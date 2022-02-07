@@ -2,9 +2,9 @@ header {
     display: flex;
     justify-content: space-around;
     align-items: stretch;
-    background-color: #fff;
-    border-bottom: 1px solid #e6e6e6;
+    background-color: rgb(233, 233, 233);
     height: 60px;
+    flex-shrink: 0;
 
     button {
         flex-grow: 1;
@@ -28,7 +28,7 @@ header {
             border-top-right-radius: 999em;
             content: attr(data-title);
             color: transparent;
-            font-size: 15px;
+            font-size: 18px;
             padding: 2px;
             overflow: hidden;
             transition: background-color 200ms, height 200ms, color 200ms, border-radius 200ms;
@@ -38,7 +38,7 @@ header {
         }
         &:hover::after {
             height: 20px;
-            background-color: #ebebeb;
+            background-color: #d3d3d3;
             color: black;
         }
         &[data-selected="true"] {

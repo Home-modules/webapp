@@ -1,0 +1,56 @@
+main#settings nav.settings-sidebar {
+    flex-shrink: 0;
+    width: 150px;
+    background-color: rgb(233, 233, 233);
+    overflow: hidden;
+    border-top: 1px solid #dcdcdc;
+
+    button {
+        display: block;
+        width: 100%;
+        padding: 7px;
+        font-size: 18px;
+        text-align: left;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        transition: background-color 200ms, color 200ms;
+        position: relative;
+
+        * {
+            vertical-align: middle;
+        }
+
+        svg {
+            width: 25px;
+            height: 25px;
+            margin-right: 8px
+        }
+
+        &::after { // Small triangle dent on the right, only shown when active
+            content: '';
+            display: block;
+            position: absolute;
+            right: -25px;
+            top: calc(50% - 8px);
+            transform: rotate(45deg);
+            width: 15px;
+            height: 15px;
+            background-color: #fff;
+            transition: right 200ms;
+        }
+
+        &:hover:not(.active) {
+            color: #437fff;
+        }
+
+        &.active {
+            background-color: #007bff;
+            color: #fff;
+
+            &::after {
+                right: -10px;
+            }
+        }
+    }
+}

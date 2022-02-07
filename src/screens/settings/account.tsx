@@ -1,11 +1,11 @@
 import './account.scss';
 import React from 'react';
 import { connect } from 'react-redux';
-import { handleError, logoutFromHub, sendRequest } from '../comms/request';
-import { store, StoreState } from '../store';
-import IntermittentableButton from '../ui/intermittentable-button';
+import { handleError, logoutFromHub, sendRequest } from '../../comms/request';
+import { store, StoreState } from '../../store';
+import IntermittentableButton from '../../ui/intermittentable-button';
 
-function AccountPage({token}: Pick<StoreState, 'token'>) {
+function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     const [sessionsCount, setSessionsCount] = React.useState(-1); // Special values: -1 = loading, -2 = error
 
     React.useEffect(()=>{
@@ -64,4 +64,4 @@ function AccountPage({token}: Pick<StoreState, 'token'>) {
     )
 }
 
-export default connect<Pick<StoreState, 'token'>, {}, {}, StoreState>(({token})=>({token}))(AccountPage);
+export default connect<Pick<StoreState, 'token'>, {}, {}, StoreState>(({token})=>({token}))(SettingsPageAccount);

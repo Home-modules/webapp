@@ -2,6 +2,11 @@
   "short_name": "Home_modules",
   "name": "Home_modules smart home",
   "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
   ],
   "start_url": ".",
   "display": "standalone",

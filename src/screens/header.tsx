@@ -1,11 +1,11 @@
 import './header.scss';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faCog } from '@fortawesome/free-solid-svg-icons'
 import { store, StoreState } from '../store';
 import { connect } from 'react-redux';
 import HomePage from './home';
-import AccountPage from './account';
+import SettingsPage from './settings/settings';
 
 function Header({CurrentScreen}: Pick<StoreState, 'CurrentScreen'>) {
     function setScreen(Screen: React.ComponentType<any>) {
@@ -18,10 +18,10 @@ function Header({CurrentScreen}: Pick<StoreState, 'CurrentScreen'>) {
                 onClick={()=>setScreen(HomePage)} >
                 <FontAwesomeIcon icon={faHome} />
             </button>
-            <button data-title="Account"
-                data-selected={CurrentScreen===AccountPage}
-                onClick={()=>setScreen(AccountPage)} >
-                <FontAwesomeIcon icon={faUserCircle} />
+            <button data-title="Settings"
+                data-selected={CurrentScreen===SettingsPage}
+                onClick={()=>setScreen(SettingsPage)} >
+                <FontAwesomeIcon icon={faCog} />
             </button>
         </header>
     );
