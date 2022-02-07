@@ -56,6 +56,7 @@ function AccountPage({token}: Pick<StoreState, 'token'>) {
                         });
                     }
                 }}
+                disabled={sessionsCount===1} // When there is only one session, there is no other session to terminate and the button will be pointless
             >
                 Terminate other sessions
             </IntermittentableButton>
