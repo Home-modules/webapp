@@ -54,3 +54,23 @@ main#settings nav.settings-sidebar {
         }
     }
 }
+
+@media screen and (max-width: 600px) {
+    main#settings nav.settings-sidebar {
+        width: auto;
+
+        button {
+            padding: 15px;
+
+            svg {
+                width: 40px;
+                height: 40px;
+                margin: 0;
+            }
+
+            span {
+                display: none;
+            }
+        }
+    }
+}

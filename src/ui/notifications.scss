@@ -2,13 +2,14 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
+    width: 300px;
+    max-width: calc(100vw - 40px);
     display: flex;
     flex-direction: column-reverse;
     gap: 10px;
 
     .notification {
         z-index: 9999;
-        width: 300px;
         padding: 10px;
         border-radius: 7px;
         background-color: #ffffff;
