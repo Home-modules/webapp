@@ -55,11 +55,16 @@ input[type=submit] {
     width: 100%;
     padding: 10px;
     border-radius: 7px;
-    background-color: #4d90fe;
+    background-color: #0464ff;
     border: none;
     color: #ffffff;
     font-size: 19px;
     cursor: pointer;
+    transition: opacity 200ms;
+
+    &:disabled {
+        opacity: 0.25;
+    }
 }
 input[type=submit] + .intermittent {
     height: 20px;
@@ -80,7 +85,7 @@ input[type=submit] + .intermittent::after {
     height: 3px;
     transform: translate(-50%, -50%);
     font-size: 20px;
-    background-color: #afdeff;
+    background-color: #00a2ff;
     animation: intermittent 3s infinite;
 }
 
