@@ -11,7 +11,7 @@ export type DialogProps = {
     id: string,
 }
 
-export function Dialog({title, children, onClose, id, cancellable=true}: DialogProps) {
+export function Dialog({title, children: Children, onClose, id, cancellable=true}: DialogProps) {
     const ref= React.useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
     const [closing, setClosing] = React.useState(false);
 
@@ -42,7 +42,7 @@ export function Dialog({title, children, onClose, id, cancellable=true}: DialogP
             <div className="dialog">
                 {title && <h1>{title}</h1>}
                 <div className="content">
-                    {typeof children==='function'? children({close}): children}
+                    {typeof Children==='function'? <Children close={close}/>: Children}
                 </div>
             </div>
         </div>
