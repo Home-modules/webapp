@@ -7,8 +7,8 @@ import { IntermittentableSubmitButton } from '../ui/button';
 export default function LoginForm() {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [usernameError, setUsernameError] = React.useState(false);
-    const [passwordError, setPasswordError] = React.useState(false);
+    const [usernameError, setUsernameError] = React.useState('');
+    const [passwordError, setPasswordError] = React.useState('');
     const usernameRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
     const passwordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
@@ -16,13 +16,13 @@ export default function LoginForm() {
     const onCatch= (e: HMApi.Response<HMApi.Request>)=> {
         if(e.type==='error') {
             if(e.error.message==='LOGIN_USER_NOT_FOUND') {
-                setUsernameError(true);
-                setPasswordError(false);
+                setUsernameError("Username not found");
+                setPasswordError('');
                 usernameRef.current?.focus();
             }
             else if(e.error.message==='LOGIN_PASSWORD_INCORRECT') {
-                setUsernameError(false);
-                setPasswordError(true);
+                setUsernameError('');
+                setPasswordError("Password incorrect");
                 passwordRef.current?.focus();
             } else {
                 handleError(e);
@@ -34,28 +34,26 @@ export default function LoginForm() {
         <div id="login">
             <h1>Login</h1>
             <form>
-                <label>
+                <label data-error={usernameError} >
                     Username
                     <input 
                         type="text" 
                         value={username} 
-                        data-error={String(usernameError)} 
                         ref={usernameRef}
                         onChange={(event) => {
                             setUsername(event.target.value); 
-                            setUsernameError(false);
+                            setUsernameError('');
                         }} />
                 </label>
-                <label>
+                <label data-error={passwordError}>
                     Password
                     <input 
                         type="password" 
                         value={password} 
-                        data-error={String(passwordError)}
                         ref={passwordRef}
                         onChange={(event) => {
                             setPassword(event.target.value); 
-                            setPasswordError(false);
+                            setPasswordError('');
                         }} />
                 </label>
                 <IntermittentableSubmitButton onClick={handleSubmit} onCatch={onCatch}>

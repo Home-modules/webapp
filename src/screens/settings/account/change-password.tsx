@@ -17,30 +17,35 @@ export default function showChangePasswordDialog() {
 
 function ChangePasswordDialog({close}: {close: ()=>void}) {
     const [currentPassword, setCurrentPassword] = React.useState("");
-    const [currentPasswordError, setCurrentPasswordError] = React.useState(false);
+    const [currentPasswordError, setCurrentPasswordError] = React.useState('');
     const currentPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
     const [newPassword, setNewPassword] = React.useState("");
-    const [newPasswordError, setNewPasswordError] = React.useState(false);
+    const [newPasswordError, setNewPasswordError] = React.useState('');
     const newPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
     const [confirmPassword, setConfirmPassword] = React.useState("");
-    const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
+    const [confirmPasswordError, setConfirmPasswordError] = React.useState('');
     const confirmNewPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
     function handleSubmit() {
         if(newPassword !== confirmPassword) {
-            setConfirmPasswordError(true);
+            setConfirmPasswordError("Passwords don't match");
             confirmNewPasswordRef.current?.focus();
             return;
         }
-        if(newPassword.length < 0 || newPassword === currentPassword) {
-            setNewPasswordError(true);
+        if(newPassword.length < 0) {
+            setNewPasswordError("New password is empty");
             newPasswordRef.current?.focus();
             return;
         }
-        
-        setConfirmPasswordError(false);
+        if(newPassword === currentPassword) {
+            setNewPasswordError("New password can't be the same as the current password");
+            newPasswordRef.current?.focus();
+            return;
+        }
+
+        setConfirmPasswordError('');
         return sendRequest({
             type: "account.changePassword",
             oldPassword: currentPassword,
@@ -62,7 +67,7 @@ function ChangePasswordDialog({close}: {close: ()=>void}) {
     function onError(err: HMApi.Response<HMApi.RequestChangePassword>) {
         if(err.type==='error') {
             if(err.error.message==='LOGIN_PASSWORD_INCORRECT') {
-                setCurrentPasswordError(true);
+                setCurrentPasswordError("Password incorrect");
                 currentPasswordRef.current?.focus();
             } else {
                 handleError(err);
@@ -73,39 +78,41 @@ function ChangePasswordDialog({close}: {close: ()=>void}) {
 
     return (
         <form onSubmit={e=>{e.preventDefault()}}>
-            <label>
+            <label data-error={currentPasswordError}>
                 Current Password
-                    <input 
+                    <input
                         type="password"
                         value={currentPassword} 
-                        data-error={String(currentPasswordError)} 
                         ref={currentPasswordRef}
                         onChange={(event) => {
                             setCurrentPassword(event.target.value); 
-                            setCurrentPasswordError(false);
+                            setCurrentPasswordError('');
+                            if(newPassword===""){
+                                setNewPasswordError('');
+                            }
                         }} />
             </label>
-            <label>
+            <label data-error={newPasswordError}>
                 New Password
                     <input
                         type="password"
                         value={newPassword}
-                        data-error={String(newPasswordError)}
                         ref={newPasswordRef}
                         onChange={(event) => {
                             setNewPassword(event.target.value);
+                            setNewPasswordError('');
+                            setConfirmPasswordError('');
                         }} />
             </label>
-            <label>
+            <label data-error={confirmPasswordError}>
                 Repeat New Password
                     <input
                         type="password"
                         value={confirmPassword}
-                        data-error={String(confirmPasswordError)}
                         ref={confirmNewPasswordRef}
                         onChange={(event) => {
                             setConfirmPassword(event.target.value);
-                            setConfirmPasswordError(false);
+                            setConfirmPasswordError('');
                         }} />
             </label>
             <IntermittentableSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onError}>

@@ -2,6 +2,7 @@ label {
     display: block;
     margin-bottom: 15px;
     font-size: 18px;
+    position: relative;
     
     input {
         width: 100%;
@@ -19,10 +20,31 @@ label {
             box-shadow: 0 0 0 3px #4d91fe4f;
             outline: none;
         }
+    }
 
-        &[data-error=true] {
+    &[data-error]:not([data-error=""]) {
+        input {
             border-color: transparent;
             box-shadow: 0 0 0 3px #e74d3c58;
+            animation: shake 0.7s;
+            position: relative;
+            z-index: 1;
+        }
+
+        &::before {
+            content: attr(data-error);
+            position: absolute;
+            bottom: 30px;
+            right: 0;
+            padding: 3px;
+            padding-bottom: 13px;
+            background-color: #e74d3c;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
             animation: shake 0.7s;
         }
     }
