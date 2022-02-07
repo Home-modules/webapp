@@ -38,7 +38,7 @@ export function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.Resp
 export function loginToHub(username: string, password: string): Promise<HMApi.Response<HMApi.Request>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
-            type: "login",
+            type: "account.login",
             username,
             password
         }).then(e=> {
@@ -60,7 +60,7 @@ export function loginToHub(username: string, password: string): Promise<HMApi.Re
 export function logoutFromHub(): Promise<HMApi.Response<HMApi.Request>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
-            type: "logout"
+            type: "account.logout"
         }).then(e=> {
             if(e.type==='ok') {
                 store.dispatch({
@@ -88,7 +88,7 @@ type HMApiResponseWithNetworkError<R extends HMApi.Request>= {
     }
 }
 
-export function handleError(e: HMApiResponseWithNetworkError<HMApi.Request>): void {
+export function handleError<T extends HMApi.Request>(e: HMApiResponseWithNetworkError<T>): void {
     let message= '';
     if(e.type==='error') {
         switch(e.error.message) {

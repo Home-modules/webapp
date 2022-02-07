@@ -1,6 +1,6 @@
 import './settings.scss';
 import React from 'react';
-import SettingsPageAccount from './account';
+import SettingsPageAccount from './account/account';
 import SettingsSidebar from './sidebar';
 import SettingsPageRooms from './rooms';
 

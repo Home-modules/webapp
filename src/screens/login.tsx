@@ -2,7 +2,7 @@ import './login.scss';
 import React from 'react';
 import { handleError, loginToHub } from '../comms/request';
 import { HMApi } from '../comms/api';
-import { IntermittentableSubmitButton } from '../ui/intermittentable-button';
+import { IntermittentableSubmitButton } from '../ui/button';
 
 export default function LoginForm() {
     const [username, setUsername] = React.useState('');
@@ -33,7 +33,7 @@ export default function LoginForm() {
     return (
         <div id="login">
             <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <label>
                     Username
                     <input 

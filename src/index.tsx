@@ -7,12 +7,14 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import Notifications from './ui/notifications';
+import Dialogs from './ui/dialogs';
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <Notifications />
             <App />
+            <Dialogs />
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')
