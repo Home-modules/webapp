@@ -47,11 +47,14 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                 onCatch={handleError}
                 onThen={(e)=>{
                     if(e.type==='ok') {
+                        setSessionsCount(1);
                         store.dispatch({
                             type: 'ADD_NOTIFICATION',
                             notification: {
                                 type: 'success',
-                                message: `${e.data.sessions} other sessions were terminated`
+                                message: e.data.sessions===1?
+                                    "Terminated 1 other session":
+                                    `Terminated ${e.data.sessions} other sessions`
                             }
                         });
                     }
