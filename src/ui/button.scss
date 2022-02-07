@@ -8,7 +8,7 @@
     transition: background-color 200ms, opacity 200ms;
 
     &:disabled {
-        color: black;
+        color: rgba(0, 0, 0, 0.467);
         opacity: 0.75;
         cursor: default;
         background-color: rgb(228, 228, 228);
@@ -30,6 +30,7 @@
     &.primary:disabled {
         color: #fff;
         background-color: rgb(12, 158, 255);
+        opacity: 0.25;
     }
 
     &.intermittent {
