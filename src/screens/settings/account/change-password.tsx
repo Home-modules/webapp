@@ -9,7 +9,6 @@ export default function showChangePasswordDialog() {
         type: "ADD_DIALOG", 
         dialog: {
             title: "Change Password", 
-            cancellable: true, 
             children: ChangePasswordDialog
         }
     });

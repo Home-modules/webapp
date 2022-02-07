@@ -5,6 +5,7 @@ import { handleError, logoutFromHub, sendRequest } from '../../../comms/request'
 import { store, StoreState } from '../../../store';
 import Button, { IntermittentableButton } from '../../../ui/button';
 import showChangePasswordDialog from './change-password';
+import showChangeUsernameDialog from './change-username';
 
 function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     const [sessionsCount, setSessionsCount] = React.useState(-1); // Special values: -1 = loading, -2 = error
@@ -68,9 +69,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                 </IntermittentableButton>
             </p>
 
-            <Button onClick={showChangePasswordDialog}>
-                Change password
-            </Button>
+            <Button onClick={showChangePasswordDialog}>Change password</Button> <Button onClick={showChangeUsernameDialog}>Change Username</Button>
         </main>
     )
 }

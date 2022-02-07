@@ -5,13 +5,14 @@ import { store, StoreState } from "../store";
 
 export type DialogProps = {
     title?: string,
+    className?: string,
     children: React.ReactNode|React.ReactNodeArray | ((props:{close: () => void})=>void),
     onClose?: ()=> void,
     cancellable?: boolean,
     id: string,
 }
 
-export function Dialog({title, children: Children, onClose, id, cancellable=true}: DialogProps) {
+export function Dialog({title, className='', children: Children, onClose, id, cancellable=true}: DialogProps) {
     const ref= React.useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
     const [closing, setClosing] = React.useState(false);
 
@@ -33,7 +34,7 @@ export function Dialog({title, children: Children, onClose, id, cancellable=true
     }, []);
 
     return (
-        <div className={`dialog-container ${closing? 'closing':''}`} 
+        <div className={`dialog-container ${closing? 'closing':''} ${className}`} 
             ref={ref} onClick={handleClose} tabIndex={0} onKeyPress={e=>{
                 if(e.key==='Escape') {
                     cancellable && close();

@@ -1,0 +1,65 @@
+.dialog-container.change-username-dialog {
+    .warning {
+        color: #d09100;
+        margin: -0.5em 0 1em 0;
+    }
+
+    .status {
+        position: relative;
+        height: 21px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+
+        div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 200ms, opacity 200ms;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .loading { color: #5a5a5a; }
+        .taken { color: #ff1b02; }
+        .available { color: #00b300; }
+
+        &.taken {
+            .loading {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(50%);
+            }
+            .available {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(100%);
+            }
+        }
+
+        &.loading {
+            .taken {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-50%);
+            }
+            .available {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(50%);
+            }
+        }
+
+        &.available {
+            .taken {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-100%);
+            }
+            .loading {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-50%);
+            }
+        }
+    }
+}
