@@ -6,6 +6,24 @@ import { store, StoreState } from '../store';
 import IntermittentableButton from '../ui/intermittentable-button';
 
 function AccountPage({token}: Pick<StoreState, 'token'>) {
+    const [sessionsCount, setSessionsCount] = React.useState(-1); // Special values: -1 = loading, -2 = error
+
+    React.useEffect(()=>{
+        sendRequest({
+            'type': 'getSessionsCount'
+        }).then(res=> {
+            if(res.type==='ok') {
+                setSessionsCount(res.data.sessions);
+            } else {
+                setSessionsCount(-2);
+                handleError(res);
+            }
+        }).catch(err=> {
+            setSessionsCount(-2);
+            handleError(err);
+        });
+    }, []);
+
     return (
         <main id="account-info">
             <h1>
@@ -15,6 +33,11 @@ function AccountPage({token}: Pick<StoreState, 'token'>) {
 
             <h2>Account settings</h2>
 
+            {
+                sessionsCount===-1 ? <p className="session-count loading">Loading active sessions count...</p> :
+                sessionsCount===-2 ? <p className="session-count error">Could not load active sessions count</p> :
+                <p className="session-count">You have {sessionsCount} active {sessionsCount===1 ? 'session' : 'sessions'}</p>
+            }
             <IntermittentableButton 
                 onClick={()=>{
                     return sendRequest({

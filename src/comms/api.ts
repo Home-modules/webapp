@@ -21,7 +21,11 @@ export namespace HMApi {
         type: "logoutOtherSessions"
     };
 
-    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions;
+    export type RequestGetSessionsCount = {
+        type: "getSessionsCount"
+    }
+
+    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount;
 
 
     export type ResponseEmpty = Record<string, never>;
@@ -34,7 +38,7 @@ export namespace HMApi {
         token: string
     };
 
-    export type ResponseLogoutOtherSessions = {
+    export type ResponseSessionCount = {
         sessions: number
     };
 
@@ -43,7 +47,8 @@ export namespace HMApi {
         R extends RequestGetVersion ? ResponseGetVersion :
         R extends RequestLogin ? ResponseLogin :
         R extends RequestLogout ? ResponseEmpty :
-        R extends RequestLogoutOtherSessions ? ResponseLogoutOtherSessions :
+        R extends RequestLogoutOtherSessions ? ResponseSessionCount :
+        R extends RequestGetSessionsCount ? ResponseSessionCount :
         never;
 
 

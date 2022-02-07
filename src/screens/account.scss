@@ -1,5 +1,9 @@
 main#account-info {
+    padding: 20px;
+
     h1 {
+        margin-top: 0;
+
         strong {
             font-weight: 900;
         }
@@ -7,6 +11,17 @@ main#account-info {
             vertical-align: middle;
             margin-left: 6px;
             padding: 5px;
+        }
+    }
+
+    .session-count {
+        margin-bottom: 10px; // Default is 16px
+
+        &.loading {
+            opacity: 0.6;
+        }
+        &.error {
+            color: #ff1b02;
         }
     }
 }
