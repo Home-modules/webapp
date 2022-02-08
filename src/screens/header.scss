@@ -2,7 +2,7 @@ header {
     display: flex;
     justify-content: space-around;
     align-items: stretch;
-    background-color: rgb(233, 233, 233);
+    background-color: var(--color-navbar-background);
     height: 60px;
     flex-shrink: 0;
 
@@ -38,21 +38,21 @@ header {
         }
         &:hover::after {
             height: 20px;
-            background-color: #d3d3d3;
-            color: black;
+            background-color: var(--color-navbar-hover-title);
+            color: var(--color-foreground);
         }
         &[data-selected="true"] {
             padding-bottom: 4px;
         }
         &[data-selected="true"]::after {
-            background-color: #4d90fe;
+            background-color: var(--color-navbar-active);
         }
         &[data-selected="true"]:hover::after {
-            color: white;
+            color: var(--color-navbar-active-text);
         }
 
         svg {
-            color: rgb(44, 44, 44);
+            color: var(--color-navbar-icon);
             height: 30px !important;
             width: 30px !important;
         }

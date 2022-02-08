@@ -1,9 +1,9 @@
 main#settings nav.settings-sidebar {
     flex-shrink: 0;
     width: 150px;
-    background-color: rgb(233, 233, 233);
+    background-color: var(--color-navbar-background);
     overflow: hidden;
-    border-top: 1px solid #dcdcdc;
+    box-shadow: inset 0 1px 0 0 var(--color-navbar-border);
 
     button {
         display: block;
@@ -14,6 +14,7 @@ main#settings nav.settings-sidebar {
         background-color: transparent;
         border: none;
         cursor: pointer;
+        color: var(--color-foreground);
         transition: background-color 200ms, color 200ms;
         position: relative;
 
@@ -24,7 +25,9 @@ main#settings nav.settings-sidebar {
         svg {
             width: 25px;
             height: 25px;
-            margin-right: 8px
+            margin-right: 8px;
+            color: var(--color-navbar-icon);
+            transition: color 200ms;
         }
 
         &::after { // Small triangle dent on the right, only shown when active
@@ -36,20 +39,28 @@ main#settings nav.settings-sidebar {
             transform: rotate(45deg);
             width: 15px;
             height: 15px;
-            background-color: #fff;
+            background-color: var(--color-background);
             transition: right 200ms;
         }
 
         &:hover:not(.active) {
-            color: #437fff;
+            color: var(--color-navbar-hover-text);
+
+            svg {
+                color: var(--color-navbar-hover-text);
+            }
         }
 
         &.active {
-            background-color: #007bff;
-            color: #fff;
+            background-color: var(--color-navbar-active);
+            color: var(--color-navbar-active-text);
 
             &::after {
                 right: -10px;
+            }
+
+            svg {
+                color: var(--color-navbar-active-text);
             }
         }
     }

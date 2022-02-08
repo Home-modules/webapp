@@ -1,0 +1,110 @@
+:root {
+    // General background & text
+    --color-background: #fff; // Background color
+    --color-foreground: #000; // Text color
+    --color-foreground-subtext: #666; // Text color for secondary text
+
+    // Login screen
+    --color-login-background: #f5f5f5; // Login background color (around the box)
+    --color-login-card-background: #fff; // Login background color (in the box)
+    --color-login-card-shadow: rgba(0, 0, 0, 0.1); // Shadow cast from the box in the middle
+
+    // Buttons
+    --color-button-primary: #0464ff; // Primary (blue) button background color
+    --color-button-primary-text: #fff; // Primary (blue) button text color
+    --color-button-primary-hover: #0353d8; // Primary (blue) button background color on hover
+    --color-button-primary-disable-opacity: 0.25; // Primary (blue) button opacity when disabled
+    --color-button-secondary: rgb(228, 228, 228); // Secondary (gray) button background color
+    --color-button-secondary-hover: #cccccc; // Secondary (gray) button background color on hover
+    --color-button-secondary-disable-opacity: 0.75; // Secondary (gray) button opacity when disabled
+    --color-button-secondary-disabled-text: rgba(0, 0, 0, 0.467); // Secondary (gray) button text color when disabled
+    --color-button-intermittent: #00a2ff; // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
+    --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
+
+    // Text fields
+    --color-input-background: #fff; // Text field background color
+    --color-input-border: #cccccc; // Text field default border color
+    --color-input-active-border: #4d91fe4f; // Active text field border color (thicker)
+    --color-input-error-border: #ff190058; // Text field with error border color (thicker)
+    --color-input-error-message: #ff1900; // Error message above fields with errors background color
+    --color-input-error-message-text: #fff; // Error message above fields with errors text color
+
+    // Header and settings sidebar
+    --color-navbar-background: #e9e9e9; // Background for the header and settings navigation menu
+    --color-navbar-border: #dcdcdc; // Border between the header and settings navigation menu
+    --color-navbar-hover-title: #d3d3d3; // Header button title background color vern hovered
+    --color-navbar-active: #007bff; // Header active item underline / Settings navigation active item background color
+    --color-navbar-active-text: #fff; // Header active item title / Settings navigation active item text color
+    --color-navbar-icon: rgb(44, 44, 44); // Header / settings navigation icon color
+    --color-navbar-hover-text: #0055c5; // Settings navigation menu inactive item text color when hovered
+
+    // Notifications
+    --color-notification-background: #fff; // Notification background color
+    --color-notification-shadow: #0004; // Notification shadow color
+    --color-notification-border-info: #2277ff; // Notification border color for information messages
+    --color-notification-border-success: #00d523; // Notification border color for success messages
+    --color-notification-border-warning: #ffb400; // Notification border color for warning messages
+    --color-notification-border-error: #ff1b02; // Notification border color for error messages
+    --color-notification-close-button-hover: rgb(60, 60, 60); // Notification close button background color when hovered
+
+    // Dialogs
+    --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
+    --color-dialog-background: #fff; // Background for dialogs
+
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        // General background & text
+        --color-background: rgb(19, 19, 19); // Background color
+        --color-foreground: #fff; // Text color
+        --color-foreground-subtext: rgb(163, 163, 163); // Text color for secondary text
+
+        // Login screen
+        --color-login-background: #151515; // Login background color (around the box)
+        --color-login-card-background: #1d1d1d; // Login background color (in the box)
+        --color-login-card-shadow: rgba(0, 0, 0, 0.1); // Shadow cast from the box in the middle
+
+        // Buttons
+        --color-button-primary: #0464ff; // Primary (blue) button background color
+        --color-button-primary-text: #fff; // Primary (blue) button text color
+        --color-button-primary-hover: #0353d8; // Primary (blue) button background color on hover
+        --color-button-primary-disable-opacity: 0.25; // Primary (blue) button opacity when disabled
+        --color-button-secondary: rgb(53, 53, 53); // Secondary (gray) button background color
+        --color-button-secondary-hover: #494949; // Secondary (gray) button background color on hover
+        --color-button-secondary-disable-opacity: 0.5; // Secondary (gray) button opacity when disabled
+        --color-button-secondary-disabled-text: rgba(255, 255, 255, 0.274); // Secondary (gray) button text color when disabled
+        --color-button-intermittent: #00a2ff; // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
+        --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
+
+        // Text fields
+        --color-input-background: #1d1d1d; // Text field background color
+        --color-input-border: #484848; // Text field default border color
+        --color-input-active-border: #1770ff65; // Active text field border color (thicker)
+        --color-input-error-border: #ff3b257c; // Text field with error border color (thicker)
+        --color-input-error-message: #ff1900; // Error message above fields with errors background color
+        --color-input-error-message-text: #fff; // Error message above fields with errors text color
+
+        // Header and settings sidebar
+        --color-navbar-background: #1d1d1d; // Background for the header and settings navigation menu
+        --color-navbar-border: #2b2b2b; // Border between the header and settings navigation menu
+        --color-navbar-hover-title: #2c2c2c; // Header button title background color vern hovered
+        --color-navbar-active: #007bff; // Header active item underline / Settings navigation active item background color
+        --color-navbar-active-text: #fff; // Header active item title / Settings navigation active item text color
+        --color-navbar-icon: rgb(209, 209, 209); // Header / settings navigation icon color
+        --color-navbar-hover-text: #4696ff; // Settings navigation menu inactive item text color when hovered
+
+        // Notifications
+        --color-notification-background: rgb(56, 56, 56); // Notification background color
+        --color-notification-shadow: rgba(0, 0, 0, 0.446); // Notification shadow color
+        --color-notification-border-info: #2277ff; // Notification border color for information messages
+        --color-notification-border-success: #00d523; // Notification border color for success messages
+        --color-notification-border-warning: #ffb400; // Notification border color for warning messages
+        --color-notification-border-error: #ff1b02; // Notification border color for error messages
+        --color-notification-close-button-hover: rgb(197, 197, 197); // Notification close button background color when hovered
+
+        // Dialogs
+        --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
+        --color-dialog-background: rgb(46, 46, 46); // Background for dialogs
+    }
+}

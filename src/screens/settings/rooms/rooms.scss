@@ -10,21 +10,22 @@ main#settings main#settings-rooms {
 
     .list {
         flex-grow: 1;
-        border: 1px solid #e5e5e5;
+        border: 1px solid var(--color-input-border);
         border-radius: 15px;
         padding: 20px;
 
         .item {
-            background-color: #ededed;
+            background-color: var(--color-button-secondary);
             border-radius: 8px;
             padding: 10px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
+            transition: background-color 200ms;
 
             &:hover {
-                background-color: #e5e5e5;
+                background-color: var(--color-button-secondary-hover);
             }
 
             .name {
@@ -38,7 +39,7 @@ main#settings main#settings-rooms {
 
             .id {
                 font-size: 14px;
-                color: #5a5a5a;
+                color: var(--color-foreground-subtext);
                 font-family: var(--code-font-stack);
             }
         }

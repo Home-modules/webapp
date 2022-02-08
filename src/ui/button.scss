@@ -1,36 +1,37 @@
 .button {
-    background-color: rgb(228, 228, 228);
+    background-color: var(--color-button-secondary);
     border-radius: 7px;
     padding: 8px;
     font-size: 17px;
     border: none;
     cursor: pointer;
+    color: var(--color-foreground);
     transition: background-color 200ms, opacity 200ms;
 
     &:disabled {
-        color: rgba(0, 0, 0, 0.467);
-        opacity: 0.75;
+        color: var(--color-button-secondary-disable-opacity);
+        opacity: var(--color-button-secondary-disable-opacity);
         cursor: default;
-        background-color: rgb(228, 228, 228);
+        background-color: var(--color-button-secondary);
     }
 
     &:hover:not(:disabled) {
-        background-color: rgb(204, 204, 204);
+        background-color: var(--color-button-secondary-hover);
     }
 
     &.primary {
-        background-color: rgb(12, 158, 255);
-        color: #fff;
+        background-color: var(--color-button-primary);
+        color: var(--color-button-primary-text);
     }
 
     &.primary:hover:not(:disabled) {
-        background-color: rgb(0, 138, 230);
+        background-color: var(--color-button-primary-hover);
     }
 
     &.primary:disabled {
-        color: #fff;
-        background-color: rgb(12, 158, 255);
-        opacity: 0.25;
+        color: var(--color-button-primary-text);
+        background-color: var(--color-button-primary);
+        opacity: var(--color-button-primary-disable-opacity);
     }
 
     &.intermittent {
@@ -47,8 +48,12 @@
             height: 3px;
             transform: translate(-50%, -50%);
             font-size: 20px;
-            background-color: #afdeff;
+            background-color: var(--color-button-intermittent);
             animation: intermittent 3s infinite;
+
+        }
+        &.primary::after {
+            background-color: var(--color-button-intermittent-2);
         }
     }
 }

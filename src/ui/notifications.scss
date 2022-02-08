@@ -12,15 +12,15 @@
         z-index: 9999;
         padding: 10px;
         border-radius: 7px;
-        background-color: #ffffff;
+        background-color: var(--color-notification-background);
         border: 2px solid;
-        box-shadow: 4px 4px 10px #0004;
+        box-shadow: 4px 4px 10px var(--color-notification-shadow);
         transition: opacity 2000ms, transform 200ms;
 
-        &.info { border-color: #2277ff; }
-        &.success { border-color: #00d523; }
-        &.warning { border-color: #ffb400; }
-        &.error { border-color: #ff1b02; }
+        &.info { border-color: var(--color-notification-border-info); }
+        &.success { border-color: var(--color-notification-border-success); }
+        &.warning { border-color: var(--color-notification-border-warning); }
+        &.error { border-color: var(--color-notification-border-error); }
 
         button.close {
             float: right;
@@ -30,7 +30,7 @@
             transition: transform 200ms, color 200ms;
 
             &:hover {
-                color: rgb(60, 60, 60);
+                color: var(--color-notification-close-button-hover);
             }
             &:active {
                 transform: scale(1.5);
