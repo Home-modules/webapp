@@ -19,9 +19,9 @@
             transform: translateY(0);
         }
 
-        .loading { color: #5a5a5a; }
-        .taken { color: #ff1b02; }
-        .available { color: #00b300; }
+        .loading { color: var(--color-status-placeholder); }
+        .taken { color: var(--color-status-error); }
+        .available { color: var(--color-status-success); }
 
         &.taken {
             .loading {

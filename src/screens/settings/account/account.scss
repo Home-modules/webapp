@@ -21,7 +21,7 @@ main#settings-account-info {
             opacity: 0.6;
         }
         &.error {
-            color: #ff1b02;
+            color: var(--color-status-error);
         }
     }
 }
