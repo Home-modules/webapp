@@ -27,3 +27,7 @@ code {
 :focus {
   outline: none;
 }
+
+* {
+  -webkit-tap-highlight-color: var(--color-tap-highlight);
+}
