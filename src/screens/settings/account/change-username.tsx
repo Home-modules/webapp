@@ -21,20 +21,28 @@ export function ChangeUsernameDialog({ close }: { close: () => void }) {
     const [usernameError, setUsernameError] = React.useState('');
     const usernameRef= React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
-    const [isAvailable, setIsAvailable] = React.useState<boolean|0>(0);
+    const [isAvailable, setIsAvailable] = React.useState<boolean|0>(0); // 0= loading false= taken true= available
+    const [isAvailableError, setIsAvailableError] = React.useState(0);  // 0= Already taken 1= Too short
 
     React.useEffect(() => {
-        setIsAvailable(0);
-        sendRequest({
-            type: 'account.checkUsernameAvailable',
-            username
-        }).then(res => {
-            if(res.type==='ok') {
-                setIsAvailable(res.data.available);
-            } else {
-                handleError(res);
-            }
-        }).catch(handleError);
+        if(username.length < 3) {
+            setIsAvailableError(1);
+            setIsAvailable(false);
+        } else {
+            setIsAvailable(0);
+            sendRequest({
+                type: 'account.checkUsernameAvailable',
+                username
+            }).then(res => {
+                if(isAvailableError === 1 && isAvailable===false) return; // If the username was too short, don't change the state
+                if(res.type==='ok') {
+                    setIsAvailable(res.data.available);
+                    setIsAvailableError(0); // This error is only shown if the username is taken
+                } else {
+                    handleError(res);
+                }
+            }).catch(handleError);
+        }
     }, [username]);
 
     function onSubmit() {
@@ -69,6 +77,10 @@ export function ChangeUsernameDialog({ close }: { close: () => void }) {
                 setUsernameError("Username already taken");
                 usernameRef.current?.focus();
             }
+            else if(res.error.message==="USERNAME_TOO_SHORT"){
+                setUsernameError("Username must be at least 3 characters long");
+                usernameRef.current?.focus();
+            }
             else handleError(res);
         }
     }
@@ -89,7 +101,7 @@ export function ChangeUsernameDialog({ close }: { close: () => void }) {
             </label>
             <div className={`status ${isAvailable===0?'loading' : isAvailable ? 'available':'taken'}`}>
                 <div className="loading">Checking username availability...</div>
-                <div className="taken">Username already taken</div>
+                <div className="taken">{["Username already taken", "Username must be at least 3 characters long"][isAvailableError]}</div>
                 <div className="available">Username available</div>
             </div>
             <IntermittentableSubmitButton onClick={onSubmit} onThen={onSuccess} onCatch={onError} disabled={isAvailable===false}>
