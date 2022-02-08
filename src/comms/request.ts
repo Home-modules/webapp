@@ -6,7 +6,11 @@ import { store } from '../store';
 export function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.Response<R>> {
     console.log('Request: ', req);
     return new Promise((resolve, reject) => {
-        axios.get<HMApi.Response<R>>(`http://${window.location.hostname}:703/${store.getState().token}/${JSON.stringify(req)}`)
+        axios.post<HMApi.Response<R>>(`http://${window.location.hostname}:703/${store.getState().token}`, req, {
+            headers: {
+                'Content-Type': 'text/plain' // Avoid pre-flight request
+            }
+        })
             .then(e=> {
                 console.log('Response: ', e.data);
                 resolve(e.data);
