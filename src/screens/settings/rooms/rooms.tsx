@@ -32,7 +32,7 @@ export default function SettingsPageRooms() {
             <div className='list'>
                 {rooms === null ? (
                     <div className="loading">
-                        <FontAwesomeIcon icon={faSpinner} spin />
+                        <span className="circle" />
                         Loading...
                     </div>
                 ) : rooms === false ? (
