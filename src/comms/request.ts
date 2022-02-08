@@ -39,7 +39,7 @@ export function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.Resp
     });
 }
 
-export function loginToHub(username: string, password: string): Promise<HMApi.Response<HMApi.Request>> {
+export function loginToHub(username: string, password: string): Promise<HMApi.Response<HMApi.RequestLogin>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
             type: "account.login",
@@ -61,7 +61,7 @@ export function loginToHub(username: string, password: string): Promise<HMApi.Re
     })
 }
 
-export function logoutFromHub(): Promise<HMApi.Response<HMApi.Request>> {
+export function logoutFromHub(): Promise<HMApi.Response<HMApi.RequestLogout>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
             type: "account.logout"

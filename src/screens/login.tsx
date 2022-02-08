@@ -16,7 +16,7 @@ export default function LoginForm() {
 
     const handleSubmit = () => loginToHub(username, password);
 
-    const onSuccess = (res: HMApi.Response<HMApi.Request>) => {
+    const onSuccess = (res: HMApi.Response<HMApi.RequestLogin>) => {
         if(res.type==='ok') {
             if(password==='admin') { // Warn the user to change their password
                 store.dispatch({
@@ -39,7 +39,7 @@ export default function LoginForm() {
         }
     }
 
-    const onCatch= (e: HMApi.Response<HMApi.Request>)=> {
+    const onCatch= (e: HMApi.Response<HMApi.RequestLogin>)=> {
         if(e.type==='error') {
             if(e.error.message==='LOGIN_USER_NOT_FOUND') {
                 setUsernameError("Username not found");
