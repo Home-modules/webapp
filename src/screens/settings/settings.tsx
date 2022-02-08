@@ -2,7 +2,7 @@ import './settings.scss';
 import React from 'react';
 import SettingsPageAccount from './account/account';
 import SettingsSidebar from './sidebar';
-import SettingsPageRooms from './rooms';
+import SettingsPageRooms from './rooms/rooms';
 
 export default function SettingsPage() {
     const [page, setPage] = React.useState(0);

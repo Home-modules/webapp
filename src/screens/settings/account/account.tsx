@@ -27,7 +27,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     }, []);
 
     return (
-        <main id="account-info">
+        <main id="settings-account-info">
             <h1>
                 Logged in to Home_modules hub as: <strong>@{token?.split(':')[0]}</strong>
                 <IntermittentableButton onClick={()=>logoutFromHub()} onCatch={handleError}>Log out</IntermittentableButton>
