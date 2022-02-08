@@ -7,3 +7,9 @@ main {
     flex-grow: 1;
     background-color: var(--color-background);
 }
+
+@media screen and (max-width: 600px) {
+    #root {
+        flex-direction: column-reverse; // Puts header to bottom on mobile
+    }
+}
