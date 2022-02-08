@@ -3,6 +3,8 @@ import React from 'react';
 import { handleError, loginToHub } from '../comms/request';
 import { HMApi } from '../comms/api';
 import { IntermittentableSubmitButton } from '../ui/button';
+import { store } from '../store';
+import showChangePasswordDialog from './settings/account/change-password';
 
 export default function LoginForm() {
     const [username, setUsername] = React.useState('');
@@ -13,6 +15,30 @@ export default function LoginForm() {
     const passwordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
     const handleSubmit = () => loginToHub(username, password);
+
+    const onSuccess = (res: HMApi.Response<HMApi.Request>) => {
+        if(res.type==='ok') {
+            if(password==='admin') { // Warn the user to change their password
+                store.dispatch({
+                    type: 'ADD_NOTIFICATION',
+                    notification: {
+                        type: 'warning',
+                        title: 'Change your password',
+                        message: 'You are using the default admin password. Please change it to a more secure password to avoid being hacked.',
+                        timeout: 60000, // Use more timeout because the warning is important
+                        buttons: [
+                            {
+                                label: 'Change password',
+                                onClick: showChangePasswordDialog,
+                                isPrimary: true
+                            }
+                        ]
+                    }
+                });
+            }
+        }
+    }
+
     const onCatch= (e: HMApi.Response<HMApi.Request>)=> {
         if(e.type==='error') {
             if(e.error.message==='LOGIN_USER_NOT_FOUND') {
@@ -56,7 +82,7 @@ export default function LoginForm() {
                             setPasswordError('');
                         }} />
                 </label>
-                <IntermittentableSubmitButton onClick={handleSubmit} onCatch={onCatch}>
+                <IntermittentableSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onCatch}>
                     Login
                 </IntermittentableSubmitButton>
             </form>

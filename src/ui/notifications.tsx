@@ -50,7 +50,12 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
             {title && <h1>{title}</h1>}
             <div className="content">{message}</div>
             {buttons.map((button, i) => (
-                <button key={i} className={button.isPrimary ? 'primary' : ''} onClick={button.onClick}>{button.label}</button>
+                <button key={i} 
+                    className={`button ${button.isPrimary ? 'primary' : ''}`} 
+                    onClick={()=>{close(); button.onClick()}}>
+                        
+                    {button.label}
+                </button>
             ))}
         </div>
     )

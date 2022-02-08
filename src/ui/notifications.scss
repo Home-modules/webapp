@@ -44,6 +44,12 @@
             margin-top: -5px;
         }
 
+        button.button {
+            margin-top: 10px;
+            padding: 7px;
+            border-radius: 999em;
+        }
+
         &.fading {
             opacity: 0;
         }
