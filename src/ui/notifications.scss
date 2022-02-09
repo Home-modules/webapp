@@ -7,9 +7,9 @@
     display: flex;
     flex-direction: column-reverse;
     gap: 10px;
+    z-index: 9999;
 
     .notification {
-        z-index: 9999;
         padding: 10px;
         border-radius: 7px;
         background-color: var(--color-notification-background);
