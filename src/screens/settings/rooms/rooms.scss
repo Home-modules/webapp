@@ -1,77 +1,128 @@
 main#settings main#settings-rooms {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
+    position: relative;
+    overflow: hidden;
 
-    h1 {
-        margin-top: 0;
-        flex-shrink: 0;
-    }
+    .rooms-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transition: opacity 250ms, transform 250ms;
 
-    .list {
-        flex-grow: 1;
-        border: 1px solid var(--color-input-border);
-        border-radius: 15px;
-        padding: 10px;
+        &.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.25);
+        }
 
-        .item {
-            background-color: var(--color-button-secondary);
-            border-radius: 8px;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: background-color 200ms;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
 
-            &:hover {
-                background-color: var(--color-button-secondary-hover);
-            }
+        h1 {
+            margin-top: 0;
+            flex-shrink: 0;
+        }
 
-            .name {
-                font-size: 18px;
-                font-weight: bold;
+        .list {
+            flex-grow: 1;
+            border: 1px solid var(--color-input-border);
+            border-radius: 15px;
+            padding: 10px;
 
-                svg {
-                    margin-right: 10px;
+            .item {
+                background-color: var(--color-button-secondary);
+                border-radius: 8px;
+                padding: 10px 15px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer;
+                transition: background-color 200ms;
+                gap: 15px;
+
+                &:hover {
+                    background-color: var(--color-button-secondary-hover);
+                }
+
+                .name {
+                    font-size: 18px;
+                    font-weight: bold;
+
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+
+                    svg {
+                        margin-right: 10px;
+                    }
+                }
+
+                .id {
+                    font-size: 14px;
+                    color: var(--color-foreground-subtext);
+                    font-family: var(--code-font-stack);
                 }
             }
 
-            .id {
-                font-size: 14px;
-                color: var(--color-foreground-subtext);
-                font-family: var(--code-font-stack);
+            .loading, .error {
+                height: calc(100% - 20px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+
+                svg, .circle {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 15px;
+                }
+
+                .circle {
+                    border-radius: 50%;
+                    box-sizing: border-box;
+                    border: 5px solid;
+                    border-top-color: transparent;
+                    animation: fa-spin 1s linear infinite;
+                }
+
+                &.loading {
+                    color: var(--color-status-placeholder);
+                }
+
+                &.error {
+                    color: var(--color-status-error);
+                }
             }
         }
+    }
 
-        .loading, .error {
-            height: calc(100% - 20px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+    .edit-room {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        animation: inner-screen-appear 250ms;
+        transition: opacity 250ms, transform 250ms;
 
-            svg, .circle {
-                width: 40px;
-                height: 40px;
-                margin-right: 15px;
-            }
-
-            .circle {
-                border-radius: 50%;
-                box-sizing: border-box;
-                border: 5px solid;
-                border-top-color: transparent;
-                animation: fa-spin 1s linear infinite;
-            }
-
-            &.loading {
-                color: var(--color-status-placeholder);
-            }
-
-            &.error {
-                color: var(--color-status-error);
-            }
+        &.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.75);
         }
+    }
+}
+
+@keyframes inner-screen-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.75);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
 }

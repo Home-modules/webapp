@@ -92,7 +92,7 @@ type HMApiResponseWithNetworkError<R extends HMApi.Request>= {
     }
 }
 
-export function handleError<T extends HMApi.Request>(e: HMApiResponseWithNetworkError<T>): void {
+export function handleError(e: HMApiResponseWithNetworkError<HMApi.Request>): void {
     let message= '';
     if(e.type==='error') {
         switch(e.error.message) {
@@ -106,6 +106,7 @@ export function handleError<T extends HMApi.Request>(e: HMApiResponseWithNetwork
             case 'INVALID_REQUEST_JSON':
             case 'INVALID_REQUEST_TYPE':
             case 'MISSING_PARAMETER':
+            case 'PARAMETER_OUT_OF_RANGE':
                 message= 'The app sent an invalid request. Please contact support.';
                 break;
             case 'NETWORK_ERROR':

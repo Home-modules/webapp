@@ -1,3 +1,5 @@
+import { Paths } from "./api-type-to-path-union.js";
+
 export namespace HMApi {
     /** 
      * Just an empty request, useful as a heartbeat request 
@@ -96,7 +98,35 @@ export namespace HMApi {
         type: "rooms.getRooms",
     }
 
-    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms;
+    /**
+     * Edits the properties of a room.
+     * All properties except ID can be changed.
+     * If the property `controllerType` is changed, the room will be restarted. (all devices will be turned off, the connection to the controller will be dropped and the room will be initialized again)
+     * @throws `ROOM_NOT_FOUND` if the room doesn't exist
+     */
+    export type RequestEditRoom = {
+        type: "rooms.editRoom",
+        /** The modified room. The room to edit will be determined from the `id` property. */
+        room: Room
+    }
+
+    /**
+     * Gets the serial ports available on the hub. Used for choosing the serial port for a room controller.
+     */
+    export type RequestGetSerialPorts = {
+        type: "io.getSerialPorts"
+    }
+
+    /**
+     * Adds a new room to the house.
+     */
+    export type RequestAddRoom = {
+        type: "rooms.addRoom",
+        /** The new room to add. */
+        room: Room
+    }
+
+    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms | RequestEditRoom | RequestGetSerialPorts;
 
 
     /** Nothing is returned */
@@ -127,6 +157,11 @@ export namespace HMApi {
         rooms: {[roomId: string]: Room}
     }
 
+    export type ResponseGetSerialPorts = {
+        /** The serial ports available on the hub */
+        ports: SerialPort[]
+    }
+
     export type ResponseData<R extends Request> = 
         R extends RequestEmpty ? ResponseEmpty :
         R extends RequestGetVersion ? ResponseGetVersion :
@@ -138,6 +173,8 @@ export namespace HMApi {
         R extends RequestChangeUsername ? ResponseEmpty :
         R extends RequestCheckUsernameAvailable ? ResponseCheckUsernameAvailable :
         R extends RequestGetRooms ? ResponseGetRooms :
+        R extends RequestEditRoom ? ResponseEmpty :
+        R extends RequestGetSerialPorts ? ResponseGetSerialPorts :
         never;
 
 
@@ -179,7 +216,7 @@ export namespace HMApi {
     export type RequestErrorMissingParameter<R extends Request> = {
         code: 400,
         message: "MISSING_PARAMETER"
-        missingParameters: (keyof R)[];
+        missingParameters: Paths<R>[];
     };
 
     /**
@@ -188,7 +225,16 @@ export namespace HMApi {
     export type RequestErrorInvalidParameter<R extends Request> = {
         code: 400,
         message: "INVALID_PARAMETER"
-        paramName: keyof R;
+        paramName: Paths<R>;
+    };
+
+    /**
+     * A number parameter is out of range, a string or array is too long or too short
+     */
+    export type RequestErrorParameterOutOfRange<R extends Request> = {
+        code: 400,
+        message: "PARAMETER_OUT_OF_RANGE"
+        paramName: Paths<R>;
     };
 
     /**
@@ -231,6 +277,22 @@ export namespace HMApi {
         message: "USERNAME_TOO_SHORT"
     };
 
+    /**
+     * The room doesn't exist.
+     */
+    export type RequestErrorRoomNotFound = {
+        code: 400,
+        message: "ROOM_NOT_FOUND"
+    };
+
+    /**
+     * The room name is empty.
+     */
+    export type RequestErrorRoomNameEmpty = {
+        code: 400,
+        message: "ROOM_NAME_EMPTY"
+    };
+
     export type RequestError<R extends Request> = (
         R extends RequestEmpty ? never :
         R extends RequestGetVersion ? never :
@@ -242,9 +304,10 @@ export namespace HMApi {
         R extends RequestChangeUsername ? RequestErrorUsernameAlreadyTaken | RequestErrorUsernameTooShort :
         R extends RequestCheckUsernameAvailable ? never :
         R extends RequestGetRooms ? never :
+        R extends RequestEditRoom ? RequestErrorRoomNotFound | RequestErrorRoomNameEmpty :
         never
     ) | (
-        [R extends R ? keyof Omit<R, 'type'>: never ][0] extends never ? never : (RequestErrorMissingParameter<R> | RequestErrorInvalidParameter<R>)
+        [R extends R ? keyof Omit<R, 'type'>: never ][0] extends never ? never : (RequestErrorMissingParameter<R> | RequestErrorInvalidParameter<R> | RequestErrorParameterOutOfRange<R>)
     ) | 
         RequestErrorInvalidRequest |
         RequestErrorInvalidJSON |
@@ -273,8 +336,8 @@ export namespace HMApi {
         name: string,
         /** The icon to show for the room */
         icon: "living-room" | "kitchen" | "bedroom" | "bathroom" | "other",
-        /** The method of communication to the room controller */
-        communication: RoomControllerCommunicationSerial,
+        /** Room controller type and mode */
+        controllerType: RoomControllerTypeStandardSerial,
     }
 
     /**
@@ -282,8 +345,8 @@ export namespace HMApi {
      * 
      * This method has a high cable length limit, but requires a separate port for each room and devices do not have enough ports most of the time.
      */
-    export type RoomControllerCommunicationSerial = {
-        type: "serial",
+    export type RoomControllerTypeStandardSerial = {
+        type: "standard-serial",
         /** The serial port to use */
         port: string,
         /** The baud rate to use. Default is 9600 */
@@ -294,5 +357,10 @@ export namespace HMApi {
         // stopBits?: 1 | 2,
         // /** The serial port's parity */
         // parity?: "none" | "even" | "mark" | "odd" | "space"
+    }
+
+    export type SerialPort = {
+        /** Port path, e.g. "/dev/ttyUSB0", "COM3" */
+        path: string
     }
 }

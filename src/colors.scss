@@ -55,6 +55,21 @@
     --color-dialog-background: #fff; // Background for dialogs
 
     --color-tap-highlight: rgba(127, 127, 127, 0.1);
+
+    // Horizontal select (like the icon selector in room edit page
+    --color-horizontal-select-active-background: var(--color-button-secondary); // Background color for the active item
+    --color-horizontal-select-active-foreground: var(--color-navbar-active); // Text/icon color for the active item
+
+    // Dropdown
+    --color-dropdown-button-background: var(--color-button-secondary); // Dropdown button background color
+    --color-dropdown-button-background-hover: var(--color-button-secondary-hover); // Dropdown button background color when hovered
+    --color-dropdown-button-arrow: var(--color-foreground-subtext); // Dropdown button arrow color
+    --color-dropdown-list-background: var(--color-dialog-background); // Dropdown list background color
+    --color-dropdown-list-border: var(--color-input-border); // Dropdown list border color
+    --color-dropdown-list-shadow: var(--color-notification-shadow); // Dropdown list shadow color
+    --color-dropdown-item-hover-text: var(--color-navbar-hover-text); // Dropdown item text color when hovered
+    --color-dropdown-item-active-background: var(--color-navbar-active); // Dropdown item background color when active
+    --color-dropdown-item-active-text: var(--color-navbar-active-text); // Dropdown item text color when active
 }
 
 @media (prefers-color-scheme: dark) {
@@ -113,5 +128,16 @@
         // Dialogs
         --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
         --color-dialog-background: rgb(46, 46, 46); // Background for dialogs
+        
+        // Dropdown
+        --color-dropdown-button-background: var(--color-button-secondary); // Dropdown button background color
+        --color-dropdown-button-background-hover: var(--color-button-secondary-hover); // Dropdown button background color when hovered
+        --color-dropdown-button-arrow: var(--color-foreground-subtext); // Dropdown button arrow color
+        --color-dropdown-list-background: var(--color-dialog-background); // Dropdown list background color
+        --color-dropdown-list-border: var(--color-input-border); // Dropdown list border color
+        --color-dropdown-list-shadow: var(--color-notification-shadow); // Dropdown list shadow color
+        --color-dropdown-item-hover-text: var(--color-navbar-hover-text); // Dropdown item text color when hovered
+        --color-dropdown-item-active-background: var(--color-navbar-active); // Dropdown item background color when active
+        --color-dropdown-item-active-text: var(--color-navbar-active-text); // Dropdown item text color when active
     }
 }
