@@ -1,5 +1,5 @@
 import './rooms.scss';
-import { faBath, faBed, faCouch, faDoorClosed, faTimesCircle, faUtensils, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faCouch, faDoorClosed, faPlus, faTimesCircle, faUtensils, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { HMApi } from '../../../comms/api';
@@ -8,7 +8,7 @@ import SettingsPageRoomsEditRoom from './room-edit';
 
 export default function SettingsPageRooms() { 
     const [rooms, setRooms] = React.useState<HMApi.Room[]|false|null>(null); // null means loading, false means error
-    const [editingRoom, setEditingRoom] = React.useState<HMApi.Room|null>(null);
+    const [editingRoom, setEditingRoom] = React.useState<(HMApi.Room & {new?: boolean})|null>(null);
     const [closingEditRoom, setClosingEditRoom] = React.useState(false);
 
     function updateRooms() {
@@ -54,9 +54,23 @@ export default function SettingsPageRooms() {
                             <FontAwesomeIcon icon={faTimesCircle} />
                             Error loading rooms
                         </div>
-                    ) : rooms.map(room => (
-                        <RoomItem key={room.id} room={room} onClick={()=> setEditingRoom(room)} />
-                    ))}
+                    ) : (<>
+                        {rooms.map(room => (
+                            <RoomItem key={room.id} room={room} onClick={()=> setEditingRoom(room)} />
+                        ))}
+                        <div className="add" onClick={()=> setEditingRoom({
+                            id: '',
+                            controllerType: {
+                                port: '',
+                                type: 'standard-serial'
+                            },
+                            icon: 'other',
+                            name: '',
+                            new: true
+                        })}>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </div>
+                    </>)}
                 </div>
             </div>
             {editingRoom && (

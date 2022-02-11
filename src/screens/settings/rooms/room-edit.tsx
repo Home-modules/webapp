@@ -8,7 +8,7 @@ import { handleError, sendRequest } from '../../../comms/request';
 import DropDownSelect from '../../../ui/dropdown';
 
 export type SettingsPageRoomsEditRoomProps = {
-    room: HMApi.Room;
+    room: HMApi.Room & {new?: boolean};
     onClose: () => void;
     hidden?: boolean;
 }
@@ -25,23 +25,37 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
     const [name, setName] = React.useState(room.name);
     const [nameError, setNameError] = React.useState('');
     const nameRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+
+    const [id, setId] = React.useState(room.id);
+    const [idError, setIdError] = React.useState('');
+    const idRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+
     const [iconId, setIconId] = React.useState(iconIds.indexOf(room.icon));
+
     const [controller, setController] = React.useState(room.controllerType);
     const [serialPorts, setSerialPorts] = React.useState<HMApi.SerialPort[]|0|-1>(0); // 0= loading -1= error
     const [serialPortError, setSerialPortError] = React.useState('');
 
     function onSave() {
         const nRoom: HMApi.Room = {
-            id: room.id,
+            id,
             name,
             icon: iconIds[iconId],
             controllerType: controller
         };
 
-        return sendRequest({
-            'type': 'rooms.editRoom',
-            room: nRoom
-        });
+        if(room.new) {
+            return sendRequest({
+                type: 'rooms.addRoom',
+                room: nRoom
+            });
+        }
+        else {
+            return sendRequest({
+                'type': 'rooms.editRoom',
+                room: nRoom
+            });
+        }
     }
 
     function loadSerialPorts() {
@@ -64,7 +78,7 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
         });
     }
 
-    function onSaveSuccess(res: HMApi.Response<HMApi.RequestEditRoom>) {
+    function onSaveSuccess(res: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) {
         if(res.type==='ok') {
             onClose();
         }
@@ -73,7 +87,7 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
         }
     }
 
-    function onSaveError(err: HMApi.Response<HMApi.RequestEditRoom>) {
+    function onSaveError(err: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) {
         if(err.type==='error') {
             if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.name') {
                 setNameError(name.length ? 'Name is too long' : 'Name is empty');
@@ -82,6 +96,16 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
             }
             else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.controllerType.port') {
                 setSerialPortError('Invalid port');
+                return;
+            }
+            else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.id') {
+                setIdError(id.length ? 'ID is too long' : 'ID is empty');
+                idRef.current?.focus();
+                return;
+            }
+            else if(err.error.message==='ROOM_ALREADY_EXISTS') {
+                setIdError('Room with this ID already exists');
+                idRef.current?.focus();
                 return;
             }
         }
@@ -94,18 +118,37 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
                 <FontAwesomeIcon icon={faArrowLeft} onClick={onClose} />
                 Editing {room.name}
             </h1>
-            <span className="id" 
-                title="Room ID is permanent and cannot be edited">
-                {room.id}
-            </span>
 
-            <label data-error={nameError}>
-                Name
-                <input type="text" value={name} ref={nameRef} onChange={e=>{
-                    setName(e.target.value);
-                    setNameError('');
-                }} />
-            </label>
+            <div className="name-and-id">
+                <label data-error={nameError}>
+                    Name
+                    <input type="text" value={name} ref={nameRef} onChange={e=>{
+                        setName(e.target.value);
+                        setNameError('');
+                    }} onBlur={e=> {
+                        if(!id) {
+                            // If the ID is empty, set it to a machine-friendly version of the name
+                            setId(e.target.value
+                                .replace(/[^A-Za-z0-9 ]/g,'') // Remove unwanted characters, only accept alphanumeric and space
+                                .replace(/\s{2,}/g,' ') // Replace multi spaces with a single space
+                                .toLowerCase() // Make it lowercase (this line is not in the original package, I added it)
+                                .replace(/\s/g, "-") // Replace space with a '-' symbol)
+                            );
+                            // These three lines are from https://github.com/mrded/machine-name/blob/master/index.js.
+                            // The package wasn't TS-compatible, so I had to copy the code.
+                        }
+                    }} />
+                </label>
+                <label data-error={idError} data-disabled={!room.new} title={(!room.new) ? 'Room ID cannot be changed after it is created': undefined}>
+                    ID (permanent)
+                    <input type="text" disabled={!room.new} value={id} ref={idRef} onChange={e=>{
+                        if(room.new) {
+                            setId(e.target.value);
+                            setIdError('');
+                        }
+                    }} />
+                </label>
+            </div>
 
             <div className="icon-select-title">Icon</div>
             <div className='icon-select' data-icon={iconId}>
@@ -159,7 +202,8 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
                 </>): null}
             </fieldset>
 
-            <IntermittentableButton primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
+            <IntermittentableButton<HMApi.Response<HMApi.RequestAddRoom|HMApi.RequestEditRoom>>
+                primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
                 <FontAwesomeIcon icon={faSave} /> Save
             </IntermittentableButton>
         </div>

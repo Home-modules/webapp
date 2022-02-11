@@ -35,6 +35,7 @@ main#settings main#settings-rooms {
                 background-color: var(--color-button-secondary);
                 border-radius: 8px;
                 padding: 10px 15px;
+                margin-bottom: 10px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -53,6 +54,7 @@ main#settings main#settings-rooms {
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                    white-space: pre;
 
                     svg {
                         margin-right: 10px;
@@ -63,6 +65,22 @@ main#settings main#settings-rooms {
                     font-size: 14px;
                     color: var(--color-foreground-subtext);
                     font-family: var(--code-font-stack);
+                    white-space: pre;
+                }
+            }
+
+            .add {
+                text-align: center;
+                padding: 10px;
+                border: 1px dashed var(--color-input-border);
+                color: var(--color-input-border);
+                border-radius: 8px;
+                cursor: pointer;
+                transition: color 200ms, border-color 200ms;
+
+                &:hover {
+                    border-color: var(--color-foreground-subtext);
+                    color: var(--color-foreground-subtext);
                 }
             }
 
