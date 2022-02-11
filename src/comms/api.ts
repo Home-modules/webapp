@@ -126,7 +126,17 @@ export namespace HMApi {
         room: Room
     }
 
-    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms | RequestEditRoom | RequestGetSerialPorts | RequestAddRoom;
+    /**
+     * Shuts down and removes a room from the house.
+     * @throws `NOT_FOUND` if the room doesn't exist
+     */
+    export type RequestRemoveRoom = {
+        type: "rooms.removeRoom",
+        /** Room ID */
+        id: string
+    }
+
+    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms | RequestEditRoom | RequestGetSerialPorts | RequestAddRoom | RequestRemoveRoom;
 
 
     /** Nothing is returned */
@@ -246,6 +256,14 @@ export namespace HMApi {
     };
 
     /**
+     * The requested item/resource was not found.
+     */
+    export type RequestErrorNotFound = {
+        code: 404,
+        message: "NOT_FOUND"
+    };
+
+    /**
      * The user trying to be logged in to doesn't exists.
      */
     export type RequestErrorLoginUserNotFound = {
@@ -278,14 +296,6 @@ export namespace HMApi {
     };
 
     /**
-     * The room doesn't exist.
-     */
-    export type RequestErrorRoomNotFound = {
-        code: 400,
-        message: "ROOM_NOT_FOUND"
-    };
-
-    /**
      * A room with the same ID already exists.
      */
     export type RequestErrorRoomAlreadyExists = {
@@ -304,9 +314,10 @@ export namespace HMApi {
         R extends RequestChangeUsername ? RequestErrorUsernameAlreadyTaken | RequestErrorUsernameTooShort :
         R extends RequestCheckUsernameAvailable ? never :
         R extends RequestGetRooms ? never :
-        R extends RequestEditRoom ? RequestErrorRoomNotFound :
+        R extends RequestEditRoom ? RequestErrorNotFound :
         R extends RequestGetSerialPorts ? never :
         R extends RequestAddRoom ? RequestErrorRoomAlreadyExists :
+        R extends RequestRemoveRoom ? RequestErrorNotFound :
         never
     ) | (
         [R extends R ? keyof Omit<R, 'type'>: never ][0] extends never ? never : (RequestErrorMissingParameter<R> | RequestErrorInvalidParameter<R> | RequestErrorParameterOutOfRange<R>)

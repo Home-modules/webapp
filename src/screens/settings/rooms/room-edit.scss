@@ -5,17 +5,29 @@ main#settings main#settings-rooms .edit-room {
     h1 {
         margin: 0;
         
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+        .title {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
 
-        svg {
+        > svg {
             margin-right: 15px;
             cursor: pointer;
+        }
+
+        button {
+            vertical-align: middle;
+            margin-left: 10px;
+            float: right;
+            height: 43px;
+            width: 43px;
+            font-size: 1.5rem;
         }
     }
 
     .name-and-id {
+        clear: both;
         display: flex;
         gap: 10px;
         margin-bottom: 15px;

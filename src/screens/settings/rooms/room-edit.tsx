@@ -1,7 +1,7 @@
 import './room-edit.scss';
 import { HMApi } from "../../../comms/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faTrash, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { IntermittentableButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../comms/request';
@@ -115,8 +115,27 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
     return (
         <div className={`edit-room ${hidden?'hidden':''}`}>
             <h1>
-                <FontAwesomeIcon icon={faArrowLeft} onClick={onClose} />
-                Editing {room.name}
+                <FontAwesomeIcon icon={faArrowLeft} onClick={onClose} fixedWidth />
+                <span className="title">
+                    {room.new ? "New room" : <>Editing {room.name}</>}
+                </span>
+                {room.new || (
+                    <IntermittentableButton 
+                        onClick={()=> sendRequest({
+                            'type': 'rooms.removeRoom',
+                            id
+                        })}
+                        onThen={res=>{
+                            if(res.type==='ok') {
+                                onClose();
+                            }
+                            else handleError(res);
+                        }}
+                        onCatch={handleError}
+                    >
+                        <FontAwesomeIcon icon={faTrash} />
+                    </IntermittentableButton>
+                )}
             </h1>
 
             <div className="name-and-id">
