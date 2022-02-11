@@ -1,6 +1,6 @@
 main#settings main#settings-rooms {
     position: relative;
-    overflow: hidden;
+    overflow: hidd;
 
     .rooms-list {
         position: absolute;
@@ -9,6 +9,7 @@ main#settings main#settings-rooms {
         right: 0;
         bottom: 0;
         transition: opacity 250ms, transform 250ms;
+        overflow: overlay;
 
         &.hidden {
             opacity: 0;
@@ -27,9 +28,6 @@ main#settings main#settings-rooms {
 
         .list {
             flex-grow: 1;
-            border: 1px solid var(--color-input-border);
-            border-radius: 15px;
-            padding: 10px;
 
             .item {
                 background-color: var(--color-button-secondary);

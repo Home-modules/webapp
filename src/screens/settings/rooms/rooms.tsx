@@ -96,7 +96,7 @@ function RoomItem({room, onClick}: RoomItemProps) {
     return (
         <div className='item' onClick={onClick}>
             <span className='name'>
-                <FontAwesomeIcon icon={icons[room.icon]} />
+                <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
                 {room.name}
             </span>
             <span className='id'>{room.id}</span>
