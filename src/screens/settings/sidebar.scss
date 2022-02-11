@@ -69,6 +69,7 @@ main#settings nav.settings-sidebar {
 @media screen and (max-width: 600px) {
     main#settings nav.settings-sidebar {
         width: auto;
+        box-shadow: inset 0 -1px 0 0 var(--color-navbar-border);
 
         button {
             padding: 15px;
