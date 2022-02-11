@@ -150,7 +150,7 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
                             setId(e.target.value
                                 .replace(/[^A-Za-z0-9 ]/g,'') // Remove unwanted characters, only accept alphanumeric and space
                                 .replace(/\s{2,}/g,' ') // Replace multi spaces with a single space
-                                .toLowerCase() // Make it lowercase (this line is not in the original package, I added it)
+                                .trim().toLowerCase() // Make it lowercase (this line is not in the original package, I added it)
                                 .replace(/\s/g, "-") // Replace space with a '-' symbol)
                             );
                             // These three lines are from https://github.com/mrded/machine-name/blob/master/index.js.
