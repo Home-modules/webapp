@@ -30,40 +30,63 @@ main#settings main#settings-rooms {
             flex-grow: 1;
 
             .item {
-                background-color: var(--color-button-secondary);
-                border-radius: 8px;
-                padding: 10px 15px;
-                margin-bottom: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                cursor: pointer;
-                transition: background-color 200ms;
-                gap: 15px;
+                position: relative;
+                transition: opacity 200ms;
 
-                &:hover {
-                    background-color: var(--color-button-secondary-hover);
-                }
+                .drag-handle {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 100%;
+                    cursor: grab;
+                    z-index: 1;
+                    fill: var(--color-foreground-subtext);
 
-                .name {
-                    font-size: 18px;
-                    font-weight: bold;
-
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    white-space: pre;
-
-                    svg {
-                        margin-right: 10px;
+                    &:active {
+                        cursor: grabbing;
                     }
                 }
 
-                .id {
-                    font-size: 14px;
-                    color: var(--color-foreground-subtext);
-                    font-family: var(--code-font-stack);
-                    white-space: pre;
+                .open {
+                    background-color: var(--color-button-secondary);
+                    border-radius: 8px;
+                    padding: 10px 15px;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    cursor: pointer;
+                    transition: background-color 200ms;
+                    gap: 15px;
+
+                    &:hover {
+                        background-color: var(--color-button-secondary-hover);
+                    }
+
+                    .name {
+                        font-size: 18px;
+                        font-weight: bold;
+
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        white-space: pre;
+
+                        svg {
+                            margin-right: 10px;
+                        }
+                    }
+
+                    .id {
+                        font-size: 14px;
+                        color: var(--color-foreground-subtext);
+                        font-family: var(--code-font-stack);
+                        white-space: pre;
+                    }
+                }
+
+                &.ghost {
+                    opacity: 0.5;
                 }
             }
 

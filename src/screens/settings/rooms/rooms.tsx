@@ -2,6 +2,8 @@ import './rooms.scss';
 import { faBath, faBed, faCouch, faDoorClosed, faPlus, faTimesCircle, faUtensils, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import { ReactSortable, Store } from "react-sortablejs";
+import Sortable from 'sortablejs';
 import { HMApi } from '../../../comms/api';
 import { handleError, sendRequest } from '../../../comms/request';
 import SettingsPageRoomsEditRoom from './room-edit';
@@ -39,6 +41,15 @@ export default function SettingsPageRooms() {
         }, 1000);
     }
 
+    function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
+        if(rooms) {
+            sendRequest({
+                type: 'rooms.changeRoomOrder',
+                ids: rooms.map(room=>room.id)
+            }).catch(handleError)
+        }
+    }
+
     return (
         <main id="settings-rooms">
             <div className={`rooms-list ${(editingRoom && !closingEditRoom)? 'hidden':''}`}>
@@ -55,9 +66,14 @@ export default function SettingsPageRooms() {
                             Error loading rooms
                         </div>
                     ) : (<>
-                        {rooms.map(room => (
-                            <RoomItem key={room.id} room={room} onClick={()=> setEditingRoom(room)} />
-                        ))}
+                        <ReactSortable 
+                            list={rooms} setList={setRooms} onSort={onSort}
+                            animation={200} easing='ease' 
+                            handle='.drag-handle' ghostClass='ghost'>
+                            {rooms.map(room => (
+                                <RoomItem key={room.id} room={room} onClick={()=> setEditingRoom(room)} />
+                            ))}
+                        </ReactSortable>
                         <div className="add" onClick={()=> setEditingRoom({
                             id: '',
                             controllerType: {
@@ -94,12 +110,17 @@ function RoomItem({room, onClick}: RoomItemProps) {
         'other': faDoorClosed
     }
     return (
-        <div className='item' onClick={onClick}>
-            <span className='name'>
-                <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
-                {room.name}
-            </span>
-            <span className='id'>{room.id}</span>
+        <div className='item'>
+            <svg className='drag-handle' width="16" height="16">
+                <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
+            </svg>
+            <div className='open' onClick={onClick}>
+                <span className='name'>
+                    <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
+                    {room.name}
+                </span>
+                <span className='id'>{room.id}</span>
+            </div>
         </div>
     );
 }

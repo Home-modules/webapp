@@ -19,8 +19,10 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-scripts": "5.0.0",
+    "react-sortablejs": "^6.1.1",
     "redux": "^4.1.2",
     "sass": "^1.49.7",
+    "sortablejs": "^1.14.0",
     "typescript": "^4.5.5",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
@@ -59,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/sortablejs": "^1.10.7"
   }
 }
