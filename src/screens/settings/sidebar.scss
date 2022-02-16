@@ -40,7 +40,7 @@ main#settings nav.settings-sidebar {
             width: 15px;
             height: 15px;
             background-color: var(--color-background);
-            transition: right 200ms;
+            transition: right 100ms;
         }
 
         &:hover:not(.active) {
