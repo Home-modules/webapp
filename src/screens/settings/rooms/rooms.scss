@@ -21,9 +21,107 @@ main#settings main#settings-rooms {
         flex-direction: column;
         padding: 20px;
 
-        h1 {
+        > h1 {
             margin-top: 0;
             flex-shrink: 0;
+            height: 44px;
+            position: relative;
+
+            .title, .search {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+            .title {
+                display: flex;
+                align-items: center;
+
+                span {
+                    flex-grow: 1;
+                }
+
+                svg {
+                    flex-shrink: 0;
+                    height: 0.75em;
+                    width: 0.75em;
+                    padding: 10px;
+                    margin-left: 15px;
+                    cursor: pointer;
+
+                    color: var(--color-foreground-subtext);
+                    transition: color 200ms;
+
+                    &:hover {
+                        color: var(--color-foreground);
+                    }
+                }
+            }
+
+            .search {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+
+                svg {
+                    flex-shrink: 0;
+                    height: 0.75em;
+                    width: 0.75em;
+                    padding: 10px 0;
+
+                    &:last-child {
+                        padding-right: 10px;
+                        color: var(--color-foreground-subtext);
+                        transition: color 200ms;
+                        cursor: pointer;
+    
+                        &:hover {
+                            color: var(--color-foreground);
+                        }
+                    }
+                }
+
+                input {
+                    flex-grow: 1;
+                    font-family: var(--main-font-stack);
+                    background: transparent;
+                    border: none;
+                    font-size: 1.5rem;
+                    color: var(--color-foreground);
+
+                    &:focus::placeholder {
+                        opacity: 0.75;
+                    }
+                }
+
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(44px);
+                transition: opacity 250ms, transform 250ms;
+            }
+
+            .title {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateY(0);
+                transition: opacity 250ms, transform 250ms;
+            }
+
+            &.search-active {
+                .title {
+                    opacity: 0;
+                    pointer-events: none;
+                    transform: translateY(-44px);
+                }
+
+                .search {
+                    opacity: 1;
+                    pointer-events: auto;
+                    transform: translateY(0);
+                }
+            }
         }
 
         .list {

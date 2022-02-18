@@ -1,5 +1,5 @@
 import './rooms.scss';
-import { faBath, faBed, faCouch, faDoorClosed, faPlus, faTimesCircle, faUtensils, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimesCircle, faTimes, faUtensils, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ReactSortable, Store } from "react-sortablejs";
@@ -8,11 +8,15 @@ import { HMApi } from '../../../comms/api';
 import { handleError, sendRequest } from '../../../comms/request';
 import { store, StoreState } from '../../../store';
 import { connect } from 'react-redux';
-import { Link, Outlet, useMatch } from 'react-router-dom';
+import { Link, Outlet, useMatch, useSearchParams } from 'react-router-dom';
 
 function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     let editing = !!(useMatch('/settings/rooms/edit/:roomId'));
     editing = !!(useMatch('/settings/rooms/new')) || editing;
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const search= searchParams.get('search');
+    const searchFieldRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
     function setRooms(rooms: StoreState['rooms']) {
         store.dispatch({
@@ -52,7 +56,20 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     return (
         <main id="settings-rooms">
             <div className={`rooms-list ${editing? 'hidden':''}`}>
-                <h1>Edit Rooms</h1>
+                <h1 className={search===null ? undefined : 'search-active'}>
+                    <div className="title">
+                        <span>Edit Rooms</span>
+                        <FontAwesomeIcon icon={faSearch} onClick={()=>{
+                            setSearchParams({search: ''});
+                            searchFieldRef.current?.focus();
+                        }} />
+                    </div>
+                    <div className="search">
+                        <FontAwesomeIcon icon={faSearch} />
+                        <input type="text" placeholder="Search" value={search||''} onChange={(e)=>setSearchParams({search: e.target.value})} ref={searchFieldRef} />
+                        <FontAwesomeIcon icon={faTimes} onClick={()=>setSearchParams({})} />
+                    </div>
+                </h1>
                 <div className='list'>
                     {rooms === null ? (
                         <div className="loading">
@@ -64,6 +81,12 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                             <FontAwesomeIcon icon={faTimesCircle} />
                             Error loading rooms
                         </div>
+                    ) : search ? (
+                        rooms
+                            .filter(room=>(room.name.toLowerCase().includes(search.toLowerCase()) || room.id.toLowerCase().includes(search.toLowerCase())))
+                            .map(room => (
+                                <RoomItem key={room.id} room={room} disableReorder />
+                            ))
                     ) : (<>
                         <ReactSortable 
                             list={rooms} setList={setRooms} onSort={onSort}
@@ -88,9 +111,10 @@ export default connect(({rooms}: StoreState)=>({rooms}))(SettingsPageRooms);
 
 type RoomItemProps= {
     room: HMApi.Room;
+    disableReorder?: boolean;
 }
 
-function RoomItem({room}: RoomItemProps) {
+function RoomItem({room, disableReorder=false}: RoomItemProps) {
     const icons: Record<HMApi.Room['icon'], IconDefinition>= {
         'bathroom': faBath,
         'bedroom': faBed,
@@ -100,9 +124,11 @@ function RoomItem({room}: RoomItemProps) {
     }
     return (
         <div className='item'>
-            <svg className='drag-handle' width="16" height="16">
-                <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
-            </svg>
+            {(!disableReorder) && (
+                <svg className='drag-handle' width="16" height="16">
+                    <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
+                </svg>
+            )}
             <Link to={`/settings/rooms/edit/${room.id}`} className='open'>
                 <span className='name'>
                     <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />

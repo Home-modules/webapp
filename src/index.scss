@@ -58,3 +58,7 @@ code {
     background-color: var(--color-scrollbar-active-thumb);
   }
 }
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
