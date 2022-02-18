@@ -6,6 +6,9 @@ import React from 'react';
 import { IntermittentableButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../comms/request';
 import DropDownSelect from '../../../ui/dropdown';
+import { StoreState } from '../../../store';
+import { Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 export type SettingsPageRoomsEditRoomProps = {
     room: HMApi.Room & {new?: boolean};
@@ -21,7 +24,22 @@ const iconIds: HMApi.Room['icon'][] = [
     'other'
 ]
 
-export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}: SettingsPageRoomsEditRoomProps) {
+function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
+    const isNew = !!useMatch('/settings/rooms/new');
+    const {roomId= ''} = useParams();
+    let room= (rooms && rooms.find(room=>room.id===roomId))
+    const roomExists= !!room;
+    room ||= {
+        id: '',
+        name: '',
+        icon: 'other',
+        controllerType: {
+            type: 'standard-serial',
+            port: ''
+        }
+    };
+    const navigate = useNavigate();
+
     const [name, setName] = React.useState(room.name);
     const [nameError, setNameError] = React.useState('');
     const nameRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
@@ -36,6 +54,11 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
     const [serialPorts, setSerialPorts] = React.useState<HMApi.SerialPort[]|0|-1>(0); // 0= loading -1= error
     const [serialPortError, setSerialPortError] = React.useState('');
 
+    console.log(roomId, room, roomExists, isNew);
+    if(!(roomExists || isNew)) {
+        return <Navigate to="/settings/rooms" />
+    }
+
     function onSave() {
         const nRoom: HMApi.Room = {
             id,
@@ -44,7 +67,7 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
             controllerType: controller
         };
 
-        if(room.new) {
+        if(isNew) {
             return sendRequest({
                 type: 'rooms.addRoom',
                 room: nRoom
@@ -80,7 +103,7 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
 
     function onSaveSuccess(res: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) {
         if(res.type==='ok') {
-            onClose();
+            navigate('/settings/rooms');
         }
         else {
             onSaveError(res);
@@ -113,13 +136,13 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
     }
 
     return (
-        <div className={`edit-room ${hidden?'hidden':''}`}>
+        <div className={`edit-room`}>
             <h1>
-                <FontAwesomeIcon icon={faArrowLeft} onClick={onClose} fixedWidth />
+                <FontAwesomeIcon icon={faArrowLeft} onClick={()=> navigate('/settings/rooms')} fixedWidth />
                 <span className="title">
-                    {room.new ? "New room" : <>Editing {room.name}</>}
+                    {isNew ? "New room" : <>Editing {room.name}</>}
                 </span>
-                {room.new || (
+                {isNew || (
                     <IntermittentableButton 
                         onClick={()=> sendRequest({
                             'type': 'rooms.removeRoom',
@@ -127,7 +150,7 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
                         })}
                         onThen={res=>{
                             if(res.type==='ok') {
-                                onClose();
+                                navigate('/settings/rooms')
                             }
                             else handleError(res);
                         }}
@@ -158,10 +181,10 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
                         }
                     }} />
                 </label>
-                <label data-error={idError} data-disabled={!room.new} title={(!room.new) ? 'Room ID cannot be changed after it is created': undefined}>
+                <label data-error={idError} data-disabled={!isNew} title={(!isNew) ? 'Room ID cannot be changed after it is created': undefined}>
                     ID (permanent)
-                    <input type="text" disabled={!room.new} value={id} ref={idRef} onChange={e=>{
-                        if(room.new) {
+                    <input type="text" disabled={!isNew} value={id} ref={idRef} onChange={e=>{
+                        if(isNew) {
                             setId(e.target.value);
                             setIdError('');
                         }
@@ -228,3 +251,5 @@ export default function SettingsPageRoomsEditRoom({room, onClose, hidden=false}:
         </div>
     );
 }
+
+export default connect(({rooms}: StoreState)=> ({rooms}))(SettingsPageRoomsEditRoom);

@@ -6,15 +6,23 @@ import { ReactSortable, Store } from "react-sortablejs";
 import Sortable from 'sortablejs';
 import { HMApi } from '../../../comms/api';
 import { handleError, sendRequest } from '../../../comms/request';
-import SettingsPageRoomsEditRoom from './room-edit';
+import { store, StoreState } from '../../../store';
+import { connect } from 'react-redux';
+import { Link, Outlet, useMatch } from 'react-router-dom';
 
-export default function SettingsPageRooms() { 
-    const [rooms, setRooms] = React.useState<HMApi.Room[]|false|null>(null); // null means loading, false means error
-    const [editingRoom, setEditingRoom] = React.useState<(HMApi.Room & {new?: boolean})|null>(null);
-    const [closingEditRoom, setClosingEditRoom] = React.useState(false);
+function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
+    let editing = !!(useMatch('/settings/rooms/edit/:roomId'));
+    editing = !!(useMatch('/settings/rooms/new')) || editing;
+
+    function setRooms(rooms: StoreState['rooms']) {
+        store.dispatch({
+            type: 'SET_ROOMS',
+            rooms
+        });
+    }
 
     function updateRooms() {
-        setRooms(null);
+        if(editing) return;
         sendRequest({
             type: 'rooms.getRooms'
         }).then(res => {
@@ -30,16 +38,7 @@ export default function SettingsPageRooms() {
             handleError(err);
         });
     }
-    React.useEffect(updateRooms, []);
-
-    function closeRoom() {
-        updateRooms();
-        setClosingEditRoom(true);
-        setTimeout(()=> {
-            setEditingRoom(null);
-            setClosingEditRoom(false);
-        }, 1000);
-    }
+    React.useEffect(updateRooms, [editing]);
 
     function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
         if(rooms) {
@@ -52,7 +51,7 @@ export default function SettingsPageRooms() {
 
     return (
         <main id="settings-rooms">
-            <div className={`rooms-list ${(editingRoom && !closingEditRoom)? 'hidden':''}`}>
+            <div className={`rooms-list ${editing? 'hidden':''}`}>
                 <h1>Edit Rooms</h1>
                 <div className='list'>
                     {rooms === null ? (
@@ -71,37 +70,27 @@ export default function SettingsPageRooms() {
                             animation={200} easing='ease' 
                             handle='.drag-handle' ghostClass='ghost'>
                             {rooms.map(room => (
-                                <RoomItem key={room.id} room={room} onClick={()=> setEditingRoom(room)} />
+                                <RoomItem key={room.id} room={room} />
                             ))}
                         </ReactSortable>
-                        <div className="add" onClick={()=> setEditingRoom({
-                            id: '',
-                            controllerType: {
-                                port: '',
-                                type: 'standard-serial'
-                            },
-                            icon: 'other',
-                            name: '',
-                            new: true
-                        })}>
+                        <Link to="/settings/rooms/new" className="add">
                             <FontAwesomeIcon icon={faPlus} />
-                        </div>
+                        </Link>
                     </>)}
                 </div>
             </div>
-            {editingRoom && (
-                <SettingsPageRoomsEditRoom room={editingRoom} onClose={closeRoom} hidden={closingEditRoom} />
-            )}
+            <Outlet />
         </main>
     )
 }
 
+export default connect(({rooms}: StoreState)=>({rooms}))(SettingsPageRooms);
+
 type RoomItemProps= {
     room: HMApi.Room;
-    onClick: () => void;
 }
 
-function RoomItem({room, onClick}: RoomItemProps) {
+function RoomItem({room}: RoomItemProps) {
     const icons: Record<HMApi.Room['icon'], IconDefinition>= {
         'bathroom': faBath,
         'bedroom': faBed,
@@ -114,13 +103,13 @@ function RoomItem({room, onClick}: RoomItemProps) {
             <svg className='drag-handle' width="16" height="16">
                 <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
             </svg>
-            <div className='open' onClick={onClick}>
+            <Link to={`/settings/rooms/edit/${room.id}`} className='open'>
                 <span className='name'>
                     <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
                     {room.name}
                 </span>
                 <span className='id'>{room.id}</span>
-            </div>
+            </Link>
         </div>
     );
 }

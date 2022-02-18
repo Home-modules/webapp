@@ -4,17 +4,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
 import { store, StoreState } from "../store";
+import { Link } from 'react-router-dom';
 
 export type NotificationProps= {
     id: string,
     title?: string,
     message: React.ReactNode|React.ReactNode[],
     type?: 'error' | 'success' | 'info' | 'warning',
-    buttons?: {
+    buttons?: ({
         label: string,
         onClick: () => void,
         isPrimary?: boolean
-    }[],
+    } | {
+        label: string,
+        route: string,
+        isPrimary?: boolean
+    })[],
     hideCloseButton?: boolean,
     timeout?: number
 }
@@ -50,12 +55,21 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
             {title && <h1>{title}</h1>}
             <div className="content">{message}</div>
             {buttons.map((button, i) => (
-                <button key={i} 
-                    className={`button ${button.isPrimary ? 'primary' : ''}`} 
-                    onClick={()=>{close(); button.onClick()}}>
-                        
-                    {button.label}
-                </button>
+                'route' in button ? (
+                    <Link key={i}
+                        className={`button ${button.isPrimary?'primary':''}`}
+                        to={button.route} onClick={()=>close()}>
+                             
+                        {button.label}
+                    </Link>
+                ) : (
+                    <button key={i} 
+                        className={`button ${button.isPrimary ? 'primary' : ''}`} 
+                        onClick={()=>{close(); button.onClick()}}>
+                            
+                        {button.label}
+                    </button>
+                )
             ))}
         </div>
     )

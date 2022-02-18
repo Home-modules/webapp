@@ -1,5 +1,5 @@
 import { createStore } from "redux";
-import HomePage from "./screens/home";
+import { HMApi } from "./comms/api";
 import { DialogProps } from "./ui/dialogs";
 import { NotificationProps } from "./ui/notifications";
 import { uniqueId } from "./uniqueId";
@@ -7,8 +7,8 @@ import { uniqueId } from "./uniqueId";
 export type StoreState = {
     token: string | null;
     notifications: NotificationProps[];
-    CurrentScreen: React.ComponentType<{}>;
     dialogs: DialogProps[];
+    rooms: HMApi.Room[] | false | null; // null means loading, false means error
 };
 
 export type StoreAction = {
@@ -21,21 +21,21 @@ export type StoreAction = {
     type: "REMOVE_NOTIFICATION",
     id: string
 } | {
-    type: "SET_CURRENT_SCREEN",
-    screen: React.ComponentType<{}>
-} | {
     type: "ADD_DIALOG",
     dialog: Omit<DialogProps, "id">
 } | {
     type: "REMOVE_DIALOG",
     id: string
-}
+} | {
+    type: "SET_ROOMS",
+    rooms: HMApi.Room[] | false | null
+};
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     token: localStorage.getItem('home_modules_token') || null,
     notifications: [],
-    CurrentScreen: HomePage,
-    dialogs: []
+    dialogs: [],
+    rooms: null
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -59,11 +59,6 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                 ...state,
                 notifications: state.notifications.filter(e=> e.id!==action.id)
             };
-        case 'SET_CURRENT_SCREEN':
-            return {
-                ...state,
-                CurrentScreen: action.screen
-            };
         case 'ADD_DIALOG':
             return {
                 ...state,
@@ -80,7 +75,12 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                 ...state,
                 dialogs: state.dialogs.filter(e=> e.id!==action.id)
             };
+        case 'SET_ROOMS':
+            return {
+                ...state,
+                rooms: action.rooms
+            };
         default:
             return state;
     }
-})
+}, (window as any).__REDUX_DEVTOOLS_EXTENSION__ ?.());

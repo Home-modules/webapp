@@ -4,25 +4,29 @@ import { HMApi } from '../../../comms/api';
 import { handleError, sendRequest } from '../../../comms/request';
 import { store } from '../../../store';
 import { IntermittentableSubmitButton } from '../../../ui/button';
+import { RouteDialog } from '../../../ui/dialogs';
+import { useNavigate } from 'react-router-dom';
 
-export default function showChangeUsernameDialog() {
-    store.dispatch({
-        type: 'ADD_DIALOG',
-        dialog: {
-            title: 'Change Username',
-            className: 'change-username-dialog',
-            children: ChangeUsernameDialog
-        }
-    });
-}
+// export default function showChangeUsernameDialog() {
+//     store.dispatch({
+//         type: 'ADD_DIALOG',
+//         dialog: {
+//             title: 'Change Username',
+//             className: 'change-username-dialog',
+//             children: ChangeUsernameDialog
+//         }
+//     });
+// }
 
-export function ChangeUsernameDialog({ close }: { close: () => void }) {
+export default function ChangeUsernameDialog() {
     const [username, setUsername] = React.useState(store.getState().token?.split(':')[0] || '');
     const [usernameError, setUsernameError] = React.useState('');
     const usernameRef= React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
     const [isAvailable, setIsAvailable] = React.useState<boolean|0>(0); // 0= loading false= taken true= available
     const [isAvailableError, setIsAvailableError] = React.useState(0);  // 0= Already taken 1= Too short
+
+    const navigate= useNavigate();
 
     React.useEffect(() => {
         if(username.length < 3) {
@@ -58,7 +62,7 @@ export function ChangeUsernameDialog({ close }: { close: () => void }) {
                 type: 'SET_TOKEN',
                 token: res.data.token
             });
-            close();
+            navigate('/settings/account');
             store.dispatch({
                 type: 'ADD_NOTIFICATION',
                 notification: {
@@ -86,27 +90,29 @@ export function ChangeUsernameDialog({ close }: { close: () => void }) {
     }
 
     return (
-        <form onSubmit={e=>e.preventDefault()}>
-            <p className="warning">Warning: Other sessions will be logged out!</p>
-            <label data-error={usernameError}>
-                New Username
-                <input 
-                    type="text"
-                    value={username}
-                    ref={usernameRef}
-                    onChange={(event) => {
-                        setUsername(event.target.value);
-                        setUsernameError('');
-                    }} />
-            </label>
-            <div className={`status ${isAvailable===0?'loading' : isAvailable ? 'available':'taken'}`}>
-                <div className="loading">Checking username availability...</div>
-                <div className="taken">{["Username already taken", "Username must be at least 3 characters long"][isAvailableError]}</div>
-                <div className="available">Username available</div>
-            </div>
-            <IntermittentableSubmitButton onClick={onSubmit} onThen={onSuccess} onCatch={onError} disabled={isAvailable===false}>
-                Change Username
-            </IntermittentableSubmitButton>
-        </form>
+        <RouteDialog className='change-username-dialog' title='Change username'>
+            <form onSubmit={e=>e.preventDefault()}>
+                <p className="warning">Warning: Other sessions will be logged out!</p>
+                <label data-error={usernameError}>
+                    New Username
+                    <input 
+                        type="text"
+                        value={username}
+                        ref={usernameRef}
+                        onChange={(event) => {
+                            setUsername(event.target.value);
+                            setUsernameError('');
+                        }} />
+                </label>
+                <div className={`status ${isAvailable===0?'loading' : isAvailable ? 'available':'taken'}`}>
+                    <div className="loading">Checking username availability...</div>
+                    <div className="taken">{["Username already taken", "Username must be at least 3 characters long"][isAvailableError]}</div>
+                    <div className="available">Username available</div>
+                </div>
+                <IntermittentableSubmitButton onClick={onSubmit} onThen={onSuccess} onCatch={onError} disabled={isAvailable===false}>
+                    Change Username
+                </IntermittentableSubmitButton>
+            </form>
+        </RouteDialog>
     )
 }

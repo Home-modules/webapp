@@ -6,6 +6,7 @@ import { store, StoreState } from '../../../store';
 import Button, { IntermittentableButton } from '../../../ui/button';
 import showChangePasswordDialog from './change-password';
 import showChangeUsernameDialog from './change-username';
+import { Link, Outlet } from 'react-router-dom';
 
 function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     const [sessionsCount, setSessionsCount] = React.useState(-1); // Special values: -1 = loading, -2 = error
@@ -69,7 +70,11 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                 </IntermittentableButton>
             </p>
 
-            <Button onClick={showChangePasswordDialog}>Change password</Button> <Button onClick={showChangeUsernameDialog}>Change Username</Button>
+            <Link to="/settings/account/change-password" className='button'>Change password</Link> 
+            <> </>
+            <Link to="/settings/account/change-username" className='button'>Change username</Link> 
+
+            <Outlet />
         </main>
     )
 }

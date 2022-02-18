@@ -52,12 +52,17 @@ main#settings main#settings-rooms {
                     border-radius: 8px;
                     padding: 10px 15px;
                     margin-bottom: 10px;
+
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    cursor: pointer;
-                    transition: background-color 200ms;
                     gap: 15px;
+
+                    cursor: pointer;
+                    text-decoration: none;
+                    color: var(--color-foreground);
+
+                    transition: background-color 200ms;
 
                     &:hover {
                         background-color: var(--color-button-secondary-hover);
@@ -91,6 +96,7 @@ main#settings main#settings-rooms {
             }
 
             .add {
+                display: block;
                 text-align: center;
                 padding: 10px;
                 border: 1px dashed var(--color-input-border);

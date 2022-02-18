@@ -1,20 +1,53 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './App';
+import App, { AppRedirect } from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+
+import HomePage from './screens/home';
+import SettingsPage from './screens/settings/settings';
+import SettingsPageAccount from './screens/settings/account/account';
+import SettingsPageRooms from './screens/settings/rooms/rooms';
+import SettingsPageRoomsEditRoom from './screens/settings/rooms/room-edit';
+import LoginForm from './screens/login';
+import ChangePasswordDialog from './screens/settings/account/change-password';
+import ChangeUsernameDialog from './screens/settings/account/change-username';
 import Notifications from './ui/notifications';
 import Dialogs from './ui/dialogs';
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <Notifications />
-            <App />
-            <Dialogs />
+            <BrowserRouter>
+                <Notifications />
+                <Routes>
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/" element={<App />}>
+                        <Route path="home" element={<HomePage />} />
+                        <Route path="settings" element={<SettingsPage />}>
+                            <Route path="account" element={<SettingsPageAccount />}>
+                                <Route path="change-password" element={<ChangePasswordDialog />} />
+                                <Route path="change-username" element={<ChangeUsernameDialog />} />
+                                <Route path="*" element={<Navigate to="/settings/account" />} />
+                            </Route>
+                            <Route path="rooms" element={<SettingsPageRooms />}>
+                                <Route path="edit/:roomId" element={<SettingsPageRoomsEditRoom />} />
+                                <Route path="new" element={<SettingsPageRoomsEditRoom />} />
+                                <Route path="*" element={<Navigate to="/settings/rooms" />} />
+                            </Route>
+                            <Route path="*" element={<Navigate to="/settings/account" />} />
+                            <Route index element={<Navigate to="/settings/account" />} />
+                        </Route>
+                        <Route index element={<AppRedirect />} />
+                        <Route path="*" element={<AppRedirect />} />
+                    </Route>
+                </Routes>
+                <Dialogs />
+            </BrowserRouter>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')

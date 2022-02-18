@@ -1,20 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { HMApi } from "../../../comms/api";
 import { handleError, sendRequest } from "../../../comms/request";
 import { store } from "../../../store";
 import { IntermittentableSubmitButton } from "../../../ui/button";
+import { RouteDialog } from "../../../ui/dialogs";
 
-export default function showChangePasswordDialog() {
-    store.dispatch({
-        type: "ADD_DIALOG", 
-        dialog: {
-            title: "Change Password", 
-            children: ChangePasswordDialog
-        }
-    });
-}
+// export default function showChangePasswordDialog() {
+//     store.dispatch({
+//         type: "ADD_DIALOG", 
+//         dialog: {
+//             title: "Change Password", 
+//             children: ChangePasswordDialog
+//         }
+//     });
+// }
 
-function ChangePasswordDialog({close}: {close: ()=>void}) {
+export default function ChangePasswordDialog() {
     const [currentPassword, setCurrentPassword] = React.useState("");
     const [currentPasswordError, setCurrentPasswordError] = React.useState('');
     const currentPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
@@ -26,6 +28,8 @@ function ChangePasswordDialog({close}: {close: ()=>void}) {
     const [confirmPassword, setConfirmPassword] = React.useState("");
     const [confirmPasswordError, setConfirmPasswordError] = React.useState('');
     const confirmNewPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+
+    const navigate= useNavigate();
 
     function handleSubmit() {
         if(newPassword !== confirmPassword) {
@@ -53,7 +57,7 @@ function ChangePasswordDialog({close}: {close: ()=>void}) {
     }
 
     function onSuccess() {
-        close();
+        navigate('/settings/account');
         store.dispatch({
             type: "ADD_NOTIFICATION",
             notification: {
@@ -76,47 +80,49 @@ function ChangePasswordDialog({close}: {close: ()=>void}) {
     }
 
     return (
-        <form onSubmit={e=>{e.preventDefault()}}>
-            <label data-error={currentPasswordError}>
-                Current Password
-                    <input
-                        type="password"
-                        value={currentPassword} 
-                        ref={currentPasswordRef}
-                        onChange={(event) => {
-                            setCurrentPassword(event.target.value); 
-                            setCurrentPasswordError('');
-                            if(newPassword===""){
+        <RouteDialog className="change-password-dialog" title="Change password">
+            <form onSubmit={e=>{e.preventDefault()}}>
+                <label data-error={currentPasswordError}>
+                    Current Password
+                        <input
+                            type="password"
+                            value={currentPassword} 
+                            ref={currentPasswordRef}
+                            onChange={(event) => {
+                                setCurrentPassword(event.target.value); 
+                                setCurrentPasswordError('');
+                                if(newPassword===""){
+                                    setNewPasswordError('');
+                                }
+                            }} />
+                </label>
+                <label data-error={newPasswordError}>
+                    New Password
+                        <input
+                            type="password"
+                            value={newPassword}
+                            ref={newPasswordRef}
+                            onChange={(event) => {
+                                setNewPassword(event.target.value);
                                 setNewPasswordError('');
-                            }
-                        }} />
-            </label>
-            <label data-error={newPasswordError}>
-                New Password
-                    <input
-                        type="password"
-                        value={newPassword}
-                        ref={newPasswordRef}
-                        onChange={(event) => {
-                            setNewPassword(event.target.value);
-                            setNewPasswordError('');
-                            setConfirmPasswordError('');
-                        }} />
-            </label>
-            <label data-error={confirmPasswordError}>
-                Repeat New Password
-                    <input
-                        type="password"
-                        value={confirmPassword}
-                        ref={confirmNewPasswordRef}
-                        onChange={(event) => {
-                            setConfirmPassword(event.target.value);
-                            setConfirmPasswordError('');
-                        }} />
-            </label>
-            <IntermittentableSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onError}>
-                Change Password
-            </IntermittentableSubmitButton>
-        </form>
+                                setConfirmPasswordError('');
+                            }} />
+                </label>
+                <label data-error={confirmPasswordError}>
+                    Repeat New Password
+                        <input
+                            type="password"
+                            value={confirmPassword}
+                            ref={confirmNewPasswordRef}
+                            onChange={(event) => {
+                                setConfirmPassword(event.target.value);
+                                setConfirmPasswordError('');
+                            }} />
+                </label>
+                <IntermittentableSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onError}>
+                    Change Password
+                </IntermittentableSubmitButton>
+            </form>
+        </RouteDialog>
     )
 }

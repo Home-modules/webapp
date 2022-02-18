@@ -5,8 +5,10 @@ main#settings nav.settings-sidebar {
     overflow: hidden;
     box-shadow: inset 0 1px 0 0 var(--color-navbar-border);
 
-    button {
-        display: block;
+    a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
         width: 100%;
         padding: 7px;
         font-size: 18px;
@@ -18,8 +20,9 @@ main#settings nav.settings-sidebar {
         transition: background-color 200ms, color 200ms;
         position: relative;
 
-        * {
-            vertical-align: middle;
+        > span {
+            position: relative;
+            top: -1px;
         }
 
         svg {
@@ -34,13 +37,13 @@ main#settings nav.settings-sidebar {
             content: '';
             display: block;
             position: absolute;
-            right: -25px;
+            right: -5px;
             top: calc(50% - 8px);
             transform: rotate(45deg);
             width: 15px;
             height: 15px;
             background-color: var(--color-background);
-            transition: right 100ms;
+            transition: right 150ms;
         }
 
         &:hover:not(.active) {
@@ -56,7 +59,7 @@ main#settings nav.settings-sidebar {
             color: var(--color-navbar-active-text);
 
             &::after {
-                right: -10px;
+                right: 5px;
             }
 
             svg {
@@ -71,7 +74,7 @@ main#settings nav.settings-sidebar {
         width: auto;
         box-shadow: inset 0 -1px 0 0 var(--color-navbar-border);
 
-        button {
+        a {
             padding: 15px;
 
             svg {

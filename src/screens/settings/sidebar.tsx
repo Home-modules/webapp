@@ -2,27 +2,23 @@ import './sidebar.scss';
 import React from 'react';
 import { faDoorClosed, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavLink } from 'react-router-dom';
 
-export type SettingsSidebarProps = {
-    page: number,
-    onChangePage: (page: number)=> void
-}
-
-export default function SettingsSidebar({page, onChangePage}: SettingsSidebarProps) {
+export default function SettingsSidebar() {
     return (
         <nav className="settings-sidebar">
-            <button 
-                className={page===0 ? 'active':''}
-                onClick={()=>onChangePage(0)}>
+            <NavLink 
+                to="/settings/account"
+                className={({isActive}) => isActive ? 'active' : ''}>
                 <FontAwesomeIcon icon={faUserCircle}/>
                 <span>Account</span>
-            </button>
-            <button
-                className={page===1 ? 'active':''}
-                onClick={()=>onChangePage(1)}>
+            </NavLink>
+            <NavLink
+                to="/settings/rooms"
+                className={({isActive}) => isActive ? 'active' : ''}>
                 <FontAwesomeIcon icon={faDoorClosed}/>
                 <span>Rooms</span>
-            </button>
+            </NavLink>
         </nav>
     );
 }

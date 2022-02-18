@@ -2,6 +2,7 @@ import './dialogs.scss';
 import React from "react";
 import { connect } from "react-redux";
 import { store, StoreState } from "../store";
+import { useNavigate } from 'react-router-dom';
 
 export type DialogProps = {
     title?: string,
@@ -61,3 +62,46 @@ export default connect<Pick<StoreState, 'dialogs'>, {}, {}, StoreState>(
         </>
     );
 });
+
+export type RouteDialogProps = {
+    title?: string,
+    className?: string,
+    children: React.ReactNode|React.ReactNodeArray,
+    cancellable?: boolean,
+    parentRoute?: string,
+}
+
+export function RouteDialog({title, className='', children, cancellable= true, parentRoute='..'}: RouteDialogProps) {
+    const ref= React.useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
+
+    const navigate= useNavigate();
+
+    function close() {
+        navigate(parentRoute);
+    }
+
+    function handleClose(e: React.MouseEvent<HTMLDivElement>) {
+        if(e.target !== ref.current || !cancellable) return;
+        close();
+    }
+
+    React.useEffect(()=>{
+        ref.current?.focus();
+    }, []);
+
+    return (
+        <div className={`dialog-container ${className}`} 
+            ref={ref} onClick={handleClose} tabIndex={0} onKeyPress={e=>{
+                if(e.key==='Escape') {
+                    cancellable && close();
+                }
+            }}>
+            <div className="dialog">
+                {title && <h1>{title}</h1>}
+                <div className="content">
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+}

@@ -3,16 +3,22 @@ import React from 'react';
 import { handleError, loginToHub } from '../comms/request';
 import { HMApi } from '../comms/api';
 import { IntermittentableSubmitButton } from '../ui/button';
-import { store } from '../store';
+import { store, StoreState } from '../store';
 import showChangePasswordDialog from './settings/account/change-password';
+import { connect } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
-export default function LoginForm() {
+function LoginForm({token}: Pick<StoreState, 'token'>) {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [usernameError, setUsernameError] = React.useState('');
     const [passwordError, setPasswordError] = React.useState('');
     const usernameRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
     const passwordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    
+    if(window.location.pathname === '/login' && token) {
+        return <Navigate to="/home" />
+    }
 
     const handleSubmit = () => loginToHub(username, password);
 
@@ -29,7 +35,7 @@ export default function LoginForm() {
                         buttons: [
                             {
                                 label: 'Change password',
-                                onClick: showChangePasswordDialog,
+                                route: '/settings/account/change-password',
                                 isPrimary: true
                             }
                         ]
@@ -89,3 +95,5 @@ export default function LoginForm() {
         </div>
     );
 }
+
+export default connect((state: StoreState)=>({token: state.token}))(LoginForm);
