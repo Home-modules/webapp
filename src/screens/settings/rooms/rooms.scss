@@ -9,6 +9,7 @@ main#settings main#settings-rooms {
         right: 0;
         bottom: 0;
         transition: opacity 250ms, transform 250ms;
+        overflow: auto;
         overflow: overlay;
 
         &.hidden {
