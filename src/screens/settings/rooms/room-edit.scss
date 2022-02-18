@@ -5,14 +5,19 @@ main#settings main#settings-rooms .edit-room {
     h1 {
         margin: 0;
         margin-bottom: 20px;
+
+        display: flex;
+        align-items: center;
         
         .title {
+            flex-grow: 1;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
         }
 
         > svg {
+            flex-shrink: 0;
             margin-right: 15px;
             cursor: pointer;
         }
