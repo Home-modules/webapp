@@ -1,0 +1,34 @@
+main#settings main#settings-rooms .edit-devices {
+    overflow: hidden;
+
+    .devices-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transition: opacity 250ms, transform 250ms;
+        overflow: overlay;
+
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+
+        h1 .title {
+            a {
+                display: contents;
+                color: var(---color-foreground);
+    
+                > svg {
+                    flex-shrink: 0;
+                    margin: 0;
+                    padding: 0;
+                    margin-right: 15px;
+                    height: 32px;
+                    width: 40px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

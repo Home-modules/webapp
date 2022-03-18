@@ -1,5 +1,5 @@
 import './rooms.scss';
-import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimesCircle, faTimes, faUtensils, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimesCircle, faTimes, faUtensils, IconDefinition, faPlug } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ReactSortable, Store } from "react-sortablejs";
@@ -12,8 +12,10 @@ import { Link, Outlet, useMatch, useSearchParams } from 'react-router-dom';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
 
 function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
-    let editing = !!(useMatch('/settings/rooms/edit/:roomId'));
-    editing = !!(useMatch('/settings/rooms/new')) || editing;
+    let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
+    hideList = !!(useMatch('/settings/rooms/new')) || hideList;
+    hideList = !!(useMatch('/settings/rooms/:roomId/devices')) || hideList;
+    hideList = !!(useMatch('/settings/rooms/:roomId/devices/new/*')) || hideList;
 
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
@@ -27,7 +29,10 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     }
 
     function updateRooms() {
-        if(editing) return;
+        if(hideList) return;
+        if(rooms === false) {
+            setRooms(null);
+        }
         sendRequest({
             type: 'rooms.getRooms'
         }).then(res => {
@@ -43,7 +48,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
             handleError(err);
         });
     }
-    React.useEffect(updateRooms, [editing]);
+    React.useEffect(updateRooms, [hideList]);
 
     function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
         if(rooms) {
@@ -56,6 +61,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
 
     return (
         <main id="settings-rooms">
+            <div className={`rooms-list ${hideList? 'hidden':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'}`}>
                     <div className="title">
                         <span>Edit Rooms</span>

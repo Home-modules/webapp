@@ -18,6 +18,7 @@ import ChangePasswordDialog from './screens/settings/account/change-password';
 import ChangeUsernameDialog from './screens/settings/account/change-username';
 import Notifications from './ui/notifications';
 import Dialogs from './ui/dialogs';
+import SettingsPageRoomsDevices from './screens/settings/rooms/devices/devices';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -35,8 +36,10 @@ ReactDOM.render(
                                 <Route path="*" element={<Navigate to="/settings/account" />} />
                             </Route>
                             <Route path="rooms" element={<SettingsPageRooms />}>
-                                <Route path="edit/:roomId" element={<SettingsPageRoomsEditRoom />} />
+                                <Route path=":roomId/edit" element={<SettingsPageRoomsEditRoom />} />
                                 <Route path="new" element={<SettingsPageRoomsEditRoom />} />
+                                <Route path=":roomId/devices" element={<SettingsPageRoomsDevices />}>
+                                </Route>
                                 <Route path="*" element={<Navigate to="/settings/rooms" />} />
                             </Route>
                             <Route path="*" element={<Navigate to="/settings/account" />} />
