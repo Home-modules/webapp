@@ -55,8 +55,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
 
     return (
         <main id="settings-rooms">
-            <div className={`rooms-list ${editing? 'hidden':''}`}>
-                <h1 className={search===null ? undefined : 'search-active'}>
+                <h1 className={`searchable ${search===null ? '' : 'search-active'}`}>
                     <div className="title">
                         <span>Edit Rooms</span>
                         <FontAwesomeIcon icon={faSearch} onClick={()=>{
