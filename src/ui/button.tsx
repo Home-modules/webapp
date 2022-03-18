@@ -26,9 +26,9 @@ export type IntermittentableButtonProps<T> = ButtonProps & {
     onClick: () => (Promise<T>|undefined);
     onThen?: (result: T) => void;
     onCatch?: (error: T) => void;
-}
+} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
-export function IntermittentableButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined, primary=false}: IntermittentableButtonProps<T>) {
+export function IntermittentableButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined, primary=false, ...rest}: IntermittentableButtonProps<T>) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     function click() {
@@ -43,7 +43,8 @@ export function IntermittentableButton<T>({onClick, children, className='', disa
         <button 
             className={`button ${className} ${intermittent?'intermittent':''} ${primary?'primary':''}`} 
             onClick={click} 
-            disabled={disabled || intermittent}>
+            disabled={disabled || intermittent}
+            {...rest}>
 
             {children}
         </button>
