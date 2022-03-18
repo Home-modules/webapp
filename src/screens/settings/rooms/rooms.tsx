@@ -9,6 +9,7 @@ import { handleError, sendRequest } from '../../../comms/request';
 import { store, StoreState } from '../../../store';
 import { connect } from 'react-redux';
 import { Link, Outlet, useMatch, useSearchParams } from 'react-router-dom';
+import SearchKeywordHighlight from '../../../ui/search-highlight';
 
 function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     let editing = !!(useMatch('/settings/rooms/edit/:roomId'));
@@ -84,7 +85,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                         rooms
                             .filter(room=>(room.name.toLowerCase().includes(search.toLowerCase()) || room.id.toLowerCase().includes(search.toLowerCase())))
                             .map(room => (
-                                <RoomItem key={room.id} room={room} disableReorder />
+                                <RoomItem key={room.id} room={room} disableReorder search={search} />
                             ))
                     ) : (<>
                         <ReactSortable 
@@ -111,9 +112,10 @@ export default connect(({rooms}: StoreState)=>({rooms}))(SettingsPageRooms);
 type RoomItemProps= {
     room: HMApi.Room;
     disableReorder?: boolean;
+    search?: string;
 }
 
-function RoomItem({room, disableReorder=false}: RoomItemProps) {
+function RoomItem({room, disableReorder=false, search}: RoomItemProps) {
     const icons: Record<HMApi.Room['icon'], IconDefinition>= {
         'bathroom': faBath,
         'bedroom': faBed,
@@ -128,12 +130,19 @@ function RoomItem({room, disableReorder=false}: RoomItemProps) {
                     <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
                 </svg>
             )}
-            <Link to={`/settings/rooms/edit/${room.id}`} className='open'>
+            <Link to={`/settings/rooms/${room.id}/edit`} className='open'>
                 <span className='name'>
                     <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
-                    {room.name}
+                    <SearchKeywordHighlight term={search}>{room.name}</SearchKeywordHighlight>
                 </span>
-                <span className='id'>{room.id}</span>
+                <span className='id'>
+                    <SearchKeywordHighlight term={search}>{room.id}</SearchKeywordHighlight>
+                </span>
+            </Link>
+            <Link to={`${room.id}/devices`} className="devices">
+                <div>
+                    <FontAwesomeIcon icon={faPlug} />
+                </div>
             </Link>
         </div>
     );

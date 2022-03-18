@@ -2,7 +2,9 @@
     // General background & text
     --color-background: #fff; // Background color
     --color-foreground: #000; // Text color
+    --color-foreground-highlight: rgb(75, 57, 0); // Text color for highlighted text
     --color-foreground-subtext: #666; // Text color for secondary text
+    --color-foreground-subtext-highlight: rgb(141, 111, 45); // Text color for secondary text for highlighted text
     --color-status-placeholder: var(--color-foreground-subtext); // Placeholder text color (e.g. loading)
     --color-status-error: #ff1b02; // Color for error fallback text
     --color-status-success: #00b300; // Color for success fallback text
@@ -84,7 +86,9 @@
         // General background & text
         --color-background: rgb(19, 19, 19); // Background color
         --color-foreground: #fff; // Text color
+        --color-foreground-highlight: #ffee00; // Text color for highlighted text
         --color-foreground-subtext: rgb(163, 163, 163); // Text color for secondary text
+        --color-foreground-subtext-highlight: rgb(181, 169, 0); // Text color for secondary text highlighted
         --color-status-placeholder: rgb(95, 95, 95); // Placeholder text color (e.g. loading)
         --color-status-error: #ff1b02; // Color for error fallback text
         --color-status-success: #00b300; // Color for success fallback text
