@@ -60,7 +60,7 @@ export namespace HMApi {
         type: "account.changePassword",
         /** The password currently in use in the account. If wrong, the error LOGIN_PASSWORD_INCORRECT will be returned with a 1 second delay. */
         oldPassword: string,
-        /** The new password to be set. The app must have a second 'confirm password' field. An error will NOT be returned if new password is the same as the current pasword. */
+        /** The new password to be set. The app must have a second 'confirm password' field. An error will NOT be returned if new password is the same as the current password. */
         newPassword: string
     }
 
@@ -146,7 +146,17 @@ export namespace HMApi {
         ids: string[]
     }
 
-    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms | RequestEditRoom | RequestGetSerialPorts | RequestAddRoom | RequestRemoveRoom | RequestChangeRoomOrder;
+    /**
+     * Gets the devices in a room.
+     * @throws `NOT_FOUND` if the room doesn't exist
+     */
+    export type RequestGetDevices = {
+        type: "devices.getDevices",
+        /** Room ID */
+        roomId: string
+    }
+
+    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms | RequestEditRoom | RequestGetSerialPorts | RequestAddRoom | RequestRemoveRoom | RequestChangeRoomOrder | RequestGetDevices;
 
 
     /** Nothing is returned */
@@ -182,6 +192,11 @@ export namespace HMApi {
         ports: SerialPort[]
     }
 
+    export type ResponseGetDevices = {
+        /** The devices in the room */
+        devices: Record<string, DeviceSettings>
+    }
+
     export type ResponseData<R extends Request> = 
         R extends RequestEmpty ? ResponseEmpty :
         R extends RequestGetVersion ? ResponseGetVersion :
@@ -190,7 +205,7 @@ export namespace HMApi {
         R extends RequestLogoutOtherSessions ? ResponseSessionCount :
         R extends RequestGetSessionsCount ? ResponseSessionCount :
         R extends RequestChangePassword ? ResponseEmpty :
-        R extends RequestChangeUsername ? ResponseEmpty :
+        R extends RequestChangeUsername ? ResponseLogin :
         R extends RequestCheckUsernameAvailable ? ResponseCheckUsernameAvailable :
         R extends RequestGetRooms ? ResponseGetRooms :
         R extends RequestEditRoom ? ResponseEmpty :
@@ -198,6 +213,7 @@ export namespace HMApi {
         R extends RequestRemoveRoom ? ResponseEmpty :
         R extends RequestChangeRoomOrder ? ResponseEmpty :
         R extends RequestGetSerialPorts ? ResponseGetSerialPorts :
+        R extends RequestGetDevices ? ResponseGetDevices :
         never;
 
 
@@ -340,6 +356,7 @@ export namespace HMApi {
         R extends RequestAddRoom ? RequestErrorRoomAlreadyExists :
         R extends RequestRemoveRoom ? RequestErrorNotFound :
         R extends RequestChangeRoomOrder ? RequestErrorRoomsNotEqual :
+        R extends RequestGetDevices ? RequestErrorNotFound :
         never
     ) | (
         [R extends R ? keyof Omit<R, 'type'>: never ][0] extends never ? never : (RequestErrorMissingParameter<R> | RequestErrorInvalidParameter<R> | RequestErrorParameterOutOfRange<R>)
@@ -372,7 +389,7 @@ export namespace HMApi {
         /** The icon to show for the room */
         icon: "living-room" | "kitchen" | "bedroom" | "bathroom" | "other",
         /** Room controller type and mode */
-        controllerType: RoomControllerTypeStandardSerial,
+        controllerType: RoomControllerType,
     }
 
     /**
@@ -394,8 +411,196 @@ export namespace HMApi {
         // parity?: "none" | "even" | "mark" | "odd" | "space"
     }
 
+    /**
+     * A room controller type and mode along with its configuration
+     */
+    export type RoomControllerType = RoomControllerTypeStandardSerial;
+
+    /**
+     * Describes a serial port
+     */
     export type SerialPort = {
         /** Port path, e.g. "/dev/ttyUSB0", "COM3" */
         path: string
     }
+
+    /**
+     * A light without dimmer capability
+     */
+    type DeviceLightDigital = {
+        /** The device's type, e.g. "light" */
+        type: "light",
+        /** True if the light can be dimmed (state is analog) */
+        hasDimmer: false,
+        /** The light's current state */
+        state: boolean
+    };
+    /**
+     * A light with dimmer capability
+     */
+    type DeviceLightAnalog = {
+        /** The device's type, e.g. "light" */
+        type: "light",
+        /** True if the light can be dimmed (state is analog) */
+        hasDimmer: true,
+        /** The light's brightness level (0= off, 0.5= half brightness, 1= full brightness) */
+        state: number,
+    };
+    /**
+     * A light
+     */
+    type DeviceLight = DeviceLightDigital | DeviceLightAnalog;
+    /**
+     * An electricity outlet
+     */
+    type DeviceOutlet = {
+        /** The device's type, e.g. "outlet" */
+        type: "outlet",
+        /** Outlet state */
+        state: boolean
+    };
+    /**
+     * An electrical switch (for double-pole switches, use separate devices)
+     */
+    type DeviceSwitch = {
+        /** The device's type, e.g. "switch" */
+        type: "switch";
+        /** Switch state */
+        state: boolean;
+        /** True if the switch state can be changed by the hub */
+        writable: boolean;
+    };
+    /**
+     * A dimmer potentiometer
+     */
+    type DeviceDimmer = {
+        /** The device's type, e.g. "dimmer" */
+        type: "dimmer";
+        /** Dimmer state (from 0 to 1) */
+        state: number;
+        /** True if the dimmer state can be changed by the hub */
+        writable: boolean;
+    };
+    /**
+     * A photo resistor to measure light intensity
+     */
+    type DevicePhotoResistor = {
+        /** The device's type, e.g. "photo-resistor" */
+        type: "photo-resistor";
+        /** Current light intensity, measured in lux */
+        state: number;
+    };
+    /**
+     * A fan without speed control
+     */
+    type DeviceFanNoSpeed = {
+        /** The device's type, e.g. "fan" */
+        type: "fan";
+        /** True if the fan speed can be changed (analog state) */
+        hasSpeed: false;
+        /** The fan's current state */
+        state: boolean;
+    };
+    /**
+     * A fan with speed control
+     */
+    type DeviceFanWithSpeed = {
+        /** The device's type, e.g. "fan" */
+        type: "fan";
+        /** True if the fan speed can be changed (analog state) */
+        hasSpeed: true;
+        /** The fan's speed level (0= off, 0.5= half speed, 1= full speed) */
+        state: number;
+    };
+    /**
+     * A fan
+     */
+    type DeviceFan = DeviceFanNoSpeed | DeviceFanWithSpeed;
+    /**
+     * A temperature sensor
+     */
+    type DeviceThermostat = {
+        /** The device's type, e.g. "thermostat" */
+        type: "thermostat";
+        /** Current temperature (in °C) */
+        state: number;
+    };
+    /**
+     * A door without a lock
+     */
+    type DeviceDoorNoLock = {
+        /** The device's type, e.g. "door" */
+        type: "door";
+        /** Door state (false= closed, true= open) */
+        state: boolean;
+        /** Whether the door is a primary door (cannot enter the house without opening it) */
+        primary: boolean;
+        /** True if the door can be robotically opened or closed */
+        writable: boolean;
+        /** Whether the door has a lock */
+        hasLock: false;
+    };
+    /**
+     * A door with a lock
+     */
+    type DeviceDoorWithLock = {
+        /** The device's type, e.g. "door" */
+        type: "door";
+        /** Door state (false= closed, true= open) */
+        state: boolean;
+        /** Whether the door is a primary door (cannot enter the house without opening it) */
+        primary: boolean;
+        /** True if the door can be robotically opened or closed */
+        writable: boolean;
+        /** Whether the door has a lock */
+        hasLock: true;
+        /** Whether the lock is currently locked */
+        locked: boolean;
+        /** Whether the door can be locked or unlocked by the hub */
+        lockWritable: boolean;
+    };
+    /**
+     * A door
+     */
+    type DeviceDoor = DeviceDoorNoLock | DeviceDoorWithLock;
+    /**
+     * A Tesla power-wall
+     */
+    type DevicePowerWall = {
+        /** The device's type, e.g. "power-wall" */
+        type: "power-wall";
+        /** Batteries percentage */
+        state: number;
+    };
+
+    /**
+     * Device properties specific to a device type (including the device's type)
+     */
+    type DeviceTypeProps = DeviceLight | DeviceOutlet | DeviceSwitch | DeviceDimmer | DevicePhotoResistor | DeviceFan | DeviceThermostat | DeviceDoor | DevicePowerWall;
+
+    type DeviceOtherProps<C extends RoomControllerType> = 
+        (C extends RoomControllerTypeStandardSerial ? {
+            pin: number
+        } : Record<string, never>)
+        & {
+            /** The device's name, e.g. "Light 1" */
+            name: string,
+            /** The device's ID, e.g. "light-1" */
+            id: string
+        };
+
+    /**
+     * A device in a room, including its state
+     */
+    export type Device<C extends RoomControllerType = RoomControllerType> = 
+        DeviceTypeProps & DeviceOtherProps<C>
+
+    type OmitIterate<T, K extends string | number | symbol> = 
+        T extends T ? Omit<T, K> : never;
+
+    /**
+     * A device in a room, without its state 
+     */
+    export type DeviceSettings<C extends RoomControllerType = RoomControllerType> = 
+        OmitIterate<DeviceTypeProps, 'state'> & DeviceOtherProps<C>;
 }
