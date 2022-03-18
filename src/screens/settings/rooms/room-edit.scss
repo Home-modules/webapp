@@ -8,18 +8,25 @@ main#settings main#settings-rooms .edit-room {
 
         display: flex;
         align-items: center;
+
+        a {
+            display: contents;
+            color: var(---color-foreground);
+
+            > svg {
+                flex-shrink: 0;
+                margin-right: 15px;
+                cursor: pointer;
+            }
+        }
         
         .title {
             flex-grow: 1;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-        }
-
-        > svg {
-            flex-shrink: 0;
-            margin-right: 15px;
-            cursor: pointer;
+            position: relative;
+            top: -2px;
         }
 
         button {
