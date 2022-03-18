@@ -54,7 +54,6 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const [serialPorts, setSerialPorts] = React.useState<HMApi.SerialPort[]|0|-1>(0); // 0= loading -1= error
     const [serialPortError, setSerialPortError] = React.useState('');
 
-    console.log(roomId, room, roomExists, isNew);
     if(!(roomExists || isNew)) {
         return <Navigate to="/settings/rooms" />
     }
