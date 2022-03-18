@@ -1,0 +1,48 @@
+main#settings main#settings-rooms .edit-devices .new-device {
+    .choose-type {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        overflow: auto;
+        height: 100%;
+        box-sizing: border-box;
+
+        h1 {
+            margin: 0;
+            flex-shrink: 0;
+
+            a {
+                color: inherit;
+                margin-right: 15px;
+            }
+        }
+
+        .subtitle {
+            flex-shrink: 0;
+            font-size: 1.125em;
+        }
+
+        .device-types {
+            margin: auto;
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-content: center;
+            max-width: 800px; // Limit to 3 columns
+
+            a {
+                padding: 15px;
+                font-size: 1.5em;
+                width: 200px;
+                text-align: center;
+
+                svg {
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}

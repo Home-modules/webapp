@@ -19,6 +19,7 @@ import ChangeUsernameDialog from './screens/settings/account/change-username';
 import Notifications from './ui/notifications';
 import Dialogs from './ui/dialogs';
 import SettingsPageRoomsDevices from './screens/settings/rooms/devices/devices';
+import SettingsPageRoomsDevicesNewDevice from './screens/settings/rooms/devices/new';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -39,6 +40,8 @@ ReactDOM.render(
                                 <Route path=":roomId/edit" element={<SettingsPageRoomsEditRoom />} />
                                 <Route path="new" element={<SettingsPageRoomsEditRoom />} />
                                 <Route path=":roomId/devices" element={<SettingsPageRoomsDevices />}>
+                                    <Route path="new" element={<SettingsPageRoomsDevicesNewDevice />} >
+                                    </Route>
                                 </Route>
                                 <Route path="*" element={<Navigate to="/settings/rooms" />} />
                             </Route>
