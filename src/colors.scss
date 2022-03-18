@@ -158,10 +158,10 @@
         --color-dropdown-item-active-text: var(--color-navbar-active-text); // Dropdown item text color when active
     
         // Scrollbar
-    --color-scrollbar-background: transparent; // Scrollbar background color
-    --color-scrollbar-thumb: rgba(255, 255, 255, 0.1); // Scrollbar thumb color
-    --color-scrollbar-hover-background: rgba(255, 255, 255, 0.1); // Scrollbar background color when hovered
-    --color-scrollbar-hover-thumb: rgba(255, 255, 255, 0.3); // Scrollbar thumb color when hovered
-    --color-scrollbar-active-thumb: rgba(255, 255, 255, 0.4); // Scrollbar thumb color when active
+        --color-scrollbar-background: transparent; // Scrollbar background color
+        --color-scrollbar-thumb: rgba(255, 255, 255, 0.1); // Scrollbar thumb color
+        --color-scrollbar-hover-background: rgba(255, 255, 255, 0.025); // Scrollbar background color when hovered
+        --color-scrollbar-hover-thumb: rgba(255, 255, 255, 0.15); // Scrollbar thumb color when hovered
+        --color-scrollbar-active-thumb: rgba(255, 255, 255, 0.2); // Scrollbar thumb color when active
     }
 }
