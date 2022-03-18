@@ -10,6 +10,7 @@ main#settings nav.settings-sidebar {
         align-items: center;
         text-decoration: none;
         width: 100%;
+        box-sizing: border-box;
         padding: 7px;
         font-size: 18px;
         text-align: left;
@@ -37,7 +38,7 @@ main#settings nav.settings-sidebar {
             content: '';
             display: block;
             position: absolute;
-            right: -5px;
+            right: -19px;
             top: calc(50% - 8px);
             transform: rotate(45deg);
             width: 15px;
@@ -59,7 +60,7 @@ main#settings nav.settings-sidebar {
             color: var(--color-navbar-active-text);
 
             &::after {
-                right: 5px;
+                right: -8px;
             }
 
             svg {
