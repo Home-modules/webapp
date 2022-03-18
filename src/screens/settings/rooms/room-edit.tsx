@@ -7,7 +7,7 @@ import { IntermittentableButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../comms/request';
 import DropDownSelect from '../../../ui/dropdown';
 import { StoreState } from '../../../store';
-import { Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 export type SettingsPageRoomsEditRoomProps = {
@@ -137,7 +137,9 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     return (
         <div className={`edit-room`}>
             <h1>
-                <FontAwesomeIcon icon={faArrowLeft} onClick={()=> navigate('/settings/rooms')} fixedWidth />
+                <Link to="/settings/rooms">
+                    <FontAwesomeIcon icon={faArrowLeft}fixedWidth />
+                </Link>
                 <span className="title">
                     {isNew ? "New room" : <>Editing {room.name}</>}
                 </span>
