@@ -93,7 +93,7 @@ export default function ChangeUsernameDialog() {
         <RouteDialog className='change-username-dialog' title='Change username'>
             <form onSubmit={e=>e.preventDefault()}>
                 <p className="warning">Warning: Other sessions will be logged out!</p>
-                <label data-error={usernameError}>
+                <label className='text' data-error={usernameError}>
                     New Username
                     <input 
                         type="text"

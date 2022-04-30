@@ -70,24 +70,8 @@ main#settings main#settings-rooms .edit-room {
     }
 
     .icon-select-title,
-    .controller-type-select-title,
-    .controller-serial-port-select-title {
+    .controller-type-select-title {
         font-size: 18px;
-    }
-
-    .dropdown-select {
-        margin-bottom: 10px;
-
-        .dropdown {
-            .loading, .error, .empty {
-                padding: 10px;
-                text-align: center;
-            }
-
-            .loading { color: var(--color-status-placeholder); }
-            .error { color: var(--color-status-error); }
-            .empty { color: var(--color-foreground-subtext); }
-        }
     }
 
     .icon-select {

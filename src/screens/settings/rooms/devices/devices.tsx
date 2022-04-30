@@ -9,7 +9,7 @@ import { store, StoreState } from "../../../../store";
 import SearchKeywordHighlight from "../../../../ui/search-highlight";
 import './devices.scss';
 
-function SettingsPageRoomsDevices({rooms, devicesSettings: allDevices}: Pick<StoreState, 'rooms'|'devicesSettings'>) {
+function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState, 'rooms'|'devices'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
     const searchFieldRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
@@ -22,8 +22,10 @@ function SettingsPageRoomsDevices({rooms, devicesSettings: allDevices}: Pick<Sto
         name: '',
         icon: 'other',
         controllerType: {
-            type: 'standard-serial',
-            port: ''
+            type: 'arduino:serial',
+            settings: {
+
+            }
         }
     };
 
@@ -31,9 +33,9 @@ function SettingsPageRoomsDevices({rooms, devicesSettings: allDevices}: Pick<Sto
 
     let hideList = useMatch('/settings/rooms/:roomId/devices/new');
 
-    const setDevices= React.useCallback(function setDevices(devices: StoreState['devicesSettings'][string]) {
+    const setDevices= React.useCallback(function setDevices(devices: StoreState['devices'][string]) {
         store.dispatch({
-            type: 'SET_DEVICES_SETTINGS',
+            type: 'SET_DEVICES',
             devices,
             roomId
         });
@@ -119,10 +121,10 @@ function SettingsPageRoomsDevices({rooms, devicesSettings: allDevices}: Pick<Sto
     )
 }
 
-export default connect(({rooms, devicesSettings}: StoreState)=>({rooms, devicesSettings}))(SettingsPageRoomsDevices);
+export default connect(({rooms, devices}: StoreState)=>({rooms, devices}))(SettingsPageRoomsDevices);
 
 type DeviceItemProps = {
-    device: HMApi.DeviceSettings,
+    device: HMApi.Device,
     roomId: string,
     disableReorder?: boolean,
     search?: string // Search keyword for highlighting

@@ -66,7 +66,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
         <div id="login">
             <h1>Login</h1>
             <form>
-                <label data-error={usernameError} >
+                <label className='text' data-error={usernameError} >
                     Username
                     <input 
                         type="text" 
@@ -77,7 +77,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                             setUsernameError('');
                         }} />
                 </label>
-                <label data-error={passwordError}>
+                <label className='text' data-error={passwordError}>
                     Password
                     <input 
                         type="password" 

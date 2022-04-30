@@ -33,6 +33,12 @@
     --color-input-error-border: #ff190058; // Text field with error border color (thicker)
     --color-input-error-message: #ff1900; // Error message above fields with errors background color
     --color-input-error-message-text: #fff; // Error message above fields with errors text color
+    --color-input-required: #ff1900; // Color of '*' for some required fields
+
+    // Checkboxes and radio buttons
+    --color-checkbox-background: var(--color-button-secondary); // Checkbox background color (when unchecked)
+    --color-checkbox-background-checked: var(--color-button-primary); // Checkbox background color (when checked)
+    --color-checkbox-check: white; // Checkbox tick color when checked
 
     // Header and settings sidebar
     --color-navbar-background: #e9e9e9; // Background for the header and settings navigation menu
@@ -117,6 +123,12 @@
         --color-input-error-border: #ff3b257c; // Text field with error border color (thicker)
         --color-input-error-message: #ff1900; // Error message above fields with errors background color
         --color-input-error-message-text: #fff; // Error message above fields with errors text color
+        --color-input-required: #ff1900; // Color of '*' for some required fields
+
+        // Checkboxes and radio buttons
+        --color-checkbox-background: var(--color-button-secondary); // Checkbox background color (when unchecked)
+        --color-checkbox-background-checked: var(--color-button-primary); // Checkbox background color (when checked)
+        --color-checkbox-check: white; // Checkbox tick color when checked
 
         // Header and settings sidebar
         --color-navbar-background: #1d1d1d; // Background for the header and settings navigation menu

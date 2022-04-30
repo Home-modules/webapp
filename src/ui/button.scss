@@ -8,7 +8,8 @@
     cursor: pointer;
     text-decoration: none;
     color: var(--color-foreground);
-    transition: background-color 200ms, opacity 200ms;
+    box-shadow: 0 0 0 0 var(--color-input-active-border);
+    transition: background-color 200ms, opacity 200ms, box-shadow 200ms;
 
     &:disabled {
         color: var(--color-button-secondary-disable-opacity);
@@ -57,6 +58,11 @@
         &.primary::after {
             background-color: var(--color-button-intermittent-2);
         }
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--color-input-active-border);
     }
 }
 

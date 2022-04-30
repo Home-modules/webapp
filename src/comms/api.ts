@@ -111,13 +111,6 @@ export namespace HMApi {
     }
 
     /**
-     * Gets the serial ports available on the hub. Used for choosing the serial port for a room controller.
-     */
-    export type RequestGetSerialPorts = {
-        type: "io.getSerialPorts"
-    }
-
-    /**
      * Adds a new room to the house.
      */
     export type RequestAddRoom = {
@@ -146,6 +139,37 @@ export namespace HMApi {
         ids: string[]
     }
 
+
+    /**
+     * Gets the available room controller types.
+     */
+    export type RequestGetRoomControllerTypes = {
+        type: "rooms.controllers.getRoomControllerTypes"
+    }
+
+    /**
+     * Gets the items of a lazy-loading dropdown. (for room controller and device options)
+     */
+    export type RequestGetSelectFieldLazyLoadItems = {
+        type: "plugins.fields.getSelectLazyLoadItems",
+        /** Whether the field is for a room controller or a device */
+        for: "roomController",
+        /** Room controller type */
+        controller: string,
+        /** Field name */
+        field: string
+    } | {
+        type: "plugins.fields.getSelectLazyLoadItems",
+        /** Whether the field is for a room controller or a device */
+        for: "device",
+        /** The controller type of the room in which the device is */
+        controller: string,
+        /** Device type */
+        deviceType: string,
+        /** Field name */
+        field: string
+    }
+
     /**
      * Gets the devices in a room.
      * @throws `NOT_FOUND` if the room doesn't exist
@@ -156,7 +180,7 @@ export namespace HMApi {
         roomId: string
     }
 
-    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms | RequestEditRoom | RequestGetSerialPorts | RequestAddRoom | RequestRemoveRoom | RequestChangeRoomOrder | RequestGetDevices;
+    export type Request= RequestEmpty | RequestGetVersion | RequestLogin | RequestLogout | RequestLogoutOtherSessions | RequestGetSessionsCount | RequestChangePassword | RequestChangeUsername | RequestCheckUsernameAvailable | RequestGetRooms | RequestEditRoom | RequestAddRoom | RequestRemoveRoom | RequestChangeRoomOrder | RequestGetRoomControllerTypes | RequestGetSelectFieldLazyLoadItems | RequestGetDevices;
 
 
     /** Nothing is returned */
@@ -187,14 +211,19 @@ export namespace HMApi {
         rooms: {[roomId: string]: Room}
     }
 
-    export type ResponseGetSerialPorts = {
-        /** The serial ports available on the hub */
-        ports: SerialPort[]
+    export type ResponseGetRoomControllerTypes = {
+        /** The available room controller types */
+        types: RoomControllerType[]
+    }
+
+    export type ResponseSelectFieldItems = {
+        /** The items of the dropdown */
+        items: (SettingsFieldSelectOption | SettingsFieldSelectOptionGroup)[]
     }
 
     export type ResponseGetDevices = {
         /** The devices in the room */
-        devices: Record<string, DeviceSettings>
+        devices: Record<string, Device>
     }
 
     export type ResponseData<R extends Request> = 
@@ -212,7 +241,8 @@ export namespace HMApi {
         R extends RequestAddRoom ? ResponseEmpty :
         R extends RequestRemoveRoom ? ResponseEmpty :
         R extends RequestChangeRoomOrder ? ResponseEmpty :
-        R extends RequestGetSerialPorts ? ResponseGetSerialPorts :
+        R extends RequestGetRoomControllerTypes ? ResponseGetRoomControllerTypes :
+        R extends RequestGetSelectFieldLazyLoadItems ? ResponseSelectFieldItems :
         R extends RequestGetDevices ? ResponseGetDevices :
         never;
 
@@ -340,6 +370,23 @@ export namespace HMApi {
         message: "ROOMS_NOT_EQUAL"
     };
 
+    /**
+     * The settings field is not a lazy-loading dropdown.
+     */
+    export type RequestErrorFieldNotLazySelect = {
+        code: 400,
+        message: "FIELD_NOT_LAZY_SELECT"
+    }
+
+    /**
+     * The plugin returned an error for the request
+     */
+    export type RequestErrorPluginCustomError = {
+        code: 400,
+        message: "CUSTOM_PLUGIN_ERROR",
+        params: Record<string, string>
+    }
+
     export type RequestError<R extends Request> = (
         R extends RequestEmpty ? never :
         R extends RequestGetVersion ? never :
@@ -352,10 +399,11 @@ export namespace HMApi {
         R extends RequestCheckUsernameAvailable ? never :
         R extends RequestGetRooms ? never :
         R extends RequestEditRoom ? RequestErrorNotFound :
-        R extends RequestGetSerialPorts ? never :
         R extends RequestAddRoom ? RequestErrorRoomAlreadyExists :
         R extends RequestRemoveRoom ? RequestErrorNotFound :
         R extends RequestChangeRoomOrder ? RequestErrorRoomsNotEqual :
+        R extends RequestGetRoomControllerTypes ? never :
+        R extends RequestGetSelectFieldLazyLoadItems ? RequestErrorNotFound | RequestErrorFieldNotLazySelect | RequestErrorPluginCustomError :
         R extends RequestGetDevices ? RequestErrorNotFound :
         never
     ) | (
@@ -389,218 +437,253 @@ export namespace HMApi {
         /** The icon to show for the room */
         icon: "living-room" | "kitchen" | "bedroom" | "bathroom" | "other",
         /** Room controller type and mode */
-        controllerType: RoomControllerType,
+        controllerType: RoomController,
     }
 
     /**
-     * Use a serial port to communicate with the room controller.
-     * 
-     * This method has a high cable length limit, but requires a separate port for each room and devices do not have enough ports most of the time.
+     * A room controller type definition
      */
-    export type RoomControllerTypeStandardSerial = {
-        type: "standard-serial",
-        /** The serial port to use */
-        port: string,
-        /** The baud rate to use. Default is 9600 */
-        baudRate?: number,
-        // /** The serial port's data bits */
-        // dataBits?: 8 | 7 | 6 | 5,
-        // /** The serial port's stop bits */
-        // stopBits?: 1 | 2,
-        // /** The serial port's parity */
-        // parity?: "none" | "even" | "mark" | "odd" | "space"
+    export type RoomControllerType = ({
+        /** The room controller id */
+        id: `${string}:${string}`,
+        /** The room controller name */
+        name: string,
+        /** The room controller sub-name (aka mode) */
+        sub_name: string
+    }) & {
+        /** Settings fields */
+        settings: SettingsField[]
     }
 
     /**
      * A room controller type and mode along with its configuration
      */
-    export type RoomControllerType = RoomControllerTypeStandardSerial;
+    export type RoomController = {
+        /** The room controller type and mode (id of its type) */
+        type: string,
+        /** Settings for the controller */
+        settings: Record<string, string|number|boolean>
+    }
+    
+    export type DeviceType = {
+        id: `${string}:${string}`,
+        name: string,
+        sub_name: string
+    };
 
-    /**
-     * Describes a serial port
-     */
-    export type SerialPort = {
-        /** Port path, e.g. "/dev/ttyUSB0", "COM3" */
-        path: string
+    export type Device = {
+        /** The device ID */
+        id: string,
+        /** The device name */
+        name: string,
+        /** The device type */
+        type: string,
+        /** The device parameters */
+        params: {
+            [key: string]: string|number|boolean,
+        },
     }
 
-    /**
-     * A light without dimmer capability
-     */
-    type DeviceLightDigital = {
-        /** The device's type, e.g. "light" */
-        type: "light",
-        /** True if the light can be dimmed (state is analog) */
-        hasDimmer: false,
-        /** The light's current state */
-        state: boolean
-    };
-    /**
-     * A light with dimmer capability
-     */
-    type DeviceLightAnalog = {
-        /** The device's type, e.g. "light" */
-        type: "light",
-        /** True if the light can be dimmed (state is analog) */
-        hasDimmer: true,
-        /** The light's brightness level (0= off, 0.5= half brightness, 1= full brightness) */
-        state: number,
-    };
-    /**
-     * A light
-     */
-    type DeviceLight = DeviceLightDigital | DeviceLightAnalog;
-    /**
-     * An electricity outlet
-     */
-    type DeviceOutlet = {
-        /** The device's type, e.g. "outlet" */
-        type: "outlet",
-        /** Outlet state */
-        state: boolean
-    };
-    /**
-     * An electrical switch (for double-pole switches, use separate devices)
-     */
-    type DeviceSwitch = {
-        /** The device's type, e.g. "switch" */
-        type: "switch";
-        /** Switch state */
-        state: boolean;
-        /** True if the switch state can be changed by the hub */
-        writable: boolean;
-    };
-    /**
-     * A dimmer potentiometer
-     */
-    type DeviceDimmer = {
-        /** The device's type, e.g. "dimmer" */
-        type: "dimmer";
-        /** Dimmer state (from 0 to 1) */
-        state: number;
-        /** True if the dimmer state can be changed by the hub */
-        writable: boolean;
-    };
-    /**
-     * A photo resistor to measure light intensity
-     */
-    type DevicePhotoResistor = {
-        /** The device's type, e.g. "photo-resistor" */
-        type: "photo-resistor";
-        /** Current light intensity, measured in lux */
-        state: number;
-    };
-    /**
-     * A fan without speed control
-     */
-    type DeviceFanNoSpeed = {
-        /** The device's type, e.g. "fan" */
-        type: "fan";
-        /** True if the fan speed can be changed (analog state) */
-        hasSpeed: false;
-        /** The fan's current state */
-        state: boolean;
-    };
-    /**
-     * A fan with speed control
-     */
-    type DeviceFanWithSpeed = {
-        /** The device's type, e.g. "fan" */
-        type: "fan";
-        /** True if the fan speed can be changed (analog state) */
-        hasSpeed: true;
-        /** The fan's speed level (0= off, 0.5= half speed, 1= full speed) */
-        state: number;
-    };
-    /**
-     * A fan
-     */
-    type DeviceFan = DeviceFanNoSpeed | DeviceFanWithSpeed;
-    /**
-     * A temperature sensor
-     */
-    type DeviceThermostat = {
-        /** The device's type, e.g. "thermostat" */
-        type: "thermostat";
-        /** Current temperature (in °C) */
-        state: number;
-    };
-    /**
-     * A door without a lock
-     */
-    type DeviceDoorNoLock = {
-        /** The device's type, e.g. "door" */
-        type: "door";
-        /** Door state (false= closed, true= open) */
-        state: boolean;
-        /** Whether the door is a primary door (cannot enter the house without opening it) */
-        primary: boolean;
-        /** True if the door can be robotically opened or closed */
-        writable: boolean;
-        /** Whether the door has a lock */
-        hasLock: false;
-    };
-    /**
-     * A door with a lock
-     */
-    type DeviceDoorWithLock = {
-        /** The device's type, e.g. "door" */
-        type: "door";
-        /** Door state (false= closed, true= open) */
-        state: boolean;
-        /** Whether the door is a primary door (cannot enter the house without opening it) */
-        primary: boolean;
-        /** True if the door can be robotically opened or closed */
-        writable: boolean;
-        /** Whether the door has a lock */
-        hasLock: true;
-        /** Whether the lock is currently locked */
-        locked: boolean;
-        /** Whether the door can be locked or unlocked by the hub */
-        lockWritable: boolean;
-    };
-    /**
-     * A door
-     */
-    type DeviceDoor = DeviceDoorNoLock | DeviceDoorWithLock;
-    /**
-     * A Tesla power-wall
-     */
-    type DevicePowerWall = {
-        /** The device's type, e.g. "power-wall" */
-        type: "power-wall";
-        /** Batteries percentage */
-        state: number;
+    type SettingsFieldGeneralProps<T>= {
+        /** Field ID */
+        id: string,
+        /** Field label */
+        label: string,
+        /** Field description */
+        description?: string,
+        /** The default value for the field */
+        default?: T,
+        /** True if the field is required */
+        required?: boolean,
+    }
+
+    export type SettingsFieldText = SettingsFieldGeneralProps<string> & {
+        type: 'text',
+        /** Field placeholder */
+        placeholder?: string,
+        /** Minimum number of characters in the field. */
+        min_length?: number,
+        /** Maximum number of characters in the field. */
+        max_length?: number,
+        /** Error message to show when the value is too short. */
+        min_length_error?: string,
+        /** Error message to show when the value is too long. */
+        max_length_error?: string,
+        /** A text to show after the value (e.g. unit of measurement) */
+        postfix?: string,
+    }
+
+    export type SettingsFieldNumber = SettingsFieldGeneralProps<number> & {
+        type: 'number',
+        /** Field placeholder */
+        placeholder?: string,
+        /** Minimum value */
+        min?: number,
+        /** Maximum value */
+        max?: number,
+        /** Error message to show when the value is too small. */
+        min_error?: string,
+        /** Error message to show when the value is too large. */
+        max_error?: string,
+        /** A text to show after the value (e.g. unit of measurement) */
+        postfix?: string,
+        /** Whether to show the arrows/spinners and allow scrolling and using up and down arrow buttons to change value. Enabled by default */
+        scrollable?: boolean,
+    }
+
+    export type SettingsFieldCheckbox = SettingsFieldGeneralProps<boolean> & {
+        type: 'checkbox',
+        /** If provided, the description will change to this value when the field is checked. */
+        description_on_true?: string
+    }
+
+    export type SettingsFieldRadio = Omit<SettingsFieldGeneralProps<string>, 'label'> & {
+        type: 'radio',
+        /** THe list of radio buttons */
+        options: Record<string, {
+            /** Option label */
+            label: string,
+            /** Option description. Not recommended if the radio group has a label and/or description. Ignored if direction is horizontal */
+            description?: string,
+        }>,
+        /** The preferred orientation of the radio buttons. 'h' means they will be on the same line and 'v' means they will be on different lines. */
+        direction: 'h'|'v',
+        /** Label before the radio buttons */
+        label?: string
+    }
+
+    export type SettingsFieldSelect = SettingsFieldGeneralProps<string> & {
+        type: 'select',
+        /** The list of options */
+        options: (SettingsFieldSelectOption|SettingsFieldSelectOptionGroup)[] | SettingsFieldSelectLazyOptions,
+        /** Whether the user can fill in the value instead of selecting an item. The field will show the value of the active option instead of its label+subtext. */
+        allowCustomValue?: boolean,
+        /** Whether the custom value should be checked to be in the items. Ignored if allowCustomValue is false */
+        checkCustomValue?: boolean,
+        /** A search bar will be shown in the dropdown if true. A number can instead be provided which will be the minimum number of total options for the search bar to be shown. */
+        showSearchBar?: boolean | number,
+    }
+
+    export type SettingsFieldSelectOption = {
+        isGroup?: false,
+        /** The value of the dropdown when this option is selected */
+        value: string,
+        /** Option label */
+        label: string,
+        /** Smaller/lighter text to be shown alongside the label. Might be shown in parentheses if proper rendering isn't possible. */
+        subtext?: string,
+    }
+
+    export type SettingsFieldSelectOptionGroup = {
+        isGroup: true,
+        /** Group label */
+        label: string,
+        /** Smaller/lighter text to be shown alongside the label. Might be shown in parentheses if proper rendering isn't possible. */
+        subtext?: string,
+        /** Whether to expand or collapse the group when the dropdown is shown. Might be ignored if not supported. */
+        expanded?: boolean,
+        /** The list of options in the group */
+        children: SettingsFieldSelectOption[],
+    }
+
+    export type SettingsFieldSelectLazyOptions = {
+        isLazy: true;
+        /** The fallback texts to use instead of the default ones */
+        fallbackTexts?: {
+            /** The text to show when the list is loading */
+            whenLoading?: string;
+            /** The text to show when the list is empty */
+            whenEmpty?: string;
+            /** The text to show if the list cannot be loaded (request failure) */
+            whenError?: string;
+        }
+        /** 
+         * When to load the items: 
+         * - When the field is rendered
+         * - When the dropdown is opened (Warning: dropdown button will show the value of the active item instead of its label+subtext before the list is loaded, so it is recommended to only use this mode when values == labels.)
+         */
+        loadOn: 'render'|'open',
+        /** Whether to refresh every time the dropdown is opened (default is true) */
+        refreshOnOpen?: boolean,
+        /** 
+         * Whether to show a manual refresh button in the dropdown. The button is always hidden while loading the list. (default is false)
+         * Can be a(n):
+         * - boolean: true to show the button (controls all states)
+         * - object: Control each state and set a custom text
+         * - array (2 items): First item (boolean) controls the visibility, second item (string) controls the button text
+         */
+        showRefreshButton?: boolean | {
+            /** Whether to show the button when the list is loaded and not empty */
+            whenNormal?: boolean,
+            /** Whether to show the button when the list is empty */
+            whenEmpty?: boolean,
+            /** Whether to show the button when the list cannot be loaded */
+            whenError?: boolean,
+            /** Whether to show the button when loading the list. The button will be disabled in this state and only shown to prevent UI flashes. */
+            whenLoading?: boolean,
+            /** Refresh button text (default: "Refresh" (normal, empty) or "Refreshing" (loading) or "Retry" (error)) */
+            buttonText?: string | {
+                /** Default: "Refresh" */
+                whenNormal?: string,
+                /** Default: "Refresh" */
+                whenEmpty?: string,
+                /** Default: "Retry" */
+                whenError?: string,
+                /** Default: "Refresh" */
+                whenLoading?: string,
+            },
+        } | [boolean, string | {
+            /** Default: "Refresh" */
+            whenNormal?: string,
+            /** Default: "Refresh" */
+            whenEmpty?: string,
+            /** Default: "Retry" */
+            whenError?: string,
+            /** Default: "Refresh" */
+            whenLoading?: string,
+        }],
     };
 
-    /**
-     * Device properties specific to a device type (including the device's type)
-     */
-    type DeviceTypeProps = DeviceLight | DeviceOutlet | DeviceSwitch | DeviceDimmer | DevicePhotoResistor | DeviceFan | DeviceThermostat | DeviceDoor | DevicePowerWall;
+    export type SettingsFieldSlider = SettingsFieldGeneralProps<number> & {
+        type: 'slider',
+        /** The minimum value */
+        min?: number,
+        /** The maximum value */
+        max?: number,
+        /** The step size */
+        step?: number,
+        /** The slider color (useful for color fields) */
+        color?: 'white'|'black'|'blue'|'green'|'red'|'yellow',
+        /** Slider appearance (horizontal/vertical/radial) */
+        appearance?: 'horizontal'|'vertical'|'radial',
+    }
 
-    type DeviceOtherProps<C extends RoomControllerType> = 
-        (C extends RoomControllerTypeStandardSerial ? {
-            pin: number
-        } : Record<string, never>)
-        & {
-            /** The device's name, e.g. "Light 1" */
-            name: string,
-            /** The device's ID, e.g. "light-1" */
-            id: string
-        };
+    export type SettingsFieldHorizontalWrapper = {
+        type: 'horizontal_wrapper',
+        /** The columns */
+        columns: SettingsFieldHorizontalWrapperColumn[],
+    }
 
-    /**
-     * A device in a room, including its state
-     */
-    export type Device<C extends RoomControllerType = RoomControllerType> = 
-        DeviceTypeProps & DeviceOtherProps<C>
+    export type SettingsFieldHorizontalWrapperColumn = {
+        /** The fields in the column */
+        fields: SettingsField[],
+        /** 
+         * The width of the column. 
+         * The total width of all columns is mapped to the wrapper's width. 
+         * If not specified, the width will be automatically determined by the content. 
+         * You can set the width to 1 while the other columns have auto width to fill the remaining space.
+         */
+        width?: number,
+    }
 
-    type OmitIterate<T, K extends string | number | symbol> = 
-        T extends T ? Omit<T, K> : never;
+    export type SettingsFieldContainer = {
+        type: 'container',
+        /** Container label (aka 'legend') */
+        label: string,
+        /** The list of fields */
+        children: SettingsField[],
+    }
 
-    /**
-     * A device in a room, without its state 
-     */
-    export type DeviceSettings<C extends RoomControllerType = RoomControllerType> = 
-        OmitIterate<DeviceTypeProps, 'state'> & DeviceOtherProps<C>;
+    export type SettingsField = SettingsFieldText | SettingsFieldNumber | SettingsFieldCheckbox | SettingsFieldRadio | SettingsFieldSelect | SettingsFieldHorizontalWrapper | SettingsFieldContainer;
+    export type SettingsFieldWithoutContainer = Exclude<HMApi.SettingsField, SettingsFieldContainer | SettingsFieldHorizontalWrapper>
 }

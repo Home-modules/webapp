@@ -5,10 +5,13 @@ import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faTrash, faU
 import React from 'react';
 import { IntermittentableButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../comms/request';
-import DropDownSelect from '../../../ui/dropdown';
+import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
 import { StoreState } from '../../../store';
 import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
+import machineFriendlyName from '../../../utils/machine-friendly-name';
+import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../ui/fields/fields';
+import getFlatFields from '../../../utils/flat-fields';
 
 export type SettingsPageRoomsEditRoomProps = {
     room: HMApi.Room & {new?: boolean};
@@ -34,8 +37,10 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
         name: '',
         icon: 'other',
         controllerType: {
-            type: 'standard-serial',
-            port: ''
+            type: 'arduino:serial',
+            settings: {
+
+            }
         }
     };
     const navigate = useNavigate();
@@ -51,14 +56,21 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const [iconId, setIconId] = React.useState(iconIds.indexOf(room.icon));
 
     const [controller, setController] = React.useState(room.controllerType);
-    const [serialPorts, setSerialPorts] = React.useState<HMApi.SerialPort[]|0|-1>(0); // 0= loading -1= error
-    const [serialPortError, setSerialPortError] = React.useState('');
+    const [controllerTypes, setControllerTypes] = React.useState<HMApi.RoomControllerType[]|0|-1>(0); // 0= loading -1= error
 
-    if(!(roomExists || isNew)) {
-        return <Navigate to="/settings/rooms" />
-    }
+    const [fields, setFields] = React.useState<HMApi.SettingsField[]>([]);
+    const [fieldErrors, setFieldErrors] = React.useState<Record<string, string|undefined>>({});
 
     function onSave() {
+        const [hasError, errors] = getFieldsErrors(getFlatFields(fields), controller.settings);
+        setFieldErrors({ });
+        if(hasError) {
+            window.setTimeout(()=> { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
+                setFieldErrors(errors);
+            });
+            return;
+        }
+        
         const nRoom: HMApi.Room = {
             id,
             name,
@@ -80,26 +92,6 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
         }
     }
 
-    function loadSerialPorts() {
-        if(!(serialPorts instanceof Array && serialPorts.length)) { // If the list has been loaded before, do not show 'Loading'. Do so otherwise
-            setSerialPorts(0);
-        }
-        sendRequest({
-            type: 'io.getSerialPorts'
-        }).then(res => {
-            if(res.type==='ok') {
-                setSerialPorts(res.data.ports);
-            }
-            else {
-                handleError(res);
-                setSerialPorts(-1);
-            }
-        }).catch(err=> {
-            handleError(err);
-            setSerialPorts(-1);
-        });
-    }
-
     function onSaveSuccess(res: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) {
         if(res.type==='ok') {
             navigate('/settings/rooms');
@@ -116,10 +108,6 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 nameRef.current?.focus();
                 return;
             }
-            else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.controllerType.port') {
-                setSerialPortError('Invalid port');
-                return;
-            }
             else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.id') {
                 setIdError(id.length ? 'ID is too long' : 'ID is empty');
                 idRef.current?.focus();
@@ -132,6 +120,34 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             }
         }
         handleError(err);
+    }
+
+    function onChangeControllerType(val?: string) { // val is not set when called by useEffect, and the existing settings must be kept in that case.
+        console.log('onChangeControllerType', val, room? room.controllerType.settings:undefined);
+        if(!(controllerTypes instanceof Array)) return;
+        const defaultRCType = room ? room.controllerType.type : 'arduino:serial';
+        const controller: HMApi.RoomController = {
+            type: val || defaultRCType,
+            settings: ((!val) && room) ? room.controllerType.settings : { }
+        }
+        const controllerType = controllerTypes.find(type => type.id === (val || defaultRCType));
+        if(!controllerType) return;
+
+        if(val || isNew) {
+            for(const field of getFlatFields(controllerType.settings)) {
+                controller.settings[field.id] = getSettingsFieldDefaultValue(field);
+            }
+        }
+
+        setController(controller);
+        setFields(controllerType.settings);
+        setFieldErrors({});
+    }
+
+    React.useEffect(onChangeControllerType, [controllerTypes])
+
+    if(!(roomExists || isNew)) {
+        return <Navigate to="/settings/rooms" />
     }
 
     return (
@@ -164,7 +180,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             </h1>
 
             <div className="name-and-id">
-                <label data-error={nameError}>
+                <label className='text' data-error={nameError}>
                     Name
                     <input type="text" value={name} ref={nameRef} onChange={e=>{
                         setName(e.target.value);
@@ -172,18 +188,11 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                     }} onBlur={e=> {
                         if(!id) {
                             // If the ID is empty, set it to a machine-friendly version of the name
-                            setId(e.target.value
-                                .replace(/[^A-Za-z0-9 ]/g,'') // Remove unwanted characters, only accept alphanumeric and space
-                                .replace(/\s{2,}/g,' ') // Replace multi spaces with a single space
-                                .trim().toLowerCase() // Make it lowercase (this line is not in the original package, I added it)
-                                .replace(/\s/g, "-") // Replace space with a '-' symbol)
-                            );
-                            // These three lines are from https://github.com/mrded/machine-name/blob/master/index.js.
-                            // The package wasn't TS-compatible, so I had to copy the code.
+                            setId(machineFriendlyName(e.target.value));
                         }
                     }} />
                 </label>
-                <label data-error={idError} data-disabled={!isNew} title={(!isNew) ? 'Room ID cannot be changed after it is created': undefined}>
+                <label className='text' data-error={idError} data-disabled={!isNew} title={(!isNew) ? 'Room ID cannot be changed after it is created': undefined}>
                     ID (permanent)
                     <input type="text" disabled={!isNew} value={id} ref={idRef} onChange={e=>{
                         if(isNew) {
@@ -207,43 +216,56 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 <legend>Controller</legend>
 
                 <div className="controller-type-select-title">Controller type &amp; mode</div>
-                <DropDownSelect options={[
-                    {
-                        label: 'Standard',
-                        subtext: 'Serial port',
-                        value: 'standard-serial'
-                    }
-                ]} onChange={val=> setController({...controller, type:val})} value={controller.type}/>
+                <LazyDropDownSelect
+                    callback={()=> {
+                        if(!(controllerTypes instanceof Array)) { // If the list has been loaded before, do not show 'Loading'. Do so otherwise
+                            setControllerTypes(0);
+                        }
+                        return sendRequest({
+                            type: 'rooms.controllers.getRoomControllerTypes'
+                        }).then(res=> {
+                            if(res.type==='ok') {
+                                setControllerTypes(res.data.types);
+                                return res.data.types.map(type=>({
+                                    value: type.id,
+                                    label: type.name,
+                                    subtext: type.sub_name
+                                }));
+                            } else {
+                                handleError(res);
+                                setControllerTypes(-1);
+                                return {error: false}; // It'll only be true if error is from a plugin, and this request does not return a plugin error.
+                            }
+                        }, err=> {
+                            handleError(err);
+                            setControllerTypes(-1);
+                            return {error: false};
+                        });
+                    }}
+                    onChange={onChangeControllerType}
+                    lazyOptions={{
+                        isLazy: true,
+                        loadOn: 'render',
+                        fallbackTexts: {
+                            whenEmpty: 'No room controller types found',
+                            whenError: 'Error loading room controller types'
+                        }
+                    }}
+                    value={controller.type}
+                />
 
-                {controller.type==='standard-serial' ? (<>
-                    <div className="controller-serial-port-select-title">Serial port</div>
-                    <DropDownSelect options={
-                        serialPorts instanceof Array ?
-                            serialPorts.map(({path})=>({
-                                label: path,
-                                value: path
-                            }))
-                            : []
-                        } onChange={val=> {
-                            setController({...controller, port:val});
-                            setSerialPortError('')
-                        }} 
-                        value={{
-                            label: controller.port,
-                            value: controller.port
-                        }}
-                        onOpen={loadSerialPorts}
-                        error={serialPortError}
-                    >
-                        {serialPorts===0 ? (
-                            <div className="loading">Loading...</div>
-                        ): serialPorts===-1 ? (
-                            <div className="error">Error loading serial ports</div>
-                        ): (
-                            <div className="empty">No serial ports detected</div>
-                        )}
-                    </DropDownSelect>
-                </>): null}
+                <Fields 
+                    fields={fields} 
+                    fieldErrors={fieldErrors} 
+                    fieldValues={controller.settings} 
+                    setFieldValues={settings => setController(controller => ({...controller, settings}))} 
+                    setFieldErrors={setFieldErrors}
+                    context={{
+                        for: "roomController",
+                        controller: controller.type
+                    }} 
+                />
+
             </fieldset>
 
             <IntermittentableButton<HMApi.Response<HMApi.RequestAddRoom|HMApi.RequestEditRoom>>

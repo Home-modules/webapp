@@ -82,7 +82,7 @@ export default function ChangePasswordDialog() {
     return (
         <RouteDialog className="change-password-dialog" title="Change password">
             <form onSubmit={e=>{e.preventDefault()}}>
-                <label data-error={currentPasswordError}>
+                <label className="text" data-error={currentPasswordError}>
                     Current Password
                         <input
                             type="password"
@@ -96,7 +96,7 @@ export default function ChangePasswordDialog() {
                                 }
                             }} />
                 </label>
-                <label data-error={newPasswordError}>
+                <label className="text" data-error={newPasswordError}>
                     New Password
                         <input
                             type="password"
@@ -108,7 +108,7 @@ export default function ChangePasswordDialog() {
                                 setConfirmPasswordError('');
                             }} />
                 </label>
-                <label data-error={confirmPasswordError}>
+                <label className="text" data-error={confirmPasswordError}>
                     Repeat New Password
                         <input
                             type="password"

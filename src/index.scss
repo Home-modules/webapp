@@ -24,7 +24,7 @@ code {
   font-family: var(--code-font-stack);
 }
 
-:focus {
+:focus:not(:focus-visible) {
   outline: none;
 }
 
