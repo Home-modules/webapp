@@ -73,9 +73,18 @@ main#settings main#settings-rooms {
                 border: none;
                 font-size: 1.5rem;
                 color: var(--color-foreground);
+                min-width: 0;
 
-                &:focus::placeholder {
-                    opacity: 0.75;
+                &::placeholder {
+                    transition: opacity 200ms;
+                }
+
+                &:focus {
+                    outline: none;
+                    
+                    &::placeholder {
+                        opacity: 0.75;
+                    }
                 }
             }
 
@@ -311,6 +320,7 @@ main#settings main#settings-rooms {
         right: 0;
         bottom: 0;
         transition: opacity 250ms, transform 250ms;
+        overflow: auto;
         overflow: overlay;
 
         &.hidden {
