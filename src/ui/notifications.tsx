@@ -25,12 +25,15 @@ export type NotificationProps= {
 }
 
 export function Notification({id, title, message, type='info', buttons=[], hideCloseButton=false, timeout=5000}: NotificationProps) {
-    const [hidden, setVisible] = React.useState('');
+    const [visible, setVisible] = React.useState<''|'closing'|'fading'>('');
     const [isNew, setIsNew] = React.useState(true);
+    const [height, setHeight] = React.useState('auto');
+    const divRef = React.useRef(null) as React.RefObject<HTMLDivElement>;
+    const [hide, setHide] = React.useState(true);
 
-    function close(mode='closing') {
-        if(hidden.length) return;
-        setVisible(mode);
+    function close(mode: typeof visible = 'closing') {
+        if(visible.length) return;
+        setVisible(c=> c==='closing' ? 'closing' : mode);
         setTimeout(()=>{
             store.dispatch({type: 'REMOVE_NOTIFICATION', id});
         }, 3000);
@@ -43,34 +46,40 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
         setTimeout(()=>{
             setIsNew(false);
         }, 500)
+        setHeight(divRef.current!.offsetHeight+'px');
+        setHide(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
-        <div className={`notification ${type} ${hidden} ${isNew?'new':''}`}>
-            {!hideCloseButton && <button className="close" onClick={() => {
-                close();
-            }}>
-                <FontAwesomeIcon icon={faTimes} />
-            </button>}
-            {title && <h1>{title}</h1>}
-            <div className="content">{message}</div>
-            {buttons.map((button, i) => (
-                'route' in button ? (
-                    <Link key={i}
-                        className={`button ${button.isPrimary?'primary':''}`}
-                        to={button.route} onClick={()=>close()}>
-                             
-                        {button.label}
-                    </Link>
-                ) : (
-                    <button key={i} 
-                        className={`button ${button.isPrimary ? 'primary' : ''}`} 
-                        onClick={()=>{close(); button.onClick()}}>
-                            
-                        {button.label}
-                    </button>
-                )
-            ))}
+        <div className={`notification ${visible} ${isNew?'new':''}`} 
+            style={{'--height': height, visibility: hide ? 'hidden':undefined} as any}>
+            <div ref={divRef} className={type}>
+                {!hideCloseButton && <button className="close" onClick={() => {
+                    close();
+                }}>
+                    <FontAwesomeIcon icon={faTimes} />
+                </button>}
+                {title && <h1>{title}</h1>}
+                <div className="content">{message}</div>
+                {buttons.map((button, i) => (
+                    'route' in button ? (
+                        <Link key={i}
+                            className={`button ${button.isPrimary?'primary':''}`}
+                            to={button.route} onClick={()=>close()}>
+                                
+                            {button.label}
+                        </Link>
+                    ) : (
+                        <button key={i} 
+                            className={`button ${button.isPrimary ? 'primary' : ''}`} 
+                            onClick={()=>{close(); button.onClick()}}>
+                                
+                            {button.label}
+                        </button>
+                    )
+                ))}
+            </div>
         </div>
     )
 }

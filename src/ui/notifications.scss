@@ -6,86 +6,99 @@
     max-width: calc(100vw - 40px);
     display: flex;
     flex-direction: column-reverse;
-    gap: 10px;
     z-index: 9999;
 
     .notification {
-        padding: 10px;
-        border-radius: 7px;
-        background-color: var(--color-notification-background);
-        border: 2px solid;
-        box-shadow: 4px 4px 10px var(--color-notification-shadow);
-        transition: opacity 2000ms, transform 200ms;
+        margin-top: 10px;
+        transition: opacity 2000ms, height 200ms , margin 200ms, transform 200ms;
+        transform: translate(0, 0);
+        height: var(--height);
+        position: relative;
 
-        &.info { border-color: var(--color-notification-border-info); }
-        &.success { border-color: var(--color-notification-border-success); }
-        &.warning { border-color: var(--color-notification-border-warning); }
-        &.error { border-color: var(--color-notification-border-error); }
-
-        button.close {
-            float: right;
-            border: none;
-            background: none;
-            padding: 5px;
-            color: inherit;
-            transition: transform 200ms, color 200ms;
-
-            &:hover {
-                color: var(--color-notification-close-button-hover);
+        > div {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 10px;
+            border-radius: 7px;
+            background-color: var(--color-notification-background);
+            border: 2px solid;
+            box-shadow: 4px 4px 10px var(--color-notification-shadow);
+    
+            &.info { border-color: var(--color-notification-border-info); }
+            &.success { border-color: var(--color-notification-border-success); }
+            &.warning { border-color: var(--color-notification-border-warning); }
+            &.error { border-color: var(--color-notification-border-error); }
+    
+            button.close {
+                float: right;
+                border: none;
+                background: none;
+                padding: 5px;
+                color: inherit;
+                transition: transform 200ms, color 200ms;
+    
+                &:hover {
+                    color: var(--color-notification-close-button-hover);
+                }
+                &:active {
+                    transform: scale(1.5);
+                }
             }
-            &:active {
-                transform: scale(1.5);
+    
+            h1 {
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 5px;
+                margin-top: -5px;
             }
-        }
-
-        h1 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            margin-top: -5px;
-        }
-
-        .button {
-            margin-top: 10px;
-            padding: 5px 8px;
-            border-radius: 999em;
+    
+            .button {
+                margin-top: 10px;
+                padding: 5px 8px;
+                border-radius: 999em;
+            }
         }
 
         &.fading {
             opacity: 0;
+            animation: notification-disappear 200ms 2000ms forwards;
         }
 
         &.closing {
-            transform: translateX(calc(100% + 30px));
-        }
-
-        &.closing ~ .notification {
-            transform: translateY(calc(100% + 20px));
+            height: 0;
+            margin-top: 0;
+            transform: translateX(340px);
         }
 
         &.new {
             animation: notification-appear 200ms;
-        }
-
-        &.new ~ .notification {
-            animation: notification-mode-up 200ms;
         }
     }
 }
 
 @keyframes notification-appear {
     from {
-        transform: translateY(calc(100% + 30px));
+        height: 0;
+        margin-top: 0;
+        transform: translateY(calc(30px + var(--height)));
     }
     to {
+        height: var(--height);
+        margin-top: 10px;
         transform: translateY(0);
     }
 }
-@keyframes notification-move-up {
+
+@keyframes notification-disappear {
     from {
-        transform: translateY(calc(100% + 20px));
+        height: var(--height);
+        margin-top: 10px;
     }
     to {
-        transform: translateY(0);
+        height: 0;
+        margin-top: 0;
+        pointer-events: none;
     }
 }
