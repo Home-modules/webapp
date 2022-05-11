@@ -10,6 +10,7 @@ export type StoreState = {
     dialogs: DialogProps[];
     rooms: HMApi.Room[] | false | null; // null means loading, false means error
     devices: Record<string, HMApi.Device[] | false | undefined>;
+    deviceTypes: Record<string, HMApi.DeviceType[] | false | undefined>; // undefined means loading, false means error
 };
 
 export type StoreAction = {
@@ -34,6 +35,10 @@ export type StoreAction = {
     type: "SET_DEVICES",
     roomId: string,
     devices: HMApi.Device[] | false | undefined
+} | {
+    type: "SET_DEVICE_TYPES",
+    roomController: string,
+    deviceTypes: HMApi.DeviceType[] | false | undefined
 };
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
@@ -41,7 +46,8 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     notifications: [],
     dialogs: [],
     rooms: null,
-    devices: {}
+    devices: {},
+    deviceTypes: {}
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -92,6 +98,14 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                 devices: {
                     ...state.devices,
                     [action.roomId]: action.devices
+                }
+            };
+        case 'SET_DEVICE_TYPES':
+            return {
+                ...state,
+                deviceTypes: {
+                    ...state.deviceTypes,
+                    [action.roomController]: action.deviceTypes
                 }
             };
         default:

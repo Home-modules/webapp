@@ -1,0 +1,76 @@
+main#settings main#settings-rooms .edit-devices .edit-device {
+    padding: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: inner-screen-appear 250ms;
+
+    h1 {
+        margin: 0;
+        margin-bottom: 20px;
+
+        display: flex;
+        align-items: center;
+
+        a {
+            display: contents;
+            color: var(---color-foreground);
+
+            > svg {
+                flex-shrink: 0;
+                margin-right: 15px;
+                cursor: pointer;
+            }
+        }
+        
+        .title {
+            flex-grow: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            position: relative;
+            top: -2px;
+        }
+
+        button {
+            vertical-align: middle;
+            margin-left: 10px;
+            float: right;
+            height: 43px;
+            width: 43px;
+            font-size: 1.5rem;
+        }
+    }
+
+    .name-and-id {
+        clear: both;
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+
+        label {
+            margin: 0;
+        }
+
+        label:first-child {
+            flex-basis: 67%;
+        }
+        label:last-child {
+            flex-basis: 33%;
+
+            input {
+                font-family: var(--code-font-stack);
+            }
+
+            &[data-disabled=true] {
+                opacity: 0.5;
+
+                &, input {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

@@ -154,7 +154,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
         <div className={`edit-room`}>
             <h1>
                 <Link to="/settings/rooms">
-                    <FontAwesomeIcon icon={faArrowLeft}fixedWidth />
+                    <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
                 </Link>
                 <span className="title">
                     {isNew ? "New room" : <>Editing {room.name}</>}

@@ -1,11 +1,41 @@
-import { faArrowLeft, faBattery, faDoorOpen, faFan, faLightbulb, faPlug, faSliders, faTemperatureHigh, faToggleOff } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, Outlet, useMatch } from "react-router-dom";
+import { Link, Navigate, Outlet, useMatch, useParams } from "react-router-dom";
 import './new.scss';
 import './edit-device';
+import { store, StoreState } from "../../../../store";
+import { connect } from "react-redux";
+import React from "react";
+import { handleError, sendRequest } from "../../../../comms/request";
 
-export default function SettingsPageRoomsDevicesNewDevice() {
+function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState, 'deviceTypes'|'rooms'>) {
     let hideList = !useMatch('/settings/rooms/:roomId/devices/new/');
+    const {roomId= ''} = useParams();
+    const controllerType = rooms ? rooms.find(r=> r.id === roomId)?.controllerType : undefined;
+    const types = controllerType ? deviceTypes[controllerType.type] : false;
+
+    React.useEffect(() => {
+        if((!types) && roomId && controllerType) {
+            sendRequest({
+                type: "devices.getDeviceTypes",
+                controllerType: controllerType.type
+            }).then(res=> {
+                if(res.type === 'ok') {
+                    store.dispatch({
+                        type: "SET_DEVICE_TYPES",
+                        roomController: controllerType.type,
+                        deviceTypes: res.data.types
+                    });
+                } else {
+                    handleError(res);
+                }
+            }, handleError)
+        }
+    }, [types, roomId, controllerType]);
+
+    if(!roomId) {
+        return <Navigate to="/settings/rooms" />
+    }
 
     return (
         <main className="new-device">
@@ -20,45 +50,28 @@ export default function SettingsPageRoomsDevicesNewDevice() {
                     Select device type
                 </div>
                 <div className="device-types">
-                    <Link to="light" className="button">
-                        <FontAwesomeIcon icon={faLightbulb} />
-                        Light
-                    </Link>
-                    <Link to="outlet" className="button">
-                        <FontAwesomeIcon icon={faPlug} />
-                        Outlet
-                    </Link>
-                    <Link to="fan" className="button">
-                        <FontAwesomeIcon icon={faFan} />
-                        Fan
-                    </Link>
-                    <Link to="switch" className="button">
-                        <FontAwesomeIcon icon={faToggleOff} />
-                        Switch
-                    </Link>
-                    <Link to="dimmer" className="button">
-                        <FontAwesomeIcon icon={faSliders} />
-                        Dimmer
-                    </Link>
-                    <Link to="thermostat" className="button">
-                        <FontAwesomeIcon icon={faTemperatureHigh} />
-                        Thermostat
-                    </Link>
-                    <Link to="door" className="button">
-                        <FontAwesomeIcon icon={faDoorOpen} />
-                        Door
-                    </Link>
-                    <Link to="photo-resistor" className="button">
-                        <FontAwesomeIcon icon={faLightbulb} />
-                        Photo resistor
-                    </Link>
-                    <Link to="power-wall" className="button">
-                        <FontAwesomeIcon icon={faBattery} />
-                        PowerWall
-                    </Link>
+                    {types === undefined ?
+                        <div className="loading">
+                            Loading device types...
+                        </div>
+                    : types === false ? 
+                        <div className="error">
+                            Error loading device types
+                        </div>
+                    : types.map(type => (
+                        /* <Link to="light" className="button">
+                            <FontAwesomeIcon icon={faLightbulb} />
+                            Light
+                        </Link> */
+                        <Link key={type.id} to={type.id} className="button">
+                            {type.name}
+                        </Link>
+                    ))}
                 </div>
             </div>
             <Outlet />
         </main>
     );
 }
+
+export default connect(({deviceTypes, rooms}: StoreState) => ({deviceTypes, rooms}))(SettingsPageRoomsDevicesNewDevice);

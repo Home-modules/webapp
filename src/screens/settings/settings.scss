@@ -1,5 +1,6 @@
 main#settings {
     display: flex;
+    height: calc(100% - 60px);
     
     .content {
         flex-grow: 1;

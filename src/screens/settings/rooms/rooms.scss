@@ -7,6 +7,7 @@ main#settings main#settings-rooms {
         flex-shrink: 0;
         // height: 44px;
         position: relative;
+        transition: opacity 250ms;
 
         .search {
             position: absolute;
@@ -24,6 +25,8 @@ main#settings main#settings-rooms {
                 flex-grow: 1;
                 position: relative;
                 top: -3px;
+                // white-space: nowrap;
+                flex-shrink: 1;
             }
 
             svg {
@@ -121,11 +124,11 @@ main#settings main#settings-rooms {
 
         .item {
             position: relative;
-            transition: opacity 200ms;
             display: flex;
             align-items: center;
             margin-bottom: 10px;
             gap: 10px;
+            transition: opacity 200ms, gap 250ms;
 
             .drag-handle {
                 position: absolute;
@@ -135,6 +138,7 @@ main#settings main#settings-rooms {
                 cursor: grab;
                 z-index: 1;
                 fill: var(--color-foreground-subtext);
+                transition: opacity 250ms;
 
                 &:active {
                     cursor: grabbing;
@@ -157,7 +161,7 @@ main#settings main#settings-rooms {
                 text-decoration: none;
                 color: var(--color-foreground);
 
-                transition: background-color 200ms;
+                transition: background-color 200ms, gap 250ms, padding-right 250ms;
 
                 &:hover {
                     background-color: var(--color-button-secondary-hover);
@@ -188,12 +192,18 @@ main#settings main#settings-rooms {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     direction: rtl;
+                    transition: flex-shrink 250ms;
 
                     .search-highlight {
                         color: var(--color-foreground-subtext-highlight);
                     }
                 }
 
+            }
+
+            &.active .open {
+                background-color: var(--color-navbar-active);
+                color: var(--color-navbar-active-text) !important;
             }
 
             .devices {
@@ -205,6 +215,7 @@ main#settings main#settings-rooms {
                 height: 44px;
                 width: 44px;
                 padding: 0;
+                transition: width 250ms, opacity 250ms;
 
                 > div {
                     position: absolute;
@@ -274,7 +285,9 @@ main#settings main#settings-rooms {
             color: var(--color-input-border);
             border-radius: 8px;
             cursor: pointer;
-            transition: color 200ms, border-color 200ms;
+            box-sizing: border-box;
+            width: 100%;
+            transition: color 200ms, border-color 200ms, opacity 250ms, margin-top 250ms, width 250ms;
 
             &:hover {
                 border-color: var(--color-foreground-subtext);
@@ -317,11 +330,19 @@ main#settings main#settings-rooms {
         position: absolute;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
-        transition: opacity 250ms, transform 250ms;
+        height: calc(100% - 40px);
+        width: calc(100% - 40px);
+        transition: opacity 250ms, transform 250ms, padding 250ms, width 250ms;
         overflow: auto;
         overflow: overlay;
+
+        h1 {
+            height: 44px;
+            .title span {
+                flex-shrink: 1;
+                white-space: nowrap;
+            }
+        }
 
         &.hidden {
             opacity: 0;
@@ -329,13 +350,69 @@ main#settings main#settings-rooms {
             transform: scale(1.25);
         }
 
+        @media screen and (min-width: 601px) {
+            &.collapsed {
+                position: relative;
+                padding-left: 10px;
+                padding-right: 10px;
+                width: 46.5px;
+
+                &::-webkit-scrollbar {
+                    width: 6px;
+                }
+
+                h1 {
+                    opacity: 0;
+                    pointer-events: none;
+                    height: 44px;
+                    overflow: hidden;
+
+                    .title {
+                        pointer-events: none;
+                    }
+                }
+                .list .item {
+                    gap: 0;
+
+                    .drag-handle {
+                        opacity: 0;
+                        pointer-events: none;
+                    }
+
+                    .open:not(.devices) { // .devices extends .open and we don't it to have these properties, so a :not(.devices) is added.
+                        gap: 0;
+                        padding-right: 12px; // Same as padding-left
+
+                        .id {
+                            flex-shrink: 9999999;
+                        }
+                    }
+
+                    .devices {
+                        opacity: 0;
+                        pointer-events: none;
+                        width: 0;
+
+                        div::before {
+                            pointer-events: none;
+                        }
+                    }
+                }
+                .list .add {
+                    opacity: 0;
+                    pointer-events: none;
+                    margin-top: -63px;
+                    width: 46.5px;
+                }
+            }
+        }
+
         display: flex;
         flex-direction: column;
         padding: 20px;
     }
 
-    .edit-room,
-    .edit-devices {
+    .edit-room {
         position: absolute;
         top: 0;
         left: 0;

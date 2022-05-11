@@ -8,14 +8,16 @@ import { HMApi } from '../../../comms/api';
 import { handleError, sendRequest } from '../../../comms/request';
 import { store, StoreState } from '../../../store';
 import { connect } from 'react-redux';
-import { Link, Outlet, useMatch, useSearchParams } from 'react-router-dom';
+import { Link, Outlet, useMatch, useParams, useSearchParams } from 'react-router-dom';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
 
 function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
     hideList = !!(useMatch('/settings/rooms/new')) || hideList;
-    hideList = !!(useMatch('/settings/rooms/:roomId/devices')) || hideList;
-    hideList = !!(useMatch('/settings/rooms/:roomId/devices/new/*')) || hideList;
+    let collapseList = !!(useMatch('/settings/rooms/:roomId/devices'));
+    collapseList = !!(useMatch('/settings/rooms/:roomId/devices/new/*')) || collapseList;
+    collapseList = !!(useMatch('/settings/rooms/:roomId/devices/edit/:deviceId')) || collapseList;
+    const {roomId= ''} = useParams();
 
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
@@ -61,7 +63,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
 
     return (
         <main id="settings-rooms">
-            <div className={`rooms-list ${hideList? 'hidden':''}`}>
+            <div className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'}`}>
                     <div className="title">
                         <span>Edit Rooms</span>
@@ -91,7 +93,14 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                         rooms
                             .filter(room=>(room.name.toLowerCase().includes(search.toLowerCase()) || room.id.toLowerCase().includes(search.toLowerCase())))
                             .map(room => (
-                                <RoomItem key={room.id} room={room} disableReorder search={search} />
+                                <RoomItem 
+                                    key={room.id} 
+                                    room={room} 
+                                    disableReorder 
+                                    search={search} 
+                                    active={collapseList ? roomId===room.id : false} 
+                                    action={collapseList ? 'devices':'edit'}
+                                />
                             ))
                     ) : (<>
                         <ReactSortable 
@@ -99,7 +108,12 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                             animation={200} easing='ease' 
                             handle='.drag-handle' ghostClass='ghost'>
                             {rooms.map(room => (
-                                <RoomItem key={room.id} room={room} />
+                                <RoomItem 
+                                    key={room.id} 
+                                    room={room} 
+                                    active={collapseList ? roomId===room.id : false} 
+                                    action={collapseList ? 'devices':'edit'}
+                                />
                             ))}
                         </ReactSortable>
                         <Link to="/settings/rooms/new" className="add">
@@ -119,9 +133,11 @@ type RoomItemProps= {
     room: HMApi.Room;
     disableReorder?: boolean;
     search?: string;
+    active?: boolean;
+    action: "edit"|"devices"
 }
 
-function RoomItem({room, disableReorder=false, search}: RoomItemProps) {
+function RoomItem({room, disableReorder=false, search, active, action}: RoomItemProps) {
     const icons: Record<HMApi.Room['icon'], IconDefinition>= {
         'bathroom': faBath,
         'bedroom': faBed,
@@ -130,16 +146,16 @@ function RoomItem({room, disableReorder=false, search}: RoomItemProps) {
         'other': faDoorClosed
     }
     return (
-        <div className='item'>
+        <div className={`item ${active?'active':''}`}>
             {(!disableReorder) && (
                 <svg className='drag-handle' width="16" height="16">
                     <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
                 </svg>
             )}
-            <Link to={`/settings/rooms/${room.id}/edit`} className='open'>
+            <Link to={`/settings/rooms/${room.id}/${action}`} className='open' title={action==='devices'? room.name : undefined}>
                 <span className='name'>
                     <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
-                    <SearchKeywordHighlight term={search}>{room.name}</SearchKeywordHighlight>
+                    <span><SearchKeywordHighlight term={search}>{room.name}</SearchKeywordHighlight></span>
                 </span>
                 <span className='id'>
                     <SearchKeywordHighlight term={search}>{room.id}</SearchKeywordHighlight>

@@ -32,6 +32,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState,
     const devices= allDevices[roomId];
 
     let hideList = useMatch('/settings/rooms/:roomId/devices/new');
+    hideList = useMatch('/settings/rooms/:roomId/devices/edit/:deviceId') || hideList;
 
     const setDevices= React.useCallback(function setDevices(devices: StoreState['devices'][string]) {
         store.dispatch({
@@ -72,7 +73,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState,
                         <Link to="/settings/rooms">
                             <FontAwesomeIcon icon={faArrowLeft} />
                         </Link>
-                        <span>Edit devices in {room.name}</span>
+                        <span>{room.name} devices</span>
                         <FontAwesomeIcon icon={faSearch} onClick={()=>{
                             setSearchParams({search: ''});
                             searchFieldRef.current?.focus();
@@ -131,18 +132,18 @@ type DeviceItemProps = {
 }
 
 function DeviceItem({device, roomId, disableReorder, search}: DeviceItemProps) {
-    const icons: Record<HMApi.Device['type'], IconDefinition> = {
-        'light': faLightbulb,
-        'outlet': faPlug,
-        'fan': faFan,
-        'switch': faToggleOff, // TODO: could not find a better icon
-        'dimmer': faSliders, // TODO: could not find a better icon
-        'thermostat': faTemperatureHigh,
-        'door': faDoorOpen,
-        'photo-resistor': faLightbulb, // TODO: could not find a better icon
-        'power-wall': faBattery // FontAwesome doesn't have an icon for Tesla
-    }
-    const icon= icons[device.type];
+    // const icons: Record<HMApi.Device['type'], IconDefinition> = {
+    //     'light': faLightbulb,
+    //     'outlet': faPlug,
+    //     'fan': faFan,
+    //     'switch': faToggleOff, // TODO: could not find a better icon
+    //     'dimmer': faSliders, // TODO: could not find a better icon
+    //     'thermostat': faTemperatureHigh,
+    //     'door': faDoorOpen,
+    //     'photo-resistor': faLightbulb, // TODO: could not find a better icon
+    //     'power-wall': faBattery // FontAwesome doesn't have an icon for Tesla
+    // }
+    // const icon= icons[device.type];
 
     return (
         <div className='item'>
@@ -153,7 +154,7 @@ function DeviceItem({device, roomId, disableReorder, search}: DeviceItemProps) {
             )}
             <Link to={`edit/${device.id}`} className='open'>
                 <span className='name'>
-                    <FontAwesomeIcon icon={icon} fixedWidth />
+                    {/* <FontAwesomeIcon icon={icon} fixedWidth /> */}
                     <SearchKeywordHighlight term={search}>{device.name}</SearchKeywordHighlight>
                 </span>
                 <span className='id'>
