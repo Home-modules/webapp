@@ -9,7 +9,7 @@
     text-decoration: none;
     color: var(--color-foreground);
     box-shadow: 0 0 0 0 var(--color-input-active-border);
-    transition: background-color 200ms, opacity 200ms, box-shadow 200ms;
+    transition: color 200ms, background-color 200ms, opacity 200ms, box-shadow 200ms;
 
     &:disabled {
         color: var(--color-button-secondary-disable-opacity);
@@ -25,16 +25,29 @@
     &.primary {
         background-color: var(--color-button-primary);
         color: var(--color-button-primary-text);
+    
+        &:hover:not(:disabled) {
+            background-color: var(--color-button-primary-hover);
+        }
+    
+        &:disabled {
+            color: var(--color-button-primary-text);
+            background-color: var(--color-button-primary);
+            opacity: var(--color-button-primary-disable-opacity);
+        }
     }
 
-    &.primary:hover:not(:disabled) {
-        background-color: var(--color-button-primary-hover);
-    }
-
-    &.primary:disabled {
-        color: var(--color-button-primary-text);
-        background-color: var(--color-button-primary);
-        opacity: var(--color-button-primary-disable-opacity);
+    &.attention {
+        color: var(--color-button-attention-foreground);
+    
+        &:hover:not(:disabled) {
+            background-color: var(--color-button-attention-hover-background);
+            color: var(--color-button-attention-hover-foreground);
+        }
+    
+        &:disabled {
+            opacity: var(--color-button-primary-disable-opacity);
+        }
     }
 
     &.intermittent {

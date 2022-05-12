@@ -23,6 +23,9 @@
     --color-button-secondary-hover: #cccccc; // Secondary (gray) button background color on hover
     --color-button-secondary-disable-opacity: 0.75; // Secondary (gray) button opacity when disabled
     --color-button-secondary-disabled-text: rgba(0, 0, 0, 0.467); // Secondary (gray) button text color when disabled
+    --color-button-attention-foreground: #ff1900; // Attention button text
+    --color-button-attention-hover-foreground: #fff; // Attention button text on hover
+    --color-button-attention-hover-background: #ff1b02; // Attention button background on hover
     --color-button-intermittent: #00a2ff; // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
     --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
 
@@ -113,6 +116,9 @@
         --color-button-secondary-hover: #494949; // Secondary (gray) button background color on hover
         --color-button-secondary-disable-opacity: 0.5; // Secondary (gray) button opacity when disabled
         --color-button-secondary-disabled-text: rgba(255, 255, 255, 0.274); // Secondary (gray) button text color when disabled
+        --color-button-attention-foreground: #ff412c; // Attention button text
+        --color-button-attention-hover-foreground: #fff; // Attention button text on hover
+        --color-button-attention-hover-background: #ff1b02; // Attention button background on hover
         --color-button-intermittent: #00a2ff; // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
         --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
 

@@ -31,7 +31,9 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
         <main id="settings-account-info">
             <h1>
                 Logged in to Home_modules hub as: <strong>@{token?.split(':')[0]}</strong>
-                <IntermittentableButton onClick={()=>logoutFromHub()} onCatch={handleError}>Log out</IntermittentableButton>
+                <IntermittentableButton onClick={()=>logoutFromHub()} onCatch={handleError} attention>
+                    Log out
+                </IntermittentableButton>
             </h1>
 
             <h2>Account settings</h2>
@@ -65,6 +67,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                         }
                     }}
                     disabled={sessionsCount===1} // When there is only one session, there is no other session to terminate and the button will be pointless
+                    attention
                 >
                     Terminate other sessions
                 </IntermittentableButton>

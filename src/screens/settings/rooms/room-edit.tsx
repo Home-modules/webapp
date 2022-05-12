@@ -173,6 +173,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                         }}
                         onCatch={handleError}
                         title="Delete room"
+                        attention
                     >
                         <FontAwesomeIcon icon={faTrash} />
                     </IntermittentableButton>

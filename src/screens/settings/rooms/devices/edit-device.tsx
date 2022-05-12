@@ -182,6 +182,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                         }}
                         onCatch={handleError}
                         title="Delete device"
+                        attention
                     >
                         <FontAwesomeIcon icon={faTrash} />
                     </IntermittentableButton>
