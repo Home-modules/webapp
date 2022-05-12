@@ -1,4 +1,4 @@
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, Navigate, Outlet, useMatch, useParams } from "react-router-dom";
 import './new.scss';
@@ -59,11 +59,8 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                             Error loading device types
                         </div>
                     : types.map(type => (
-                        /* <Link to="light" className="button">
-                            <FontAwesomeIcon icon={faLightbulb} />
-                            Light
-                        </Link> */
                         <Link key={type.id} to={type.id} className="button">
+                            <FontAwesomeIcon icon={fas['fa'+type.icon]} />
                             {type.name}
                         </Link>
                     ))}

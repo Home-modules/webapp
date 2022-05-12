@@ -1,4 +1,4 @@
-import { faArrowLeft, faPlus, faSearch, faTimes, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPlus, fas, faSearch, faTimes, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
@@ -119,7 +119,13 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                         devices
                             .filter(device=>(device.name.toLowerCase().includes(search.toLowerCase()) || device.id.toLowerCase().includes(search.toLowerCase())))
                             .map(device => (
-                                <DeviceItem key={device.id} device={device} roomId={roomId} disableReorder search={search} />
+                                <DeviceItem 
+                                    key={device.id} 
+                                    device={device} 
+                                    disableReorder 
+                                    search={search} 
+                                    deviceType={types? types.find(t=> t.id === device.type): undefined}
+                                />
                             ))
                     ) : (<>
                         {/* <ReactSortable 
@@ -127,7 +133,12 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                             animation={200} easing='ease' 
                             handle='.drag-handle' ghostClass='ghost'> */}
                             {devices.map(device => (
-                                <DeviceItem key={device.id} device={device} roomId={roomId} disableReorder />
+                                <DeviceItem 
+                                    key={device.id} 
+                                    device={device} 
+                                    disableReorder 
+                                    deviceType={types? types.find(t=> t.id === device.type): undefined}
+                                />
                             ))}
                         {/* </ReactSortable> */}
                         <Link to="new" className="add">
@@ -145,25 +156,12 @@ export default connect(({rooms, devices, deviceTypes}: StoreState)=>({rooms, dev
 
 type DeviceItemProps = {
     device: HMApi.Device,
-    roomId: string,
+    deviceType?: HMApi.DeviceType,
     disableReorder?: boolean,
     search?: string // Search keyword for highlighting
 }
 
-function DeviceItem({device, roomId, disableReorder, search}: DeviceItemProps) {
-    // const icons: Record<HMApi.Device['type'], IconDefinition> = {
-    //     'light': faLightbulb,
-    //     'outlet': faPlug,
-    //     'fan': faFan,
-    //     'switch': faToggleOff, // TODO: could not find a better icon
-    //     'dimmer': faSliders, // TODO: could not find a better icon
-    //     'thermostat': faTemperatureHigh,
-    //     'door': faDoorOpen,
-    //     'photo-resistor': faLightbulb, // TODO: could not find a better icon
-    //     'power-wall': faBattery // FontAwesome doesn't have an icon for Tesla
-    // }
-    // const icon= icons[device.type];
-
+function DeviceItem({device, deviceType, disableReorder, search}: DeviceItemProps) {
     return (
         <div className='item'>
             {(!disableReorder) && (
@@ -173,7 +171,7 @@ function DeviceItem({device, roomId, disableReorder, search}: DeviceItemProps) {
             )}
             <Link to={`edit/${device.id}`} className='open'>
                 <span className='name'>
-                    {/* <FontAwesomeIcon icon={icon} fixedWidth /> */}
+                    {deviceType && <FontAwesomeIcon icon={fas['fa'+deviceType.icon]} fixedWidth />}
                     <SearchKeywordHighlight term={search}>{device.name}</SearchKeywordHighlight>
                 </span>
                 <span className='id'>
