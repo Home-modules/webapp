@@ -3,9 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { handleError, logoutFromHub, sendRequest } from '../../../comms/request';
 import { store, StoreState } from '../../../store';
-import Button, { IntermittentableButton } from '../../../ui/button';
-import showChangePasswordDialog from './change-password';
-import showChangeUsernameDialog from './change-username';
+import { IntermittentableButton } from '../../../ui/button';
 import { Link, Outlet } from 'react-router-dom';
 
 function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {

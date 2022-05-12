@@ -143,7 +143,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
         setFields(controllerType.settings);
         setFieldErrors({});
     }
-
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(onChangeControllerType, [controllerTypes])
 
     if(!(roomExists || isNew)) {
