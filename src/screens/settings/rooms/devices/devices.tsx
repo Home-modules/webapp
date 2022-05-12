@@ -9,11 +9,10 @@ import { store, StoreState } from "../../../../store";
 import SearchKeywordHighlight from "../../../../ui/search-highlight";
 import './devices.scss';
 
-function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState, 'rooms'|'devices'>) {
+function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pick<StoreState, 'rooms'|'devices'|'deviceTypes'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
     const searchFieldRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
-    
     const {roomId= ''} = useParams();
     let room= (rooms && rooms.find(room=>room.id===roomId))
     const roomExists= !!room;
@@ -28,10 +27,12 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState,
             }
         }
     };
-
     const devices= allDevices[roomId];
+    const controllerType = rooms ? rooms.find(r=> r.id === roomId)?.controllerType : undefined;
+    const types = controllerType ? deviceTypes[controllerType.type] : false;
 
     let hideList = useMatch('/settings/rooms/:roomId/devices/new');
+    hideList = useMatch('/settings/rooms/:roomId/devices/new/:deviceType') || hideList;
     hideList = useMatch('/settings/rooms/:roomId/devices/edit/:deviceId') || hideList;
 
     const setDevices= React.useCallback(function setDevices(devices: StoreState['devices'][string]) {
@@ -43,7 +44,6 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState,
     }, [roomId]);
 
     React.useEffect(()=> {
-        // if(editing) return;
         sendRequest({
             type: 'devices.getDevices',
             roomId
@@ -59,7 +59,26 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState,
             setDevices(false);
             handleError(err);
         });
-    }, [/*editing, */ roomId, setDevices]);
+    }, [hideList, roomId, setDevices]);
+
+    React.useEffect(() => {
+        if((!types) && roomId && controllerType) {
+            sendRequest({
+                type: "devices.getDeviceTypes",
+                controllerType: controllerType.type
+            }).then(res=> {
+                if(res.type === 'ok') {
+                    store.dispatch({
+                        type: "SET_DEVICE_TYPES",
+                        roomController: controllerType.type,
+                        deviceTypes: res.data.types
+                    });
+                } else {
+                    handleError(res);
+                }
+            }, handleError)
+        }
+    }, [types, roomId, controllerType]);
 
     if(!roomExists) {
         return <Navigate to="/settings/rooms" />
@@ -122,7 +141,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices}: Pick<StoreState,
     )
 }
 
-export default connect(({rooms, devices}: StoreState)=>({rooms, devices}))(SettingsPageRoomsDevices);
+export default connect(({rooms, devices, deviceTypes}: StoreState)=>({rooms, devices, deviceTypes}))(SettingsPageRoomsDevices);
 
 type DeviceItemProps = {
     device: HMApi.Device,

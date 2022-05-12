@@ -130,7 +130,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
 
     function onSaveSuccess(res: HMApi.Response<HMApi.RequestEditDevice|HMApi.RequestAddDevice>) {
         if(res.type==='ok') {
-            navigate('/settings/rooms');
+            navigate(`/settings/rooms/${room.id}/devices`);
         }
         else {
             onSaveError(res);
