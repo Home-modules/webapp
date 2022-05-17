@@ -3,6 +3,7 @@ import React from 'react';
 import { faDoorClosed, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
+import version from '../../version';
 
 export default function SettingsSidebar() {
     return (
@@ -19,6 +20,10 @@ export default function SettingsSidebar() {
                 <FontAwesomeIcon icon={faDoorClosed}/>
                 <span>Rooms</span>
             </NavLink>
+            <div className="space-filler" />
+            <div className="footer">
+                Home_modules {version}
+            </div>
         </nav>
     );
 }

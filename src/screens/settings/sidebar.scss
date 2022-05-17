@@ -4,6 +4,8 @@ main#settings nav.settings-sidebar {
     background-color: var(--color-navbar-background);
     overflow: hidden;
     box-shadow: inset 0 1px 0 0 var(--color-navbar-border);
+    display: flex;
+    flex-direction: column;
 
     a {
         display: flex;
@@ -68,11 +70,23 @@ main#settings nav.settings-sidebar {
             }
         }
     }
+
+    .space-filler {
+        flex-grow: 1
+    }
+
+    .footer {
+        color: var(--color-foreground-subtext);
+        padding: 10px;
+        font-size: 0.75em;
+        text-align: center;
+        word-wrap: break-word;
+    }
 }
 
 @media screen and (max-width: 600px) {
     main#settings nav.settings-sidebar {
-        width: auto;
+        width: 70px;
         box-shadow: inset 0 -1px 0 0 var(--color-navbar-border);
 
         a {
