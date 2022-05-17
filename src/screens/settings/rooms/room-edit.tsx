@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import machineFriendlyName from '../../../utils/machine-friendly-name';
 import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../ui/fields/fields';
 import getFlatFields from '../../../utils/flat-fields';
+import IconSelect from '../../../ui/fields/icon-select';
 
 export type SettingsPageRoomsEditRoomProps = {
     room: HMApi.Room & {new?: boolean};
@@ -204,13 +205,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             </div>
 
             <div className="icon-select-title">Icon</div>
-            <div className='icon-select' data-icon={iconId}>
-                <FontAwesomeIcon icon={faCouch} onClick={()=>setIconId(0)} />
-                <FontAwesomeIcon icon={faUtensils} onClick={()=>setIconId(1)} />
-                <FontAwesomeIcon icon={faBed} onClick={()=>setIconId(2)} />
-                <FontAwesomeIcon icon={faBath} onClick={()=>setIconId(3)} />
-                <FontAwesomeIcon icon={faDoorClosed} onClick={()=>setIconId(4)} />
-            </div>
+            <IconSelect value={iconId} onChange={setIconId} icons={[faCouch, faUtensils, faBed, faBath, faDoorClosed]} />
 
             <fieldset>
                 <legend>Controller</legend>
