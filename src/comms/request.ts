@@ -109,6 +109,9 @@ export function handleError(e: HMApiResponseWithNetworkError<HMApi.Request>): vo
             case 'PARAMETER_OUT_OF_RANGE':
                 message= 'The app sent an invalid request. Please contact support.';
                 break;
+            case 'CUSTOM_PLUGIN_ERROR':
+                message= e.error.text;
+                break;
             case 'NETWORK_ERROR':
                 message= 'The hub could not be reached. Please check if the hub is powered on and is on the same network as this device.';
                 break;

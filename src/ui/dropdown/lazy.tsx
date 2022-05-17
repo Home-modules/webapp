@@ -9,12 +9,10 @@ export type LazyDropDownSelectProps = {
     lazyOptions: HMApi.SettingsFieldSelectLazyOptions;
     callback():
         (HMApi.SettingsFieldSelectOption | HMApi.SettingsFieldSelectOptionGroup)[] |
-        { error: true; params: Record<string, string>; } |
-        { error: false; params?: undefined; } |
+        { error: true } |
         Promise<
             (HMApi.SettingsFieldSelectOption | HMApi.SettingsFieldSelectOptionGroup)[] |
-            { error: true; params: Record<string, string>; } |
-            { error: false; params?: undefined; }
+            { error: true; }
         >;
     value: string | DropDownSelectOption<string>;
     onChange: (value: string) => void;

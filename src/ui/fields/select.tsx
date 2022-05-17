@@ -28,30 +28,16 @@ export function FieldTypeSelect({ field, value, setValue, error, setError, conte
                             if (res.type === 'ok') {
                                 return res.data.items;
                             } else {
-                                if (res.error.message === 'CUSTOM_PLUGIN_ERROR') {
-                                    return {
-                                        error: true,
-                                        params: res.error.params
-                                    };
-                                } else {
-                                    handleError(res);
-                                    return {
-                                        error: false
-                                    };
-                                }
+                                handleError(res);
+                                return {
+                                    error: true
+                                };
                             }
                         }, err => {
-                            if (err.error.message === 'CUSTOM_PLUGIN_ERROR') {
-                                return {
-                                    error: true,
-                                    params: err.error.params
-                                };
-                            } else {
-                                handleError(err);
-                                return {
-                                    error: false
-                                };
-                            }
+                            handleError(err);
+                            return {
+                                error: true
+                            };
                         });
                     }} />
                 {field.description && <div className="description">

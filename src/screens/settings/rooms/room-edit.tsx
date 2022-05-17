@@ -235,12 +235,12 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                             } else {
                                 handleError(res);
                                 setControllerTypes(-1);
-                                return {error: false}; // It'll only be true if error is from a plugin, and this request does not return a plugin error.
+                                return {error: true}; 
                             }
                         }, err=> {
                             handleError(err);
                             setControllerTypes(-1);
-                            return {error: false};
+                            return {error: true};
                         });
                     }}
                     onChange={onChangeControllerType}
