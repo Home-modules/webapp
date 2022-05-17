@@ -1,9 +1,9 @@
 import './change-username.scss';
 import React from 'react';
-import { HMApi } from '../../../comms/api';
-import { handleError, sendRequest } from '../../../comms/request';
+import { HMApi } from '../../../hub/api';
+import { handleError, sendRequest } from '../../../hub/request';
 import { store } from '../../../store';
-import { IntermittentableSubmitButton } from '../../../ui/button';
+import { IntermittentSubmitButton } from '../../../ui/button';
 import { RouteDialog } from '../../../ui/dialogs';
 import { useNavigate } from 'react-router-dom';
 
@@ -109,9 +109,9 @@ export default function ChangeUsernameDialog() {
                     <div className="taken">{["Username already taken", "Username must be at least 3 characters long"][isAvailableError]}</div>
                     <div className="available">Username available</div>
                 </div>
-                <IntermittentableSubmitButton onClick={onSubmit} onThen={onSuccess} onCatch={onError} disabled={isAvailable===false}>
+                <IntermittentSubmitButton onClick={onSubmit} onThen={onSuccess} onCatch={onError} disabled={isAvailable===false}>
                     Change Username
-                </IntermittentableSubmitButton>
+                </IntermittentSubmitButton>
             </form>
         </RouteDialog>
     )

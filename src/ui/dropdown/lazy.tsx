@@ -1,5 +1,5 @@
 import React from 'react';
-import { HMApi } from '../../comms/api';
+import { HMApi } from '../../hub/api';
 import promiseTimeout from '../../utils/promise-timeout';
 import DropDownSelect, { DropDownSelectOption } from './dropdown';
 

@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { HMApi } from "../../../comms/api";
-import { handleError, sendRequest } from "../../../comms/request";
+import { HMApi } from "../../../hub/api";
+import { handleError, sendRequest } from "../../../hub/request";
 import { store } from "../../../store";
-import { IntermittentableSubmitButton } from "../../../ui/button";
+import { IntermittentSubmitButton } from "../../../ui/button";
 import { RouteDialog } from "../../../ui/dialogs";
 
 // export default function showChangePasswordDialog() {
@@ -119,9 +119,9 @@ export default function ChangePasswordDialog() {
                                 setConfirmPasswordError('');
                             }} />
                 </label>
-                <IntermittentableSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onError}>
+                <IntermittentSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onError}>
                     Change Password
-                </IntermittentableSubmitButton>
+                </IntermittentSubmitButton>
             </form>
         </RouteDialog>
     )

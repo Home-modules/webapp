@@ -2,14 +2,14 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import './edit-device.scss';
 import { StoreState } from '../../../../store';
 import { connect } from 'react-redux';
-import { HMApi } from '../../../../comms/api';
+import { HMApi } from '../../../../hub/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../../ui/fields/fields';
 import getFlatFields from '../../../../utils/flat-fields';
-import { handleError, sendRequest } from '../../../../comms/request';
-import { IntermittentableButton } from '../../../../ui/button';
+import { handleError, sendRequest } from '../../../../hub/request';
+import { IntermittentButton } from '../../../../ui/button';
 import machineFriendlyName from '../../../../utils/machine-friendly-name';
 
 function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : Pick<StoreState, 'deviceTypes'|'rooms'|'devices'>) {
@@ -165,7 +165,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                     {isNew ? <>New {deviceType.name}</> : <>Editing {device.name} ({deviceType.name})</>}
                 </span>
                 {isNew || (
-                    <IntermittentableButton 
+                    <IntermittentButton 
                         onClick={()=> sendRequest({
                             'type': 'devices.removeDevice',
                             roomId: room.id,
@@ -182,7 +182,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                         attention
                     >
                         <FontAwesomeIcon icon={faTrash} />
-                    </IntermittentableButton>
+                    </IntermittentButton>
                 )}
             </h1>
 
@@ -223,10 +223,10 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                 }} 
             />
 
-            <IntermittentableButton<HMApi.Response<HMApi.RequestAddDevice|HMApi.RequestEditDevice>>
+            <IntermittentButton<HMApi.Response<HMApi.RequestAddDevice|HMApi.RequestEditDevice>>
                 primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
                 <FontAwesomeIcon icon={faSave} /> Save
-            </IntermittentableButton>
+            </IntermittentButton>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { HMApi } from '../../comms/api';
-import { handleError, sendRequest } from '../../comms/request';
+import { HMApi } from '../../hub/api';
+import { handleError, sendRequest } from '../../hub/request';
 import DropDownSelect from '../dropdown/dropdown';
 import { LazyDropDownSelect } from "../dropdown/lazy";
 import { FieldProps } from './fields';

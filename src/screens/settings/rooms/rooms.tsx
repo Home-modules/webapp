@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ReactSortable, Store } from "react-sortablejs";
 import Sortable from 'sortablejs';
-import { HMApi } from '../../../comms/api';
-import { handleError, sendRequest } from '../../../comms/request';
+import { HMApi } from '../../../hub/api';
+import { handleError, sendRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
 import { connect } from 'react-redux';
 import { Link, Outlet, useMatch, useParams, useSearchParams } from 'react-router-dom';
@@ -50,7 +50,8 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
             handleError(err);
         });
     }
-    React.useEffect(updateRooms, [hideList]);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useEffect(updateRooms, [hideList]); // The `rooms` dependency should not be there because it will cause a state stack overflow
 
     function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
         if(rooms) {

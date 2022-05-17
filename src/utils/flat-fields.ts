@@ -1,4 +1,4 @@
-import { HMApi } from "../comms/api";
+import { HMApi } from "../hub/api";
 
 export default function getFlatFields(fields: HMApi.SettingsField[]): HMApi.SettingsFieldWithoutContainer[] {
     const result: HMApi.SettingsFieldWithoutContainer[] = [];

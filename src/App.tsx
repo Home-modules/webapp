@@ -4,7 +4,7 @@ import './App.scss';
 import Header from './screens/header';
 import { StoreState } from './store';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { sendRequest } from './comms/request';
+import { sendRequest } from './hub/request';
 import version from './version';
 
 function App({token}: Pick<StoreState, 'token'>) {

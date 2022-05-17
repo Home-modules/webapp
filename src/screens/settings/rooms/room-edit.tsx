@@ -1,10 +1,10 @@
 import './room-edit.scss';
-import { HMApi } from "../../../comms/api";
+import { HMApi } from "../../../hub/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faTrash, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import { IntermittentableButton } from '../../../ui/button';
-import { handleError, sendRequest } from '../../../comms/request';
+import { IntermittentButton } from '../../../ui/button';
+import { handleError, sendRequest } from '../../../hub/request';
 import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
 import { StoreState } from '../../../store';
 import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
@@ -160,7 +160,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                     {isNew ? "New room" : <>Editing {room.name}</>}
                 </span>
                 {isNew || (
-                    <IntermittentableButton 
+                    <IntermittentButton 
                         onClick={()=> sendRequest({
                             'type': 'rooms.removeRoom',
                             id
@@ -176,7 +176,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                         attention
                     >
                         <FontAwesomeIcon icon={faTrash} />
-                    </IntermittentableButton>
+                    </IntermittentButton>
                 )}
             </h1>
 
@@ -263,10 +263,10 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
 
             </fieldset>
 
-            <IntermittentableButton<HMApi.Response<HMApi.RequestAddRoom|HMApi.RequestEditRoom>>
+            <IntermittentButton<HMApi.Response<HMApi.RequestAddRoom|HMApi.RequestEditRoom>>
                 primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
                 <FontAwesomeIcon icon={faSave} /> Save
-            </IntermittentableButton>
+            </IntermittentButton>
         </div>
     );
 }

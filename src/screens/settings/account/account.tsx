@@ -1,9 +1,9 @@
 import './account.scss';
 import React from 'react';
 import { connect } from 'react-redux';
-import { handleError, logoutFromHub, sendRequest } from '../../../comms/request';
+import { handleError, logoutFromHub, sendRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
-import { IntermittentableButton } from '../../../ui/button';
+import { IntermittentButton } from '../../../ui/button';
 import { Link, Outlet } from 'react-router-dom';
 
 function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
@@ -29,9 +29,9 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
         <main id="settings-account-info">
             <h1>
                 Logged in to Home_modules hub as: <strong>@{token?.split(':')[0]}</strong>
-                <IntermittentableButton onClick={()=>logoutFromHub()} onCatch={handleError} attention>
+                <IntermittentButton onClick={()=>logoutFromHub()} onCatch={handleError} attention>
                     Log out
-                </IntermittentableButton>
+                </IntermittentButton>
             </h1>
 
             <h2>Account settings</h2>
@@ -43,7 +43,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                     <span className="session-count">You have {sessionsCount} active {sessionsCount===1 ? 'session' : 'sessions'}</span>
                 }
                 <br/>
-                <IntermittentableButton 
+                <IntermittentButton 
                     onClick={()=>{
                         return sendRequest({
                             "type": "account.logoutOtherSessions"
@@ -68,7 +68,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                     attention
                 >
                     Terminate other sessions
-                </IntermittentableButton>
+                </IntermittentButton>
             </p>
 
             <Link to="/settings/account/change-password" className='button'>Change password</Link> 

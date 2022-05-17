@@ -1,8 +1,8 @@
 import './login.scss';
 import React from 'react';
-import { handleError, loginToHub } from '../comms/request';
-import { HMApi } from '../comms/api';
-import { IntermittentableSubmitButton } from '../ui/button';
+import { handleError, loginToHub } from '../hub/request';
+import { HMApi } from '../hub/api';
+import { IntermittentSubmitButton } from '../ui/button';
 import { store, StoreState } from '../store';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
@@ -87,9 +87,9 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                             setPasswordError('');
                         }} />
                 </label>
-                <IntermittentableSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onCatch}>
+                <IntermittentSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onCatch}>
                     Login
-                </IntermittentableSubmitButton>
+                </IntermittentSubmitButton>
             </form>
         </div>
     );

@@ -23,13 +23,13 @@ export default function Button({onClick, children, className='', disabled=false,
     );
 }
 
-export type IntermittentableButtonProps<T> = ButtonProps & {
+export type IntermittentButtonProps<T> = ButtonProps & {
     onClick: () => (Promise<T>|undefined);
     onThen?: (result: T) => void;
     onCatch?: (error: T) => void;
 } & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
-export function IntermittentableButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined, primary=false, attention= false, ...rest}: IntermittentableButtonProps<T>) {
+export function IntermittentButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined, primary=false, attention= false, ...rest}: IntermittentButtonProps<T>) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     function click() {
@@ -52,7 +52,7 @@ export function IntermittentableButton<T>({onClick, children, className='', disa
     );
 }
 
-export function IntermittentableSubmitButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined}: Omit<IntermittentableButtonProps<T>, 'primary'> & {children:string}) {
+export function IntermittentSubmitButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined}: Omit<IntermittentButtonProps<T>, 'primary'> & {children:string}) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     function click() {

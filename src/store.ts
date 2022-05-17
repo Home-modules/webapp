@@ -1,5 +1,5 @@
 import { createStore } from "redux";
-import { HMApi } from "./comms/api";
+import { HMApi } from "./hub/api";
 import { DialogProps } from "./ui/dialogs";
 import { NotificationProps } from "./ui/notifications";
 import { uniqueId } from "./uniqueId";

@@ -1,12 +1,12 @@
 import React from "react";
-import { handleError, sendRequest } from "../../comms/request";
-import { IntermittentableButton } from "../../ui/button";
+import { handleError, sendRequest } from "../../hub/request";
+import { IntermittentButton } from "../../ui/button";
 
 export default function HomePage() {
     return (
         <main id="home">
             <h1>Home</h1>
-            <IntermittentableButton 
+            <IntermittentButton 
                 onClick={()=> 
                     sendRequest({
                         "type": "empty"
@@ -16,7 +16,7 @@ export default function HomePage() {
                 primary
             >
                 Send an empty req
-            </IntermittentableButton>
+            </IntermittentButton>
         </main>
     )
 }

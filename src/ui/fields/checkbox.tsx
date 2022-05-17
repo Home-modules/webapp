@@ -1,5 +1,5 @@
 import React from 'react';
-import { HMApi } from '../../comms/api';
+import { HMApi } from '../../hub/api';
 import { FieldProps } from './fields';
 
 export function FieldTypeCheckBox({ field, value, setValue, error, setError }: FieldProps<boolean, HMApi.SettingsFieldCheckbox>) {

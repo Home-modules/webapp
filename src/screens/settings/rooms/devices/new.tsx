@@ -6,7 +6,7 @@ import './edit-device';
 import { store, StoreState } from "../../../../store";
 import { connect } from "react-redux";
 import React from "react";
-import { handleError, sendRequest } from "../../../../comms/request";
+import { handleError, sendRequest } from "../../../../hub/request";
 
 function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState, 'deviceTypes'|'rooms'>) {
     let hideList = !useMatch('/settings/rooms/:roomId/devices/new/');

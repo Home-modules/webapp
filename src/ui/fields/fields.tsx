@@ -1,5 +1,5 @@
 import React from 'react';
-import { HMApi } from '../../comms/api';
+import { HMApi } from '../../hub/api';
 import { searchInDropdownOptions } from "../dropdown/traverse-options";
 import { FieldTypeCheckBox } from './checkbox';
 import { FieldTypeRadio } from './radio';
