@@ -13,17 +13,19 @@ export type IconSelectProps = {
 }
 
 export default function IconSelect({icons, value, onChange}: IconSelectProps) {
-    const [squareCoordinates, setSquareCoordinates] = React.useState([0, 0])
+    const [squareCoordinates, setSquareCoordinates] = React.useState<[number, number]|undefined>(undefined)
     const ref = React.useRef(null) as React.RefObject<HTMLDivElement>;
 
     React.useEffect(()=> {
+        const inAnimation = !squareCoordinates; // When the component mount, it is inside a scale animation from 75% to 100% and squareCoordinates isn't yet set.
         if(ref.current) {
             const child = ref.current.childNodes[value] as SVGSVGElement
             const parentCoordinates = ref.current.getBoundingClientRect();
             const coordinates = child.getBoundingClientRect();
+            console.log(parentCoordinates, coordinates);
             setSquareCoordinates([
-                coordinates.x - parentCoordinates.x, 
-                coordinates.y - parentCoordinates.y
+                (coordinates.x - parentCoordinates.x)*(inAnimation?(1/0.75) : 1), 
+                (coordinates.y - parentCoordinates.y)*(inAnimation?(1/0.75) : 1)
             ])
         }
     }, [value])
@@ -31,13 +33,13 @@ export default function IconSelect({icons, value, onChange}: IconSelectProps) {
     return(
         <div className='icon-select' data-icon={value} ref={ref}>
             {icons.map((icon, index) => (
-                <FontAwesomeIcon icon={icon} onClick={()=> {
+                <FontAwesomeIcon key={index} icon={icon} onClick={()=> {
                     if(value !== index) {
                         onChange(index);
                     }
                 }} className={index===value? 'selected':''} />
             ))}
-            <div className="square" style={{left: squareCoordinates[0]+'px', top: squareCoordinates[1]+'px'}} />
+            <div className="square" style={squareCoordinates && {left: squareCoordinates[0]+'px', top: squareCoordinates[1]+'px'}} />
         </div>
     )
 }
