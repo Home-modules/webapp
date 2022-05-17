@@ -1,6 +1,6 @@
 import React from "react";
-import { handleError, sendRequest } from "../comms/request";
-import { IntermittentableButton } from "../ui/button";
+import { handleError, sendRequest } from "../../comms/request";
+import { IntermittentableButton } from "../../ui/button";
 
 export default function HomePage() {
     return (

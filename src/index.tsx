@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-import HomePage from './screens/home';
+import HomePage from './screens/home/home';
 import SettingsPage from './screens/settings/settings';
 import SettingsPageAccount from './screens/settings/account/account';
 import SettingsPageRooms from './screens/settings/rooms/rooms';
