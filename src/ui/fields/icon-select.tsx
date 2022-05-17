@@ -28,6 +28,7 @@ export default function IconSelect({icons, value, onChange}: IconSelectProps) {
                 (coordinates.y - parentCoordinates.y)*(inAnimation?(1/0.75) : 1)
             ])
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
 
     return(

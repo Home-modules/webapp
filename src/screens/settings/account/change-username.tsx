@@ -7,17 +7,6 @@ import { IntermittentSubmitButton } from '../../../ui/button';
 import { RouteDialog } from '../../../ui/dialogs';
 import { useNavigate } from 'react-router-dom';
 
-// export default function showChangeUsernameDialog() {
-//     store.dispatch({
-//         type: 'ADD_DIALOG',
-//         dialog: {
-//             title: 'Change Username',
-//             className: 'change-username-dialog',
-//             children: ChangeUsernameDialog
-//         }
-//     });
-// }
-
 export default function ChangeUsernameDialog() {
     const [username, setUsername] = React.useState(store.getState().token?.split(':')[0] || '');
     const [usernameError, setUsernameError] = React.useState('');
@@ -47,6 +36,7 @@ export default function ChangeUsernameDialog() {
                 }
             }).catch(handleError);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [username]);
 
     function onSubmit() {

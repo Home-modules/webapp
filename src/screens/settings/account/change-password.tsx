@@ -6,16 +6,6 @@ import { store } from "../../../store";
 import { IntermittentSubmitButton } from "../../../ui/button";
 import { RouteDialog } from "../../../ui/dialogs";
 
-// export default function showChangePasswordDialog() {
-//     store.dispatch({
-//         type: "ADD_DIALOG", 
-//         dialog: {
-//             title: "Change Password", 
-//             children: ChangePasswordDialog
-//         }
-//     });
-// }
-
 export default function ChangePasswordDialog() {
     const [currentPassword, setCurrentPassword] = React.useState("");
     const [currentPasswordError, setCurrentPasswordError] = React.useState('');
