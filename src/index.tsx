@@ -21,6 +21,7 @@ import Dialogs from './ui/dialogs';
 import SettingsPageRoomsDevices from './screens/settings/rooms/devices/devices';
 import SettingsPageRoomsDevicesNewDevice from './screens/settings/rooms/devices/new';
 import SettingsPageRoomsDevicesEditDevice from './screens/settings/rooms/devices/edit-device';
+import InvalidVersionPage from './screens/invalid-version';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -29,6 +30,7 @@ ReactDOM.render(
                 <Notifications />
                 <Routes>
                     <Route path="/login" element={<LoginForm />} />
+                    <Route path="/invalid-version" element={<InvalidVersionPage />} />
                     <Route path="/" element={<App />}>
                         <Route path="home" element={<HomePage />} />
                         <Route path="settings" element={<SettingsPage />}>

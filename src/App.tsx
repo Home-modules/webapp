@@ -3,12 +3,30 @@ import { connect } from 'react-redux';
 import './App.scss';
 import Header from './screens/header';
 import { StoreState } from './store';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { sendRequest } from './comms/request';
+import version from './version';
 
 function App({token}: Pick<StoreState, 'token'>) {
+    const navigate = useNavigate();
+    React.useEffect(()=> {
+        if(token) {
+            sendRequest({
+                type: "getVersion"
+            }).then(e=>{
+                if(e.type === 'ok') {
+                    if(e.data.version !== version) {
+                        navigate(`/invalid-version?current=${e.data.version}`);
+                    }
+                }
+            })
+        }
+    })
+
     if(!token) {
         return <Navigate to="/login" />
     }
+
     return (
         <>
             <Header />
