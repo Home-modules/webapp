@@ -275,7 +275,6 @@ export default function DropDownSelect<T extends string>({
                                 return true;
                             }
                             function searchIn(item: DropDownSelectOption<T>, term: string) {
-                                console.log('searchIn', item, term);
                                 return item.label.toLowerCase().includes(term.toLowerCase()) || (item.subtext?.toLowerCase().includes(term.toLowerCase()));
                             }
                             if(o.isGroup) {

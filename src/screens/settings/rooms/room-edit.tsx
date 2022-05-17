@@ -123,7 +123,6 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     }
 
     function onChangeControllerType(val?: string) { // val is not set when called by useEffect, and the existing settings must be kept in that case.
-        console.log('onChangeControllerType', val, room? room.controllerType.settings:undefined);
         if(!(controllerTypes instanceof Array)) return;
         const defaultRCType = room ? room.controllerType.type : 'arduino:serial';
         const controller: HMApi.RoomController = {

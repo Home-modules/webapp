@@ -31,7 +31,6 @@ export function LazyDropDownSelect({ className, callback, lazyOptions, onChange,
     const [options, setOptions] = React.useState<OptionsState>(0);
 
     const loadItems = React.useCallback(function loadItems() {
-        console.log('loading items');
         const returned = callback();
         if (returned instanceof Promise) {
             promiseTimeout(returned, 75, () => {

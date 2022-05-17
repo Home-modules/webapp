@@ -24,13 +24,11 @@ function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : P
 
         const devicesInRoom = devices[roomId];
         if(!devicesInRoom) {
-            console.log('devices', devices);
             return <Navigate to={`/settings/rooms/${roomId}/devices`} />
         }
 
         const device = devicesInRoom.find(d=> d.id === deviceId);
         if (!device) {
-            console.log('devicesInRoom', devicesInRoom);
             return <Navigate to={`/settings/rooms/${roomId}/devices`} />
         }
 
@@ -38,7 +36,6 @@ function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : P
         const deviceType = deviceTypesForController ? deviceTypesForController.find(t=> t.id === device.type) : undefined;
 
         if(!deviceType) {
-            console.log('deviceTypesForController', deviceTypesForController, 'deviceType', deviceType);
             return <Navigate to={`/settings/rooms/${roomId}/devices`} />
         }
 
