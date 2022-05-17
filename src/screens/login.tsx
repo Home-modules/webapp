@@ -4,7 +4,6 @@ import { handleError, loginToHub } from '../comms/request';
 import { HMApi } from '../comms/api';
 import { IntermittentableSubmitButton } from '../ui/button';
 import { store, StoreState } from '../store';
-import showChangePasswordDialog from './settings/account/change-password';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
