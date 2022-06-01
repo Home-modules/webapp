@@ -1,6 +1,7 @@
 main#settings main#settings-rooms .edit-room {
-    padding: 20px;
-    overflow-y: auto;
+    > div:first-child {
+        padding: 20px;
+    }
 
     h1 {
         margin: 0;

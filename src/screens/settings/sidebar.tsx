@@ -4,10 +4,11 @@ import { faDoorClosed, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
 import version from '../../version';
+import ScrollView from '../../ui/scrollbar';
 
 export default function SettingsSidebar() {
     return (
-        <nav className="settings-sidebar">
+        <ScrollView tagName='nav' className="settings-sidebar">
             <NavLink 
                 to="/settings/account"
                 className={({isActive}) => isActive ? 'active' : ''}>
@@ -24,6 +25,6 @@ export default function SettingsSidebar() {
             <div className="footer">
                 Home_modules {version}
             </div>
-        </nav>
+        </ScrollView>
     );
 }

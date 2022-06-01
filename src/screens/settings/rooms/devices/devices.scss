@@ -32,9 +32,11 @@ main#settings main#settings-rooms .edit-devices {
             transform: scale(1.25);
         }
 
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
+        > div:first-child {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
 
         h1 .title {
             a {

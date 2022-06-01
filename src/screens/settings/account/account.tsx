@@ -5,6 +5,7 @@ import { handleError, logoutFromHub, sendRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
 import { IntermittentButton } from '../../../ui/button';
 import { Link, Outlet } from 'react-router-dom';
+import ScrollView from '../../../ui/scrollbar';
 
 function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     const [sessionsCount, setSessionsCount] = React.useState(-1); // Special values: -1 = loading, -2 = error
@@ -26,7 +27,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     }, []);
 
     return (
-        <main id="settings-account-info">
+        <ScrollView tagName='main' id="settings-account-info">
             <h1>
                 Logged in to Home_modules hub as: <strong>@{token?.split(':')[0]}</strong>
                 <IntermittentButton onClick={()=>logoutFromHub()} onCatch={handleError} attention>
@@ -76,7 +77,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
             <Link to="/settings/account/change-username" className='button'>Change username</Link> 
 
             <Outlet />
-        </main>
+        </ScrollView>
     )
 }
 

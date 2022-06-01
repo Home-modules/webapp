@@ -11,6 +11,7 @@ import getFlatFields from '../../../../utils/flat-fields';
 import { handleError, sendRequest } from '../../../../hub/request';
 import { IntermittentButton } from '../../../../ui/button';
 import machineFriendlyName from '../../../../utils/machine-friendly-name';
+import ScrollView from '../../../../ui/scrollbar';
 
 function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : Pick<StoreState, 'deviceTypes'|'rooms'|'devices'>) {
     let { deviceType: deviceTypeId, roomId, deviceId } = useParams();
@@ -156,7 +157,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
     }
 
     return (
-        <div className={`edit-device`}>
+        <ScrollView className={`edit-device`}>
             <h1>
                 <Link to="..">
                     <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
@@ -227,6 +228,6 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                 primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
                 <FontAwesomeIcon icon={faSave} /> Save
             </IntermittentButton>
-        </div>
+        </ScrollView>
     );
 }

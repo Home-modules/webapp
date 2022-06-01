@@ -327,14 +327,13 @@ main#settings main#settings-rooms {
     }
 
     .rooms-list {
-        position: absolute;
+        position: relative !important;
         top: 0;
         left: 0;
-        height: calc(100% - 40px);
-        width: calc(100% - 40px);
-        transition: opacity 250ms, transform 250ms, padding 250ms, width 250ms;
-        overflow: auto;
-        overflow: overlay;
+        height: 100%;
+        width: 100% !important;
+        transition: opacity 250ms, transform 250ms, width 250ms;
+        overflow: hidden !important;
 
         h1 {
             height: 44px;
@@ -352,10 +351,11 @@ main#settings main#settings-rooms {
 
         @media screen and (min-width: 601px) {
             &.collapsed {
-                position: relative;
-                padding-left: 10px;
-                padding-right: 10px;
-                width: 46.5px;
+                > div:first-child {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+                width: 66.5px !important;
 
                 &::-webkit-scrollbar {
                     width: 6px;
@@ -404,16 +404,29 @@ main#settings main#settings-rooms {
                     margin-top: -63px;
                     width: 46.5px;
                 }
+
+                --scrollbar-width: 6px;
+                --scrollbar-margin: 2px;
             }
         }
 
-        display: flex;
-        flex-direction: column;
-        padding: 20px;
+        > div:first-child {
+            padding: 20px;
+            transition: padding 250ms;
+            display: flex;
+            flex-direction: column;
+        }
+
+        > .track-horizontal,
+        > .track-vertical,
+        > .thumb-horizontal,
+        > .thumb-vertical {
+            transition: width 200ms, height 200ms, margin 200ms;
+        }
     }
 
     .edit-room {
-        position: absolute;
+        position: absolute !important;
         top: 0;
         left: 0;
         right: 0;

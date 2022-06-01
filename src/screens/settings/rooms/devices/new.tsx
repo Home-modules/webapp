@@ -7,6 +7,7 @@ import { store, StoreState } from "../../../../store";
 import { connect } from "react-redux";
 import React from "react";
 import { handleError, sendRequest } from "../../../../hub/request";
+import ScrollView from "../../../../ui/scrollbar";
 
 function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState, 'deviceTypes'|'rooms'>) {
     let hideList = !useMatch('/settings/rooms/:roomId/devices/new/');
@@ -39,7 +40,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
 
     return (
         <main className="new-device">
-            <div className={`choose-type ${hideList ? 'hidden' : ''}`}>
+            <ScrollView className={`choose-type ${hideList ? 'hidden' : ''}`}>
                 <h1>
                     <Link to="..">
                         <FontAwesomeIcon icon={faArrowLeft} />
@@ -65,7 +66,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                         </Link>
                     ))}
                 </div>
-            </div>
+            </ScrollView>
             <Outlet />
         </main>
     );

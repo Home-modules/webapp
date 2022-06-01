@@ -10,6 +10,7 @@ import { store, StoreState } from '../../../store';
 import { connect } from 'react-redux';
 import { Link, Outlet, useMatch, useParams, useSearchParams } from 'react-router-dom';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
+import ScrollView from '../../../ui/scrollbar';
 
 function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
@@ -64,7 +65,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
 
     return (
         <main id="settings-rooms">
-            <div className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}>
+            <ScrollView className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'}`}>
                     <div className="title">
                         <span>Edit Rooms</span>
@@ -122,7 +123,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                         </Link>
                     </>)}
                 </div>
-            </div>
+            </ScrollView>
             <Outlet />
         </main>
     )

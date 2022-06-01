@@ -1,0 +1,62 @@
+:root {
+    --scrollbar-width: 12px;
+    --scrollbar-margin: 3px;
+}
+
+.scroll-view {
+    > .track-horizontal {
+        bottom: var(--scrollbar-margin);
+        left: var(--scrollbar-margin);
+        right: var(--scrollbar-margin);
+        height: var(--scrollbar-width) !important;
+        border-radius: 999em;
+        background-color: var(--color-scrollbar-background);
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: var(--color-scrollbar-hover-background);
+        }
+
+        > .thumb-horizontal {
+            border-radius: 999em;
+            background-color: var(--color-scrollbar-thumb);
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: var(--color-scrollbar-hover-thumb);
+            }
+
+            &:active {
+                background-color: var(--color-scrollbar-active-thumb);
+            }
+        }
+    }
+
+    > .track-vertical {
+        right: var(--scrollbar-margin);
+        top: var(--scrollbar-margin);
+        bottom: var(--scrollbar-margin);
+        width: var(--scrollbar-width) !important;
+        border-radius: 999em;
+        background-color: var(--color-scrollbar-background);
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: var(--color-scrollbar-hover-background);
+        }
+
+        > .thumb-vertical {
+            border-radius: 999em;
+            background-color: var(--color-scrollbar-thumb);
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: var(--color-scrollbar-hover-thumb);
+            }
+
+            &:active {
+                background-color: var(--color-scrollbar-active-thumb);
+            }
+        }
+    }
+}

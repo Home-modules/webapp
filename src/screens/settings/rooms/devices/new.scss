@@ -1,12 +1,13 @@
 main#settings main#settings-rooms .edit-devices .new-device {
     .choose-type {
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        overflow: auto;
         height: 100%;
-        box-sizing: border-box;
+        
+        > div:first-child {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
         h1 {
             margin: 0;

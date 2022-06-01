@@ -13,6 +13,7 @@ import machineFriendlyName from '../../../utils/machine-friendly-name';
 import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../ui/fields/fields';
 import getFlatFields from '../../../utils/flat-fields';
 import IconSelect from '../../../ui/fields/icon-select';
+import ScrollView from '../../../ui/scrollbar';
 
 export type SettingsPageRoomsEditRoomProps = {
     room: HMApi.Room & {new?: boolean};
@@ -151,7 +152,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     }
 
     return (
-        <div className={`edit-room`}>
+        <ScrollView className={`edit-room`}>
             <h1>
                 <Link to="/settings/rooms">
                     <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
@@ -267,7 +268,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
                 <FontAwesomeIcon icon={faSave} /> Save
             </IntermittentButton>
-        </div>
+        </ScrollView>
     );
 }
 

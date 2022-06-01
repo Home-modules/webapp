@@ -6,6 +6,7 @@ import { Link, Navigate, Outlet, useMatch, useParams, useSearchParams } from "re
 import { HMApi } from "../../../../hub/api";
 import { handleError, sendRequest } from "../../../../hub/request";
 import { store, StoreState } from "../../../../store";
+import ScrollView from "../../../../ui/scrollbar";
 import SearchKeywordHighlight from "../../../../ui/search-highlight";
 import './devices.scss';
 
@@ -86,7 +87,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
 
     return (
         <div className="edit-devices">
-            <div className={`devices-list ${hideList? 'hidden':''}`}>
+            <ScrollView className={`devices-list ${hideList? 'hidden':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'}`}>
                     <div className="title">
                         <Link to="/settings/rooms">
@@ -146,7 +147,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                         </Link>
                     </>)}
                 </div>
-            </div>
+            </ScrollView>
             <Outlet />
         </div>
     )

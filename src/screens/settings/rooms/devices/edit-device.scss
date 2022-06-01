@@ -1,11 +1,14 @@
 main#settings main#settings-rooms .edit-devices .edit-device {
-    padding: 20px;
-    position: absolute;
+    position: absolute !important;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     animation: inner-screen-appear 250ms;
+
+    > div:first-child {
+        padding: 20px;
+    }
 
     h1 {
         margin: 0;
