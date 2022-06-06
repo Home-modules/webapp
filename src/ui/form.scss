@@ -14,7 +14,7 @@ label.text, label.number {
         padding-right: calc( var(--postfix-width) + 10px );
         border-radius: 7px;
         border: 1px solid var(--color-input-border);
-        box-shadow: 0 0 0 0 transparent;
+        box-shadow: 0 0 0 0 transparent, inset 0 0 0 100px var(--color-input-background);
         font-size: 16px;
         color: var(--color-foreground);
         transition: box-shadow 200ms, border-color 200ms, padding-right 200ms;
@@ -34,7 +34,7 @@ label.text, label.number {
 
         &:focus {
             border-color: transparent;
-            box-shadow: 0 0 0 3px var(--color-input-active-border);
+            box-shadow: 0 0 0 3px var(--color-input-active-border), inset 0 0 0 100px var(--color-input-background);
             outline: none;
         }
     }
@@ -42,7 +42,7 @@ label.text, label.number {
     &[data-error]:not([data-error=""]) {
         input {
             border-color: transparent;
-            box-shadow: 0 0 0 3px var(--color-input-error-border);
+            box-shadow: 0 0 0 3px var(--color-input-error-border), inset 0 0 0 100px var(--color-input-background);
             animation: shake 0.7s;
             position: relative;
             z-index: 1;
