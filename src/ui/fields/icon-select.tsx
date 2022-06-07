@@ -1,25 +1,29 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { IconDefinition, IconName } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { HMApi } from "../../hub/api";
+import { uniqueId } from "../../uniqueId";
 import './icon-select.scss';
 
 export type IconSelectProps = {
     /** A list of icon */
     icons: IconDefinition[],
     /** The index of the selected icon */
-    value: number,
+    value: IconName,
     /** Fired when the selected icon changes */
-    onChange: (value: number) => void
+    onChange: (value: IconName) => void
 }
 
 export default function IconSelect({icons, value, onChange}: IconSelectProps) {
     const [squareCoordinates, setSquareCoordinates] = React.useState<[number, number]|undefined>(undefined)
     const ref = React.useRef(null) as React.RefObject<HTMLDivElement>;
+    const [id] = React.useState(uniqueId('icon-select-'));
+    const valueIndex = icons.findIndex(i=> i.iconName === value);
 
     React.useEffect(()=> {
         const inAnimation = !squareCoordinates; // When the component mount, it is inside a scale animation from 75% to 100% and squareCoordinates isn't yet set.
         if(ref.current) {
-            const child = ref.current.childNodes[value] as SVGSVGElement
+            const child = ref.current.childNodes[valueIndex] as SVGSVGElement
             const parentCoordinates = ref.current.getBoundingClientRect();
             const coordinates = child.getBoundingClientRect();
             console.log(parentCoordinates, coordinates);
@@ -34,11 +38,11 @@ export default function IconSelect({icons, value, onChange}: IconSelectProps) {
     return(
         <div className='icon-select' data-icon={value} ref={ref}>
             {icons.map((icon, index) => (
-                <FontAwesomeIcon key={index} icon={icon} onClick={()=> {
-                    if(value !== index) {
-                        onChange(index);
+                <FontAwesomeIcon key={icon.iconName} icon={icon} onClick={()=> {
+                    if(value !== icon.iconName) {
+                        onChange(icon.iconName);
                     }
-                }} className={index===value? 'selected':''} />
+                }} className={icon.iconName===value? 'selected':''} />
             ))}
             <div className="square" style={squareCoordinates && {left: squareCoordinates[0]+'px', top: squareCoordinates[1]+'px'}} />
         </div>

@@ -1,7 +1,7 @@
 import './room-edit.scss';
 import { HMApi } from "../../../hub/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faTrash, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faTrash, faUtensils, IconName } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { IntermittentButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../hub/request';
@@ -21,13 +21,14 @@ export type SettingsPageRoomsEditRoomProps = {
     hidden?: boolean;
 }
 
-const iconIds: HMApi.Room['icon'][] = [
-    'living-room',
-    'kitchen',
-    'bedroom',
-    'bathroom',
-    'other'
-]
+export const icons: Record<HMApi.Room['icon'], IconName> = {
+    'living-room': 'couch',
+    'kitchen': 'utensils',
+    'bedroom': 'bed',
+    'bathroom': 'bath',
+    'other': 'door-closed'
+}
+const iconNames = Object.fromEntries(Object.entries(icons).map(([k,v])=>[v,k])) as Record<IconName, HMApi.Room['icon']>;
 
 function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const isNew = !!useMatch('/settings/rooms/new');
@@ -55,7 +56,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const [idError, setIdError] = React.useState('');
     const idRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
 
-    const [iconId, setIconId] = React.useState(iconIds.indexOf(room.icon));
+    const [icon, setIcon] = React.useState(icons[room.icon]);
 
     const [controller, setController] = React.useState(room.controllerType);
     const [controllerTypes, setControllerTypes] = React.useState<HMApi.RoomControllerType[]|0|-1>(0); // 0= loading -1= error
@@ -76,7 +77,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
         const nRoom: HMApi.Room = {
             id,
             name,
-            icon: iconIds[iconId],
+            icon: iconNames[icon],
             controllerType: controller
         };
 
@@ -206,7 +207,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             </div>
 
             <div className="icon-select-title">Icon</div>
-            <IconSelect value={iconId} onChange={setIconId} icons={[faCouch, faUtensils, faBed, faBath, faDoorClosed]} />
+            <IconSelect value={icon} onChange={setIcon} icons={[faCouch, faUtensils, faBed, faBath, faDoorClosed]} />
 
             <fieldset>
                 <legend>Controller</legend>
