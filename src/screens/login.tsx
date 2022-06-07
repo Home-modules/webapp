@@ -71,6 +71,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                         type="text" 
                         value={username} 
                         ref={usernameRef}
+                        autoComplete="username"
                         onChange={(event) => {
                             setUsername(event.target.value); 
                             setUsernameError('');

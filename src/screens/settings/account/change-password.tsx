@@ -74,40 +74,46 @@ export default function ChangePasswordDialog() {
             <form onSubmit={e=>{e.preventDefault()}}>
                 <label className="text" data-error={currentPasswordError}>
                     Current Password
-                        <input
-                            type="password"
-                            value={currentPassword} 
-                            ref={currentPasswordRef}
-                            onChange={(event) => {
-                                setCurrentPassword(event.target.value); 
-                                setCurrentPasswordError('');
-                                if(newPassword===""){
-                                    setNewPasswordError('');
-                                }
-                            }} />
+                    <input
+                        type="password"
+                        value={currentPassword} 
+                        ref={currentPasswordRef}
+                        autoComplete="current-password"
+                        onChange={(event) => {
+                            setCurrentPassword(event.target.value); 
+                            setCurrentPasswordError('');
+                            if(newPassword===""){
+                                setNewPasswordError('');
+                            }
+                        }} 
+                    />
                 </label>
                 <label className="text" data-error={newPasswordError}>
                     New Password
-                        <input
-                            type="password"
-                            value={newPassword}
-                            ref={newPasswordRef}
-                            onChange={(event) => {
-                                setNewPassword(event.target.value);
-                                setNewPasswordError('');
-                                setConfirmPasswordError('');
-                            }} />
+                    <input
+                        type="password"
+                        value={newPassword}
+                        ref={newPasswordRef}
+                        autoComplete="new-password"
+                        onChange={(event) => {
+                            setNewPassword(event.target.value);
+                            setNewPasswordError('');
+                            setConfirmPasswordError('');
+                        }} 
+                    />
                 </label>
                 <label className="text" data-error={confirmPasswordError}>
                     Repeat New Password
-                        <input
-                            type="password"
-                            value={confirmPassword}
-                            ref={confirmNewPasswordRef}
-                            onChange={(event) => {
-                                setConfirmPassword(event.target.value);
-                                setConfirmPasswordError('');
-                            }} />
+                    <input
+                        type="password"
+                        value={confirmPassword}
+                        ref={confirmNewPasswordRef}
+                        autoComplete="new-password"
+                        onChange={(event) => {
+                            setConfirmPassword(event.target.value);
+                            setConfirmPasswordError('');
+                        }} 
+                    />
                 </label>
                 <IntermittentSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onError}>
                     Change Password
