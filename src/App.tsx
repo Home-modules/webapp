@@ -21,7 +21,7 @@ function App({token}: Pick<StoreState, 'token'>) {
                 }
             })
         }
-    })
+    }, [token, navigate]);
 
     if(!token) {
         return <Navigate to="/login" />
