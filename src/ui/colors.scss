@@ -8,6 +8,7 @@
     --color-status-placeholder: var(--color-foreground-subtext); // Placeholder text color (e.g. loading)
     --color-status-error: #ff1b02; // Color for error fallback text
     --color-status-success: #00b300; // Color for success fallback text
+    --color-status-warning: #c88d00; // Color for warning fallback text
 
     // Login screen
     --color-login-background: #f5f5f5; // Login background color (around the box)
@@ -101,6 +102,7 @@
         --color-status-placeholder: rgb(95, 95, 95); // Placeholder text color (e.g. loading)
         --color-status-error: #ff1b02; // Color for error fallback text
         --color-status-success: #00b300; // Color for success fallback text
+        --color-status-warning: var(--color-notification-border-warning); // Color for warning fallback text
 
         // Login screen
         --color-login-background: #151515; // Login background color (around the box)

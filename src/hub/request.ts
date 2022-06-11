@@ -1,6 +1,7 @@
 import { HMApi } from './api';
 import axios from 'axios'
 import { store } from '../store';
+import platform from "platform";
 
 
 export function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.Response<R>> {
@@ -44,7 +45,8 @@ export function loginToHub(username: string, password: string): Promise<HMApi.Re
         sendRequest({
             type: "account.login",
             username,
-            password
+            password,
+            device: platform.description || 'Unknown device',
         }).then(e=> {
             if(e.type==='ok') {
                 store.dispatch({
@@ -112,8 +114,14 @@ export function handleError(e: HMApiResponseWithNetworkError<HMApi.Request>): vo
             case 'CUSTOM_PLUGIN_ERROR':
                 message= e.error.text;
                 break;
+            case 'SESSION_TOO_NEW':
+                message= 'You must have been logged in for at least 24 hours to perform sensitive actions. Please try again later.';
+                break;
             case 'NETWORK_ERROR':
                 message= 'The hub could not be reached. Please check if the hub is powered on and is on the same network as this device.';
+                break;
+            default:
+                message= 'An unknown error occurred. Please contact support.';
                 break;
         }
     }

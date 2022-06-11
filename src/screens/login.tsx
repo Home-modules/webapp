@@ -30,11 +30,11 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                         type: 'warning',
                         title: 'Change your password',
                         message: 'You are using the default admin password. Please change it to a more secure password to avoid being hacked.',
-                        timeout: 60000, // Use more timeout because the warning is important
+                        timeout: 0, // Do not auto-dismiss
                         buttons: [
                             {
                                 label: 'Change password',
-                                route: '/settings/account/change-password',
+                                route: '/settings/account/change-password?usingDefaultPassword=true',
                                 isPrimary: true
                             }
                         ]

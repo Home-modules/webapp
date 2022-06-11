@@ -36,7 +36,7 @@ export function IntermittentButton<T>({onClick, children, className='', disabled
         const promise= onClick();
         if(promise) {
             setIntermittent(true);
-            promise.then(onThen).catch(onCatch).finally(()=>setIntermittent(false));
+            promise.then(onThen, onCatch).finally(()=>setIntermittent(false));
         }
     }
 

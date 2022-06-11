@@ -2,7 +2,7 @@ main#settings {
     display: flex;
     height: calc(100% - 60px);
     
-    .content {
+    > .content {
         flex-grow: 1;
     }
 }

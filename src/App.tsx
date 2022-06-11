@@ -21,7 +21,8 @@ function App({token}: Pick<StoreState, 'token'>) {
                 }
             })
         }
-    }, [token, navigate]);
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
+    }, [token]);
 
     if(!token) {
         return <Navigate to="/login" />

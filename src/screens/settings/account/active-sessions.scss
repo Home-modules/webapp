@@ -1,0 +1,85 @@
+.active-sessions {
+    .dialog { 
+        overflow: hidden;
+
+        .content {
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+
+            .terminate-others {
+                display: block;
+                width: 100%;
+            }
+
+            .list {
+                position: relative;
+                max-height: calc(100vh - 184px);
+                overflow: auto;
+                background-color: var(--color-button-secondary);
+                border-radius: 10px;
+
+                .item {
+                    padding: 10px;
+                    transition: background-color 200ms, height 200ms;
+                    cursor: pointer;
+                    overflow: hidden;
+
+                    &:not(:last-child) {
+                        border-bottom: 1px solid var(--color-button-secondary-hover);
+                    }
+
+                    &:hover {
+                        background-color: var(--color-button-secondary-hover);
+                    }
+
+                    .device {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+
+                        &.current {
+                            font-weight: bold;
+                        }
+                    }
+
+                    .details {
+                        margin: 5px 0 0;
+                        color: var(--color-foreground-subtext);
+                        font-size: 0.8em;
+
+                        .terminate {
+                            margin-top: 10px;
+                            display: block;
+                            width: 100%;
+                        }
+
+                        div {
+                            transition: opacity 200ms;
+                        }
+                    }
+
+                    &:not(:hover) .details .terminate {
+                        background-color: var(--color-button-secondary-hover)
+                    }
+
+                    &:not(.expanded) {
+                        height: 43px;
+                        overflow: hidden;
+                        .details {
+                            .login-time,
+                            .last-use,
+                            .terminate {
+                                opacity: 0;
+                            }
+                        }
+                    }
+
+                    &.expanded {
+                        height: 124px;
+                    }
+                }
+            }
+        }
+    }
+}

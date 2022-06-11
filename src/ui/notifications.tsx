@@ -40,9 +40,11 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
     }
 
     React.useEffect(() => {
-        setTimeout(()=>{
-            close('fading');
-        }, timeout);
+        if(timeout > 0) {
+            setTimeout(()=>{
+                close('fading');
+            }, timeout);
+        }
         setTimeout(()=>{
             setIsNew(false);
         }, 500)
