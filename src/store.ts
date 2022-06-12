@@ -2,7 +2,7 @@ import { createStore } from "redux";
 import { HMApi } from "./hub/api";
 import { DialogProps } from "./ui/dialogs";
 import { NotificationProps } from "./ui/notifications";
-import { uniqueId } from "./uniqueId";
+import { uniqueId } from "./utils/uniqueId";
 
 export type StoreState = {
     token: string | null;

@@ -1,7 +1,7 @@
 import { IconDefinition, IconName } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { uniqueId } from "../../uniqueId";
+import { uniqueId } from "../../utils/uniqueId";
 import './icon-select.scss';
 
 export type IconSelectProps = {
