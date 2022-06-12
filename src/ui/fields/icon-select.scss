@@ -2,17 +2,36 @@
     margin-bottom: 10px;
     position: relative;
 
-    svg {
-        padding: 10px;
-        height: 30px;
-        width: 30px;
+    
+    label {
+        display: inline-block;
         cursor: pointer;
         position: relative;
         z-index: +1;
-        transition: color 200ms;
 
-        &.selected {
+        input {
+            appearance: none;
+            height: 0;
+            width: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        svg {
+            padding: 10px;
+            height: 30px;
+            width: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 0 0 transparent;
+            transition: color 200ms, box-shadow 200ms;
+        }
+
+        input:checked + svg {
             color: var(--color-horizontal-select-active-foreground);
+        }
+
+        input:focus-visible + svg {
+            box-shadow: 0 0 0 3px var(--color-input-active-border);
         }
     }
 
