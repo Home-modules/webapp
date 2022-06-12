@@ -29,7 +29,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     return (
         <ScrollView tagName='main' id="settings-account-info">
             <h1>
-                Logged in to Home_modules hub as: <strong>@{token?.split(':')[0]}</strong>
+                Logged in to Home_modules as <strong>@{token?.split(':')[0]}</strong>
                 <IntermittentButton onClick={()=>logoutFromHub()} onCatch={handleError} attention>
                     Log out
                 </IntermittentButton>
