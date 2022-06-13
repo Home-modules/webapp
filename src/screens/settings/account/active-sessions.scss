@@ -16,7 +16,7 @@
                 position: relative;
                 max-height: calc(100vh - 184px);
                 overflow: auto;
-                background-color: var(--color-button-secondary);
+                background-color: var(--color-button-secondary-background);
                 border-radius: 10px;
 
                 .item {
@@ -26,11 +26,11 @@
                     overflow: hidden;
 
                     &:not(:last-child) {
-                        border-bottom: 1px solid var(--color-button-secondary-hover);
+                        border-bottom: 1px solid var(--color-button-secondary-hover-background);
                     }
 
                     &:hover {
-                        background-color: var(--color-button-secondary-hover);
+                        background-color: var(--color-button-secondary-hover-background);
                     }
 
                     .device {
@@ -60,7 +60,7 @@
                     }
 
                     &:not(:hover) .details .terminate {
-                        background-color: var(--color-button-secondary-hover)
+                        background-color: var(--color-button-secondary-hover-background)
                     }
 
                     &:not(.expanded) {

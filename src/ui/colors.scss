@@ -16,17 +16,26 @@
     --color-login-card-shadow: rgba(0, 0, 0, 0.1); // Shadow cast from the box in the middle
 
     // Buttons
-    --color-button-primary: #0464ff; // Primary (blue) button background color
-    --color-button-primary-text: #fff; // Primary (blue) button text color
-    --color-button-primary-hover: #0353d8; // Primary (blue) button background color on hover
+    --color-button-primary-background: #0464ff; // Primary (blue) button background color
+    --color-button-primary-foreground: #fff; // Primary (blue) button text color
+    --color-button-primary-hover-background: #0353d8; // Primary (blue) button background color on hover
+    --color-button-primary-hover-foreground: #fff; // Primary (blue) button text color on hover
     --color-button-primary-disable-opacity: 0.25; // Primary (blue) button opacity when disabled
-    --color-button-secondary: rgb(228, 228, 228); // Secondary (gray) button background color
-    --color-button-secondary-hover: #cccccc; // Secondary (gray) button background color on hover
+    --color-button-secondary-background: rgb(228, 228, 228); // Secondary (gray) button background color
+    --color-button-secondary-foreground: var(--color-foreground); // Primary (blue) button text color
+    --color-button-secondary-hover-background: #cccccc; // Secondary (gray) button background color on hover
+    --color-button-secondary-hover-foreground: var(--color-foreground); // Primary (blue) button text color on hover
     --color-button-secondary-disable-opacity: 0.75; // Secondary (gray) button opacity when disabled
-    --color-button-secondary-disabled-text: rgba(0, 0, 0, 0.467); // Secondary (gray) button text color when disabled
-    --color-button-attention-foreground: #ff1900; // Attention button text
-    --color-button-attention-hover-foreground: #fff; // Attention button text on hover
-    --color-button-attention-hover-background: #ff1b02; // Attention button background on hover
+    --color-button-secondary-disabled-foreground: rgba(0, 0, 0, 0.467); // Secondary (gray) button text color when disabled
+    --color-button-attention-primary-foreground: #fff; // Attention primary button text color
+    --color-button-attention-primary-background: #ff1900; // Attention primary button background color
+    --color-button-attention-primary-hover-foreground: #fff; // Attention primary button text color on hover
+    --color-button-attention-primary-hover-background: #be1300; // Attention primary button background color on hover
+    --color-button-attention-secondary-foreground: #ff1900; // Attention button text color
+    --color-button-attention-secondary-background: var(--color-button-secondary-background); // Attention button background color
+    --color-button-attention-secondary-hover-foreground: #fff; // Attention button text color on hover
+    --color-button-attention-secondary-hover-background: #ff1b02; // Attention button background color on hover
+    --color-button-attention-secondary-disabled-foreground: #ff19007c; // Attention button text color when disabled
     --color-button-intermittent: #00a2ff; // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
     --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
 
@@ -40,8 +49,8 @@
     --color-input-required: #ff1900; // Color of '*' for some required fields
 
     // Checkboxes and radio buttons
-    --color-checkbox-background: var(--color-button-secondary); // Checkbox background color (when unchecked)
-    --color-checkbox-background-checked: var(--color-button-primary); // Checkbox background color (when checked)
+    --color-checkbox-background: var(--color-button-secondary-background); // Checkbox background color (when unchecked)
+    --color-checkbox-background-checked: var(--color-button-primary-background); // Checkbox background color (when checked)
     --color-checkbox-check: white; // Checkbox tick color when checked
 
     // Header and settings sidebar
@@ -74,12 +83,12 @@
     --color-tap-highlight: rgba(127, 127, 127, 0.1);
 
     // Horizontal select (like the icon selector in room edit page
-    --color-horizontal-select-active-background: var(--color-button-secondary); // Background color for the active item
+    --color-horizontal-select-active-background: var(--color-button-secondary-background); // Background color for the active item
     --color-horizontal-select-active-foreground: var(--color-navbar-active); // Text/icon color for the active item
 
     // Dropdown
-    --color-dropdown-button-background: var(--color-button-secondary); // Dropdown button background color
-    --color-dropdown-button-background-hover: var(--color-button-secondary-hover); // Dropdown button background color when hovered
+    --color-dropdown-button-background: var(--color-button-secondary-background); // Dropdown button background color
+    --color-dropdown-button-background-hover: var(--color-button-secondary-hover-background); // Dropdown button background color when hovered
     --color-dropdown-button-arrow: var(--color-foreground-subtext); // Dropdown button arrow color
     --color-dropdown-list-background: var(--color-dialog-background); // Dropdown list background color
     --color-dropdown-list-border: var(--color-input-border); // Dropdown list border color
@@ -115,17 +124,26 @@
         --color-login-card-shadow: rgba(0, 0, 0, 0.1); // Shadow cast from the box in the middle
 
         // Buttons
-        --color-button-primary: #0464ff; // Primary (blue) button background color
-        --color-button-primary-text: #fff; // Primary (blue) button text color
-        --color-button-primary-hover: #0353d8; // Primary (blue) button background color on hover
+        --color-button-primary-background: #0464ff; // Primary (blue) button background color
+        --color-button-primary-foreground: #fff; // Primary (blue) button text color
+        --color-button-primary-hover-background: #0353d8; // Primary (blue) button background color on hover
+        --color-button-primary-hover-foreground: #fff; // Primary (blue) button text color on hover
         --color-button-primary-disable-opacity: 0.25; // Primary (blue) button opacity when disabled
-        --color-button-secondary: rgb(53, 53, 53); // Secondary (gray) button background color
-        --color-button-secondary-hover: #494949; // Secondary (gray) button background color on hover
+        --color-button-secondary-background: rgb(53, 53, 53); // Secondary (gray) button background color
+        --color-button-secondary-foreground: var(--color-foreground); // Primary (blue) button text color
+        --color-button-secondary-hover-background: #494949; // Secondary (gray) button background color on hover
+        --color-button-secondary-hover-foreground: var(--color-foreground); // Primary (blue) button text color on hover
         --color-button-secondary-disable-opacity: 0.5; // Secondary (gray) button opacity when disabled
-        --color-button-secondary-disabled-text: rgba(255, 255, 255, 0.274); // Secondary (gray) button text color when disabled
-        --color-button-attention-foreground: #ff412c; // Attention button text
-        --color-button-attention-hover-foreground: #fff; // Attention button text on hover
-        --color-button-attention-hover-background: #ff1b02; // Attention button background on hover
+        --color-button-secondary-disabled-foreground: rgba(255, 255, 255, 0.274); // Secondary (gray) button text color when disabled
+        --color-button-attention-primary-foreground: #fff; // Attention primary button text color
+        --color-button-attention-primary-background: #ce1500; // Attention primary button background color
+        --color-button-attention-primary-hover-foreground: #fff; // Attention primary button text color on hover
+        --color-button-attention-primary-hover-background: #ff1900; // Attention primary button background color on hover
+        --color-button-attention-secondary-foreground: #ff412c; // Attention button text color
+        --color-button-attention-secondary-background: var(--color-button-secondary-background); // Attention button background color
+        --color-button-attention-secondary-hover-foreground: #fff; // Attention button text color on hover
+        --color-button-attention-secondary-hover-background: #ff1b02; // Attention button background color on hover
+        --color-button-attention-secondary-disabled-foreground: #ff1900b1; // Attention button text color when disabled
         --color-button-intermittent: #00a2ff; // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
         --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
 
@@ -139,8 +157,8 @@
         --color-input-required: #ff1900; // Color of '*' for some required fields
 
         // Checkboxes and radio buttons
-        --color-checkbox-background: var(--color-button-secondary); // Checkbox background color (when unchecked)
-        --color-checkbox-background-checked: var(--color-button-primary); // Checkbox background color (when checked)
+        --color-checkbox-background: var(--color-button-secondary-background); // Checkbox background color (when unchecked)
+        --color-checkbox-background-checked: var(--color-button-primary-background); // Checkbox background color (when checked)
         --color-checkbox-check: white; // Checkbox tick color when checked
 
         // Header and settings sidebar
@@ -173,12 +191,12 @@
         --color-tap-highlight: rgba(127, 127, 127, 0.1);
 
         // Horizontal select (like the icon selector in room edit page
-        --color-horizontal-select-active-background: var(--color-button-secondary); // Background color for the active item
+        --color-horizontal-select-active-background: var(--color-button-secondary-background); // Background color for the active item
         --color-horizontal-select-active-foreground: var(--color-navbar-active); // Text/icon color for the active item
 
         // Dropdown
-        --color-dropdown-button-background: var(--color-button-secondary); // Dropdown button background color
-        --color-dropdown-button-background-hover: var(--color-button-secondary-hover); // Dropdown button background color when hovered
+        --color-dropdown-button-background: var(--color-button-secondary-background); // Dropdown button background color
+        --color-dropdown-button-background-hover: var(--color-button-secondary-hover-background); // Dropdown button background color when hovered
         --color-dropdown-button-arrow: var(--color-foreground-subtext); // Dropdown button arrow color
         --color-dropdown-list-background: var(--color-dialog-background); // Dropdown list background color
         --color-dropdown-list-border: var(--color-input-border); // Dropdown list border color

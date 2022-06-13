@@ -1,52 +1,77 @@
 .button {
     display: inline-block;
-    background-color: var(--color-button-secondary);
     border-radius: 7px;
     padding: 8px;
     font-size: 17px;
     border: none;
     cursor: pointer;
     text-decoration: none;
-    color: var(--color-foreground);
     box-shadow: 0 0 0 0 var(--color-input-active-border);
     transition: color 200ms, background-color 200ms, opacity 200ms, box-shadow 200ms;
 
-    &:disabled {
-        color: var(--color-button-secondary-disable-opacity);
-        opacity: var(--color-button-secondary-disable-opacity);
-        cursor: default;
-        background-color: var(--color-button-secondary);
-    }
-
-    &:hover:not(:disabled) {
-        background-color: var(--color-button-secondary-hover);
-    }
-
-    &.primary {
-        background-color: var(--color-button-primary);
-        color: var(--color-button-primary-text);
+    &:not(.primary):not(.attention) {
+        color: var(--color-button-secondary-foreground);
+        background-color: var(--color-button-secondary-background);
     
         &:hover:not(:disabled) {
-            background-color: var(--color-button-primary-hover);
+            color: var(--color-button-secondary-hover-foreground);
+            background-color: var(--color-button-secondary-hover-background);
         }
     
         &:disabled {
-            color: var(--color-button-primary-text);
-            background-color: var(--color-button-primary);
-            opacity: var(--color-button-primary-disable-opacity);
+            color: var(--color-button-secondary-disabled-foreground);
+            opacity: var(--color-button-secondary-disable-opacity);
+            cursor: default;
+            background-color: var(--color-button-secondary-background);
         }
     }
 
-    &.attention {
-        color: var(--color-button-attention-foreground);
+    &.primary:not(.attention) {
+        color: var(--color-button-primary-foreground);
+        background-color: var(--color-button-primary-background);
     
         &:hover:not(:disabled) {
-            background-color: var(--color-button-attention-hover-background);
-            color: var(--color-button-attention-hover-foreground);
+            color: var(--color-button-primary-hover-foreground);
+            background-color: var(--color-button-primary-hover-background);
         }
     
         &:disabled {
             opacity: var(--color-button-primary-disable-opacity);
+            cursor: default;
+            background-color: var(--color-button-primary-background);
+        }
+    }
+
+    &:not(.primary).attention {
+        color: var(--color-button-attention-secondary-foreground);
+        background-color: var(--color-button-attention-secondary-background);
+    
+        &:hover:not(:disabled) {
+            color: var(--color-button-attention-secondary-hover-foreground);
+            background-color: var(--color-button-attention-secondary-hover-background);
+        }
+    
+        &:disabled {
+            color: var(--color-button-attention-secondary-disabled-foreground);
+            opacity: var(--color-button-secondary-disable-opacity);
+            cursor: default;
+            background-color: var(--color-button-attention-secondary-background);
+        }
+    }
+
+    &.primary.attention {
+        color: var(--color-button-attention-primary-foreground);
+        background-color: var(--color-button-attention-primary-background);
+    
+        &:hover:not(:disabled) {
+            color: var(--color-button-attention-primary-hover-foreground);
+            background-color: var(--color-button-attention-primary-hover-background);
+        }
+    
+        &:disabled {
+            opacity: var(--color-button-primary-disable-opacity);
+            cursor: default;
+            background-color: var(--color-button-attention-primary-background);
         }
     }
 

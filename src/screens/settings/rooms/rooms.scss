@@ -142,7 +142,7 @@ main#settings main#settings-rooms {
                 }
 
                 &:first-of-type {
-                    color: var(--color-button-attention-foreground);
+                    color: var(--color-button-attention-secondary-foreground);
                 }
             }
 
@@ -210,7 +210,7 @@ main#settings main#settings-rooms {
             .open {
                 flex-grow: 1;
                 min-width: 0;
-                background-color: var(--color-button-secondary);
+                background-color: var(--color-button-secondary-background);
                 border-radius: 8px;
                 padding: 10px 17px 10px 12px;
 
@@ -226,7 +226,7 @@ main#settings main#settings-rooms {
                 transition: background-color 200ms, gap 250ms, padding-right 250ms;
 
                 &:hover {
-                    background-color: var(--color-button-secondary-hover);
+                    background-color: var(--color-button-secondary-hover-background);
                 }
 
                 &:hover, &.checkbox-visible {
@@ -334,7 +334,7 @@ main#settings main#settings-rooms {
                     padding: 10px;
                     height: 24px;
                     width: 24px;
-                    background-color: var(--color-button-secondary);
+                    background-color: var(--color-button-secondary-background);
                     transition: background-color 200ms;
                     border-radius: inherit;
                     position: absolute;
@@ -345,7 +345,7 @@ main#settings main#settings-rooms {
                 }
 
                 &:hover svg {
-                    background-color: var(--color-button-secondary-hover);
+                    background-color: var(--color-button-secondary-hover-background);
                 }
 
                 > div::before {
@@ -358,7 +358,7 @@ main#settings main#settings-rooms {
                     pointer-events: initial; // Undo the inheritance of this property
                     padding: 10px;
                     padding-right: 16px;
-                    background-color: var(--color-button-secondary);
+                    background-color: var(--color-button-secondary-background);
                     border-radius: inherit;
                     box-shadow: 0 0 10px 4px transparent;
                     white-space: nowrap;
@@ -368,7 +368,7 @@ main#settings main#settings-rooms {
 
                 &:hover > div::before {
                     display: block;
-                    background-color: var(--color-button-secondary-hover);
+                    background-color: var(--color-button-secondary-hover-background);
                     transform: translateX(0);
                     box-shadow: 0 0 10px 4px var(--color-notification-shadow);
                 }
