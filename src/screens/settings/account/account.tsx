@@ -35,14 +35,10 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                         type: "ADD_FLYOUT",
                         flyout: {
                             element: e.target as Element,
-                            children: <>
-                                Are you sure you want to log out?
-                            </>,
+                            children: <>Are you sure you want to log out?</>,
                             width: 200,
                             buttons: [
-                                {
-                                    text: "Cancel"
-                                },
+                                { text: "Cancel" },
                                 {
                                     text: "Log out",
                                     attention: true,

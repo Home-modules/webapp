@@ -103,14 +103,10 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                     type: "ADD_FLYOUT",
                                     flyout: {
                                         element: e.target as Element,
-                                        children: <>
-                                            Are you sure you want to delete {selectedRooms.length} {selectedRooms.length===1 ? 'room':'rooms'}?
-                                        </>,
+                                        children: <>Are you sure you want to delete {selectedRooms.length} {selectedRooms.length===1 ? 'room':'rooms'}?</>,
                                         width: 200,
                                         buttons: [
-                                            {
-                                                text: "Cancel"
-                                            }, 
+                                            { text: "Cancel" }, 
                                             {
                                                 text: "Delete",
                                                 attention: true,
