@@ -46,6 +46,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                                 {
                                     text: "Log out",
                                     attention: true,
+                                    primary: true,
                                     async: true,
                                     onClick: logoutFromHub,
                                     onCatch: handleError

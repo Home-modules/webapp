@@ -114,6 +114,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                             {
                                                 text: "Delete",
                                                 attention: true,
+                                                primary: true,
                                                 async: true,
                                                 async onClick() {
                                                     const rooms = [...selectedRooms]; // Clone array it case it changes during the process
