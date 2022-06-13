@@ -114,7 +114,7 @@ function getFlyoutPosition(element: Element, width: number) {
     let bottom: number|undefined = window.innerHeight - rect.y + 10;
     let top: number|undefined = undefined;
 
-    if(window.innerHeight - bottom < 300) {
+    if(window.innerHeight - bottom < 150) {
         bottom = undefined;
         top = rect.bottom + 10;
     }
