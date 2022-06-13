@@ -2,42 +2,46 @@ import { HMApi } from './api';
 import axios from 'axios'
 import { store } from '../store';
 import platform from "platform";
+import { delay } from '../utils/promise-timeout';
 
 
-export function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.Response<R>> {
+export async function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.Response<R>> {
     console.log('Request: ', req);
-    return new Promise((resolve, reject) => {
-        axios.post<HMApi.Response<R>>(`http://${window.location.hostname}:703/${store.getState().token}`, req, {
+    try {
+        const e = await axios.post<HMApi.Response<R>>(`http://${window.location.hostname}:703/${store.getState().token}`, req, {
             headers: {
                 'Content-Type': 'text/plain' // Avoid pre-flight request
             }
-        })
-            .then(e=> {
-                console.log('Response: ', e.data);
-                resolve(e.data);
-            }).catch(e=> {
-                if(e.response) {
-                    const err= e.response.data as HMApi.Response<R>;
-                    console.error('Error: ', err);
-                    if(err.type==='error' && err.error.message==='TOKEN_INVALID') {
-                        store.dispatch({
-                            type: 'SET_TOKEN',
-                            token: null
-                        });
-                        localStorage.removeItem('home_modules_token');
-                    }
-                    reject(err);
-                } else {
-                    reject({
-                        type: "error",
-                        error: {
-                            message: "NETWORK_ERROR",
-                            data: e
-                        }
-                    })
+        });
+        console.log('Response: ', e.data);
+        return e.data;
+    } catch(e: any) {
+        if(e.response) {
+            const err= e.response.data as HMApi.Response<R>;
+            console.error('Error: ', err);
+            if(err.type==='error' && err.error.message==='TOKEN_INVALID') {
+                store.dispatch({
+                    type: 'SET_TOKEN',
+                    token: null
+                });
+                localStorage.removeItem('home_modules_token');
+            }
+            if(err.type==='error' && err.error.message==='TOO_MANY_REQUESTS') {
+                await delay(1000);
+                return await sendRequest(req); // Resend request after 1 second
+            }
+            throw err;
+        } else {
+            // eslint-disable-next-line no-throw-literal
+            throw {
+                type: "error",
+                error: {
+                    message: "NETWORK_ERROR",
+                    data: e
                 }
-            })
-    });
+            };
+        }
+    }
 }
 
 export function loginToHub(username: string, password: string): Promise<HMApi.Response<HMApi.RequestLogin>> {

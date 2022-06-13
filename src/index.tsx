@@ -7,6 +7,9 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import Notifications from './ui/notifications';
+import Dialogs from './ui/dialogs';
+import {Flyouts} from './ui/flyout';
 
 import HomePage from './screens/home/home';
 import SettingsPage from './screens/settings/settings';
@@ -16,8 +19,6 @@ import SettingsPageRoomsEditRoom from './screens/settings/rooms/room-edit';
 import LoginForm from './screens/login';
 import ChangePasswordDialog from './screens/settings/account/change-password';
 import ChangeUsernameDialog from './screens/settings/account/change-username';
-import Notifications from './ui/notifications';
-import Dialogs from './ui/dialogs';
 import SettingsPageRoomsDevices from './screens/settings/rooms/devices/devices';
 import SettingsPageRoomsDevicesNewDevice from './screens/settings/rooms/devices/new';
 import SettingsPageRoomsDevicesEditDevice from './screens/settings/rooms/devices/edit-device';
@@ -60,6 +61,7 @@ ReactDOM.render(
                     </Route>
                 </Routes>
                 <Dialogs />
+                <Flyouts />
             </BrowserRouter>
         </Provider>
     </React.StrictMode>,

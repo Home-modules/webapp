@@ -66,6 +66,11 @@
     --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
     --color-dialog-background: #fff; // Background for dialogs
 
+    // Flyouts
+    --color-flyout-background: var(--color-background); // Flyout background color
+    --color-flyout-border: var(--color-input-border); // Flyout border color
+    --color-flyout-shadow: var(--color-notification-shadow); // Flyout shadow color
+
     --color-tap-highlight: rgba(127, 127, 127, 0.1);
 
     // Horizontal select (like the icon selector in room edit page
@@ -160,6 +165,11 @@
         --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
         --color-dialog-background: rgb(46, 46, 46); // Background for dialogs
         
+        // Flyouts
+        --color-flyout-background: var(--color-navbar-background); // Flyout background color
+        --color-flyout-border: var(--color-input-border); // Flyout border color
+        --color-flyout-shadow: var(--color-notification-shadow); // Flyout shadow color
+
         --color-tap-highlight: rgba(127, 127, 127, 0.1);
 
         // Horizontal select (like the icon selector in room edit page

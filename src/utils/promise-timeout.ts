@@ -18,3 +18,14 @@ export default function promiseTimeout<T>(promise: Promise<T>, timeout: number, 
         })
     })
 }
+
+/**
+ * Promisified version of `setTimeout`
+ */
+export function delay(time: number) {
+    return new Promise<void>(resolve=> {
+        window.setTimeout(()=> {
+            resolve();
+        }, time)
+    })
+}

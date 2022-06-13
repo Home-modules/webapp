@@ -1,6 +1,7 @@
 import { createStore } from "redux";
 import { HMApi } from "./hub/api";
 import { DialogProps } from "./ui/dialogs";
+import { FlyoutProps } from "./ui/flyout";
 import { NotificationProps } from "./ui/notifications";
 import { uniqueId } from "./utils/uniqueId";
 
@@ -8,6 +9,7 @@ export type StoreState = {
     token: string | null;
     notifications: NotificationProps[];
     dialogs: DialogProps[];
+    flyouts: FlyoutProps[];
     rooms: HMApi.Room[] | false | null; // null means loading, false means error
     devices: Record<string, HMApi.Device[] | false | undefined>;
     deviceTypes: Record<string, HMApi.DeviceType[] | false | undefined>; // undefined means loading, false means error
@@ -29,6 +31,12 @@ export type StoreAction = {
     type: "REMOVE_DIALOG",
     id: string
 } | {
+    type: "ADD_FLYOUT",
+    flyout: Omit<FlyoutProps, "id">
+} | {
+    type: "REMOVE_FLYOUT",
+    id: string
+} | {
     type: "SET_ROOMS",
     rooms: HMApi.Room[] | false | null
 } | {
@@ -45,6 +53,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     token: localStorage.getItem('home_modules_token') || null,
     notifications: [],
     dialogs: [],
+    flyouts: [],
     rooms: null,
     devices: {},
     deviceTypes: {}
@@ -86,6 +95,22 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
             return {
                 ...state,
                 dialogs: state.dialogs.filter(e=> e.id!==action.id)
+            };
+        case 'ADD_FLYOUT':
+            return {
+                ...state,
+                flyouts: [
+                    ...state.flyouts,
+                    {
+                        ...action.flyout,
+                        id: uniqueId()
+                    }
+                ]
+            };
+        case 'REMOVE_FLYOUT':
+            return {
+                ...state,
+                flyouts: state.flyouts.filter(e=> e.id!==action.id)
             };
         case 'SET_ROOMS':
             return {

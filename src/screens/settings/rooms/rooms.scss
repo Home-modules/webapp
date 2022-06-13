@@ -9,17 +9,13 @@ main#settings main#settings-rooms {
         position: relative;
         transition: opacity 250ms;
 
-        .search {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-
         .title {
             display: flex;
             align-items: center;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            transition: opacity 250ms, transform 250ms;
 
             span {
                 flex-grow: 1;
@@ -47,6 +43,11 @@ main#settings main#settings-rooms {
         }
 
         .search {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -97,10 +98,57 @@ main#settings main#settings-rooms {
             transition: opacity 250ms, transform 250ms;
         }
 
-        .title {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
+        .selected {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            label.checkbox {
+                margin: 0;
+                margin-left: 13px;
+                height: 20px;
+                width: 20px;
+                position: relative;
+
+                input {
+                    position: absolute;
+                }
+            }
+
+            span {
+                flex-grow: 1;
+            }
+
+            svg {
+                flex-shrink: 0;
+                height: 0.75em;
+                width: 0.75em;
+                padding: 10px 0;
+                cursor: pointer;
+
+                &:last-child {
+                    padding-right: 10px;
+                    color: var(--color-foreground-subtext);
+                    transition: color 200ms;
+
+                    &:hover {
+                        color: var(--color-foreground);
+                    }
+                }
+
+                &:first-of-type {
+                    color: var(--color-button-attention-foreground);
+                }
+            }
+
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(44px);
             transition: opacity 250ms, transform 250ms;
         }
 
@@ -112,6 +160,20 @@ main#settings main#settings-rooms {
             }
 
             .search {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateY(0);
+            }
+        }
+
+        &.selected-active {
+            .title, .search {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-44px);
+            }
+
+            .selected {
                 opacity: 1;
                 pointer-events: auto;
                 transform: translateY(0);
@@ -167,6 +229,21 @@ main#settings main#settings-rooms {
                     background-color: var(--color-button-secondary-hover);
                 }
 
+                &:hover, &.checkbox-visible {
+
+                    .name {
+                        svg {
+                            opacity: 0;
+                            pointer-events: none;
+                        }
+
+                        label.checkbox {
+                            opacity: 1;
+                            pointer-events: initial;
+                        }
+                    }
+                }
+
                 .name {
                     font-size: 18px;
                     font-weight: bold;
@@ -175,12 +252,37 @@ main#settings main#settings-rooms {
                     text-overflow: ellipsis;
                     white-space: pre;
 
+                    position: relative;
+                    top: -0.5px;
+
                     .search-highlight {
                         color: var(--color-foreground-highlight);
                     }
 
                     svg {
                         margin-right: 10px;
+                        transition: opacity 200ms;
+                    }
+
+                    label.checkbox {
+                        display: inline-block;
+                        margin: 0;
+                        position: absolute;
+                        top: 2.5px; left: 1px;
+                        opacity: 0;
+                        pointer-events: none;
+                        transition: opacity 200ms;
+                        height: 20px;
+                        width: 20px;
+                        
+                        input {
+                            margin: 0;
+                            position: absolute;
+
+                            &:not(:checked) {
+                                background-color: var(--color-input-background);
+                            }
+                        }
                     }
                 }
 

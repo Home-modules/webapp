@@ -1,5 +1,5 @@
 import './rooms.scss';
-import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimesCircle, faTimes, faUtensils, IconDefinition, faPlug } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimesCircle, faTimes, faUtensils, IconDefinition, faPlug, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ReactSortable, Store } from "react-sortablejs";
@@ -23,6 +23,8 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
     const searchFieldRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+
+    const [selectedRooms, setSelectedRooms] = React.useState<string[]>([])
 
     function setRooms(rooms: StoreState['rooms']) {
         store.dispatch({
@@ -66,7 +68,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     return (
         <main id="settings-rooms">
             <ScrollView className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}>
-                <h1 className={`searchable ${search===null ? '' : 'search-active'}`}>
+                <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedRooms.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">
                         <span>Edit Rooms</span>
                         <FontAwesomeIcon icon={faSearch} onClick={()=>{
@@ -78,6 +80,66 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                         <FontAwesomeIcon icon={faSearch} />
                         <input type="text" placeholder="Search" value={search||''} onChange={(e)=>setSearchParams({search: e.target.value})} ref={searchFieldRef} />
                         <FontAwesomeIcon icon={faTimes} onClick={()=>setSearchParams({})} />
+                    </div>
+                    <div className="selected">
+                        <label className="checkbox">
+                            <input 
+                                type="checkbox" 
+                                checked={rooms ? selectedRooms.length === rooms.length: false}
+                                onChange={e=> {
+                                    if(rooms && e.target.checked) {
+                                        setSelectedRooms(rooms.map(r=>r.id));
+                                    } else {
+                                        setSelectedRooms([]);
+                                    }
+                                }} 
+                                title="Select all"
+                            />
+                        </label>
+                        <span>{selectedRooms.length}</span>
+                        <FontAwesomeIcon icon={faTrash} onClick={e=> {
+                            if(e.nativeEvent.target) {
+                                store.dispatch({
+                                    type: "ADD_FLYOUT",
+                                    flyout: {
+                                        element: e.target as Element,
+                                        children: <>
+                                            Are you sure you want to delete {selectedRooms.length} {selectedRooms.length===1 ? 'room':'rooms'}?
+                                        </>,
+                                        width: 200,
+                                        buttons: [
+                                            {
+                                                text: "Cancel"
+                                            }, 
+                                            {
+                                                text: "Delete",
+                                                attention: true,
+                                                async: true,
+                                                async onClick() {
+                                                    const rooms = [...selectedRooms]; // Clone array it case it changes during the process
+                                                    for(const roomId of rooms) {
+                                                        await sendRequest({
+                                                            type: "rooms.removeRoom",
+                                                            id: roomId
+                                                        })
+                                                    }
+                                                    store.dispatch({
+                                                        type: "ADD_NOTIFICATION",
+                                                        notification: {
+                                                            type: "success",
+                                                            message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
+                                                        }
+                                                    });
+                                                    updateRooms();
+                                                    setSelectedRooms([]);
+                                                }
+                                            }
+                                        ]
+                                    }
+                                })
+                            }
+                        }}/>
+                        <FontAwesomeIcon icon={faTimes} onClick={()=>setSelectedRooms([])} />
                     </div>
                 </h1>
                 <div className='list'>
@@ -101,7 +163,15 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                     disableReorder 
                                     search={search} 
                                     active={collapseList ? roomId===room.id : false} 
-                                    action={collapseList ? 'devices':'edit'}
+                                    action={selectedRooms.length===0 ? (collapseList ? 'devices':'edit') : 'check'}
+                                    selected={selectedRooms.includes(room.id)}
+                                    onSelectChange={()=> {
+                                        if(selectedRooms.includes(room.id)) {
+                                            setSelectedRooms(val=> val.filter(el=> el!==room.id));
+                                        } else {
+                                            setSelectedRooms(val=> [...val, room.id])
+                                        }
+                                    }}
                                 />
                             ))
                     ) : (<>
@@ -114,7 +184,15 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                     key={room.id} 
                                     room={room} 
                                     active={collapseList ? roomId===room.id : false} 
-                                    action={collapseList ? 'devices':'edit'}
+                                    action={selectedRooms.length===0 ? (collapseList ? 'devices':'edit') : 'check'}
+                                    selected={selectedRooms.includes(room.id)}
+                                    onSelectChange={()=> {
+                                        if(selectedRooms.includes(room.id)) {
+                                            setSelectedRooms(val=> val.filter(el=> el!==room.id));
+                                        } else {
+                                            setSelectedRooms(val=> [...val, room.id])
+                                        }
+                                    }}
                                 />
                             ))}
                         </ReactSortable>
@@ -136,10 +214,12 @@ type RoomItemProps= {
     disableReorder?: boolean;
     search?: string;
     active?: boolean;
-    action: "edit"|"devices"
+    action: "edit"|"devices"|"check",
+    selected: boolean,
+    onSelectChange: ()=>void
 }
 
-function RoomItem({room, disableReorder=false, search, active, action}: RoomItemProps) {
+function RoomItem({room, disableReorder=false, search, active, action, selected, onSelectChange}: RoomItemProps) {
     const icons: Record<HMApi.Room['icon'], IconDefinition>= {
         'bathroom': faBath,
         'bedroom': faBed,
@@ -154,9 +234,27 @@ function RoomItem({room, disableReorder=false, search, active, action}: RoomItem
                     <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
                 </svg>
             )}
-            <Link to={`/settings/rooms/${room.id}/${action}`} className='open' title={action==='devices'? room.name : undefined}>
+            <Link 
+                to={action==='check' ? '#' : `/settings/rooms/${room.id}/${action}`} 
+                className={`open ${action==='check'? 'checkbox-visible': ''}`}
+                title={action==='devices'? room.name : undefined}
+                onClick={e=> {
+                    if(action==='check') {
+                        e.preventDefault();
+                        onSelectChange();
+                    }
+                }}
+            >
                 <span className='name'>
                     <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
+                    <label className="checkbox">
+                        <input 
+                            type="checkbox" 
+                            checked={selected} 
+                            onClick={e=> {e.stopPropagation()}} 
+                            onChange={onSelectChange}
+                        />
+                    </label>
                     <span><SearchKeywordHighlight term={search}>{room.name}</SearchKeywordHighlight></span>
                 </span>
                 <span className='id'>
