@@ -23,9 +23,9 @@ export type FlyoutProps = {
         onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void,
     } | {
         async: true,
-        onClick: (e: React.MouseEvent<HTMLElement>) => Promise<void>,
-        onThen?: ()=> void,
-        onCatch?: ()=> void
+        onClick: (e: React.MouseEvent<HTMLElement>) => Promise<any>,
+        onThen?: (res: any)=> void,
+        onCatch?: (err: any)=> void
     }))[],
     onClose?: ()=> void,
 }
@@ -70,8 +70,8 @@ export default function Flyout({id, element, children, showCloseButton, width, b
                                     attention={button.attention}
                                     disabled={button.disabled}
                                     onClick={button.onClick}
-                                    onThen={()=> {
-                                        button.onThen?.();
+                                    onThen={(res)=> {
+                                        button.onThen?.(res);
                                         if(button.closeOnClick!==false) {
                                             handleClose();
                                         }

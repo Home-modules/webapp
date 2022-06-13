@@ -2,8 +2,8 @@ import './account.scss';
 import React from 'react';
 import { connect } from 'react-redux';
 import { handleError, logoutFromHub, sendRequest } from '../../../hub/request';
-import { StoreState } from '../../../store';
-import { IntermittentButton } from '../../../ui/button';
+import { store, StoreState } from '../../../store';
+import Button, { IntermittentButton } from '../../../ui/button';
 import { Link, Outlet } from 'react-router-dom';
 import ScrollView from '../../../ui/scrollbar';
 
@@ -30,9 +30,32 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
         <ScrollView tagName='main' id="settings-account-info">
             <h1>
                 Logged in to Home_modules as <strong>@{token?.split(':')[0]}</strong>
-                <IntermittentButton onClick={()=>logoutFromHub()} onCatch={handleError} attention>
+                <Button onClick={(e)=>{
+                    store.dispatch({
+                        type: "ADD_FLYOUT",
+                        flyout: {
+                            element: e.target as Element,
+                            children: <>
+                                Are you sure you want to log out?
+                            </>,
+                            width: 200,
+                            buttons: [
+                                {
+                                    text: "Cancel"
+                                },
+                                {
+                                    text: "Log out",
+                                    attention: true,
+                                    async: true,
+                                    onClick: logoutFromHub,
+                                    onCatch: handleError
+                                }
+                            ]
+                        }
+                    })
+                }} attention>
                     Log out
-                </IntermittentButton>
+                </Button>
             </h1>
 
             <h2>Account settings</h2>
