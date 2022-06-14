@@ -10,9 +10,8 @@ export default function HomePage() {
                 onClick={()=> 
                     sendRequest({
                         "type": "empty"
-                    })
+                    }).catch(handleError)
                 }
-                onCatch={handleError}
                 primary
             >
                 Send an empty req

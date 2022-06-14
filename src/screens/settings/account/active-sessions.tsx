@@ -39,9 +39,7 @@ export default function ActiveSessions() {
                                     async: true,
                                     onClick: ()=> sendRequest({
                                         "type": "account.logoutOtherSessions"
-                                    }),
-                                    onCatch: handleError,
-                                    onThen: (e: HMApi.Response<HMApi.RequestLogoutOtherSessions>)=> {
+                                    }).then(e=> {
                                         if(e.type==='ok') {
                                             setSessions(sessions=> sessions.filter(s=> s.isCurrent));
                                             store.dispatch({
@@ -54,7 +52,7 @@ export default function ActiveSessions() {
                                                 }
                                             });
                                         }
-                                    }
+                                    }, handleError)
                                 }
                             ]
                         }
@@ -134,24 +132,18 @@ function Session({session, onTerminated}: {session: HMApi.Session, onTerminated:
                                         primary: true,
                                         async: true,
                                         onClick: ()=> {
-                                            if(session.isCurrent) {
-                                                return logoutFromHub();
-                                            } else {
-                                                return sendRequest({
-                                                    type: "account.logoutSession",
-                                                    id: session.id
-                                                });
-                                            }
+                                            return (session.isCurrent ? logoutFromHub() : sendRequest({
+                                                type: "account.logoutSession",
+                                                id: session.id
+                                            })).then(e=> {
+                                                setExpanded(e=> !e);
+                                                if(e.type==='ok') {
+                                                    onTerminated();
+                                                } else {
+                                                    handleError(e);
+                                                }
+                                            }, handleError);
                                         },
-                                        onCatch: handleError,
-                                        onThen: (e: HMApi.Response<HMApi.RequestLogout|HMApi.RequestLogoutSession>)=> {
-                                            setExpanded(e=> !e);
-                                            if(e.type==='ok') {
-                                                onTerminated();
-                                            } else {
-                                                handleError(e);
-                                            }
-                                        }
                                     }
                                 ]
                             }

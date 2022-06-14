@@ -19,9 +19,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
         return <Navigate to="/home" />
     }
 
-    const handleSubmit = () => loginToHub(username, password);
-
-    const onSuccess = (res: HMApi.Response<HMApi.RequestLogin>) => {
+    const handleSubmit = () => loginToHub(username, password).then(res => {
         if(res.type==='ok') {
             if(password==='admin') { // Warn the user to change their password
                 store.dispatch({
@@ -42,9 +40,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                 });
             }
         }
-    }
-
-    const onCatch= (e: HMApi.Response<HMApi.RequestLogin>)=> {
+    }, (e: HMApi.Response<HMApi.RequestLogin>)=> {
         if(e.type==='error') {
             if(e.error.message==='LOGIN_USER_NOT_FOUND') {
                 setUsernameError("Username not found");
@@ -59,7 +55,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                 handleError(e);
             }
         } 
-    }
+    });
 
     return (
         <div id="login">
@@ -88,7 +84,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                             setPasswordError('');
                         }} />
                 </label>
-                <IntermittentSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onCatch}>
+                <IntermittentSubmitButton onClick={handleSubmit}>
                     Login
                 </IntermittentSubmitButton>
             </form>

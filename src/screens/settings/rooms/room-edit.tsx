@@ -71,7 +71,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             window.setTimeout(()=> { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
                 setFieldErrors(errors);
             });
-            return;
+            return Promise.reject();
         }
         
         const nRoom: HMApi.Room = {
@@ -81,48 +81,36 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             controllerType: controller
         };
 
-        if(isNew) {
-            return sendRequest({
-                type: 'rooms.addRoom',
-                room: nRoom
-            });
-        }
-        else {
-            return sendRequest({
-                'type': 'rooms.editRoom',
-                room: nRoom
-            });
-        }
-    }
-
-    function onSaveSuccess(res: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) {
-        if(res.type==='ok') {
-            navigate('/settings/rooms');
-        }
-        else {
-            onSaveError(res);
-        }
-    }
-
-    function onSaveError(err: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) {
-        if(err.type==='error') {
-            if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.name') {
-                setNameError(name.length ? 'Name is too long' : 'Name is empty');
-                nameRef.current?.focus();
-                return;
+        return sendRequest({
+            type: isNew ? 'rooms.addRoom' : 'rooms.editRoom',
+            room: nRoom
+        }).then(res=> {
+            if(res.type==='ok') {
+                navigate('/settings/rooms');
             }
-            else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.id') {
-                setIdError(id.length ? 'ID is too long' : 'ID is empty');
-                idRef.current?.focus();
-                return;
+            else {
+                throw res;
             }
-            else if(err.error.message==='ROOM_ALREADY_EXISTS') {
-                setIdError('Room with this ID already exists');
-                idRef.current?.focus();
-                return;
+        }).catch((err: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) => {
+            if(err.type==='error') {
+                if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.name') {
+                    setNameError(name.length ? 'Name is too long' : 'Name is empty');
+                    nameRef.current?.focus();
+                    return;
+                }
+                else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.id') {
+                    setIdError(id.length ? 'ID is too long' : 'ID is empty');
+                    idRef.current?.focus();
+                    return;
+                }
+                else if(err.error.message==='ROOM_ALREADY_EXISTS') {
+                    setIdError('Room with this ID already exists');
+                    idRef.current?.focus();
+                    return;
+                }
             }
-        }
-        handleError(err);
+            handleError(err);
+        })
     }
 
     function onChangeControllerType(val?: string) { // val is not set when called by useEffect, and the existing settings must be kept in that case.
@@ -180,14 +168,12 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                                             onClick: ()=> sendRequest({
                                                 'type': 'rooms.removeRoom',
                                                 id
-                                            }),
-                                            onCatch: handleError,
-                                            onThen: (res: HMApi.Response<HMApi.RequestRemoveRoom>)=>{
+                                            }).then(res=> {
                                                 if(res.type==='ok') {
                                                     navigate('/settings/rooms')
                                                 }
                                                 else handleError(res);
-                                            }
+                                            }, handleError)
                                         }
                                     ]
                                 }
@@ -284,8 +270,8 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
 
             </fieldset>
 
-            <IntermittentButton<HMApi.Response<HMApi.RequestAddRoom|HMApi.RequestEditRoom>>
-                primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
+            <IntermittentButton
+                primary className='save' onClick={onSave}>
                 <FontAwesomeIcon icon={faSave} /> Save
             </IntermittentButton>
         </ScrollView>

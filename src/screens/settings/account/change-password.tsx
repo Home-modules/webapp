@@ -30,17 +30,17 @@ export default function ChangePasswordDialog() {
         if(newPassword !== confirmPassword) {
             setConfirmPasswordError("Passwords don't match");
             confirmNewPasswordRef.current?.focus();
-            return;
+            return Promise.reject();
         }
         if(newPassword.length < 0) {
             setNewPasswordError("New password is empty");
             newPasswordRef.current?.focus();
-            return;
+            return Promise.reject();
         }
         if(newPassword === currentPassword) {
             setNewPasswordError("New password can't be the same as the current password");
             newPasswordRef.current?.focus();
-            return;
+            return Promise.reject();
         }
 
         setConfirmPasswordError('');
@@ -48,30 +48,25 @@ export default function ChangePasswordDialog() {
             type: "account.changePassword",
             oldPassword: currentPassword,
             newPassword: newPassword
+        }).then(res=> {
+            navigate('/settings/account');
+            store.dispatch({
+                type: "ADD_NOTIFICATION",
+                notification: {
+                    type: "success",
+                    message: "Password changed successfully"
+                }
+            });
+        }, (err: HMApi.Response<HMApi.RequestChangePassword>)=> {
+            if(err.type==='error') {
+                if(err.error.message==='LOGIN_PASSWORD_INCORRECT') {
+                    setCurrentPasswordError("Password incorrect");
+                    currentPasswordRef.current?.focus();
+                } else {
+                    handleError(err);
+                }
+            }
         })
-    }
-
-    function onSuccess() {
-        navigate('/settings/account');
-        store.dispatch({
-            type: "ADD_NOTIFICATION",
-            notification: {
-                type: "success",
-                message: "Password changed successfully"
-            }
-        });
-    }
-
-    function onError(err: HMApi.Response<HMApi.RequestChangePassword>) {
-        if(err.type==='error') {
-            if(err.error.message==='LOGIN_PASSWORD_INCORRECT') {
-                setCurrentPasswordError("Password incorrect");
-                currentPasswordRef.current?.focus();
-            } else {
-                handleError(err);
-            }
-        }
-
     }
 
     return (
@@ -139,7 +134,7 @@ export default function ChangePasswordDialog() {
                         }} 
                     />
                 </label>
-                <IntermittentSubmitButton onClick={handleSubmit} onThen={onSuccess} onCatch={onError}>
+                <IntermittentSubmitButton onClick={handleSubmit}>
                     Change Password
                 </IntermittentSubmitButton>
             </form>

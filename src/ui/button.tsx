@@ -24,20 +24,18 @@ export default function Button({onClick, children, className='', disabled=false,
     );
 }
 
-export type IntermittentButtonProps<T> = Omit<ButtonProps, 'onClick'> & {
-    onClick: (e: React.MouseEvent<HTMLElement>) => (Promise<T>|undefined);
-    onThen?: (result: T) => void;
-    onCatch?: (error: T) => void;
+export type IntermittentButtonProps<E extends HTMLElement> = Omit<ButtonProps, 'onClick'> & {
+    onClick: (e: React.MouseEvent<E>) => Promise<any>;
 } & Omit<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, 'onClick'>;
 
-export function IntermittentButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined, primary=false, attention= false, ...rest}: IntermittentButtonProps<T>) {
+export function IntermittentButton({onClick, children, className='', disabled, primary=false, attention= false, ...rest}: IntermittentButtonProps<HTMLButtonElement>) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     function click(e: React.MouseEvent<HTMLButtonElement>) {
         const promise= onClick(e);
         if(promise) {
             setIntermittent(true);
-            promise.then(onThen, onCatch).finally(()=>setIntermittent(false));
+            promise.finally(()=>setIntermittent(false));
         }
     }
 
@@ -53,14 +51,14 @@ export function IntermittentButton<T>({onClick, children, className='', disabled
     );
 }
 
-export function IntermittentSubmitButton<T>({onClick, children, className='', disabled, onThen=()=>undefined, onCatch=()=>undefined}: Omit<IntermittentButtonProps<T>, 'primary'> & {children:string}) {
+export function IntermittentSubmitButton({onClick, children, className='', disabled}: Omit<IntermittentButtonProps<HTMLInputElement>, 'primary'> & {children:string}) {
     const [intermittent, setIntermittent] = React.useState(false);
 
-    function click(e: React.MouseEvent<HTMLElement>) {
+    function click(e: React.MouseEvent<HTMLInputElement>) {
         const promise= onClick(e);
         if(promise) {
             setIntermittent(true);
-            promise.then(onThen).catch(onCatch).finally(()=>setIntermittent(false));
+            promise.finally(()=>setIntermittent(false));
         }
     }
 

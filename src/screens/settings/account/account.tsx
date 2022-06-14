@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { handleError, logoutFromHub, sendRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
-import Button, { IntermittentButton } from '../../../ui/button';
+import Button from '../../../ui/button';
 import { Link, Outlet } from 'react-router-dom';
 import ScrollView from '../../../ui/scrollbar';
 
@@ -44,8 +44,7 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
                                     attention: true,
                                     primary: true,
                                     async: true,
-                                    onClick: logoutFromHub,
-                                    onCatch: handleError
+                                    onClick: ()=>logoutFromHub().catch(handleError),
                                 }
                             ]
                         }

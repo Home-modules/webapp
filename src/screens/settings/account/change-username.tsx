@@ -43,40 +43,36 @@ export default function ChangeUsernameDialog() {
         return sendRequest({
             type: 'account.changeUsername',
             username
-        });
-    }
-
-    function onSuccess(res: HMApi.Response<HMApi.RequestChangeUsername>) {
-        if(res.type==='ok') {
-            store.dispatch({
-                type: 'SET_TOKEN',
-                token: res.data.token
-            });
-            navigate('/settings/account');
-            store.dispatch({
-                type: 'ADD_NOTIFICATION',
-                notification: {
-                    type: 'success',
-                    message: 'Username changed successfully'
+        }).then(res => {
+            if(res.type==='ok') {
+                store.dispatch({
+                    type: 'SET_TOKEN',
+                    token: res.data.token
+                });
+                navigate('/settings/account');
+                store.dispatch({
+                    type: 'ADD_NOTIFICATION',
+                    notification: {
+                        type: 'success',
+                        message: 'Username changed successfully'
+                    }
+                });
+            } else {
+                handleError(res);
+            }
+        }, (res: HMApi.Response<HMApi.RequestChangeUsername>) => {
+            if(res.type==='error') {
+                if(res.error.message==="USERNAME_ALREADY_TAKEN"){
+                    setUsernameError("Username already taken");
+                    usernameRef.current?.focus();
                 }
-            });
-        } else {
-            handleError(res);
-        }
-    }
-
-    function onError(res: HMApi.Response<HMApi.RequestChangeUsername>) {
-        if(res.type==='error') {
-            if(res.error.message==="USERNAME_ALREADY_TAKEN"){
-                setUsernameError("Username already taken");
-                usernameRef.current?.focus();
+                else if(res.error.message==="USERNAME_TOO_SHORT"){
+                    setUsernameError("Username must be at least 3 characters long");
+                    usernameRef.current?.focus();
+                }
+                else handleError(res);
             }
-            else if(res.error.message==="USERNAME_TOO_SHORT"){
-                setUsernameError("Username must be at least 3 characters long");
-                usernameRef.current?.focus();
-            }
-            else handleError(res);
-        }
+        })
     }
 
     return (
@@ -99,7 +95,7 @@ export default function ChangeUsernameDialog() {
                     <div className="taken">{["Username already taken", "Username must be at least 3 characters long"][isAvailableError]}</div>
                     <div className="available">Username available</div>
                 </div>
-                <IntermittentSubmitButton onClick={onSubmit} onThen={onSuccess} onCatch={onError} disabled={isAvailable===false}>
+                <IntermittentSubmitButton onClick={onSubmit} disabled={isAvailable===false}>
                     Change Username
                 </IntermittentSubmitButton>
             </form>

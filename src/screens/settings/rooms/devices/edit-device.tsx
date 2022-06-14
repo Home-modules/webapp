@@ -100,7 +100,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
             window.setTimeout(()=> { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
                 setFieldErrors(errors);
             });
-            return;
+            return Promise.reject();
         }
         
         const nDevice: HMApi.Device = {
@@ -110,50 +110,38 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
             params: fieldValues
         };
 
-        if(isNew) {
-            return sendRequest({
-                type: 'devices.addDevice',
-                roomId: room.id,
-                device: nDevice
-            });
-        }
-        else {
-            return sendRequest({
-                type: 'devices.editDevice',
-                roomId: room.id,
-                device: nDevice
-            });
-        }
-    }
+        return sendRequest({
+            type: isNew ? 'devices.addDevice' : 'devices.editDevice',
+            roomId: room.id,
+            device: nDevice
+        }).then(res=> {
+            if(res.type==='ok') {
+                navigate(`/settings/rooms/${room.id}/devices`);
+            }
+            else {
+                throw res;
+            }
+        }).catch((err: HMApi.Response<HMApi.RequestEditDevice|HMApi.RequestAddDevice>)=> {
+            if(err.type==='error') {
+                if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='device.name') {
+                    setNameError(name.length ? 'Name is too long' : 'Name is empty');
+                    nameRef.current?.focus();
+                    return;
+                }
+                else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='device.id') {
+                    setIdError(id.length ? 'ID is too long' : 'ID is empty');
+                    idRef.current?.focus();
+                    return;
+                }
+                else if(err.error.message==='DEVICE_ALREADY_EXISTS') {
+                    setIdError('Device with this ID already exists');
+                    idRef.current?.focus();
+                    return;
+                }
+            }
+            handleError(err);
+        });
 
-    function onSaveSuccess(res: HMApi.Response<HMApi.RequestEditDevice|HMApi.RequestAddDevice>) {
-        if(res.type==='ok') {
-            navigate(`/settings/rooms/${room.id}/devices`);
-        }
-        else {
-            onSaveError(res);
-        }
-    }
-
-    function onSaveError(err: HMApi.Response<HMApi.RequestEditDevice|HMApi.RequestAddDevice>) {
-        if(err.type==='error') {
-            if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='device.name') {
-                setNameError(name.length ? 'Name is too long' : 'Name is empty');
-                nameRef.current?.focus();
-                return;
-            }
-            else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='device.id') {
-                setIdError(id.length ? 'ID is too long' : 'ID is empty');
-                idRef.current?.focus();
-                return;
-            }
-            else if(err.error.message==='DEVICE_ALREADY_EXISTS') {
-                setIdError('Device with this ID already exists');
-                idRef.current?.focus();
-                return;
-            }
-        }
-        handleError(err);
     }
 
     return (
@@ -171,14 +159,12 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                             'type': 'devices.removeDevice',
                             roomId: room.id,
                             id
-                        })}
-                        onThen={res=>{
+                        }).then(res=>{
                             if(res.type==='ok') {
                                 navigate(`/settings/rooms/${room.id}/devices`);
                             }
                             else handleError(res);
-                        }}
-                        onCatch={handleError}
+                        }, handleError)}
                         title="Delete device"
                         attention
                     >
@@ -224,8 +210,8 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                 }} 
             />
 
-            <IntermittentButton<HMApi.Response<HMApi.RequestAddDevice|HMApi.RequestEditDevice>>
-                primary className='save' onClick={onSave} onThen={onSaveSuccess} onCatch={onSaveError}>
+            <IntermittentButton
+                primary className='save' onClick={onSave}>
                 <FontAwesomeIcon icon={faSave} /> Save
             </IntermittentButton>
         </ScrollView>

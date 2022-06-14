@@ -112,7 +112,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                                 attention: true,
                                                 primary: true,
                                                 async: true,
-                                                async onClick() {
+                                                onClick: ()=> (async()=> {
                                                     const rooms = [...selectedRooms]; // Clone array it case it changes during the process
                                                     for(const roomId of rooms) {
                                                         await sendRequest({
@@ -129,7 +129,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                                     });
                                                     updateRooms();
                                                     setSelectedRooms([]);
-                                                }
+                                                })().catch(handleError)
                                             }
                                         ]
                                     }
