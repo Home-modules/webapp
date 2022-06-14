@@ -3,10 +3,10 @@ import { HMApi } from "../../../hub/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faTrash, faUtensils, IconName } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import { IntermittentButton } from '../../../ui/button';
+import Button, { IntermittentButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../hub/request';
 import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
-import { StoreState } from '../../../store';
+import { store, StoreState } from '../../../store';
 import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import machineFriendlyName from '../../../utils/machine-friendly-name';
@@ -162,23 +162,42 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                     {isNew ? "New room" : <>Editing {room.name}</>}
                 </span>
                 {isNew || (
-                    <IntermittentButton 
-                        onClick={()=> sendRequest({
-                            'type': 'rooms.removeRoom',
-                            id
-                        })}
-                        onThen={res=>{
-                            if(res.type==='ok') {
-                                navigate('/settings/rooms')
-                            }
-                            else handleError(res);
+                    <Button 
+                        onClick={e=> {
+                            store.dispatch({
+                                type: "ADD_FLYOUT",
+                                flyout: {
+                                    children: <>Are you sure you want to delete this room?</>,
+                                    element: e.target as Element,
+                                    width: 200,
+                                    buttons: [
+                                        { text: "Cancel" },
+                                        {
+                                            text: "Delete",
+                                            attention: true,
+                                            primary: true,
+                                            async: true,
+                                            onClick: ()=> sendRequest({
+                                                'type': 'rooms.removeRoom',
+                                                id
+                                            }),
+                                            onCatch: handleError,
+                                            onThen: (res: HMApi.Response<HMApi.RequestRemoveRoom>)=>{
+                                                if(res.type==='ok') {
+                                                    navigate('/settings/rooms')
+                                                }
+                                                else handleError(res);
+                                            }
+                                        }
+                                    ]
+                                }
+                            })
                         }}
-                        onCatch={handleError}
                         title="Delete room"
                         attention
                     >
                         <FontAwesomeIcon icon={faTrash} />
-                    </IntermittentButton>
+                    </Button>
                 )}
             </h1>
 

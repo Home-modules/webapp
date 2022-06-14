@@ -2,7 +2,7 @@ import React from "react";
 import { HMApi } from "../../../hub/api";
 import { handleError, logoutFromHub, sendRequest } from "../../../hub/request";
 import { store } from "../../../store";
-import { IntermittentButton } from "../../../ui/button";
+import Button from "../../../ui/button";
 import { RouteDialog } from "../../../ui/dialogs";
 import './active-sessions.scss';
 
@@ -22,33 +22,50 @@ export default function ActiveSessions() {
     }, []);
     return (
         <RouteDialog className="active-sessions" title="Active sessions">
-            <IntermittentButton 
-                onClick={()=>{
-                    return sendRequest({
-                        "type": "account.logoutOtherSessions"
-                    });
-                }}
-                onCatch={handleError}
-                onThen={(e)=>{
-                    if(e.type==='ok') {
-                        setSessions(sessions=> sessions.filter(s=> s.isCurrent));
-                        store.dispatch({
-                            type: 'ADD_NOTIFICATION',
-                            notification: {
-                                type: 'success',
-                                message: e.data.sessions===1? // Plural/singular
-                                    "Terminated 1 other session":
-                                    `Terminated ${e.data.sessions} other sessions`
-                            }
-                        });
-                    }
+            <Button 
+                onClick={(e)=>{
+                    store.dispatch({
+                        type: "ADD_FLYOUT",
+                        flyout: {
+                            children: <>Are you sure you want to terminate other sessions?</>,
+                            width: 205,
+                            element: e.target as Element,
+                            buttons: [
+                                { text: "Cancel" },
+                                {
+                                    text: "Terminate",
+                                    attention: true,
+                                    primary: true,
+                                    async: true,
+                                    onClick: ()=> sendRequest({
+                                        "type": "account.logoutOtherSessions"
+                                    }),
+                                    onCatch: handleError,
+                                    onThen: (e: HMApi.Response<HMApi.RequestLogoutOtherSessions>)=> {
+                                        if(e.type==='ok') {
+                                            setSessions(sessions=> sessions.filter(s=> s.isCurrent));
+                                            store.dispatch({
+                                                type: 'ADD_NOTIFICATION',
+                                                notification: {
+                                                    type: 'success',
+                                                    message: e.data.sessions===1? // Plural/singular
+                                                        "Terminated 1 other session":
+                                                        `Terminated ${e.data.sessions} other sessions`
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    })
                 }}
                 disabled={sessions.length===1} // When there is only one session, there is no other session to terminate and the button is pointless
                 attention
                 className="terminate-others"
             >
                 Terminate other sessions
-            </IntermittentButton>
+            </Button>
             <div className="list">
                 {sessions.map(session=> (
                     <Session 
@@ -100,30 +117,51 @@ function Session({session, onTerminated}: {session: HMApi.Session, onTerminated:
                     Last used: {lastUsedTime.toLocaleDateString()} {lastUsedTime.toLocaleTimeString()}
                 </div>
                 
-                <IntermittentButton
-                    onClick={()=>{
-                        if(session.isCurrent) {
-                            return logoutFromHub();
-                        } else {
-                            return sendRequest({
-                                type: "account.logoutSession",
-                                id: session.id
-                            });
-                        }
-                    }}
-                    onCatch={handleError}
-                    onThen={(e)=>{
-                        if(e.type==='ok') {
-                            onTerminated();
-                        } else {
-                            handleError(e);
-                        }
+                <Button
+                    onClick={(e)=> {
+                        e.stopPropagation();
+                        store.dispatch({
+                            type: "ADD_FLYOUT",
+                            flyout: {
+                                children: <>Are you sure you want to {session.isCurrent? "log out":"terminate this session"}?</>,
+                                element: e.target as Element,
+                                width: 200,
+                                buttons: [
+                                    { text: "Cancel" },
+                                    {
+                                        text: session.isCurrent ? "Log Out" : "Terminate",
+                                        attention: true,
+                                        primary: true,
+                                        async: true,
+                                        onClick: ()=> {
+                                            if(session.isCurrent) {
+                                                return logoutFromHub();
+                                            } else {
+                                                return sendRequest({
+                                                    type: "account.logoutSession",
+                                                    id: session.id
+                                                });
+                                            }
+                                        },
+                                        onCatch: handleError,
+                                        onThen: (e: HMApi.Response<HMApi.RequestLogout|HMApi.RequestLogoutSession>)=> {
+                                            setExpanded(e=> !e);
+                                            if(e.type==='ok') {
+                                                onTerminated();
+                                            } else {
+                                                handleError(e);
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        })
                     }}
                     attention
                     className="terminate"
                 >
-                    {session.isCurrent ? 'Log out' : 'Terminate session'}
-                </IntermittentButton>
+                    {session.isCurrent ? 'Log Out' : 'Terminate session'}
+                </Button>
             </div>
         </div>
     );

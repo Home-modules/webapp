@@ -9,15 +9,16 @@ export type ButtonProps = {
     disabled?: boolean;
     primary?: boolean;
     attention?: boolean;
-}
+} & Omit<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, 'onClick'>
 
-export default function Button({onClick, children, className='', disabled=false, primary=false, attention=false}: ButtonProps) {
+export default function Button({onClick, children, className='', disabled=false, primary=false, attention=false, ...rest}: ButtonProps) {
     return (
         <button 
             className={`button ${className} ${primary?'primary':''} ${attention?'attention':''}`} 
             onClick={onClick} 
-            disabled={disabled}>
-
+            disabled={disabled}
+            {...rest}
+        >
             {children}
         </button>
     );
