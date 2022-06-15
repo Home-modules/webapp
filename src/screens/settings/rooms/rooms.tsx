@@ -230,6 +230,12 @@ function RoomItem({room, disableReorder=false, search, active, action, selected,
                         onSelectChange();
                     }
                 }}
+                onContextMenu={e=> {
+                    if(navigator.maxTouchPoints && action==='edit') { // Only on mobile devices and when devices list is closed and select mode is off
+                        e.preventDefault();
+                        onSelectChange();
+                    }
+                }}
             >
                 <span className='name'>
                     <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
