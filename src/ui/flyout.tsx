@@ -44,6 +44,13 @@ export default function Flyout({id, element, children, showCloseButton, width, b
         }, 500);
     }
 
+    React.useEffect(()=> {
+        const observer = new ResizeObserver(()=> {
+            setPosition(getFlyoutPosition(element, width));
+        });
+        observer.observe(element);
+    })
+
     return (
         <div ref={containerRef} className={`flyout-container ${closing?'closing':''}`} onClick={e=> {
             if(e.target === containerRef?.current) {
