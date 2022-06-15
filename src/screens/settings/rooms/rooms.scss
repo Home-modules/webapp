@@ -229,8 +229,8 @@ main#settings main#settings-rooms {
                     background-color: var(--color-button-secondary-hover-background);
                 }
 
-                &:hover, &.checkbox-visible {
-
+                &:hover:not(.rooms-list.collapsed .open), 
+                &.checkbox-visible {
                     .name {
                         svg {
                             opacity: 0;
