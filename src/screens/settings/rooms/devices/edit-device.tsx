@@ -9,9 +9,10 @@ import React from 'react';
 import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../../ui/fields/fields';
 import getFlatFields from '../../../../utils/flat-fields';
 import { handleError, sendRequest } from '../../../../hub/request';
-import { IntermittentButton } from '../../../../ui/button';
+import Button, { IntermittentButton } from '../../../../ui/button';
 import machineFriendlyName from '../../../../utils/machine-friendly-name';
 import ScrollView from '../../../../ui/scrollbar';
+import { addConfirmationFlyout } from '../../../../ui/flyout';
 
 function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : Pick<StoreState, 'deviceTypes'|'rooms'|'devices'>) {
     let { deviceType: deviceTypeId, roomId, deviceId } = useParams();
@@ -154,22 +155,32 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                     {isNew ? <>New {deviceType.name}</> : <>Editing {device.name} ({deviceType.name})</>}
                 </span>
                 {isNew || (
-                    <IntermittentButton 
-                        onClick={()=> sendRequest({
-                            'type': 'devices.removeDevice',
-                            roomId: room.id,
-                            id
-                        }).then(res=>{
-                            if(res.type==='ok') {
-                                navigate(`/settings/rooms/${room.id}/devices`);
-                            }
-                            else handleError(res);
-                        }, handleError)}
+                    <Button 
+                        onClick={(e)=> {
+                            addConfirmationFlyout({
+                                element: e.target,
+                                text: "Are you sure you want to delete this device?",
+                                width: 190,
+                                confirmText: "Delete",
+                                attention: true,
+                                async: true,
+                                onConfirm: ()=> sendRequest({
+                                    'type': 'devices.removeDevice',
+                                    roomId: room.id,
+                                    id
+                                }).then(res=>{
+                                    if(res.type==='ok') {
+                                        navigate(`/settings/rooms/${room.id}/devices`);
+                                    }
+                                    else handleError(res);
+                                }, handleError)
+                            })
+                        }}
                         title="Delete device"
                         attention
                     >
                         <FontAwesomeIcon icon={faTrash} />
-                    </IntermittentButton>
+                    </Button>
                 )}
             </h1>
 
