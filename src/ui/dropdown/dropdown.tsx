@@ -47,7 +47,7 @@ export default function DropDownSelect<T extends string>({
     const currentOption = searchInDropdownOptions(options, currentValue);
     const [expandedGroups, setExpandedGroups] = React.useState<Record<number, boolean>>(Object.fromEntries(options.map((op, i)=>op.isGroup ? [i, op.expanded!==false] : undefined).filter(Boolean) as [number, boolean][]));
     const [focus, setFocus] = React.useState<T|number>(currentOption ? currentOption.value : -1); // string for options, number for groups, -1 for no focus
-    const searchBarRef = React.useRef(null) as React.RefObject<HTMLInputElement>;
+    const searchBarRef = React.useRef<HTMLInputElement>(null);
 
     
     if(typeof showSearchBar==='number') {

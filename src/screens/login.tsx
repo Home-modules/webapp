@@ -12,8 +12,8 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
     const [password, setPassword] = React.useState('');
     const [usernameError, setUsernameError] = React.useState('');
     const [passwordError, setPasswordError] = React.useState('');
-    const usernameRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
-    const passwordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const usernameRef = React.useRef<HTMLInputElement>(null);
+    const passwordRef = React.useRef<HTMLInputElement>(null);
     
     if(window.location.pathname === '/login' && token) {
         return <Navigate to="/home" />

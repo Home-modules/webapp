@@ -23,7 +23,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
-    const searchFieldRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const searchFieldRef = React.useRef<HTMLInputElement>(null);
 
     const [selectedRooms, setSelectedRooms] = React.useState<string[]>([])
 

@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 export default function ChangeUsernameDialog() {
     const [username, setUsername] = React.useState(store.getState().token?.split(':')[0] || '');
     const [usernameError, setUsernameError] = React.useState('');
-    const usernameRef= React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const usernameRef= React.useRef<HTMLInputElement>(null);
 
     const [isAvailable, setIsAvailable] = React.useState<boolean|0>(0); // 0= loading false= taken true= available
     const [isAvailableError, setIsAvailableError] = React.useState(0);  // 0= Already taken 1= Too short

@@ -15,7 +15,7 @@ export type IconSelectProps = {
 
 export default function IconSelect({icons, value, onChange}: IconSelectProps) {
     const [squareCoordinates, setSquareCoordinates] = React.useState<[number, number]|undefined>(undefined)
-    const ref = React.useRef(null) as React.RefObject<HTMLDivElement>;
+    const ref = React.useRef<HTMLDivElement>(null);
     const [id] = React.useState(uniqueId('icon-select-'));
     const valueIndex = icons.findIndex(i=> i.iconName === value);
 

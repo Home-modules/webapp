@@ -13,7 +13,7 @@ import './devices.scss';
 function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pick<StoreState, 'rooms'|'devices'|'deviceTypes'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
-    const searchFieldRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const searchFieldRef = React.useRef<HTMLInputElement>(null);
     const {roomId= ''} = useParams();
     let room= (rooms && rooms.find(room=>room.id===roomId))
     const roomExists= !!room;

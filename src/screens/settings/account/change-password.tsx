@@ -12,15 +12,15 @@ import './change-password.scss';
 export default function ChangePasswordDialog() {
     const [currentPassword, setCurrentPassword] = React.useState("");
     const [currentPasswordError, setCurrentPasswordError] = React.useState('');
-    const currentPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const currentPasswordRef = React.useRef<HTMLInputElement>(null);
 
     const [newPassword, setNewPassword] = React.useState("");
     const [newPasswordError, setNewPasswordError] = React.useState('');
-    const newPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const newPasswordRef = React.useRef<HTMLInputElement>(null);
 
     const [confirmPassword, setConfirmPassword] = React.useState("");
     const [confirmPasswordError, setConfirmPasswordError] = React.useState('');
-    const confirmNewPasswordRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const confirmNewPasswordRef = React.useRef<HTMLInputElement>(null);
 
     const navigate= useNavigate();
 

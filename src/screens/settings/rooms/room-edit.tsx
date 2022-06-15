@@ -51,11 +51,11 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
 
     const [name, setName] = React.useState(room.name);
     const [nameError, setNameError] = React.useState('');
-    const nameRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const nameRef = React.useRef<HTMLInputElement>(null);
 
     const [id, setId] = React.useState(room.id);
     const [idError, setIdError] = React.useState('');
-    const idRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const idRef = React.useRef<HTMLInputElement>(null);
 
     const [icon, setIcon] = React.useState(icons[room.icon]);
 

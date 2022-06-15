@@ -3,7 +3,7 @@ import { HMApi } from '../../hub/api';
 import { FieldProps } from './fields';
 
 export function FieldTypeNumber({ field, value, setValue, error, setError }: FieldProps<number, HMApi.SettingsFieldNumber>) {
-    const pfRef = React.useRef(null) as React.RefObject<HTMLSpanElement>;
+    const pfRef = React.useRef<HTMLSpanElement>(null);
     const [pfWidth, setPfWidth] = React.useState<undefined | number>(undefined);
     React.useEffect(() => {
         if (field.postfix && pfRef.current) {

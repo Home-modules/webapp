@@ -80,11 +80,11 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
 
     const [name, setName] = React.useState(device.name);
     const [nameError, setNameError] = React.useState('');
-    const nameRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const nameRef = React.useRef<HTMLInputElement>(null);
 
     const [id, setId] = React.useState(device.id);
     const [idError, setIdError] = React.useState('');
-    const idRef = React.useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
+    const idRef = React.useRef<HTMLInputElement>(null);
 
     const [fieldValues, setFieldValues] = React.useState(
         isNew? Object.fromEntries(getFlatFields(deviceType.settings)

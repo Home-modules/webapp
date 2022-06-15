@@ -14,7 +14,7 @@ export type DialogProps = {
 }
 
 export function Dialog({title, className='', children: Children, onClose, id, cancellable=true}: DialogProps) {
-    const ref= React.useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
+    const ref= React.useRef<HTMLDivElement>(null);
     const [closing, setClosing] = React.useState(false);
 
     function close() {
@@ -72,7 +72,7 @@ export type RouteDialogProps = {
 }
 
 export function RouteDialog({title, className='', children, cancellable= true, parentRoute='..'}: RouteDialogProps) {
-    const ref= React.useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
+    const ref= React.useRef<HTMLDivElement>(null);
 
     const navigate= useNavigate();
 

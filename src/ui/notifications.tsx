@@ -28,7 +28,7 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
     const [visible, setVisible] = React.useState<''|'closing'|'fading'>('');
     const [isNew, setIsNew] = React.useState(true);
     const [height, setHeight] = React.useState('auto');
-    const divRef = React.useRef(null) as React.RefObject<HTMLDivElement>;
+    const divRef = React.useRef<HTMLDivElement>(null);
     const [hide, setHide] = React.useState(true);
 
     function close(mode: typeof visible = 'closing') {
