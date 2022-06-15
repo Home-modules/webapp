@@ -2,10 +2,11 @@ import './account.scss';
 import React from 'react';
 import { connect } from 'react-redux';
 import { handleError, logoutFromHub, sendRequest } from '../../../hub/request';
-import { store, StoreState } from '../../../store';
+import { StoreState } from '../../../store';
 import Button from '../../../ui/button';
 import { Link, Outlet } from 'react-router-dom';
 import ScrollView from '../../../ui/scrollbar';
+import { addConfirmationFlyout } from '../../../ui/flyout';
 
 function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     const [sessionsCount, setSessionsCount] = React.useState(-1); // Special values: -1 = loading, -2 = error
@@ -31,23 +32,13 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
             <h1>
                 Logged in to Home_modules as <strong>@{token?.split(':')[0]}</strong>
                 <Button onClick={(e)=>{
-                    store.dispatch({
-                        type: "ADD_FLYOUT",
-                        flyout: {
-                            element: e.target as Element,
-                            children: <>Are you sure you want to log out?</>,
-                            width: 200,
-                            buttons: [
-                                { text: "Cancel" },
-                                {
-                                    text: "Log out",
-                                    attention: true,
-                                    primary: true,
-                                    async: true,
-                                    onClick: ()=>logoutFromHub().catch(handleError),
-                                }
-                            ]
-                        }
+                    addConfirmationFlyout({
+                        element: e.target,
+                        text: "Are you sure you want to log out?",
+                        confirmText: "Log Out",
+                        attention: true,
+                        async: true,
+                        onConfirm: ()=>logoutFromHub().catch(handleError),
                     })
                 }} attention>
                     Log out

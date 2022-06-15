@@ -4,6 +4,7 @@ import { handleError, logoutFromHub, sendRequest } from "../../../hub/request";
 import { store } from "../../../store";
 import Button from "../../../ui/button";
 import { RouteDialog } from "../../../ui/dialogs";
+import { addConfirmationFlyout } from "../../../ui/flyout";
 import './active-sessions.scss';
 
 export default function ActiveSessions() {
@@ -24,38 +25,29 @@ export default function ActiveSessions() {
         <RouteDialog className="active-sessions" title="Active sessions">
             <Button 
                 onClick={(e)=>{
-                    store.dispatch({
-                        type: "ADD_FLYOUT",
-                        flyout: {
-                            children: <>Are you sure you want to terminate other sessions?</>,
-                            width: 205,
-                            element: e.target as Element,
-                            buttons: [
-                                { text: "Cancel" },
-                                {
-                                    text: "Terminate",
-                                    attention: true,
-                                    primary: true,
-                                    async: true,
-                                    onClick: ()=> sendRequest({
-                                        "type": "account.logoutOtherSessions"
-                                    }).then(e=> {
-                                        if(e.type==='ok') {
-                                            setSessions(sessions=> sessions.filter(s=> s.isCurrent));
-                                            store.dispatch({
-                                                type: 'ADD_NOTIFICATION',
-                                                notification: {
-                                                    type: 'success',
-                                                    message: e.data.sessions===1? // Plural/singular
-                                                        "Terminated 1 other session":
-                                                        `Terminated ${e.data.sessions} other sessions`
-                                                }
-                                            });
-                                        }
-                                    }, handleError)
-                                }
-                            ]
-                        }
+                    addConfirmationFlyout({
+                        element: e.target,
+                        text: "Are you sure you want to terminate other sessions?",
+                        width: 205,
+                        confirmText: "Terminate",
+                        attention: true,
+                        async: true,
+                        onConfirm: ()=> sendRequest({
+                            "type": "account.logoutOtherSessions"
+                        }).then(e=> {
+                            if(e.type==='ok') {
+                                setSessions(sessions=> sessions.filter(s=> s.isCurrent));
+                                store.dispatch({
+                                    type: 'ADD_NOTIFICATION',
+                                    notification: {
+                                        type: 'success',
+                                        message: e.data.sessions===1? // Plural/singular
+                                            "Terminated 1 other session":
+                                            `Terminated ${e.data.sessions} other sessions`
+                                    }
+                                });
+                            }
+                        }, handleError)
                     })
                 }}
                 disabled={sessions.length===1} // When there is only one session, there is no other session to terminate and the button is pointless
@@ -118,36 +110,26 @@ function Session({session, onTerminated}: {session: HMApi.Session, onTerminated:
                 <Button
                     onClick={(e)=> {
                         e.stopPropagation();
-                        store.dispatch({
-                            type: "ADD_FLYOUT",
-                            flyout: {
-                                children: <>Are you sure you want to {session.isCurrent? "log out":"terminate this session"}?</>,
-                                element: e.target as Element,
-                                width: 200,
-                                buttons: [
-                                    { text: "Cancel" },
-                                    {
-                                        text: session.isCurrent ? "Log Out" : "Terminate",
-                                        attention: true,
-                                        primary: true,
-                                        async: true,
-                                        onClick: ()=> {
-                                            return (session.isCurrent ? logoutFromHub() : sendRequest({
-                                                type: "account.logoutSession",
-                                                id: session.id
-                                            })).then(e=> {
-                                                setExpanded(e=> !e);
-                                                if(e.type==='ok') {
-                                                    onTerminated();
-                                                } else {
-                                                    handleError(e);
-                                                }
-                                            }, handleError);
-                                        },
+                        addConfirmationFlyout({
+                            element: e.target,
+                            text: `Are you sure you want to ${session.isCurrent? "log out":"terminate this session"}?`,
+                            confirmText: session.isCurrent ? "Log Out" : "Terminate",
+                            attention: true,
+                            async: true,
+                            onConfirm: ()=> {
+                                return (session.isCurrent ? logoutFromHub() : sendRequest({
+                                    type: "account.logoutSession",
+                                    id: session.id
+                                })).then(e=> {
+                                    setExpanded(e=> !e);
+                                    if(e.type==='ok') {
+                                        onTerminated();
+                                    } else {
+                                        handleError(e);
                                     }
-                                ]
-                            }
-                        })
+                                }, handleError);
+                            },
+                        });
                     }}
                     attention
                     className="terminate"

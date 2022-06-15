@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { Link, Outlet, useMatch, useParams, useSearchParams } from 'react-router-dom';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
 import ScrollView from '../../../ui/scrollbar';
+import { addConfirmationFlyout } from '../../../ui/flyout';
 
 function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
@@ -98,43 +99,31 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                         </label>
                         <span>{selectedRooms.length}</span>
                         <FontAwesomeIcon icon={faTrash} onClick={e=> {
-                            if(e.nativeEvent.target) {
-                                store.dispatch({
-                                    type: "ADD_FLYOUT",
-                                    flyout: {
-                                        element: e.target as Element,
-                                        children: <>Are you sure you want to delete {selectedRooms.length} {selectedRooms.length===1 ? 'room':'rooms'}?</>,
-                                        width: 200,
-                                        buttons: [
-                                            { text: "Cancel" }, 
-                                            {
-                                                text: "Delete",
-                                                attention: true,
-                                                primary: true,
-                                                async: true,
-                                                onClick: ()=> (async()=> {
-                                                    const rooms = [...selectedRooms]; // Clone array it case it changes during the process
-                                                    for(const roomId of rooms) {
-                                                        await sendRequest({
-                                                            type: "rooms.removeRoom",
-                                                            id: roomId
-                                                        })
-                                                    }
-                                                    store.dispatch({
-                                                        type: "ADD_NOTIFICATION",
-                                                        notification: {
-                                                            type: "success",
-                                                            message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
-                                                        }
-                                                    });
-                                                    updateRooms();
-                                                    setSelectedRooms([]);
-                                                })().catch(handleError)
-                                            }
-                                        ]
+                            addConfirmationFlyout({
+                                element: e.target,
+                                text: `Are you sure you want to delete ${selectedRooms.length} ${selectedRooms.length===1 ? 'room':'rooms'}?`,
+                                confirmText: "Delete",
+                                attention: true,
+                                async: true,
+                                onConfirm: ()=> (async()=> {
+                                    const rooms = [...selectedRooms]; // Clone array it case it changes during the process
+                                    for(const roomId of rooms) {
+                                        await sendRequest({
+                                            type: "rooms.removeRoom",
+                                            id: roomId
+                                        })
                                     }
-                                })
-                            }
+                                    store.dispatch({
+                                        type: "ADD_NOTIFICATION",
+                                        notification: {
+                                            type: "success",
+                                            message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
+                                        }
+                                    });
+                                    updateRooms();
+                                    setSelectedRooms([]);
+                                })().catch(handleError)
+                            });
                         }}/>
                         <FontAwesomeIcon icon={faTimes} onClick={()=>setSelectedRooms([])} />
                     </div>

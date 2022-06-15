@@ -6,7 +6,7 @@ import React from 'react';
 import Button, { IntermittentButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../hub/request';
 import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
-import { store, StoreState } from '../../../store';
+import { StoreState } from '../../../store';
 import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import machineFriendlyName from '../../../utils/machine-friendly-name';
@@ -14,6 +14,7 @@ import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../
 import getFlatFields from '../../../utils/flat-fields';
 import IconSelect from '../../../ui/fields/icon-select';
 import ScrollView from '../../../ui/scrollbar';
+import { addConfirmationFlyout } from '../../../ui/flyout';
 
 export type SettingsPageRoomsEditRoomProps = {
     room: HMApi.Room & {new?: boolean};
@@ -152,31 +153,21 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 {isNew || (
                     <Button 
                         onClick={e=> {
-                            store.dispatch({
-                                type: "ADD_FLYOUT",
-                                flyout: {
-                                    children: <>Are you sure you want to delete this room?</>,
-                                    element: e.target as Element,
-                                    width: 200,
-                                    buttons: [
-                                        { text: "Cancel" },
-                                        {
-                                            text: "Delete",
-                                            attention: true,
-                                            primary: true,
-                                            async: true,
-                                            onClick: ()=> sendRequest({
-                                                'type': 'rooms.removeRoom',
-                                                id
-                                            }).then(res=> {
-                                                if(res.type==='ok') {
-                                                    navigate('/settings/rooms')
-                                                }
-                                                else handleError(res);
-                                            }, handleError)
-                                        }
-                                    ]
-                                }
+                            addConfirmationFlyout({
+                                element: e.target,
+                                text: "Are you sure you want to delete this room?",
+                                confirmText: "Delete",
+                                attention: true,
+                                async: true,
+                                onConfirm: ()=> sendRequest({
+                                    'type': 'rooms.removeRoom',
+                                    id
+                                }).then(res=> {
+                                    if(res.type==='ok') {
+                                        navigate('/settings/rooms')
+                                    }
+                                    else handleError(res);
+                                }, handleError)
                             })
                         }}
                         title="Delete room"

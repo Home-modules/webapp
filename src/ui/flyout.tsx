@@ -124,3 +124,36 @@ function getFlyoutPosition(element: Element, width: number) {
 
     return {left, bottom, top}
 }
+
+export function addConfirmationFlyout({element, text, confirmText, attention = false, onConfirm, async, width = 200}: {
+    element: EventTarget|Element,
+    text: string|JSX.Element, 
+    confirmText: string, 
+    attention?: boolean, 
+    width?: number,
+} & ({
+    async?: false,
+    onConfirm: (e: React.MouseEvent<HTMLButtonElement>) => void,
+} | {
+    async: true,
+    onConfirm: (e: React.MouseEvent<HTMLButtonElement>) => Promise<any>,
+})) {
+    store.dispatch({
+        type: "ADD_FLYOUT",
+        flyout: {
+            children: text,
+            element: element as Element,
+            width,
+            buttons: [
+                { text: "Cancel" },
+                {
+                    text: confirmText,
+                    attention,
+                    primary: true,
+                    async,
+                    onClick: onConfirm
+                } as any // To suppress a TypeScript error I cannot figure out
+            ]
+        }
+    })
+}
