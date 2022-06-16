@@ -111,7 +111,6 @@ export const Flyouts = connect(({flyouts}: StoreState)=>({flyouts}))(
 
 function getFlyoutPosition(element: Element, width: number) {
     const rect = element.getBoundingClientRect();
-    console.log(rect);
     let left: number = rect.x + rect.width/2 - width/2;
     let bottom: number|undefined = window.innerHeight - rect.y + 10;
     let top: number|undefined = undefined;
