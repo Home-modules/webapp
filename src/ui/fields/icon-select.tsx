@@ -20,15 +20,9 @@ export default function IconSelect({icons, value, onChange}: IconSelectProps) {
     const valueIndex = icons.findIndex(i=> i.iconName === value);
 
     React.useEffect(()=> {
-        // const inAnimation = !squareCoordinates; // When the component mount, it is inside a scale animation from 75% to 100% and squareCoordinates isn't yet set.
         if(ref.current) {
             const child = ref.current.childNodes[valueIndex] as HTMLLabelElement;
-            // const parentCoordinates = ref.current.getBoundingClientRect();
-            // const coordinates = child.getBoundingClientRect();
-            // console.log(parentCoordinates, coordinates);
             setSquareCoordinates([
-                // (coordinates.x - parentCoordinates.x)*(inAnimation?(1/0.75) : 1), 
-                // (coordinates.y - parentCoordinates.y)*(inAnimation?(1/0.75) : 1)
                 child.offsetLeft,
                 child.offsetTop
             ])
