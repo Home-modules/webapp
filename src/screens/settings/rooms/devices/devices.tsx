@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
 import { Link, Navigate, Outlet, useMatch, useParams, useSearchParams } from "react-router-dom";
+import { ReactSortable, Store } from "react-sortablejs";
+import Sortable from "sortablejs";
 import { HMApi } from "../../../../hub/api";
 import { handleError, sendRequest } from "../../../../hub/request";
 import { store, StoreState } from "../../../../store";
@@ -81,6 +83,16 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
         }
     }, [types, roomId, controllerType]);
 
+    function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
+        if(devices) {
+            sendRequest({
+                type: 'devices.changeDeviceOrder',
+                roomId,
+                ids: devices.map(device=>device.id)
+            }).catch(handleError)
+        }
+    }
+
     if(!roomExists) {
         return <Navigate to="/settings/rooms" />
     }
@@ -129,19 +141,18 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                                 />
                             ))
                     ) : (<>
-                        {/* <ReactSortable 
-                            list={rooms} setList={setRooms} onSort={onSort}
+                        <ReactSortable 
+                            list={devices} setList={setDevices} onSort={onSort}
                             animation={200} easing='ease' 
-                            handle='.drag-handle' ghostClass='ghost'> */}
+                            handle='.drag-handle' ghostClass='ghost'>
                             {devices.map(device => (
                                 <DeviceItem 
                                     key={device.id} 
                                     device={device} 
-                                    disableReorder 
                                     deviceType={types? types.find(t=> t.id === device.type): undefined}
                                 />
                             ))}
-                        {/* </ReactSortable> */}
+                        </ReactSortable>
                         <Link to="new" className="add">
                             <FontAwesomeIcon icon={faPlus} />
                         </Link>
