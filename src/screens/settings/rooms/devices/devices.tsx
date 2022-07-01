@@ -1,4 +1,4 @@
-import { faArrowLeft, faPlus, fas, faSearch, faTimes, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPlus, fas, faSearch, faTimes, faTimesCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
@@ -8,6 +8,7 @@ import Sortable from "sortablejs";
 import { HMApi } from "../../../../hub/api";
 import { handleError, sendRequest } from "../../../../hub/request";
 import { store, StoreState } from "../../../../store";
+import { addConfirmationFlyout } from "../../../../ui/flyout";
 import ScrollView from "../../../../ui/scrollbar";
 import SearchKeywordHighlight from "../../../../ui/search-highlight";
 import './devices.scss';
@@ -16,6 +17,9 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
     const searchFieldRef = React.useRef<HTMLInputElement>(null);
+    
+    const [selectedDevices, setSelectedDevices] = React.useState<string[]>([])
+
     const {roomId= ''} = useParams();
     let room= (rooms && rooms.find(room=>room.id===roomId))
     const roomExists= !!room;
@@ -46,7 +50,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
         });
     }, [roomId]);
 
-    React.useEffect(()=> {
+    function updateDevices() {
         sendRequest({
             type: 'devices.getDevices',
             roomId
@@ -62,15 +66,17 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
             setDevices(false);
             handleError(err);
         });
-    }, [hideList, roomId, setDevices]);
+    }
 
-    React.useEffect(() => {
-        if((!types) && roomId && controllerType) {
+    React.useEffect(updateDevices , [hideList, roomId, setDevices]);
+
+    React.useEffect(()=> {
+        if ((!types) && roomId && controllerType) {
             sendRequest({
                 type: "devices.getDeviceTypes",
                 controllerType: controllerType.type
-            }).then(res=> {
-                if(res.type === 'ok') {
+            }).then(res => {
+                if (res.type === 'ok') {
                     store.dispatch({
                         type: "SET_DEVICE_TYPES",
                         roomController: controllerType.type,
@@ -79,7 +85,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                 } else {
                     handleError(res);
                 }
-            }, handleError)
+            }, handleError);
         }
     }, [types, roomId, controllerType]);
 
@@ -100,7 +106,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
     return (
         <div className="edit-devices">
             <ScrollView className={`devices-list ${hideList? 'hidden':''}`}>
-                <h1 className={`searchable ${search===null ? '' : 'search-active'}`}>
+                <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedDevices.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">
                         <Link to="/settings/rooms">
                             <FontAwesomeIcon icon={faArrowLeft} />
@@ -115,6 +121,52 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                         <FontAwesomeIcon icon={faSearch} />
                         <input type="text" placeholder="Search" value={search||''} onChange={(e)=>setSearchParams({search: e.target.value})} ref={searchFieldRef} />
                         <FontAwesomeIcon icon={faTimes} onClick={()=>setSearchParams({})} />
+                    </div>
+                    <div className="selected">
+                        <label className="checkbox">
+                            <input 
+                                type="checkbox" 
+                                checked={devices ? selectedDevices.length === devices.length: false}
+                                onChange={e=> {
+                                    if(devices && e.target.checked) {
+                                        setSelectedDevices(devices.map(r=>r.id));
+                                    } else {
+                                        setSelectedDevices([]);
+                                    }
+                                }} 
+                                title="Select all"
+                            />
+                        </label>
+                        <span>{selectedDevices.length}</span>
+                        <FontAwesomeIcon icon={faTrash} onClick={e=> {
+                            addConfirmationFlyout({
+                                element: e.target,
+                                text: `Are you sure you want to delete ${selectedDevices.length} ${selectedDevices.length===1 ? 'device':'devices'}?`,
+                                confirmText: "Delete",
+                                attention: true,
+                                async: true,
+                                onConfirm: ()=> (async()=> {
+                                    const devices = [...selectedDevices]; // Clone array it case it changes during the process
+                                    for(const deviceId of devices) {
+                                        await sendRequest({
+                                            type: "devices.removeDevice",
+                                            roomId,
+                                            id: deviceId
+                                        });
+                                    }
+                                    store.dispatch({
+                                        type: "ADD_NOTIFICATION",
+                                        notification: {
+                                            type: "success",
+                                            message: `Deleted ${devices.length} ${devices.length===1?'device':'devices'}`
+                                        }
+                                    });
+                                    updateDevices();
+                                    setSelectedDevices([]);
+                                })().catch(handleError)
+                            });
+                        }}/>
+                        <FontAwesomeIcon icon={faTimes} onClick={()=>setSelectedDevices([])} />
                     </div>
                 </h1>
                 <div className='list'>
@@ -138,6 +190,15 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                                     disableReorder 
                                     search={search} 
                                     deviceType={types? types.find(t=> t.id === device.type): undefined}
+                                    action={selectedDevices.length===0 ? 'edit' : 'check'}
+                                    selected={selectedDevices.includes(device.id)}
+                                    onSelectChange={()=> {
+                                        if(selectedDevices.includes(device.id)) {
+                                            setSelectedDevices(val=> val.filter(el=> el!==device.id));
+                                        } else {
+                                            setSelectedDevices(val=> [...val, device.id])
+                                        }
+                                    }}
                                 />
                             ))
                     ) : (<>
@@ -150,6 +211,15 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                                     key={device.id} 
                                     device={device} 
                                     deviceType={types? types.find(t=> t.id === device.type): undefined}
+                                    action={selectedDevices.length===0 ? 'edit' : 'check'}
+                                    selected={selectedDevices.includes(device.id)}
+                                    onSelectChange={()=> {
+                                        if(selectedDevices.includes(device.id)) {
+                                            setSelectedDevices(val=> val.filter(el=> el!==device.id));
+                                        } else {
+                                            setSelectedDevices(val=> [...val, device.id])
+                                        }
+                                    }}
                                 />
                             ))}
                         </ReactSortable>
@@ -170,10 +240,13 @@ type DeviceItemProps = {
     device: HMApi.Device,
     deviceType?: HMApi.DeviceType,
     disableReorder?: boolean,
-    search?: string // Search keyword for highlighting
+    search?: string, // Search keyword for highlighting
+    action: "edit"|"check",
+    selected: boolean,
+    onSelectChange: ()=>void
 }
 
-function DeviceItem({device, deviceType, disableReorder, search}: DeviceItemProps) {
+function DeviceItem({device, deviceType, disableReorder, search, action, onSelectChange, selected}: DeviceItemProps) {
     return (
         <div className='item'>
             {(!disableReorder) && (
@@ -181,9 +254,32 @@ function DeviceItem({device, deviceType, disableReorder, search}: DeviceItemProp
                     <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
                 </svg>
             )}
-            <Link to={`edit/${device.id}`} className='open'>
+            <Link 
+                to={`edit/${device.id}`} 
+                className={`open ${action==='check'? 'checkbox-visible': ''}`}
+                onClick={e=> {
+                    if(action==='check') {
+                        e.preventDefault();
+                        onSelectChange();
+                    }
+                }}
+                onContextMenu={e=> {
+                    if(navigator.maxTouchPoints && action==='edit') { // Only on mobile devices and when select mode is off
+                        e.preventDefault();
+                        onSelectChange();
+                    }
+                }}
+            >
                 <span className='name'>
                     {deviceType && <FontAwesomeIcon icon={fas['fa'+deviceType.icon]} fixedWidth />}
+                    <label className="checkbox">
+                        <input 
+                            type="checkbox" 
+                            checked={selected} 
+                            onClick={e=> {e.stopPropagation()}} 
+                            onChange={onSelectChange}
+                        />
+                    </label>
                     <SearchKeywordHighlight term={search}>{device.name}</SearchKeywordHighlight>
                 </span>
                 <span className='id'>
