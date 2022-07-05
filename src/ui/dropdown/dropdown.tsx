@@ -249,6 +249,7 @@ export default function DropDownSelect<T extends string>({
                         className="button refresh" 
                         onClick={onRefreshButton}
                         disabled={refreshButtonActive}
+                        tabIndex={-1}
                     >
                         <FontAwesomeIcon icon={faRefresh} spin={refreshButtonActive} />
                         {refreshButton}
