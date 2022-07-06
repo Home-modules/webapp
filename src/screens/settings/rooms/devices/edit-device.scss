@@ -44,6 +44,10 @@ main#settings main#settings-rooms .edit-devices .edit-device {
             height: 43px;
             width: 43px;
             font-size: 1.5rem;
+
+            svg {
+                pointer-events: none;
+            }
         }
     }
 
