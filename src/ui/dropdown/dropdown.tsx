@@ -47,7 +47,9 @@ export default function DropDownSelect<T extends string>({
     const currentOption = searchInDropdownOptions(options, currentValue);
     const [expandedGroups, setExpandedGroups] = React.useState<Record<number, boolean>>(Object.fromEntries(options.map((op, i)=>op.isGroup ? [i, op.expanded!==false] : undefined).filter(Boolean) as [number, boolean][]));
     const [focus, setFocus] = React.useState<T|number>(currentOption ? currentOption.value : -1); // string for options, number for groups, -1 for no focus
+    const ref = React.useRef<HTMLDivElement>(null);
     const searchBarRef = React.useRef<HTMLInputElement>(null);
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
     
     if(typeof showSearchBar==='number') {
@@ -214,7 +216,12 @@ export default function DropDownSelect<T extends string>({
     }
 
     return (
-        <div className={`dropdown-select ${className||''}`} data-error={error}>
+        <div className={`dropdown-select ${className||''}`} data-error={error} onBlur={()=> {
+            console.log(document.activeElement)
+            setTimeout(()=> {
+                if(document.activeElement !== document.body && !ref.current?.contains(document.activeElement)) close(); // Close the dropdown when it is no longer in focus.
+            }, 5);
+        }} ref={ref}>
             { allowCustomValue ? (
                 <>
                     <input 
@@ -222,8 +229,18 @@ export default function DropDownSelect<T extends string>({
                         value={currentValue} 
                         onChange={e=>onChange(e.target.value as T)} 
                         onKeyDown={handleKeys}
+                        ref={inputRef}
+                        onBlur={(e)=> {
+                            setTimeout(()=> {
+                                if((ref.current?.contains(document.activeElement) && document.activeElement!==searchBarRef.current) || (document.activeElement===document.body && open)) {
+                                    e.target.focus();
+                                } 
+                                else if(document.activeElement !== document.body) close();
+                            }, 10);
+                            e.stopPropagation();
+                        }}
                     />
-                    <button onClick={openDropDown} tabIndex={-1} onKeyDown={handleKeys}>
+                    <button onClick={()=> {inputRef.current?.focus(); openDropDown();}} tabIndex={-1} onKeyDown={handleKeys}>
                         <FontAwesomeIcon icon={faChevronDown} />
                     </button>
                 </>
