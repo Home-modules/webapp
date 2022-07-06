@@ -378,11 +378,16 @@ main#settings main#settings-rooms {
         }
 
         .add {
+            position: sticky;
+            bottom: 0;
+            z-index: 2;
+
             display: block;
             text-align: center;
             padding: 10px;
             border: 1px dashed var(--color-input-border);
             color: var(--color-input-border);
+            background-color: var(--color-background);
             border-radius: 8px;
             cursor: pointer;
             box-sizing: border-box;
