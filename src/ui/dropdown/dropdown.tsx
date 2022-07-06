@@ -33,11 +33,12 @@ export type DropDownSelectProps<T extends string= string> = {
     showSearchBar?: boolean | number; // If number, it will be the minimum item count to show search bar.
     refreshButton?: string;
     refreshButtonActive?: boolean;
+    refreshButtonPulse?: boolean;
     onRefreshButton?: ()=> void;
 }
 
 export default function DropDownSelect<T extends string>({
-    className, options, onChange, value, onOpen, children, error, allowCustomValue, showSearchBar, onRefreshButton, refreshButton, refreshButtonActive
+    className, options, onChange, value, onOpen, children, error, allowCustomValue, showSearchBar, onRefreshButton, refreshButton, refreshButtonActive, refreshButtonPulse
 }: DropDownSelectProps<T>) {
     const [open, setOpen] = React.useState(false);
     const [closing, setClosing] = React.useState(false);
@@ -268,7 +269,7 @@ export default function DropDownSelect<T extends string>({
                         disabled={refreshButtonActive}
                         tabIndex={-1}
                     >
-                        <FontAwesomeIcon icon={faRefresh} spin={refreshButtonActive} />
+                        <FontAwesomeIcon icon={faRefresh} spin={refreshButtonActive} className={refreshButtonPulse? 'pulse':''} />
                         {refreshButton}
                     </button>
                 )}

@@ -30,6 +30,8 @@ export function LazyDropDownSelect({ className, callback, lazyOptions, onChange,
         { error: false; params?: undefined; }; // Other errors
     const [options, setOptions] = React.useState<OptionsState>(0);
 
+    const [pulse, setPulse] = React.useState(false);
+
     const loadItems = React.useCallback(function loadItems() {
         const returned = callback();
         if (returned instanceof Promise) {
@@ -37,6 +39,11 @@ export function LazyDropDownSelect({ className, callback, lazyOptions, onChange,
                 if (!(options instanceof Array)) { // Don't show loading indicator if loaded before
                     setOptions(0);
                 }
+            }, ()=> {
+                setPulse(true); // The pulse rotates the loading indicator by 180 degrees as a haptic feedback.
+                setTimeout(() => {
+                    setPulse(false);
+                }, 550);
             }).then(setOptions, setOptions);
         } else {
             setOptions(returned);
@@ -114,6 +121,7 @@ export function LazyDropDownSelect({ className, callback, lazyOptions, onChange,
             showSearchBar={showSearchBar}
             refreshButton={showRefreshCurrent[0] ? (showRefreshCurrent[1]) : undefined}
             refreshButtonActive={typeof options === 'number'}
+            refreshButtonPulse={pulse}
             onRefreshButton={loadItems}
             error={error}
         >
