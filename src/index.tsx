@@ -24,6 +24,7 @@ import SettingsPageRoomsDevicesNewDevice from './screens/settings/rooms/devices/
 import SettingsPageRoomsDevicesEditDevice from './screens/settings/rooms/devices/edit-device';
 import InvalidVersionPage from './screens/invalid-version';
 import ActiveSessions from './screens/settings/account/active-sessions';
+import HomePageRoom from './screens/home/room';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -34,7 +35,10 @@ ReactDOM.render(
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/invalid-version" element={<InvalidVersionPage />} />
                     <Route path="/" element={<App />}>
-                        <Route path="home" element={<HomePage />} />
+                        <Route path="home" element={<HomePage />}>
+                            <Route index element={<HomePageRoom />} />
+                            <Route path=":roomId" element={<HomePageRoom />} />
+                        </Route>
                         <Route path="settings" element={<SettingsPage />}>
                             <Route path="account" element={<SettingsPageAccount />}>
                                 <Route path="change-password" element={<ChangePasswordDialog />} />

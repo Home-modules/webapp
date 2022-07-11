@@ -1,0 +1,8 @@
+#home {
+    display: flex;
+    flex-direction: column;
+
+    .devices {
+        flex-grow: 1;
+    }
+}

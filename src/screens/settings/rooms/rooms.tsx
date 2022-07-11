@@ -195,6 +195,15 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
 
 export default connect(({rooms}: StoreState)=>({rooms}))(SettingsPageRooms);
 
+
+export const roomIcons: Record<HMApi.Room['icon'], IconDefinition>= {
+    'bathroom': faBath,
+    'bedroom': faBed,
+    'kitchen': faUtensils,
+    'living-room': faCouch,
+    'other': faDoorClosed
+}
+
 type RoomItemProps= {
     room: HMApi.Room;
     disableReorder?: boolean;
@@ -206,13 +215,6 @@ type RoomItemProps= {
 }
 
 function RoomItem({room, disableReorder=false, search, active, action, selected, onSelectChange}: RoomItemProps) {
-    const icons: Record<HMApi.Room['icon'], IconDefinition>= {
-        'bathroom': faBath,
-        'bedroom': faBed,
-        'kitchen': faUtensils,
-        'living-room': faCouch,
-        'other': faDoorClosed
-    }
     return (
         <div className={`item ${active?'active':''}`}>
             {(!disableReorder) && (
@@ -238,7 +240,7 @@ function RoomItem({room, disableReorder=false, search, active, action, selected,
                 }}
             >
                 <span className='name'>
-                    <FontAwesomeIcon icon={icons[room.icon]} fixedWidth />
+                    <FontAwesomeIcon icon={roomIcons[room.icon]} fixedWidth />
                     <label className="checkbox">
                         <input 
                             type="checkbox" 

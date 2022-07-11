@@ -1,0 +1,31 @@
+.devices {
+    &.disabled,
+    &.empty {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .error-icon {
+            height: 50px;
+            width: 50px;
+            color: var(--color-status-error);
+        }
+
+        .title {
+            margin: 15px 0 0;
+            font-size: 1.5em;
+        }
+
+        p {
+            white-space: pre;
+            text-align: start;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+    }
+}
