@@ -7,10 +7,18 @@
         align-items: center;
         justify-content: center;
 
-        .error-icon {
+        > svg {
             height: 50px;
             width: 50px;
-            color: var(--color-status-error);
+
+            &.error {
+                color: var(--color-status-error);
+            }
+
+            &.placeholder {
+                color: var(--color-foreground-subtext);
+                opacity: 0.5;
+            }
         }
 
         .title {
