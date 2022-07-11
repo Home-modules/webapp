@@ -43,10 +43,13 @@ header {
             overflow: hidden;
             transition: background-color 200ms, height 200ms, color 200ms, border-radius 200ms;
         }
-        &:hover:hover {
+        &:hover:hover,
+        &:focus-visible:focus-visible {
             padding-bottom: 15px;
+            outline: none;
         }
-        &:hover::after {
+        &:hover::after,
+        &:focus-visible::after {
             height: 20px;
             background-color: var(--color-navbar-hover-title);
             color: var(--color-foreground);
@@ -57,7 +60,8 @@ header {
         &.active::after {
             background-color: var(--color-navbar-active);
         }
-        &.active:hover::after {
+        &.active:hover::after,
+        &.active:focus-visible::after {
             color: var(--color-navbar-active-text);
         }
 
