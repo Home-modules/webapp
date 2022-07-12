@@ -356,10 +356,10 @@ input[type=submit] {
     border-radius: 7px;
     background-color: var(--color-button-primary-background);
     border: none;
-    color: var(--color-button-primary-text);
+    color: var(--color-button-primary-foreground);
     font-size: 19px;
     cursor: pointer;
-    transition: opacity 200ms;
+    transition: opacity 200ms, background-color 200ms, color 200ms;
 
     &:hover {
         background-color: var(--color-button-primary-hover-background);
