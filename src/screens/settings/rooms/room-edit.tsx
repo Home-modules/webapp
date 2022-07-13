@@ -189,7 +189,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                             // If the ID is empty, set it to a machine-friendly version of the name
                             setId(machineFriendlyName(e.target.value));
                         }
-                    }} autoFocus />
+                    }} autoFocus={isNew} />
                 </label>
                 <label className='text' data-error={idError} data-disabled={!isNew} title={(!isNew) ? 'Room ID cannot be changed after it is created': undefined}>
                     ID (permanent)
