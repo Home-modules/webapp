@@ -14,6 +14,7 @@ export type StoreState = {
     devices: Record<string, HMApi.Device[] | false | undefined>;
     deviceTypes: Record<string, HMApi.DeviceType[] | false | undefined>; // undefined means loading, false means error
     roomStates: HMApi.RoomState[] | false | undefined;
+    deviceStates: Record<string, HMApi.DeviceState[] | false | undefined>;
 };
 
 export type StoreAction = {
@@ -51,7 +52,11 @@ export type StoreAction = {
 } | {
     type: "SET_ROOM_STATES",
     states: StoreState['roomStates']
-}
+} | {
+    type: "SET_DEVICE_STATES",
+    roomId: string,
+    states: StoreState['deviceStates'][string]
+};
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     token: localStorage.getItem('home_modules_token') || null,
@@ -61,7 +66,8 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     rooms: null,
     devices: {},
     deviceTypes: {},
-    roomStates: undefined
+    roomStates: undefined,
+    deviceStates: {}
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -138,11 +144,19 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                     [action.roomController]: action.deviceTypes
                 }
             };
-            case 'SET_ROOM_STATES':
-                return {
-                    ...state,
-                    roomStates: action.states
-                };
+        case 'SET_ROOM_STATES':
+            return {
+                ...state,
+                roomStates: action.states
+            };
+        case 'SET_DEVICE_STATES':
+            return {
+                ...state,
+                deviceStates: {
+                    ...state.deviceStates,
+                    [action.roomId]: action.states
+                }
+            };
         default:
             return state;
     }
