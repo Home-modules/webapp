@@ -1,5 +1,6 @@
 import { createStore } from "redux";
 import { HMApi } from "./hub/api";
+import { ContextMenuProps } from "./ui/context-menu";
 import { DialogProps } from "./ui/dialogs";
 import { FlyoutProps } from "./ui/flyout";
 import { NotificationProps } from "./ui/notifications";
@@ -10,11 +11,13 @@ export type StoreState = {
     notifications: NotificationProps[];
     dialogs: DialogProps[];
     flyouts: FlyoutProps[];
+    contextMenu: ContextMenuProps | null;
     rooms: HMApi.Room[] | false | null; // null means loading, false means error
     devices: Record<string, HMApi.Device[] | false | undefined>;
     deviceTypes: Record<string, HMApi.DeviceType[] | false | undefined>; // undefined means loading, false means error
     roomStates: HMApi.RoomState[] | false | undefined;
     deviceStates: Record<string, HMApi.DeviceState[] | false | undefined>;
+    favoriteDeviceStates: HMApi.DeviceState[] | false | undefined;
 };
 
 export type StoreAction = {
@@ -39,6 +42,9 @@ export type StoreAction = {
     type: "REMOVE_FLYOUT",
     id: string
 } | {
+    type: "SET_CONTEXT_MENU",
+    contextMenu: ContextMenuProps | null
+} | {
     type: "SET_ROOMS",
     rooms: HMApi.Room[] | false | null
 } | {
@@ -56,6 +62,9 @@ export type StoreAction = {
     type: "SET_DEVICE_STATES",
     roomId: string,
     states: StoreState['deviceStates'][string]
+} | {
+    type: "SET_FAVORITE_DEVICE_STATES",
+    states: StoreState['favoriteDeviceStates']
 };
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
@@ -63,11 +72,13 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     notifications: [],
     dialogs: [],
     flyouts: [],
+    contextMenu: null,
     rooms: null,
     devices: {},
     deviceTypes: {},
     roomStates: undefined,
-    deviceStates: {}
+    deviceStates: {},
+    favoriteDeviceStates: undefined,
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -123,6 +134,11 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                 ...state,
                 flyouts: state.flyouts.filter(e=> e.id!==action.id)
             };
+        case 'SET_CONTEXT_MENU':
+            return {
+                ...state,
+                contextMenu: action.contextMenu
+            };
         case 'SET_ROOMS':
             return {
                 ...state,
@@ -156,6 +172,11 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                     ...state.deviceStates,
                     [action.roomId]: action.states
                 }
+            };
+        case 'SET_FAVORITE_DEVICE_STATES':
+            return {
+                ...state,
+                favoriteDeviceStates: action.states
             };
         default:
             return state;

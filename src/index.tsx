@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Notifications from './ui/notifications';
 import Dialogs from './ui/dialogs';
 import {Flyouts} from './ui/flyout';
+import { CurrentContextMenu } from './ui/context-menu';
 
 import HomePage from './screens/home/home';
 import SettingsPage from './screens/settings/settings';
@@ -66,6 +67,7 @@ ReactDOM.render(
                 </Routes>
                 <Dialogs />
                 <Flyouts />
+                <CurrentContextMenu />
             </BrowserRouter>
         </Provider>
     </React.StrictMode>,

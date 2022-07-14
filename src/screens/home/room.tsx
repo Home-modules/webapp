@@ -1,5 +1,5 @@
-import { faExclamationCircle, faPlug, fas, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { faChevronRight, faExclamationCircle, faPlug, fas, faTimesCircle, faStar as fasStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
 import { Link, Navigate, useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import './room.scss';
 import React from "react";
 import { HMApi } from "../../hub/api";
 import ScrollView from "../../ui/scrollbar";
+import { ContextMenuItem } from "../../ui/context-menu";
 
 const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(function Room({roomStates}: Pick<StoreState, 'roomStates'>) {
     const {roomId} = useParams();
@@ -55,18 +56,6 @@ const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(functio
 });
 export default HomePageRoom;
 
-function Favorites() {
-    return (
-        <div className="devices favorites empty">
-            <FontAwesomeIcon icon={faStar} className="placeholder" />
-            <h1>No favorite devices</h1>
-            <p>
-                Add devices to this list by {navigator.maxTouchPoints ? 'long pressing' : 'right clicking'} a device and selecting the <FontAwesomeIcon icon={faStar} /> button.
-            </p>
-        </div>
-    )
-}
-
 export async function refreshDeviceStates(roomId: string) {
     function setStates(states: HMApi.DeviceState[] | false | undefined) {
         store.dispatch({
@@ -79,6 +68,30 @@ export async function refreshDeviceStates(roomId: string) {
     return sendRequest({
         type: 'devices.getDeviceStates',
         roomId: roomId
+    }).then(res => {
+        if (res.type === 'ok') {
+            setStates(Object.values(res.data.states));
+            
+        } else {
+            handleError(res);
+            setStates(false);
+        }
+    }, err => {
+        handleError(err);
+        setStates(false);
+    })
+}
+
+export async function refreshFavoriteDeviceStates() {
+    function setStates(states: HMApi.DeviceState[] | false | undefined) {
+        store.dispatch({
+            type: 'SET_FAVORITE_DEVICE_STATES',
+            states
+        });
+    }
+
+    return sendRequest({
+        type: 'devices.getFavoriteDeviceStates',
     }).then(res => {
         if (res.type === 'ok') {
             setStates(Object.values(res.data.states));
@@ -111,7 +124,7 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
         thisRoomDeviceStates.length ? (
             <ScrollView className="devices">
                 {thisRoomDeviceStates.map(state => (
-                    <Device key={state.id} deviceState={state} roomId={roomState.id} />
+                    <Device key={state.id} deviceState={state} isInFavorites={false}/>
                 ))}
             </ScrollView>
         ) : (
@@ -141,12 +154,52 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
     )
 })
 
+const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({favoriteDeviceStates, roomStates}))(function Favorites({favoriteDeviceStates, roomStates}: Pick<StoreState, 'favoriteDeviceStates'|'roomStates'>) {
+    React.useEffect(()=> {refreshFavoriteDeviceStates()}, []);
+
+    return favoriteDeviceStates instanceof Array ? (
+        favoriteDeviceStates.length ? (
+            <ScrollView className="devices">
+                {favoriteDeviceStates.map(state => (
+                    <Device 
+                        key={state.id} 
+                        deviceState={state} 
+                        isInFavorites 
+                        roomName={roomStates? roomStates.find(r=> r.id === state.roomId)?.name : undefined} 
+                    />
+                ))}
+            </ScrollView>
+        ) : (
+            <div className="devices favorites empty">
+                <FontAwesomeIcon icon={farStar} className="placeholder" />
+                <h1>No favorite devices</h1>
+                <p>
+                    Add devices to this list by {navigator.maxTouchPoints ? 'long pressing' : 'right clicking'} a device and selecting the <FontAwesomeIcon icon={farStar} /> button.
+                </p>
+            </div>
+        )
+    ) : (
+        favoriteDeviceStates === undefined ? (
+            <div className="devices loading">
+                <div className="circle" />
+                Loading devices...
+            </div>
+        ) : (
+            <div className="devices error">
+                <FontAwesomeIcon icon={faTimesCircle} />
+                There was an error loading the devices
+            </div>
+        )
+    )
+});
+
 type DeviceProps = {
     deviceState: HMApi.DeviceState;
-    roomId: string;
+    isInFavorites: boolean;
+    roomName?: string;
 };
 
-function Device({deviceState, roomId}: DeviceProps) {
+function Device({deviceState, isInFavorites, roomName}: DeviceProps) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     return (
@@ -157,20 +210,59 @@ function Device({deviceState, roomId}: DeviceProps) {
                     setIntermittent(true);
                     sendRequest({
                         type: 'devices.toggleDeviceMainToggle',
-                        roomId,
+                        roomId: deviceState.roomId,
                         id: deviceState.id
                     }).catch(handleError).finally(async()=> {
-                        await refreshDeviceStates(roomId);
+                        if(isInFavorites) {
+                            await refreshFavoriteDeviceStates();
+                        } else {
+                            await refreshDeviceStates(deviceState.roomId);
+                        }
                         setIntermittent(false);
                     });
                 }
+            }}
+            onContextMenu={e=> {
+                e.preventDefault();
+                store.dispatch({
+                    type: 'SET_CONTEXT_MENU',
+                    contextMenu: {
+                        x: e.clientX,
+                        y: e.clientY,
+                        children: [
+                            <ContextMenuItem key={0}
+                                icon={deviceState.isFavorite ? fasStar : farStar}
+                                onClick={()=> {
+                                    sendRequest({
+                                        type: 'devices.toggleDeviceIsFavorite',
+                                        roomId: deviceState.roomId,
+                                        id: deviceState.id,
+                                        isFavorite: !deviceState.isFavorite
+                                    }).catch(handleError).finally(async()=> {
+                                        await refreshFavoriteDeviceStates();
+                                    });
+                                }}
+                            >
+                                {deviceState.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                            </ContextMenuItem>
+                        ]
+                    }
+                })
             }}
             disabled={intermittent}
         >
             <FontAwesomeIcon icon={fas['fa'+deviceState.type.icon]} />
             <div className="name">
-                {deviceState.name}
+                {isInFavorites ? 
+                    <>{roomName} <FontAwesomeIcon icon={faChevronRight} /> {deviceState.name}</> : 
+                    deviceState.name
+                }
             </div>
+            {deviceState.hasMainToggle && 
+                <div className="state">
+                    {deviceState.mainToggleState ? 'On' : 'Off'}
+                </div>
+            }
         </button>
     )
 }

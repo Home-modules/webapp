@@ -80,6 +80,15 @@
     --color-flyout-border: var(--color-input-border); // Flyout border color
     --color-flyout-shadow: var(--color-notification-shadow); // Flyout shadow color
 
+    // Context menu
+    --color-context-menu-background: var(--color-flyout-background); // Context menu background color
+    --color-context-menu-border: var(--color-navbar-background); // Context menu border color
+    --color-context-menu-shadow: var(--color-notification-shadow); // Context menu shadow color
+    --color-context-menu-item-foreground: var(--color-foreground); // Context menu item text color
+    --color-context-menu-item-hover-background: var(--color-context-menu-border); // Context menu item background color when hovered
+    --color-context-menu-item-attention-hover-background: var(--color-button-attention-secondary-hover-background); // Context menu item background color when hovered and attention is needed
+    --color-context-menu-item-attention-hover-foreground: var(--color-button-attention-secondary-hover-foreground); // Context menu item text color when hovered and attention is needed
+
     --color-tap-highlight: rgba(127, 127, 127, 0.1);
 
     // Horizontal select (like the icon selector in room edit page
@@ -187,6 +196,15 @@
         --color-flyout-background: var(--color-navbar-background); // Flyout background color
         --color-flyout-border: var(--color-input-border); // Flyout border color
         --color-flyout-shadow: var(--color-notification-shadow); // Flyout shadow color
+
+        // Context menu
+        --color-context-menu-background: var(--color-flyout-background); // Context menu background color
+        --color-context-menu-border: var(--color-navbar-border); // Context menu border color
+        --color-context-menu-shadow: var(--color-notification-shadow); // Context menu shadow color
+        --color-context-menu-item-foreground: var(--color-foreground); // Context menu item text color
+        --color-context-menu-item-hover-background: var(--color-context-menu-border); // Context menu item background color when hovered
+        --color-context-menu-item-attention-hover-background: var(--color-button-attention-secondary-hover-background); // Context menu item background color when hovered and attention is needed
+        --color-context-menu-item-attention-hover-foreground: var(--color-button-attention-secondary-hover-foreground); // Context menu item text color when hovered and attention is needed
 
         --color-tap-highlight: rgba(127, 127, 127, 0.1);
 
