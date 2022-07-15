@@ -10,6 +10,32 @@
     --color-status-success: #00b300; // Color for success fallback text
     --color-status-warning: #c88d00; // Color for warning fallback text
 
+    // Custom colors
+    --color-foreground-red: #ff1b02; // Red text color
+    --color-foreground-orange: #ff9e00; // Orange text color
+    --color-foreground-yellow: #eac100; // Yellow text color
+    --color-foreground-green: #00b300; // Green text color
+    --color-foreground-blue: #00b3ff; // Blue text color
+    --color-foreground-purple: #b300ff; // Purple text color
+    --color-foreground-pink: #ff00ff; // Pink text color
+    --color-foreground-brown: #8b4513; // Brown text color
+    --color-background-red: #ff1b02; // Red background color
+    --color-background-red-hover: #e71700; // Red background color when hovering
+    --color-background-orange: #e79200; // Orange background color
+    --color-background-orange-hover: #d28500; // Orange background color when hovering
+    --color-background-yellow: #ffd200; // Yellow background color
+    --color-background-yellow-hover: #e6b000; // Yellow background color when hovering
+    --color-background-green: #00b300; // Green background color
+    --color-background-green-hover: #00a300; // Green background color when hovering
+    --color-background-blue: #00b3ff; // Blue background color
+    --color-background-blue-hover: #009fe3; // Blue background color when hovering
+    --color-background-purple: #b300ff; // Purple background color
+    --color-background-purple-hover: #9c00df; // Purple background color when hovering
+    --color-background-pink: #ff00ff; // Pink background color
+    --color-background-pink-hover: #db00db; // Pink background color when hovering
+    --color-background-brown: #c76a28; // Brown background color
+    --color-background-brown-hover: #a35923; // Brown background color when hovering
+
     // Login screen
     --color-login-background: #f5f5f5; // Login background color (around the box)
     --color-login-card-background: #fff; // Login background color (in the box)
@@ -126,6 +152,32 @@
         --color-status-error: #ff1b02; // Color for error fallback text
         --color-status-success: #00b300; // Color for success fallback text
         --color-status-warning: var(--color-notification-border-warning); // Color for warning fallback text
+
+        // Custom colors
+        --color-foreground-red: #ff1b02; // Red text color
+        --color-foreground-orange: #ff9e00; // Orange text color
+        --color-foreground-yellow: #eac100; // Yellow text color
+        --color-foreground-green: #00cf00; // Green text color
+        --color-foreground-blue: #00b3ff; // Blue text color
+        --color-foreground-purple: #c53eff; // Purple text color
+        --color-foreground-pink: #ff3eb2; // Pink text color
+        --color-foreground-brown: #d85a00; // Brown text color
+        --color-background-red: #dc1600; // Red background color
+        --color-background-red-hover: #ff1b02; // Red background color when hovered
+        --color-background-orange: #ca5900; // Orange background color
+        --color-background-orange-hover: #e36200; // Orange background color when hovered
+        --color-background-yellow: #be9c00; // Yellow background color
+        --color-background-yellow-hover: #e0a300; // Yellow background color when hovered
+        --color-background-green: #00b300; // Green background color
+        --color-background-green-hover: #00ca00; // Green background color when hovered
+        --color-background-blue: #0094d3; // Blue background color
+        --color-background-blue-hover: #00abf5; // Blue background color when hovered
+        --color-background-purple: #b300ff; // Purple background color
+        --color-background-purple-hover: #c336ff; // Purple background color when hovered
+        --color-background-pink: #ff00b6; // Pink background color
+        --color-background-pink-hover: #ff43ca; // Pink background color when hovered
+        --color-background-brown: #c76a28; // Brown background color
+        --color-background-brown-hover: #f0873b; // Brown background color when hovered
 
         // Login screen
         --color-login-background: #151515; // Login background color (around the box)

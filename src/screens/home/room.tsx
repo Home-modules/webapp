@@ -124,7 +124,7 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
         thisRoomDeviceStates.length ? (
             <ScrollView className="devices">
                 {thisRoomDeviceStates.map(state => (
-                    <Device key={state.id} deviceState={state} isInFavorites={false}/>
+                    <Device key={state.id} state={state} isInFavorites={false}/>
                 ))}
             </ScrollView>
         ) : (
@@ -163,7 +163,7 @@ const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({fa
                 {favoriteDeviceStates.map(state => (
                     <Device 
                         key={state.id} 
-                        deviceState={state} 
+                        state={state} 
                         isInFavorites 
                         roomName={roomStates? roomStates.find(r=> r.id === state.roomId)?.name : undefined} 
                     />
@@ -194,29 +194,34 @@ const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({fa
 });
 
 type DeviceProps = {
-    deviceState: HMApi.DeviceState;
+    state: HMApi.DeviceState;
     isInFavorites: boolean;
     roomName?: string;
 };
 
-function Device({deviceState, isInFavorites, roomName}: DeviceProps) {
+function Device({state, isInFavorites, roomName}: DeviceProps) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     return (
         <button 
-            className={`device ${deviceState.mainToggleState?'active':''} ${intermittent?'intermittent':''}`} 
+            className={`device ${state.mainToggleState?'active':''} ${intermittent?'intermittent':''} ${state.clickable?'clickable':''} ${state.activeColor||''}`} 
             onClick={()=> {
-                if(deviceState.hasMainToggle) {
+                if(!state.clickable) return;
+                if(state.hasMainToggle) {
                     setIntermittent(true);
                     sendRequest({
                         type: 'devices.toggleDeviceMainToggle',
-                        roomId: deviceState.roomId,
-                        id: deviceState.id
-                    }).catch(handleError).finally(async()=> {
+                        roomId: state.roomId,
+                        id: state.id
+                    }).catch((err: {type: "error", error: HMApi.RequestError<HMApi.RequestToggleDeviceMainToggle>})=> {
+                        if(err.error.message === 'ROOM_DISABLED') {
+                            refreshRoomStates(); // refresh room states to show the room is disabled
+                        }
+                    }).finally(async()=> {
                         if(isInFavorites) {
                             await refreshFavoriteDeviceStates();
                         } else {
-                            await refreshDeviceStates(deviceState.roomId);
+                            await refreshDeviceStates(state.roomId);
                         }
                         setIntermittent(false);
                     });
@@ -231,19 +236,19 @@ function Device({deviceState, isInFavorites, roomName}: DeviceProps) {
                         y: e.clientY,
                         children: [
                             <ContextMenuItem key={0}
-                                icon={deviceState.isFavorite ? fasStar : farStar}
+                                icon={state.isFavorite ? fasStar : farStar}
                                 onClick={()=> {
                                     sendRequest({
                                         type: 'devices.toggleDeviceIsFavorite',
-                                        roomId: deviceState.roomId,
-                                        id: deviceState.id,
-                                        isFavorite: !deviceState.isFavorite
+                                        roomId: state.roomId,
+                                        id: state.id,
+                                        isFavorite: !state.isFavorite
                                     }).catch(handleError).finally(async()=> {
                                         await refreshFavoriteDeviceStates();
                                     });
                                 }}
                             >
-                                {deviceState.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                                {state.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                             </ContextMenuItem>
                         ]
                     }
@@ -251,18 +256,19 @@ function Device({deviceState, isInFavorites, roomName}: DeviceProps) {
             }}
             disabled={intermittent}
         >
-            <FontAwesomeIcon icon={fas['fa'+deviceState.type.icon]} />
+            {state.iconText ? 
+                <div className={`icon-text ${state.iconColor||''}`}>{state.iconText}</div> :
+                <FontAwesomeIcon icon={fas['fa'+(state.icon || state.type.icon)]} className={state.iconColor||''} />}
+            
             <div className="name">
                 {isInFavorites ? 
-                    <>{roomName} <FontAwesomeIcon icon={faChevronRight} /> {deviceState.name}</> : 
-                    deviceState.name
+                    <>{roomName} <FontAwesomeIcon icon={faChevronRight} /> {state.name}</> : 
+                    state.name
                 }
             </div>
-            {deviceState.hasMainToggle && 
-                <div className="state">
-                    {deviceState.mainToggleState ? 'On' : 'Off'}
-                </div>
-            }
+            <div className="state">
+                {state.statusText}
+            </div>
         </button>
     )
 }

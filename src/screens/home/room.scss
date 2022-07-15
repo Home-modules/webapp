@@ -91,8 +91,12 @@
         font-family: var(--main-font-stack);
         border-radius: 10px;
         text-align: center;
-        cursor: pointer;
         transition: background-color 200ms, color 200ms;
+        cursor: default;
+        
+        &.clickable {
+            cursor: pointer;
+        }
     
         &:not(.active):disabled {
             color: var(--color-button-secondary-disabled-foreground);
@@ -107,7 +111,7 @@
             background-color: var(--color-button-primary-background);
         }
 
-        &:hover {
+        &.clickable:hover {
             background-color: var(--color-button-secondary-hover-background);
             color: var(--color-button-secondary-hover-foreground);
         }
@@ -116,10 +120,28 @@
             background-color: var(--color-button-primary-background);
             color: var(--color-button-primary-foreground);
     
-            &:hover {
+            &.clickable:hover {
                 background-color: var(--color-button-primary-hover-background);
                 color: var(--color-button-primary-hover-foreground);
+
+                &.red { background-color: var(--color-background-red-hover); }
+                &.orange { background-color: var(--color-background-orange-hover); }
+                &.yellow { background-color: var(--color-background-yellow-hover); }
+                &.green { background-color: var(--color-background-green-hover); }
+                &.blue { background-color: var(--color-background-blue-hover); }
+                &.purple { background-color: var(--color-background-purple-hover); }
+                &.pink { background-color: var(--color-background-pink-hover); }
+                &.brown { background-color: var(--color-background-brown-hover); }
             }
+
+            &.red { background-color: var(--color-background-red); }
+            &.orange { background-color: var(--color-background-orange); }
+            &.yellow { background-color: var(--color-background-yellow); }
+            &.green { background-color: var(--color-background-green); }
+            &.blue { background-color: var(--color-background-blue); }
+            &.purple { background-color: var(--color-background-purple); }
+            &.pink { background-color: var(--color-background-pink); }
+            &.brown { background-color: var(--color-background-brown); }
         }
 
         &.intermittent {
@@ -150,6 +172,23 @@
             width: 40px;
         }
 
+        .icon-text { // Text which is as big as the icon
+            font-size: 40px;
+            line-height: 40px;
+        }
+
+        &:not(.active) > svg,
+        &:not(.active) .icon-text {
+            &.red { color: var(--color-foreground-red); }
+            &.orange { color: var(--color-foreground-orange); }
+            &.yellow { color: var(--color-foreground-yellow); }
+            &.green { color: var(--color-foreground-green); }
+            &.blue { color: var(--color-foreground-blue); }
+            &.purple { color: var(--color-foreground-purple); }
+            &.pink { color: var(--color-foreground-pink); }
+            &.brown { color: var(--color-foreground-brown); }
+        }
+
         .name {
             margin-top: 10px;
             font-size: 1.2em;
@@ -164,7 +203,6 @@
         .state {
             margin-top: 8px;
             font-size: 0.9em;
-            text-transform: uppercase;
         }
     }
 }
