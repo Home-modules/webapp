@@ -12,6 +12,7 @@ import React from "react";
 import { HMApi } from "../../hub/api";
 import ScrollView from "../../ui/scrollbar";
 import { ContextMenuItem } from "../../ui/context-menu";
+import promiseTimeout from "../../utils/promise-timeout";
 
 const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(function Room({roomStates}: Pick<StoreState, 'roomStates'>) {
     const {roomId} = useParams();
@@ -208,8 +209,7 @@ function Device({state, isInFavorites, roomName}: DeviceProps) {
             onClick={()=> {
                 if(!state.clickable) return;
                 if(state.hasMainToggle) {
-                    setIntermittent(true);
-                    sendRequest({
+                    promiseTimeout(sendRequest({
                         type: 'devices.toggleDeviceMainToggle',
                         roomId: state.roomId,
                         id: state.id
@@ -224,7 +224,7 @@ function Device({state, isInFavorites, roomName}: DeviceProps) {
                             await refreshDeviceStates(state.roomId);
                         }
                         setIntermittent(false);
-                    });
+                    }), 100, ()=> setIntermittent(true));
                 }
             }}
             onContextMenu={e=> {

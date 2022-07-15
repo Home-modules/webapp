@@ -91,7 +91,7 @@
         font-family: var(--main-font-stack);
         border-radius: 10px;
         text-align: center;
-        transition: background-color 200ms, color 200ms;
+        transition: background-color 200ms, color 200ms, opacity 200ms;
         cursor: default;
         
         &.clickable {
@@ -170,11 +170,13 @@
         > svg {
             height: 40px;
             width: 40px;
+            transition: color 200ms;
         }
 
         .icon-text { // Text which is as big as the icon
             font-size: 40px;
             line-height: 40px;
+            transition: color 200ms;
         }
 
         &:not(.active) > svg,
