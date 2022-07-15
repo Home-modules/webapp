@@ -22,7 +22,7 @@ export function ContextMenu({x, y, children}: ContextMenuProps) {
                     type: "SET_CONTEXT_MENU",
                     contextMenu: null
                 });
-            }, 300);
+            }, 500);
         }}>
             <div className="context-menu" style={{ left: x, top: y }}>
                 <div className="content">
