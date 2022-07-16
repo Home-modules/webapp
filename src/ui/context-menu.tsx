@@ -2,6 +2,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import { connect } from "react-redux"
+import { Link } from "react-router-dom"
 import { store, StoreState } from "../store"
 import './context-menu.scss'
 
@@ -37,10 +38,25 @@ export type ContextMenuItemProps = {
     children: string,
     icon: IconDefinition,
     onClick: () => void,
+    href?: undefined,
+    attention?: boolean,
+} | {
+    children: string,
+    icon: IconDefinition,
+    onClick?: undefined,
+    href: string,
     attention?: boolean,
 }
 
-export function ContextMenuItem({children, icon, onClick, attention}: ContextMenuItemProps) {
+export function ContextMenuItem({children, icon, onClick, href, attention}: ContextMenuItemProps) {
+    if(href) {
+        return (
+            <Link to={href} className={`context-menu-item ${attention?'attention':''}`}>
+                <FontAwesomeIcon icon={icon} />
+                <span>{children}</span>
+            </Link>
+        )
+    }
     return (
         <button className={`context-menu-item ${attention?'attention':''}`} onClick={onClick}>
             <FontAwesomeIcon icon={icon} />

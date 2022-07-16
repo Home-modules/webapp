@@ -1,4 +1,4 @@
-import { faChevronRight, fas, faStar as fasStar } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faPen, faRotateRight, fas, faStar as fasStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { handleError, sendRequest } from "../../hub/request";
@@ -18,6 +18,10 @@ type DeviceProps = {
 
 export function Device({ state, isInFavorites, roomName }: DeviceProps) {
     const [intermittent, setIntermittent] = React.useState(false);
+
+    if(state.disabled) {
+        return <DisabledDevice state={state} roomName={roomName} isInFavorites={isInFavorites} />;
+    }
 
     return (
         <button
@@ -84,6 +88,62 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
             </div>
             <div className="state">
                 {state.statusText}
+            </div>
+        </button>
+    );
+}
+
+function DisabledDevice({ state, isInFavorites, roomName }: DeviceProps) {
+    function showContextMenu(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+        store.dispatch({
+            type: 'SET_CONTEXT_MENU',
+            contextMenu: {
+                x: e.clientX,
+                y: e.clientY,
+                children: [
+                    <ContextMenuItem key={0}
+                        icon={faRotateRight}
+                        onClick={async() => {
+                            await sendRequest({
+                                type: 'devices.restartDevice',
+                                roomId: state.roomId,
+                                id: state.id
+                            }).catch(handleError);
+                            if(isInFavorites) {
+                                await refreshFavoriteDeviceStates();
+                            } else {
+                                await refreshDeviceStates(state.roomId);
+                            }
+                        }}
+                    >
+                        Restart device
+                    </ContextMenuItem>,
+                    <ContextMenuItem key={1}
+                        icon={faPen}
+                        href={`/settings/rooms/${state.roomId}/devices/edit/${state.id}`}
+                    >
+                        Edit device
+                    </ContextMenuItem>
+                ]
+            }
+        });
+    }
+
+    return (
+        <button
+            className="device clickable disabled" // Active, clickable and color are ignored
+            onContextMenu={showContextMenu}
+            onClick={showContextMenu}
+        >
+            <FontAwesomeIcon icon={fas['fa' + state.type.icon] /* Current icon and icon text are ignored */} />
+            <div className="name">
+                {isInFavorites ?
+                    <>{roomName} <FontAwesomeIcon icon={faChevronRight} /> {state.name}</> :
+                    state.name}
+            </div>
+            <div className="state">
+                ERROR
             </div>
         </button>
     );

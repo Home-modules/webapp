@@ -29,11 +29,14 @@
             transition: transform 200ms;
             
             .context-menu-item {
+                display: block;
                 padding: 10px;
                 border: none;
                 background-color: var(--color-context-menu-background);
                 color: var(--color-foreground);
                 font-family: var(--main-font-stack);
+                font-size: inherit;
+                text-decoration: none;
                 cursor: pointer;
                 transition: background-color 200ms, color 200ms;
 

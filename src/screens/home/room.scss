@@ -144,6 +144,10 @@
             &.brown { background-color: var(--color-background-brown); }
         }
 
+        &.disabled {
+            color: var(--color-status-error) !important;
+        }
+
         &.intermittent {
             overflow: hidden;
             position: relative;
