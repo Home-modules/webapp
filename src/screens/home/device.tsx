@@ -65,7 +65,11 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                                         id: state.id,
                                         isFavorite: !state.isFavorite
                                     }).catch(handleError).finally(async () => {
-                                        await refreshFavoriteDeviceStates();
+                                        if (isInFavorites) {
+                                            await refreshFavoriteDeviceStates();
+                                        } else {
+                                            await refreshDeviceStates(state.roomId);
+                                        }
                                     });
                                 }}
                             >
