@@ -64,7 +64,15 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                                         roomId: state.roomId,
                                         id: state.id,
                                         isFavorite: !state.isFavorite
-                                    }).catch(handleError).finally(async () => {
+                                    }).then(()=> {
+                                        store.dispatch({
+                                            type: 'ADD_NOTIFICATION',
+                                            notification: {
+                                                type: 'success',
+                                                message: state.isFavorite ? 'Removed from favorites' : 'Added to favorites'
+                                            }
+                                        });
+                                    }, handleError).finally(async () => {
                                         if (isInFavorites) {
                                             await refreshFavoriteDeviceStates();
                                         } else {
