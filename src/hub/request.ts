@@ -5,10 +5,10 @@ import platform from "platform";
 import { delay } from '../utils/promise-timeout';
 
 
-export async function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.Response<R>> {
+export async function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.ResponseOrError<R>> {
     console.log('Request: ', req);
     try {
-        const e = await axios.post<HMApi.Response<R>>(`http://${window.location.hostname}:703/${store.getState().token}`, req, {
+        const e = await axios.post<HMApi.ResponseOrError<R>>(`http://${window.location.hostname}:703/${store.getState().token}`, req, {
             headers: {
                 'Content-Type': 'text/plain' // Avoid pre-flight request
             }
@@ -17,7 +17,7 @@ export async function sendRequest<R extends HMApi.Request>(req: R): Promise<HMAp
         return e.data;
     } catch(e: any) {
         if(e.response) {
-            const err= e.response.data as HMApi.Response<R>;
+            const err= e.response.data as HMApi.ResponseOrError<R>;
             console.error('Error: ', err);
             if(err.type==='error' && err.error.message==='TOKEN_INVALID') {
                 store.dispatch({
@@ -44,7 +44,7 @@ export async function sendRequest<R extends HMApi.Request>(req: R): Promise<HMAp
     }
 }
 
-export function loginToHub(username: string, password: string): Promise<HMApi.Response<HMApi.RequestLogin>> {
+export function loginToHub(username: string, password: string): Promise<HMApi.ResponseOrError<HMApi.Request.Login>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
             type: "account.login",
@@ -67,7 +67,7 @@ export function loginToHub(username: string, password: string): Promise<HMApi.Re
     })
 }
 
-export function logoutFromHub(): Promise<HMApi.Response<HMApi.RequestLogout>> {
+export function logoutFromHub(): Promise<HMApi.ResponseOrError<HMApi.Request.Logout>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
             type: "account.logout"
@@ -89,10 +89,10 @@ export function logoutFromHub(): Promise<HMApi.Response<HMApi.RequestLogout>> {
 
 type HMApiResponseWithNetworkError<R extends HMApi.Request>= {
     type: "ok",
-    data: HMApi.ResponseData<R>
+    data: HMApi.Response<R>
 } | {
     type: "error",
-    error: HMApi.RequestError<R> | {
+    error: HMApi.Error<R> | {
         message: "NETWORK_ERROR",
         data: any
     }

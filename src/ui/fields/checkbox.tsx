@@ -2,7 +2,7 @@ import React from 'react';
 import { HMApi } from '../../hub/api';
 import { FieldProps } from './fields';
 
-export function FieldTypeCheckBox({ field, value, setValue, error, setError }: FieldProps<boolean, HMApi.SettingsFieldCheckbox>) {
+export function FieldTypeCheckBox({ field, value, setValue, error, setError }: FieldProps<boolean, HMApi.T.SettingsField.TypeCheckbox>) {
     const description = (value === true && field.description_on_true) || field.description;
     return (
         <>

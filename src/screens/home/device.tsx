@@ -11,7 +11,7 @@ import promiseTimeout from "../../utils/promise-timeout";
 import { refreshFavoriteDeviceStates, refreshDeviceStates } from "./room";
 
 type DeviceProps = {
-    state: HMApi.DeviceState;
+    state: HMApi.T.DeviceState;
     isInFavorites: boolean;
     roomName?: string;
 };
@@ -34,7 +34,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                         type: 'devices.toggleDeviceMainToggle',
                         roomId: state.roomId,
                         id: state.id
-                    }).catch((err: { type: "error"; error: HMApi.RequestError<HMApi.RequestToggleDeviceMainToggle>; }) => {
+                    }).catch((err: { type: "error"; error: HMApi.Error<HMApi.Request.ToggleDeviceMainToggle>; }) => {
                         if (err.error.message === 'ROOM_DISABLED') {
                             refreshRoomStates(); // refresh room states to show the room is disabled
                         }

@@ -12,12 +12,12 @@ export type StoreState = {
     dialogs: DialogProps[];
     flyouts: FlyoutProps[];
     contextMenu: ContextMenuProps | null;
-    rooms: HMApi.Room[] | false | null; // null means loading, false means error
-    devices: Record<string, HMApi.Device[] | false | undefined>;
-    deviceTypes: Record<string, HMApi.DeviceType[] | false | undefined>; // undefined means loading, false means error
-    roomStates: HMApi.RoomState[] | false | undefined;
-    deviceStates: Record<string, HMApi.DeviceState[] | false | undefined>;
-    favoriteDeviceStates: HMApi.DeviceState[] | false | undefined;
+    rooms: HMApi.T.Room[] | false | null; // null means loading, false means error
+    devices: Record<string, HMApi.T.Device[] | false | undefined>;
+    deviceTypes: Record<string, HMApi.T.DeviceType[] | false | undefined>; // undefined means loading, false means error
+    roomStates: HMApi.T.RoomState[] | false | undefined;
+    deviceStates: Record<string, HMApi.T.DeviceState[] | false | undefined>;
+    favoriteDeviceStates: HMApi.T.DeviceState[] | false | undefined;
 };
 
 export type StoreAction = {
@@ -46,15 +46,15 @@ export type StoreAction = {
     contextMenu: ContextMenuProps | null
 } | {
     type: "SET_ROOMS",
-    rooms: HMApi.Room[] | false | null
+    rooms: HMApi.T.Room[] | false | null
 } | {
     type: "SET_DEVICES",
     roomId: string,
-    devices: HMApi.Device[] | false | undefined
+    devices: HMApi.T.Device[] | false | undefined
 } | {
     type: "SET_DEVICE_TYPES",
     roomController: string,
-    deviceTypes: HMApi.DeviceType[] | false | undefined
+    deviceTypes: HMApi.T.DeviceType[] | false | undefined
 } | {
     type: "SET_ROOM_STATES",
     states: StoreState['roomStates']

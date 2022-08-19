@@ -62,9 +62,9 @@ const SettingsPageRoomsDevicesEditDevice = connect(({ deviceTypes, rooms, device
 export default SettingsPageRoomsDevicesEditDevice;
 
 type EditDeviceProps = {
-    deviceType: HMApi.DeviceType;
-    room: HMApi.Room;
-    device?: HMApi.Device;
+    deviceType: HMApi.T.DeviceType;
+    room: HMApi.T.Room;
+    device?: HMApi.T.Device;
 }
 
 function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
@@ -94,7 +94,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
     const [fieldErrors, setFieldErrors] = React.useState<Record<string, string|undefined>>({});
 
     function onSave() {
-        device = device as HMApi.Device;
+        device = device as HMApi.T.Device;
         const [hasError, errors] = getFieldsErrors(getFlatFields(deviceType.settings), fieldValues);
         setFieldErrors({ });
         if(hasError) {
@@ -104,7 +104,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
             return Promise.reject();
         }
         
-        const nDevice: HMApi.Device = {
+        const nDevice: HMApi.T.Device = {
             id,
             name,
             type: deviceType.id,
@@ -122,7 +122,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
             else {
                 throw res;
             }
-        }).catch((err: HMApi.Response<HMApi.RequestEditDevice|HMApi.RequestAddDevice>)=> {
+        }).catch((err: HMApi.ResponseOrError<HMApi.Request.EditDevice|HMApi.Request.AddDevice>)=> {
             if(err.type==='error') {
                 if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='device.name') {
                     setNameError(name.length ? 'Name is too long' : 'Name is empty');

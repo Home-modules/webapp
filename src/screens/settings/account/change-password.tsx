@@ -57,7 +57,7 @@ export default function ChangePasswordDialog() {
                     message: "Password changed successfully"
                 }
             });
-        }, (err: HMApi.Response<HMApi.RequestChangePassword>)=> {
+        }, (err: HMApi.ResponseOrError<HMApi.Request.ChangePassword>)=> {
             if(err.type==='error') {
                 if(err.error.message==='LOGIN_PASSWORD_INCORRECT') {
                     setCurrentPasswordError("Password incorrect");

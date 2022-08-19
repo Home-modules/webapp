@@ -8,7 +8,7 @@ import { addConfirmationFlyout } from "../../../ui/flyout";
 import './active-sessions.scss';
 
 export default function ActiveSessions() {
-    const [sessions, setSessions] = React.useState<HMApi.Session[]>([]);
+    const [sessions, setSessions] = React.useState<HMApi.T.Session[]>([]);
 
     React.useEffect(()=>{
         sendRequest({
@@ -80,7 +80,7 @@ export default function ActiveSessions() {
     )
 }
 
-function Session({session, onTerminated}: {session: HMApi.Session, onTerminated: ()=>void}) {
+function Session({session, onTerminated}: {session: HMApi.T.Session, onTerminated: ()=>void}) {
     const [expanded, setExpanded] = React.useState(false);
     const loginTime = new Date(session.loginTime);
     const lastUsedTime = new Date(session.lastUsedTime);

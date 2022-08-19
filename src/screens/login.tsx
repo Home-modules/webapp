@@ -40,7 +40,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                 });
             }
         }
-    }, (e: HMApi.Response<HMApi.RequestLogin>)=> {
+    }, (e: HMApi.ResponseOrError<HMApi.Request.Login>)=> {
         if(e.type==='error') {
             if(e.error.message==='LOGIN_USER_NOT_FOUND') {
                 setUsernameError("Username not found");

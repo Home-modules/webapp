@@ -6,12 +6,12 @@ import DropDownSelect, { DropDownSelectOption } from './dropdown';
 
 export type LazyDropDownSelectProps = {
     className?: string;
-    lazyOptions: HMApi.SettingsFieldSelectLazyOptions;
+    lazyOptions: HMApi.T.SettingsField.SelectLazyOptions;
     callback():
-        (HMApi.SettingsFieldSelectOption | HMApi.SettingsFieldSelectOptionGroup)[] |
+        (HMApi.T.SettingsField.SelectOption | HMApi.T.SettingsField.SelectOptionGroup)[] |
         { error: true } |
         Promise<
-            (HMApi.SettingsFieldSelectOption | HMApi.SettingsFieldSelectOptionGroup)[] |
+            (HMApi.T.SettingsField.SelectOption | HMApi.T.SettingsField.SelectOptionGroup)[] |
             { error: true; }
         >;
     value: string | DropDownSelectOption<string>;
@@ -25,7 +25,7 @@ export type LazyDropDownSelectProps = {
 export function LazyDropDownSelect({ className, callback, lazyOptions, onChange, value, allowCustomValue, showSearchBar, error, onOpen }: LazyDropDownSelectProps) {
     type OptionsState =
         0 |
-        (HMApi.SettingsFieldSelectOption | HMApi.SettingsFieldSelectOptionGroup)[] |
+        (HMApi.T.SettingsField.SelectOption | HMApi.T.SettingsField.SelectOptionGroup)[] |
         { error: true; params?: Record<string, string>; } |
         { error: false; params?: undefined; }; // Other errors
     const [options, setOptions] = React.useState<OptionsState>(0);

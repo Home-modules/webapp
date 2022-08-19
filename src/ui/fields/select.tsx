@@ -5,7 +5,7 @@ import DropDownSelect from '../dropdown/dropdown';
 import { LazyDropDownSelect } from "../dropdown/lazy";
 import { FieldProps } from './fields';
 
-export function FieldTypeSelect({ field, value, setValue, error, setError, context }: FieldProps<string, HMApi.SettingsFieldSelect>) {
+export function FieldTypeSelect({ field, value, setValue, error, setError, context }: FieldProps<string, HMApi.T.SettingsField.TypeSelect>) {
     if ('isLazy' in field.options) {
         return (
             <>

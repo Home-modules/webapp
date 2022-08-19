@@ -17,19 +17,19 @@ import ScrollView from '../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../ui/flyout';
 
 export type SettingsPageRoomsEditRoomProps = {
-    room: HMApi.Room & {new?: boolean};
+    room: HMApi.T.Room & {new?: boolean};
     onClose: () => void;
     hidden?: boolean;
 }
 
-export const icons: Record<HMApi.Room['icon'], IconName> = {
+export const icons: Record<HMApi.T.Room['icon'], IconName> = {
     'living-room': 'couch',
     'kitchen': 'utensils',
     'bedroom': 'bed',
     'bathroom': 'bath',
     'other': 'door-closed'
 }
-const iconNames = Object.fromEntries(Object.entries(icons).map(([k,v])=>[v,k])) as Record<IconName, HMApi.Room['icon']>;
+const iconNames = Object.fromEntries(Object.entries(icons).map(([k,v])=>[v,k])) as Record<IconName, HMApi.T.Room['icon']>;
 
 function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const isNew = !!useMatch('/settings/rooms/new');
@@ -60,9 +60,9 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const [icon, setIcon] = React.useState(icons[room.icon]);
 
     const [controller, setController] = React.useState(room.controllerType);
-    const [controllerTypes, setControllerTypes] = React.useState<HMApi.RoomControllerType[]|0|-1>(0); // 0= loading -1= error
+    const [controllerTypes, setControllerTypes] = React.useState<HMApi.T.RoomControllerType[]|0|-1>(0); // 0= loading -1= error
 
-    const [fields, setFields] = React.useState<HMApi.SettingsField[]>([]);
+    const [fields, setFields] = React.useState<HMApi.T.SettingsField[]>([]);
     const [fieldErrors, setFieldErrors] = React.useState<Record<string, string|undefined>>({});
 
     function onSave() {
@@ -75,7 +75,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             return Promise.reject();
         }
         
-        const nRoom: HMApi.Room = {
+        const nRoom: HMApi.T.Room = {
             id,
             name,
             icon: iconNames[icon],
@@ -92,7 +92,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             else {
                 throw res;
             }
-        }).catch((err: HMApi.Response<HMApi.RequestEditRoom|HMApi.RequestAddRoom>) => {
+        }).catch((err: HMApi.ResponseOrError<HMApi.Request.EditRoom|HMApi.Request.AddRoom>) => {
             if(err.type==='error') {
                 if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.name') {
                     setNameError(name.length ? 'Name is too long' : 'Name is empty');
@@ -117,7 +117,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     function onChangeControllerType(val?: string) { // val is not set when called by useEffect, and the existing settings must be kept in that case.
         if(!(controllerTypes instanceof Array)) return;
         const defaultRCType = room ? room.controllerType.type : 'arduino:serial';
-        const controller: HMApi.RoomController = {
+        const controller: HMApi.T.RoomController = {
             type: val || defaultRCType,
             settings: ((!val) && room) ? room.controllerType.settings : { }
         }

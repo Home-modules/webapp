@@ -2,7 +2,7 @@ import React from 'react';
 import { HMApi } from '../../hub/api';
 import { FieldProps } from './fields';
 
-export function FieldTypeNumber({ field, value, setValue, error, setError }: FieldProps<number, HMApi.SettingsFieldNumber>) {
+export function FieldTypeNumber({ field, value, setValue, error, setError }: FieldProps<number, HMApi.T.SettingsField.TypeNumber>) {
     const pfRef = React.useRef<HTMLSpanElement>(null);
     const [pfWidth, setPfWidth] = React.useState<undefined | number>(undefined);
     React.useEffect(() => {

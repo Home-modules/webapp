@@ -2,7 +2,7 @@ import React from 'react';
 import { HMApi } from '../../hub/api';
 import { FieldProps } from './fields';
 
-export function FieldTypeRadio({ field, value, setValue, error, setError }: FieldProps<string, HMApi.SettingsFieldRadio>) {
+export function FieldTypeRadio({ field, value, setValue, error, setError }: FieldProps<string, HMApi.T.SettingsField.TypeRadio>) {
     const [name] = React.useState(field.id);
     if (field.direction === 'h') {
         return (

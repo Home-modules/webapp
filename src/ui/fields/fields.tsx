@@ -8,7 +8,7 @@ import { FieldTypeText } from './text';
 import { FieldTypeSelect } from './select';
 
 export type FieldsProps = {
-    fields: HMApi.SettingsField[],
+    fields: HMApi.T.SettingsField[],
     fieldValues: Record<string, string | number | boolean>,
     setFieldValues: (values: Record<string, string | number | boolean>) => void,
     fieldErrors: Record<string, string | undefined>,
@@ -56,7 +56,7 @@ export default function Fields({fields, fieldValues, setFieldValues, fieldErrors
 
 export type FieldProps<
     T extends string | number | boolean = string | number | boolean,
-    F extends HMApi.SettingsField = HMApi.SettingsField
+    F extends HMApi.T.SettingsField = HMApi.T.SettingsField
 > = {
     field: F,
     value: T,
@@ -92,7 +92,7 @@ function Field({field, value, setValue, error, setError, context}: FieldProps) {
     return null;
 }
 
-export function getSettingsFieldDefaultValue(field: HMApi.SettingsFieldWithoutContainer) {
+export function getSettingsFieldDefaultValue(field: HMApi.T.SettingsField<false>) {
     if(field.default !== undefined) {
         return field.default;
     }
@@ -112,7 +112,7 @@ export function getSettingsFieldDefaultValue(field: HMApi.SettingsFieldWithoutCo
     }
 }
 
-export function validateField(field: HMApi.SettingsFieldWithoutContainer, value: string|number|boolean) {
+export function validateField(field: HMApi.T.SettingsField<false>, value: string|number|boolean) {
     switch(field.type) {
         case 'checkbox': {
             if(typeof value !== 'boolean') {
@@ -267,7 +267,7 @@ export function fieldErrorToText(error: ReturnType<typeof validateField>): strin
     }
 }
 
-export function getFieldsErrors(fields: HMApi.SettingsFieldWithoutContainer[], values: Record<string, string|number|boolean>): [boolean, Record<string, string|undefined>] {
+export function getFieldsErrors(fields: HMApi.T.SettingsField<false>[], values: Record<string, string|number|boolean>): [boolean, Record<string, string|undefined>] {
     const res: Record<string, string|undefined> = { };
     let hasErr = false;
     for(const field of fields) {

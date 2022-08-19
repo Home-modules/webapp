@@ -237,8 +237,8 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
 export default connect(({rooms, devices, deviceTypes}: StoreState)=>({rooms, devices, deviceTypes}))(SettingsPageRoomsDevices);
 
 type DeviceItemProps = {
-    device: HMApi.Device,
-    deviceType?: HMApi.DeviceType,
+    device: HMApi.T.Device,
+    deviceType?: HMApi.T.DeviceType,
     disableReorder?: boolean,
     search?: string, // Search keyword for highlighting
     action: "edit"|"check",

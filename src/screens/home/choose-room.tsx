@@ -7,7 +7,7 @@ import { roomIcons } from "../settings/rooms/rooms";
 import './choose-room.scss';
 
 export type HomePageChooseRoomProps = {
-    roomStates: HMApi.RoomState[] | undefined | false,
+    roomStates: HMApi.T.RoomState[] | undefined | false,
     currentRoomId: string,
     onRoomSelected: (roomId: string) => void
 }

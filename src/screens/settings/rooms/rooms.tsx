@@ -196,7 +196,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
 export default connect(({rooms}: StoreState)=>({rooms}))(SettingsPageRooms);
 
 
-export const roomIcons: Record<HMApi.Room['icon'], IconDefinition>= {
+export const roomIcons: Record<HMApi.T.Room['icon'], IconDefinition>= {
     'bathroom': faBath,
     'bedroom': faBed,
     'kitchen': faUtensils,
@@ -205,7 +205,7 @@ export const roomIcons: Record<HMApi.Room['icon'], IconDefinition>= {
 }
 
 type RoomItemProps= {
-    room: HMApi.Room;
+    room: HMApi.T.Room;
     disableReorder?: boolean;
     search?: string;
     active?: boolean;

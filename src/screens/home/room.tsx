@@ -57,7 +57,7 @@ const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(functio
 export default HomePageRoom;
 
 export async function refreshDeviceStates(roomId: string) {
-    function setStates(states: HMApi.DeviceState[] | false | undefined) {
+    function setStates(states: HMApi.T.DeviceState[] | false | undefined) {
         store.dispatch({
             type: 'SET_DEVICE_STATES',
             roomId: roomId,
@@ -83,7 +83,7 @@ export async function refreshDeviceStates(roomId: string) {
 }
 
 export async function refreshFavoriteDeviceStates() {
-    function setStates(states: HMApi.DeviceState[] | false | undefined) {
+    function setStates(states: HMApi.T.DeviceState[] | false | undefined) {
         store.dispatch({
             type: 'SET_FAVORITE_DEVICE_STATES',
             states
