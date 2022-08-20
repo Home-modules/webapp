@@ -21,7 +21,7 @@ const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(functio
     )
 
     if((!roomStates)) {
-        return <Navigate to="/home" />
+        return <Navigate to={`/home?redirect=/home/${roomId}`} />
     }
     const state = roomStates.find(s=> s.id === roomId);
     if(!state) {

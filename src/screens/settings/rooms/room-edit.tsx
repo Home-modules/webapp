@@ -138,7 +138,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     React.useEffect(onChangeControllerType, [controllerTypes])
 
     if(!(roomExists || isNew)) {
-        return <Navigate to="/settings/rooms" />
+        return <Navigate to={`/settings/rooms?redirect=/settings/rooms/${roomId}/edit`} />
     }
 
     return (

@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import './edit-device.scss';
 import { StoreState } from '../../../../store';
 import { connect } from 'react-redux';
@@ -14,30 +14,38 @@ import machineFriendlyName from '../../../../utils/machine-friendly-name';
 import ScrollView from '../../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../../ui/flyout';
 
+/** Resolves all needed objects from their IDs (and redirects to the proper location if something wasn't found) */
 function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : Pick<StoreState, 'deviceTypes'|'rooms'|'devices'>) {
     let { deviceType: deviceTypeId, roomId, deviceId } = useParams();
+    const location = useLocation();
 
     const room = rooms ? rooms.find(r=> r.id === roomId) : undefined;
-    if((!room) || (!roomId) || (!rooms)) {
+    if(!rooms) { // Rooms are not loaded yet
+        return <Navigate to={`/settings/rooms?redirect=${location.pathname}`} />
+    }
+    if((!roomId) || (!room)) { // Room not found
         return <Navigate to="/settings/rooms" />
     }
 
     if(deviceId) { // Editing existing device
 
         const devicesInRoom = devices[roomId];
-        if(!devicesInRoom) {
-            return <Navigate to={`/settings/rooms/${roomId}/devices`} />
+        if(!devicesInRoom) { // Devices not loaded yet
+            return <Navigate to={`/settings/rooms/${roomId}/devices?redirect=${location.pathname}`} />
         }
 
         const device = devicesInRoom.find(d=> d.id === deviceId);
-        if (!device) {
+        if (!device) { // Device not found
             return <Navigate to={`/settings/rooms/${roomId}/devices`} />
         }
 
         const deviceTypesForController = deviceTypes[room.controllerType.type];
-        const deviceType = deviceTypesForController ? deviceTypesForController.find(t=> t.id === device.type) : undefined;
+        if(!deviceTypesForController) { // Device types not loaded yet
+            return <Navigate to={`/settings/rooms/${roomId}/devices?redirect=${location.pathname}`} />
+        }
 
-        if(!deviceType) {
+        const deviceType = deviceTypesForController ? deviceTypesForController.find(t=> t.id === device.type) : undefined;
+        if(!deviceType) { // Device type not found
             return <Navigate to={`/settings/rooms/${roomId}/devices`} />
         }
 
@@ -46,14 +54,18 @@ function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : P
     else if(deviceTypeId) { // New device
 
         const deviceTypesForController = deviceTypes[room.controllerType.type];
-        const deviceType = deviceTypesForController ? deviceTypesForController.find(t=> t.id === deviceTypeId) : undefined;
+        if(!deviceTypesForController) { // Device types not loaded yet
+            return <Navigate to={`/settings/rooms/${roomId}/devices?redirect=${location.pathname}`} />
+        }
 
-        if(!deviceType) {
+        const deviceType = deviceTypesForController ? deviceTypesForController.find(t=> t.id === deviceTypeId) : undefined;
+        if(!deviceType) { // Device type not found
             return <Navigate to={`/settings/rooms/${roomId}/devices`} />
         }
 
         return <EditDevice deviceType={deviceType} room={room} />
-    } else {
+    }
+    else {
         return <Navigate to={`/settings/rooms/${roomId}/devices`} />
     }
 }

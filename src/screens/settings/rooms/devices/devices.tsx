@@ -99,8 +99,16 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
         }
     }
 
-    if(!roomExists) {
-        return <Navigate to="/settings/rooms" />
+    if (!roomExists) {
+        if (searchParams.has('redirect')) { // Don't override the redirect if it's already set
+            return <Navigate to={`/settings/rooms?redirect=${searchParams.get('redirect')}`} />;
+        } else if(!hideList) {
+            return <Navigate to={`/settings/rooms?redirect=/settings/rooms/${roomId}/devices`} />;
+        }
+    }
+
+    if (devices && types && searchParams.has('redirect')) {
+        return <Navigate to={searchParams.get('redirect')!} replace />
     }
 
     return (

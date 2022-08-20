@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useSearchParams } from "react-router-dom";
 import { handleError, sendRequest } from "../../hub/request";
 import { store, StoreState } from "../../store";
 import HomePageChooseRoom from "./choose-room";
@@ -8,8 +8,13 @@ import './home.scss';
 
 const HomePage = connect(({roomStates}: StoreState)=>({roomStates}))(function Home({roomStates}: Pick<StoreState, 'roomStates'>) {
     const [currentRoomId, setCurrentRoomId] = React.useState<string>("");
+    const [searchParams] = useSearchParams();
 
     React.useEffect(()=>{refreshRoomStates()}, []);
+
+    if (roomStates && searchParams.has("redirect")) {
+        return <Navigate to={searchParams.get("redirect")!} replace />
+    }
 
     return (
         <main id="home">
