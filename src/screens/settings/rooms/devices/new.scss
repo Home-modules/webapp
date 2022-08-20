@@ -14,8 +14,13 @@ main#settings main#settings-rooms .edit-devices .new-device {
             flex-shrink: 0;
 
             a {
-                color: inherit;
                 margin-right: 15px;
+                color: var(--color-foreground-subtext);
+                transition: color 200ms;
+
+                &:hover {
+                    color: var(--color-foreground);
+                }
             }
         }
 

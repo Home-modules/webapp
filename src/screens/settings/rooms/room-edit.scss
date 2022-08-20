@@ -12,7 +12,12 @@ main#settings main#settings-rooms .edit-room {
 
         a {
             display: contents;
-            color: var(---color-foreground);
+            color: var(--color-foreground-subtext);
+            transition: color 200ms;
+
+            &:hover {
+                color: var(--color-foreground);
+            }
 
             > svg {
                 flex-shrink: 0;
