@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import './App.scss';
 import Header from './screens/header';
 import { StoreState } from './store';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { sendRequest } from './hub/request';
 import version from './version';
 
 function App({token}: Pick<StoreState, 'token'>) {
     const navigate = useNavigate();
+    const location = useLocation();
+
     React.useEffect(()=> {
         if(token) {
             sendRequest({
@@ -25,7 +27,7 @@ function App({token}: Pick<StoreState, 'token'>) {
     }, [token]);
 
     if(!token) {
-        return <Navigate to="/login" />
+        return <Navigate to={`/login?redirect=${location.pathname}`} />
     }
 
     return (
