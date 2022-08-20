@@ -1,10 +1,14 @@
-import { faStar, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faRotate, faStar, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 import { HMApi } from "../../hub/api";
+import { store } from "../../store";
 import ScrollView from "../../ui/scrollbar";
 import { roomIcons } from "../settings/rooms/rooms";
+import { ContextMenuItem } from "../../ui/context-menu";
 import './choose-room.scss';
+import { handleError, sendRequest } from "../../hub/request";
+import { refreshRoomStates } from "./home";
 
 export type HomePageChooseRoomProps = {
     roomStates: HMApi.T.RoomState[] | undefined | false,
@@ -22,7 +26,28 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
     }
 
     return (
-        <ScrollView className={`choose-room ${roomStates===undefined ? 'loading':''} ${roomStates===false ? 'error':''}`} tagName="nav">
+        <ScrollView
+            className={`choose-room ${roomStates === undefined ? 'loading' : ''} ${roomStates === false ? 'error' : ''}`}
+            tagName="nav"
+            onContextMenu={e => {
+                e.preventDefault();
+                store.dispatch({
+                    type: 'SET_CONTEXT_MENU',
+                    contextMenu: {
+                        x: e.clientX,
+                        y: e.clientY,
+                        children: [
+                            <ContextMenuItem key={0}
+                                icon={faPen}
+                                href="/settings/rooms"
+                            >
+                                Edit rooms
+                            </ContextMenuItem>
+                        ]
+                    }
+                })
+            }}
+        >
             {roomStates instanceof Array ? <>
                 <NavLink 
                     to="/home" 
@@ -41,6 +66,39 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                         to={`/home/${roomState.id}`} 
                         className={({isActive}) => `${isActive ? 'active' : ''} ${roomState.disabled?'disabled':''}`}
                         onClick={navigated}
+                        onContextMenu={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            store.dispatch({
+                                type: 'SET_CONTEXT_MENU',
+                                contextMenu: {
+                                    x: e.clientX,
+                                    y: e.clientY,
+                                    children: [
+                                        (roomState.disabled ? (
+                                            <ContextMenuItem key={0}
+                                                icon={faRotate}
+                                                onClick={async () => {
+                                                    await sendRequest({
+                                                        type: 'rooms.restartRoom',
+                                                        id: roomState.id
+                                                    }).catch(handleError);
+                                                    await refreshRoomStates();
+                                                }}
+                                            >
+                                                Restart room
+                                            </ContextMenuItem>
+                                        ) : null),
+                                        <ContextMenuItem key={1}
+                                            icon={faPen}
+                                            href={`/settings/rooms/${roomState.id}/edit`}
+                                        >
+                                            Edit
+                                        </ContextMenuItem>
+                                    ]
+                                }
+                            })
+                        }}
                     >
                         <FontAwesomeIcon icon={roomIcons[roomState.icon]} />
                         <span>

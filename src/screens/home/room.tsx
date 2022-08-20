@@ -1,4 +1,4 @@
-import { faExclamationCircle, faPlug, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle, faPen, faPlug, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
@@ -12,6 +12,7 @@ import React from "react";
 import { HMApi } from "../../hub/api";
 import ScrollView from "../../ui/scrollbar";
 import { Device } from "./device";
+import { ContextMenuItem } from "../../ui/context-menu";
 
 const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(function Room({roomStates}: Pick<StoreState, 'roomStates'>) {
     const {roomId} = useParams();
@@ -122,7 +123,27 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
 
     return thisRoomDeviceStates instanceof Array ? (
         thisRoomDeviceStates.length ? (
-            <ScrollView className="devices">
+            <ScrollView
+                className="devices"
+                onContextMenu={e => {
+                    e.preventDefault();
+                    store.dispatch({
+                        type: 'SET_CONTEXT_MENU',
+                        contextMenu: {
+                            x: e.clientX,
+                            y: e.clientY,
+                            children: [
+                                <ContextMenuItem key={0}
+                                    icon={faPen}
+                                    href={`/settings/rooms/${roomState.id}/devices`}
+                                >
+                                    Edit devices
+                                </ContextMenuItem>
+                            ]
+                        }
+                    })
+                }}
+            >
                 {thisRoomDeviceStates.map(state => (
                     <Device key={state.id} state={state} isInFavorites={false}/>
                 ))}

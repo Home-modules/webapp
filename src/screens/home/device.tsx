@@ -50,6 +50,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
             }}
             onContextMenu={e => {
                 e.preventDefault();
+                e.stopPropagation();
                 store.dispatch({
                     type: 'SET_CONTEXT_MENU',
                     contextMenu: {
@@ -82,6 +83,12 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                                 }}
                             >
                                 {state.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                            </ContextMenuItem>,
+                            <ContextMenuItem key={1}
+                                icon={faPen}
+                                href={`/settings/rooms/${state.roomId}/devices/edit/${state.id}`}
+                            >
+                                Edit
                             </ContextMenuItem>
                         ]
                     }
