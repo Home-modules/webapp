@@ -8,7 +8,7 @@ import { HMApi } from '../../../hub/api';
 import { handleError, sendRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
 import { connect } from 'react-redux';
-import { Link, Navigate, Outlet, useMatch, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, Outlet, useMatch, useParams, useSearchParams } from 'react-router-dom';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
 import ScrollView from '../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../ui/flyout';
