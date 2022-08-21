@@ -28,7 +28,7 @@ export default function Fields({fields, fieldValues, setFieldValues, fieldErrors
     return <>
         {fields.map((field, index)=>(
             field.type === 'horizontal_wrapper' ? (
-                <div className="horizontal-wrapper" key={index}>
+                <div className="horizontal-wrapper" key={index} data-responsive={String(field.responsive !== false)}>
                     {field.columns.map((col, index) => (
                         <div key={index} style={{flexGrow: col.width}}>
                             <Fields fields={col.fields} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
