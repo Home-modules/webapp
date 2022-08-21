@@ -34,7 +34,7 @@ export function FieldTypeSlider({ field, value, setValue, error, setError }: Fie
                         className={`${field.color || ''}`}
                     />
                     {field.showValue && <span className="value">
-                        {value}
+                        {value}{field.postfix||''}
                     </span>}
                 </div>
             ) : field.appearance.type === 'vertical' ? (
@@ -50,7 +50,7 @@ export function FieldTypeSlider({ field, value, setValue, error, setError }: Fie
                         />
                     </div>
                     {field.showValue && <span className="value">
-                        {value}
+                        {value}{field.postfix||''}
                     </span>}
                 </div>
             ) : (
