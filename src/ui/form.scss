@@ -364,14 +364,13 @@ label.slider {
         gap: 10px;
 
         &.horizontal {
-            &.small, &.large {
-                width: max-content;
-            }
+            align-items: center;
+
             &.small input {
-                width: 150px;
+                max-width: 150px;
             }
             &.large input {
-                width: 250px;
+                max-width: 250px;
             }
         }
 
@@ -382,6 +381,7 @@ label.slider {
             div {
                 margin: 5px 15px 0;
                 width: 20px;
+                overflow: hidden;
             }
 
             &.small div {
