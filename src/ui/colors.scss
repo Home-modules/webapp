@@ -90,6 +90,7 @@
 
     // Notifications
     --color-notification-background: #fff; // Notification background color
+    --color-notification-background-with-blur: #fffa; // Notification background color with background blur effect
     --color-notification-shadow: #0004; // Notification shadow color
     --color-notification-border-info: #2277ff; // Notification border color for information messages
     --color-notification-border-success: #00d523; // Notification border color for success messages
@@ -100,15 +101,18 @@
     // Dialogs
     --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
     --color-dialog-background: #fff; // Background for dialogs
+    --color-dialog-background-with-blur: #fffa; // Background for dialogs with background blur effect
 
     // Flyouts
     --color-flyout-background: var(--color-background); // Flyout background color
+    --color-flyout-background-with-blur: #fffa; // Flyout background color with background blur effect
     --color-flyout-border: var(--color-input-border); // Flyout border color
     --color-flyout-shadow: var(--color-notification-shadow); // Flyout shadow color
 
     // Context menu
     --color-context-menu-background: var(--color-flyout-background); // Context menu background color
-    --color-context-menu-border: var(--color-navbar-background); // Context menu border color
+    --color-context-menu-background-with-blur: var(--color-flyout-background-with-blur); // Context menu background color with background blur effect
+    --color-context-menu-border: rgba(0, 0, 0, 0.1); // Context menu border color
     --color-context-menu-shadow: var(--color-notification-shadow); // Context menu shadow color
     --color-context-menu-item-foreground: var(--color-foreground); // Context menu item text color
     --color-context-menu-item-hover-background: var(--color-context-menu-border); // Context menu item background color when hovered
@@ -126,6 +130,7 @@
     --color-dropdown-button-background-hover: var(--color-button-secondary-hover-background); // Dropdown button background color when hovered
     --color-dropdown-button-arrow: var(--color-foreground-subtext); // Dropdown button arrow color
     --color-dropdown-list-background: var(--color-dialog-background); // Dropdown list background color
+    --color-dropdown-list-background-with-blur: var(--color-dialog-background-with-blur); // Dropdown list background color with background blur effect
     --color-dropdown-list-border: var(--color-input-border); // Dropdown list border color
     --color-dropdown-list-shadow: var(--color-notification-shadow); // Dropdown list shadow color
     --color-dropdown-item-hover-text: var(--color-navbar-hover-text); // Dropdown item text color when hovered
@@ -233,6 +238,7 @@
 
         // Notifications
         --color-notification-background: rgb(56, 56, 56); // Notification background color
+        --color-notification-background-with-blur: rgb(56, 56, 56, 0.67); // Notification background color with background blur effect
         --color-notification-shadow: rgba(0, 0, 0, 0.446); // Notification shadow color
         --color-notification-border-info: #2277ff; // Notification border color for information messages
         --color-notification-border-success: #00d523; // Notification border color for success messages
@@ -243,15 +249,18 @@
         // Dialogs
         --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
         --color-dialog-background: rgb(46, 46, 46); // Background for dialogs
+        --color-dialog-background-with-blur: rgba(46, 46, 46, 0.67); // Background for dialogs with background blur effect
         
         // Flyouts
         --color-flyout-background: var(--color-navbar-background); // Flyout background color
+        --color-flyout-background-with-blur: #1d1d1da9; // Flyout background color with background blur effect
         --color-flyout-border: var(--color-input-border); // Flyout border color
         --color-flyout-shadow: var(--color-notification-shadow); // Flyout shadow color
 
         // Context menu
         --color-context-menu-background: var(--color-flyout-background); // Context menu background color
-        --color-context-menu-border: var(--color-navbar-border); // Context menu border color
+        --color-context-menu-background-with-blur: var(--color-flyout-background-with-blur); // Context menu background color with background blur effect
+        --color-context-menu-border: #fff1; // Context menu border color
         --color-context-menu-shadow: var(--color-notification-shadow); // Context menu shadow color
         --color-context-menu-item-foreground: var(--color-foreground); // Context menu item text color
         --color-context-menu-item-hover-background: var(--color-context-menu-border); // Context menu item background color when hovered

@@ -10,7 +10,7 @@
 
     .notification {
         margin-top: 10px;
-        transition: opacity 2000ms, height 200ms , margin 200ms, transform 200ms;
+        transition: height 200ms , margin 200ms, transform 200ms;
         transform: translate(0, 0);
         height: var(--height);
         position: relative;
@@ -25,6 +25,8 @@
             background-color: var(--color-notification-background);
             border: 2px solid;
             box-shadow: 4px 4px 10px var(--color-notification-shadow);
+            filter: opacity(1);
+            transition: filter 2000ms;
     
             &.info { border-color: var(--color-notification-border-info); }
             &.success { border-color: var(--color-notification-border-success); }
@@ -62,7 +64,10 @@
         }
 
         &.fading {
-            opacity: 0;
+            > div {
+                filter: opacity(0);
+            }
+
             animation: notification-disappear 200ms 2000ms forwards;
         }
 
@@ -74,6 +79,21 @@
 
         &.new {
             animation: notification-appear 200ms;
+        }
+
+        @supports (backdrop-filter: blur(10px)) {
+            > div {
+                backdrop-filter: opacity(1) blur(10px);
+                background-color: var(--color-notification-background-with-blur);
+                transition: filter 2000ms, backdrop-filter 2000ms;
+            }
+
+            &.fading {
+                > div {
+                    backdrop-filter: opacity(0) blur(10px);
+                    filter: opacity(0);
+                }
+            }
         }
     }
 }

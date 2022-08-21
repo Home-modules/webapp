@@ -14,15 +14,15 @@
         padding: 10px;
         box-shadow: 4px 4px 10px var(--color-flyout-shadow);
         transform: translateY(0);
-        opacity: 1;
-        transition: transform 200ms, opacity 200ms;
+        filter: opacity(1);
+        transition: transform 200ms, filter 200ms;
 
         &.top {
-            animation: flyout-appear-top 200ms;
+            animation: flyout-appear 200ms, flyout-appear-top 200ms;
         }
 
         &.bottom {
-            animation: flyout-appear-bottom 200ms;
+            animation: flyout-appear 200ms, flyout-appear-bottom 200ms;
         }
 
         > svg.close {
@@ -52,38 +52,74 @@
 
         .flyout {
             pointer-events: unset;
+            filter: opacity(0);
 
             &.top {
                 transform: translateY(10px);
-                opacity: 0;
             }
-
             &.bottom {
                 transform: translateY(-10px);
-                opacity: 0;
+            }
+        }
+    }
+
+    @supports (backdrop-filter: blur(10px)) {
+        .flyout {
+            backdrop-filter: opacity(1) blur(10px);
+            background-color: var(--color-flyout-background-with-blur);
+            transition: transform 200ms, filter 200ms, backdrop-filter 200ms;
+
+            &.top {
+                animation: flyout-appear-with-blur 200ms, flyout-appear-top 200ms;
+            }
+            &.bottom {
+                animation: flyout-appear-with-blur 200ms, flyout-appear-bottom 200ms;
+            }
+        }
+
+        &.closing {
+            .flyout {
+                backdrop-filter: opacity(0) blur(10px);
+                filter: opacity(0);
             }
         }
     }
 } 
 
+@keyframes flyout-appear {
+    from {
+        filter: opacity(0);
+    } 
+    to {
+        filter: opacity(1);
+    }
+}
+
+@keyframes flyout-appear-with-blur {
+    from {
+        filter: opacity(0);
+        backdrop-filter: opacity(0) blur(10px);
+    } 
+    to {
+        filter: opacity(1);
+        backdrop-filter: opacity(1) blur(10px);
+    }
+}
+
 @keyframes flyout-appear-top {
     from {
         transform: translateY(10px);
-        opacity: 0;
     } 
     to {
         transform: translateY(0);
-        opacity: 1;
     }
 }
 
 @keyframes flyout-appear-bottom {
     from {
         transform: translateY(-10px);
-        opacity: 0;
     } 
     to {
         transform: translateY(0);
-        opacity: 1;
     }
 }
