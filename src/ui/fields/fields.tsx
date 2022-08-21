@@ -6,6 +6,7 @@ import { FieldTypeRadio } from './radio';
 import { FieldTypeNumber } from './number';
 import { FieldTypeText } from './text';
 import { FieldTypeSelect } from './select';
+import { FieldTypeSlider } from './slider';
 
 export type FieldsProps = {
     fields: HMApi.T.SettingsField[],
@@ -88,6 +89,10 @@ function Field({field, value, setValue, error, setError, context}: FieldProps) {
             value = value as string;
             return <FieldTypeSelect field={field} value={value} setValue={setValue} error={error} setError={setError} context={context} />;
         }
+        case 'slider': {
+            value = value as number;
+            return <FieldTypeSlider field={field} value={value} setValue={setValue} error={error} setError={setError} context={context} />;
+        }
     }
     return null;
 }
@@ -104,7 +109,8 @@ export function getSettingsFieldDefaultValue(field: HMApi.T.SettingsField<false>
                 return '';
 
             case 'number':
-                return 0;
+            case 'slider':
+                return field.min || 0;
             
             case 'checkbox':
                 return false;
