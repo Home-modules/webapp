@@ -9,7 +9,7 @@ import './context-menu.scss'
 export type ContextMenuProps = {
     x: number,
     y: number,
-    children: (React.ReactElement<ContextMenuItemProps, typeof ContextMenuItem> | null)[]
+    children: React.ReactChild | (React.ReactChild|null)[],
 }
 
 export function ContextMenu({x, y, children}: ContextMenuProps) {

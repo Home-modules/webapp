@@ -1,0 +1,51 @@
+.device-interactions {
+    .interactions {
+        padding: 15px;
+
+        > button {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        > .label {
+            margin-bottom: 15px;
+
+            &.align-start {text-align: start;}
+            &.align-center {text-align: center;}
+            &.align-end {text-align: end;}
+
+            &.small {font-size: 15px;}
+            &.medium {font-size: 17px;}
+            &.large {font-size: 20px;}
+
+            @each $color in (red, orange, yellow, green, blue, purple, pink, brown) {
+                &.#{$color} {color: var(--color-foreground-#{$color});}
+            }
+        }
+
+        > :last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .other-controls {
+        display: flex;
+        border-top: 1px solid var(--color-context-menu-border);
+
+        .context-menu-item {
+            flex-grow: 1;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+
+            svg {
+                margin: 0 !important;
+            }
+
+            span {
+                display: none;
+            }
+        }
+    }
+}

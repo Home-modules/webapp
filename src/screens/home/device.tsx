@@ -10,6 +10,7 @@ import { ContextMenuItem } from "../../ui/context-menu";
 import promiseTimeout from "../../utils/promise-timeout";
 import { refreshFavoriteDeviceStates, refreshDeviceStates } from "./room";
 import './device.scss';
+import DeviceInteractions from "./device-interactions/interactions";
 
 type DeviceProps = {
     state: HMApi.T.DeviceState;
@@ -57,41 +58,47 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                     contextMenu: {
                         x: e.clientX,
                         y: e.clientY,
-                        children: [
-                            <ContextMenuItem key={0}
-                                icon={state.isFavorite ? fasStar : farStar}
-                                onClick={() => {
-                                    sendRequest({
-                                        type: 'devices.toggleDeviceIsFavorite',
-                                        roomId: state.roomId,
-                                        id: state.id,
-                                        isFavorite: !state.isFavorite
-                                    }).then(()=> {
-                                        store.dispatch({
-                                            type: 'ADD_NOTIFICATION',
-                                            notification: {
-                                                type: 'success',
-                                                message: state.isFavorite ? 'Removed from favorites' : 'Added to favorites'
+                        children: (
+                            <DeviceInteractions
+                                roomId={state.roomId}
+                                deviceId={state.id}
+                                isInFavorites={isInFavorites}
+                            >
+                                <ContextMenuItem key={0}
+                                    icon={state.isFavorite ? fasStar : farStar}
+                                    onClick={() => {
+                                        sendRequest({
+                                            type: 'devices.toggleDeviceIsFavorite',
+                                            roomId: state.roomId,
+                                            id: state.id,
+                                            isFavorite: !state.isFavorite
+                                        }).then(()=> {
+                                            store.dispatch({
+                                                type: 'ADD_NOTIFICATION',
+                                                notification: {
+                                                    type: 'success',
+                                                    message: state.isFavorite ? 'Removed from favorites' : 'Added to favorites'
+                                                }
+                                            });
+                                        }, handleError).finally(async () => {
+                                            if (isInFavorites) {
+                                                await refreshFavoriteDeviceStates();
+                                            } else {
+                                                await refreshDeviceStates(state.roomId);
                                             }
                                         });
-                                    }, handleError).finally(async () => {
-                                        if (isInFavorites) {
-                                            await refreshFavoriteDeviceStates();
-                                        } else {
-                                            await refreshDeviceStates(state.roomId);
-                                        }
-                                    });
-                                }}
-                            >
-                                {state.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                            </ContextMenuItem>,
-                            <ContextMenuItem key={1}
-                                icon={faPen}
-                                href={`/settings/rooms/${state.roomId}/devices/edit/${state.id}`}
-                            >
-                                Edit
-                            </ContextMenuItem>
-                        ]
+                                    }}
+                                >
+                                    {state.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                                </ContextMenuItem>
+                                <ContextMenuItem key={1}
+                                    icon={faPen}
+                                    href={`/settings/rooms/${state.roomId}/devices/edit/${state.id}`}
+                                >
+                                    Edit
+                                    </ContextMenuItem>
+                            </DeviceInteractions>
+                        )
                     }
                 });
             }}

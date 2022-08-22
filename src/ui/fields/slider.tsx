@@ -2,55 +2,91 @@ import { HMApi } from "../../hub/api";
 import { FieldProps } from "./fields";
 
 export function FieldTypeSlider({ field, value, setValue, error, setError }: FieldProps<number, HMApi.T.SettingsField.TypeSlider>) {
+    return (
+        <Slider
+            onChange={setValue}
+            value={value}
+            appearance={field.appearance}
+            color={field.color}
+            min={field.min}
+            description={field.description}
+            label={field.label}
+            max={field.max}
+            postfix={field.postfix}
+            showValue={field.showValue}
+            step={field.step}
+        />
+    )
+}
 
-    if (field.min === undefined)
-        field.min = 0;
-    if (field.max === undefined)
-        field.max = 100;
-    if (field.step === undefined)
-        field.step = 1;
+export type SliderProps = {
+    label?: string,
+    description?: string,
+    appearance?: HMApi.T.SettingsField.TypeSlider['appearance'],
+    min?: number,
+    max?: number,
+    step?: number,
+    color?: HMApi.T.UIColor,
+    showValue?: boolean,
+    postfix?: string,
+    value: number,
+    onChange: (value: number) => void,
+    onPointerUp?: () => void,
+}
 
-    field.appearance ||= {
-        type: 'horizontal'
-    }
-
+export default function Slider({
+    label,
+    description,
+    appearance = { type: 'horizontal' },
+    min = 0,
+    max = 100,
+    step = 1,
+    color,
+    showValue = false,
+    postfix = "",
+    value,
+    onChange,
+    onPointerUp,
+}: SliderProps) {
     return (
         <label className="slider">
-            <div className="label">
-                {field.label}
-            </div>
-            {field.description && <div className="description">
-                {field.description}
+            {label && <div className="label">
+                {label}
+            </div>}
+            {description && <div className="description">
+                {description}
             </div>}
 
-            {field.appearance.type === 'horizontal' ? (
-                <div className={`input-and-value horizontal ${field.appearance.width || 'large'}`}>
+            {appearance.type === 'horizontal' ? (
+                <div className={`input-and-value horizontal ${appearance.width || 'large'}`}>
                     <input type="range"
-                        min={field.min}
-                        max={field.max}
-                        step={field.step === 0 ? 'any' : field.step}
+                        min={min}
+                        max={max}
+                        step={step === 0 ? 'any' : step}
                         value={value}
-                        onChange={e => setValue(e.target.valueAsNumber)}
-                        className={`${field.color || ''}`}
+                        onChange={e => onChange(e.target.valueAsNumber)}
+                        onPointerUp={onPointerUp}
+                        className={color || ''}
                     />
-                    {field.showValue && <span className="value">
-                        {value}{field.postfix||''}
+                    {showValue && <span className="value">
+                        {value}{postfix}
                     </span>}
                 </div>
-            ) : field.appearance.type === 'vertical' ? (
-                <div className={`input-and-value vertical ${field.appearance.height || 'large'}`}>
+            ) : appearance.type === 'vertical' ? (
+                <div className={`input-and-value vertical ${appearance.height || 'large'}`}>
                     <div>
                         <input type="range"
-                            min={field.min}
-                            max={field.max}
-                            step={field.step === 0 ? 'any' : field.step}
+                            min={min}
+                            max={max}
+                            step={step === 0 ? 'any' : step}
                             value={value}
-                            onChange={e => setValue(e.target.valueAsNumber)}
-                            className={`${field.color || ''}`}
+                            onChange={e => onChange(e.target.valueAsNumber)}
+                            onPointerUp={onPointerUp}
+                            className={color || ''}
                         />
                     </div>
-                    {field.showValue && <span className="value">
-                        {value}{field.postfix||''}
+                    {showValue && <span className="value">
+                        {value}{postfix}
                     </span>}
                 </div>
             ) : (
