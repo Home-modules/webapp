@@ -390,7 +390,7 @@ label.slider {
 
                 input {
                     width: 150px;
-                    transform: rotate(90deg) translate(65px, 65px);
+                    transform: rotate(-90deg) translate(-65px, -65px);
                 }
             }
             &.large div {
@@ -398,7 +398,7 @@ label.slider {
 
                 input {
                     width: 250px;
-                    transform: rotate(90deg) translate(115px, 115px);
+                    transform: rotate(-90deg) translate(-115px, -115px);
                 }
             }
 
