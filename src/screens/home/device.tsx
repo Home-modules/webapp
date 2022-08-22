@@ -9,6 +9,7 @@ import { HMApi } from "../../hub/api";
 import { ContextMenuItem } from "../../ui/context-menu";
 import promiseTimeout from "../../utils/promise-timeout";
 import { refreshFavoriteDeviceStates, refreshDeviceStates } from "./room";
+import './device.scss';
 
 type DeviceProps = {
     state: HMApi.T.DeviceState;

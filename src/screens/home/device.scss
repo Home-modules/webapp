@@ -1,0 +1,139 @@
+#home .devices .device {
+    display: block;
+    width: 150px;
+    min-width: 150px;
+    flex-grow: 1;
+    max-width: min(calc(50% - 5px), 250px);
+    @media (max-width: 350px) { // When there is only one column
+        width: 100%;
+        max-width: 100%;
+    }
+    padding: 10px;
+    box-sizing: border-box;
+
+    border: none;
+    background-color: var(--color-button-secondary-background);
+    color: var(--color-button-secondary-foreground);
+    font-family: var(--main-font-stack);
+    border-radius: 10px;
+    text-align: center;
+    transition: background-color 200ms, color 200ms, opacity 200ms;
+    cursor: default;
+    
+    &.clickable {
+        cursor: pointer;
+    }
+
+    &:not(.active):disabled {
+        color: var(--color-button-secondary-disabled-foreground);
+        opacity: var(--color-button-secondary-disable-opacity);
+        cursor: default;
+        background-color: var(--color-button-secondary-background);
+    }
+
+    &.active:disabled {
+        opacity: var(--color-button-primary-disable-opacity);
+        cursor: default;
+        background-color: var(--color-button-primary-background);
+    }
+
+    &.clickable:hover {
+        background-color: var(--color-button-secondary-hover-background);
+        color: var(--color-button-secondary-hover-foreground);
+    }
+
+    &.active {
+        background-color: var(--color-button-primary-background);
+        color: var(--color-button-primary-foreground);
+
+        &.clickable:hover {
+            background-color: var(--color-button-primary-hover-background);
+            color: var(--color-button-primary-hover-foreground);
+
+            &.red { background-color: var(--color-background-red-hover); }
+            &.orange { background-color: var(--color-background-orange-hover); }
+            &.yellow { background-color: var(--color-background-yellow-hover); }
+            &.green { background-color: var(--color-background-green-hover); }
+            &.blue { background-color: var(--color-background-blue-hover); }
+            &.purple { background-color: var(--color-background-purple-hover); }
+            &.pink { background-color: var(--color-background-pink-hover); }
+            &.brown { background-color: var(--color-background-brown-hover); }
+        }
+
+        &.red { background-color: var(--color-background-red); }
+        &.orange { background-color: var(--color-background-orange); }
+        &.yellow { background-color: var(--color-background-yellow); }
+        &.green { background-color: var(--color-background-green); }
+        &.blue { background-color: var(--color-background-blue); }
+        &.purple { background-color: var(--color-background-purple); }
+        &.pink { background-color: var(--color-background-pink); }
+        &.brown { background-color: var(--color-background-brown); }
+    }
+
+    &.disabled {
+        color: var(--color-status-error) !important;
+    }
+
+    &.intermittent {
+        overflow: hidden;
+        position: relative;
+
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 100%;
+            bottom: -2px;
+            height: 3px;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            background-color: var(--color-button-intermittent);
+            animation: intermittent 3s infinite;
+
+        }
+        &.active::after {
+            background-color: var(--color-button-intermittent-2);
+        }
+    }
+
+    > svg {
+        height: 40px;
+        width: 40px;
+        transition: color 200ms;
+    }
+
+    .icon-text { // Text which is as big as the icon
+        font-size: 40px;
+        line-height: 40px;
+        transition: color 200ms;
+    }
+
+    &:not(.active) > svg,
+    &:not(.active) .icon-text {
+        &.red { color: var(--color-foreground-red); }
+        &.orange { color: var(--color-foreground-orange); }
+        &.yellow { color: var(--color-foreground-yellow); }
+        &.green { color: var(--color-foreground-green); }
+        &.blue { color: var(--color-foreground-blue); }
+        &.purple { color: var(--color-foreground-purple); }
+        &.pink { color: var(--color-foreground-pink); }
+        &.brown { color: var(--color-foreground-brown); }
+    }
+
+    .name {
+        margin-top: 10px;
+        font-size: 1.2em;
+
+        svg { // fa-chevron-right
+            font-size: 0.75em;
+            position: relative;
+            top: -0.1em;
+        }
+    }
+
+    .state {
+        margin-top: 8px;
+        font-size: 0.9em;
+    }
+}
