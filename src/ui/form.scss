@@ -362,6 +362,7 @@ label.slider {
     .input-and-value {
         display: flex;
         gap: 10px;
+        margin-top: 5px;
 
         &.horizontal {
             align-items: center;
@@ -379,7 +380,7 @@ label.slider {
             flex-direction: column;
 
             div {
-                margin: 5px 15px 0;
+                margin: 0 15px;
                 width: 20px;
                 overflow: hidden;
             }
@@ -389,7 +390,7 @@ label.slider {
 
                 input {
                     width: 150px;
-                    transform: rotate(90deg) translate(60px, 65px);
+                    transform: rotate(90deg) translate(65px, 65px);
                 }
             }
             &.large div {
@@ -397,7 +398,7 @@ label.slider {
 
                 input {
                     width: 250px;
-                    transform: rotate(90deg) translate(110px, 115px);
+                    transform: rotate(90deg) translate(115px, 115px);
                 }
             }
 
@@ -409,7 +410,6 @@ label.slider {
 
         input {
             margin: 0;
-            margin-top: 5px;
             flex-grow: 1;
             
             appearance: none;
