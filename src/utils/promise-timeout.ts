@@ -1,11 +1,11 @@
 /**
  * Calls the specified callback if a promise takes longer than the specified time to complete
  */
-export default function promiseTimeout<T>(promise: Promise<T>, timeout: number, callback: ()=>void, noTimeoutCallback?: ()=>void): Promise<T> {
+export default function promiseTimeout<T>(promise: Promise<T>, timeout: number, callback: (promise: Promise<T>)=>void, noTimeoutCallback?: ()=>void): Promise<T> {
     let hasCompleted = false;
     setTimeout(()=> {
         if(!hasCompleted) {
-            callback();
+            callback(promise);
         } else {
             noTimeoutCallback?.();
         }

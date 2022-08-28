@@ -22,7 +22,7 @@
         animation: context-menu-appear 200ms;
         background-color: var(--color-context-menu-background);
 
-        .content {
+        > .content {
             transform: scale(1);
             transform-origin: top left;
             animation: context-menu-content-appear 200ms;
@@ -111,7 +111,7 @@
             transform: scale(0.5);
             filter: opacity(0);
 
-            .content {
+            > .content {
                 transform: scale(1.5);
             }
         }

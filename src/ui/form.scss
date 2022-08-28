@@ -517,6 +517,120 @@ label.slider {
     }
 }
 
+label.toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    
+    .right {
+        position: relative;
+        height: 20px;
+    }
+
+    input {
+        cursor: pointer;
+        appearance: none;
+        margin: 0;
+        height: 20px;
+        width: 40px;
+        border-radius: 10px;
+        background-color: var(--color-checkbox-background);
+        position: relative;
+        transition: background-color 200ms, opacity 200ms;
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background-color: var(--color-checkbox-check);
+            transition: left 200ms;
+        }
+
+        &:checked {
+            background-color: var(--color-checkbox-background-checked);
+
+            &::after {
+                left: 22px;
+            }
+        }
+
+        &:disabled {
+            opacity: 0.5;
+        }
+    }
+
+    .intermittent {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+
+        box-sizing: border-box;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        border: 3px solid var(--color-checkbox-check);
+        border-top-color: transparent;
+        animation: fa-spin 1s linear infinite;
+        transition: left 200ms;
+    }
+
+    input:checked + .intermittent {
+        left: 22px;
+    }
+}
+
+.ui-color-input {
+    .label {
+        margin-bottom: 5px;
+    }
+
+    .colors {
+        display: flex;
+
+        input {
+            flex-grow: 1;
+            flex-basis: 10px;
+            box-sizing: border-box;
+            appearance: none;
+            cursor: pointer;
+            height: 30px;
+            margin: 0;
+            border: 0px solid var(--color-checkbox-background-checked);
+            transition: border 200ms, background-color 200ms;
+            background-color: white;
+
+            &:first-child {
+                border-top-left-radius: 7px;
+                border-bottom-left-radius: 7px;
+            }
+            &:last-child {
+                border-top-right-radius: 7px;
+                border-bottom-right-radius: 7px;
+            }
+            
+            @each $color in ("red", "orange", "yellow", "green", "blue", "purple", "pink", "brown") {
+                &[value=#{$color}] {
+                    background-color: var(--color-background-#{$color});
+
+                    &:hover {
+                        background-color: var(--color-background-#{$color}-hover);
+                    }
+                }
+            }
+
+            &:checked {
+                border: 5px solid var(--color-checkbox-background-checked);
+            }
+        }
+    }
+}
+
 input[type=submit] {
     display: block;
     width: 100%;

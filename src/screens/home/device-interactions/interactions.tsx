@@ -8,6 +8,9 @@ import { DeviceInteractionTypeButton } from "./button";
 import { DeviceInteractionTypeLabel } from "./label";
 import { connect } from "react-redux";
 import { StoreState } from "../../../store";
+import { DeviceInteractionTypeToggleButton } from "./toggleButton";
+import { DeviceInteractionTypeTwoButtonNumber } from "./twoButtonNumber";
+import { DeviceInteractionTypeUIColorInput } from "./uiColorInput";
 
 export type DeviceInteractionsProps = {
     roomId: string, deviceId: string,
@@ -79,6 +82,12 @@ export function DeviceInteraction({ interaction, state, sendAction }: DeviceInte
             return <DeviceInteractionTypeButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Button} sendAction={sendAction} />;
         case 'label':
             return <DeviceInteractionTypeLabel interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Label} sendAction={sendAction} />;
+        case 'toggleButton':
+            return <DeviceInteractionTypeToggleButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.ToggleButton} sendAction={sendAction} />;
+        case 'twoButtonNumber':
+            return <DeviceInteractionTypeTwoButtonNumber interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.TwoButtonNumber} sendAction={sendAction} />;
+        case 'uiColorInput':
+            return <DeviceInteractionTypeUIColorInput interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.UIColorInput} sendAction={sendAction} />;
         default:
             return null;
     }
