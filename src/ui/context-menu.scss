@@ -64,6 +64,10 @@
             transition: transform 200ms, filter 200ms, backdrop-filter 200ms;
             animation: context-menu-appear-with-blur 200ms;
         }
+
+        &.closing .context-menu {
+            backdrop-filter: opacity(0) blur(10px);
+        }
     }
 
     @keyframes context-menu-appear {
@@ -101,11 +105,11 @@
 
     &.closing {
         pointer-events: none;
-        opacity: 0;
 
         .context-menu {
             pointer-events: unset;
             transform: scale(0.5);
+            filter: opacity(0);
 
             .content {
                 transform: scale(1.5);
