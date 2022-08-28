@@ -1,5 +1,5 @@
 import { HMApi } from "../../../hub/api";
-import { sendRequest } from "../../../hub/request";
+import { handleError, sendRequest } from "../../../hub/request";
 import { ContextMenuItem, ContextMenuItemProps } from "../../../ui/context-menu";
 import { refreshDeviceStates, refreshFavoriteDeviceStates } from "../room";
 import { DeviceInteractionTypeSlider } from "./slider";
@@ -19,9 +19,11 @@ export type DeviceInteractionsProps = {
 
 const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: StoreState) => ({ deviceStates, favoriteDeviceStates }))(
     function DeviceInteractions({ deviceStates, favoriteDeviceStates, roomId, deviceId, children, isInFavorites }: DeviceInteractionsProps) {
-        const deviceState = isInFavorites ?
-            (favoriteDeviceStates as HMApi.T.DeviceState[]).find(s => s.roomId === roomId && s.id === deviceId)! :
-            (deviceStates[roomId] as HMApi.T.DeviceState[]).find(s => s.roomId === roomId && s.id === deviceId)!;
+        
+        const deviceStatesThisRoom = isInFavorites ? (favoriteDeviceStates) : (deviceStates[roomId]);
+        if (!deviceStatesThisRoom) return <>{children}</>;
+        const deviceState = deviceStatesThisRoom.find(s => s.roomId === roomId && s.id === deviceId);
+        if (!deviceState) return <>{children}</>;
 
         var interactions = Object.entries(deviceState.type.interactions).map(([id, interaction]) => ({ ...interaction, id }));
         if (interactions.length === 0) {
@@ -43,12 +45,12 @@ const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: Stor
                                     deviceId: deviceState.id,
                                     interactionId: interaction.id,
                                     action
-                                });
+                                }).catch(handleError);
                                 if (refresh) {
                                     if (isInFavorites) {
-                                        refreshFavoriteDeviceStates();
+                                        await refreshFavoriteDeviceStates();
                                     } else {
-                                        refreshDeviceStates(deviceState.roomId);
+                                        await refreshDeviceStates(deviceState.roomId);
                                     }
                                 }
                             }}
