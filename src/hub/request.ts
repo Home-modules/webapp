@@ -4,15 +4,18 @@ import { store } from '../store';
 import platform from "platform";
 import { delay } from '../utils/promise-timeout';
 
+const ax = axios.create({
+    baseURL: `http://${window.location.hostname}:703`,
+    headers: {
+        'Content-Type': 'text/plain' // Avoid pre-flight request
+    },
+    timeout: 20_000
+});
 
 export async function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.ResponseOrError<R>> {
     console.log('Request: ', req);
     try {
-        const e = await axios.post<HMApi.ResponseOrError<R>>(`http://${window.location.hostname}:703/${store.getState().token}`, req, {
-            headers: {
-                'Content-Type': 'text/plain' // Avoid pre-flight request
-            }
-        });
+        const e = await ax.post<HMApi.ResponseOrError<R>>(String(store.getState().token), req);
         console.log('Response: ', e.data);
         return e.data;
     } catch(e: any) {
