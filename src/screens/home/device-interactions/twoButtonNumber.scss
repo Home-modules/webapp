@@ -1,52 +1,84 @@
-.device-interactions .interactions > .two-button-number {
+.device-interactions .interactions > .two-button-number,
+#home .devices .device .two-button-number {
     margin-bottom: 15px;
 
     .content {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        align-items: stretch;
 
-        .button {
-            height: 25px;
-            width: 25px;
-            border-radius: 50%;
+        .button-container {
+            flex-grow: 1;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
 
-            @each $color in ("red", "orange", "yellow", "green", "blue", "purple", "pink", "brown") {
-                &.#{$color} {
-                    background-color: var(--color-background-#{$color});
+            .button {
+                height: 25px;
+                width: 25px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
-                    &:hover {
-                        background-color: var(--color-background-#{$color}-hover);
+                @each $color in ("red", "orange", "yellow", "green", "blue", "purple", "pink", "brown") {
+                    &.#{$color} {
+                        background-color: var(--color-background-#{$color});
+
+                        &:hover {
+                            background-color: var(--color-background-#{$color}-hover);
+                        }
                     }
                 }
-            }
 
-            &::after {
-                content: "";
-                opacity: 0;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                border-radius: 100%;
-                border: 3px solid var(--color-button-intermittent-2);
-                border-top-color: transparent;
-                animation: fa-spin 1s linear infinite;
-                transition: opacity 200ms;
-            }
-            
-            &.intermittent-spin::after {
-                opacity: 1;
+                &::before { // Expand clickable area
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+
+                &::after {
+                    content: "";
+                    opacity: 0;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 25px;
+                    height: 25px;
+                    box-sizing: border-box;
+                    transform: translate(-50%, -50%);
+                    border-radius: 100%;
+                    border: 3px solid var(--color-button-intermittent-2);
+                    border-top-color: transparent;
+                    animation: spin-centered 1s linear infinite;
+                    transition: opacity 200ms;
+
+                    @keyframes spin-centered {
+                        from { transform: translate(-50%, -50%) rotate(0deg); }
+                        to { transform: translate(-50%, -50%) rotate(360deg); }
+                    }
+                }
+                
+                &.intermittent-spin::after {
+                    opacity: 1;
+                }
             }
         }
 
         .value {
             font-size: 2em;
         }
+    }
+}
+
+#home .devices .device .two-button-number {
+    margin-bottom: 0;
+
+    .value {
+        font-size: 30px !important;
+        line-height: 40px;
     }
 }

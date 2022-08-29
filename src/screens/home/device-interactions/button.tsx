@@ -6,12 +6,13 @@ import { DeviceInteractionTypeProps } from "./interactions";
 export function DeviceInteractionTypeButton({
     interaction,
     state = { },
-    sendAction
+    sendAction,
+    isDefault = false
 }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type.Button>) {
 
     return (
         <IntermittentButton
-            primary={interaction.primary}
+            primary={interaction.primary || isDefault}
             attention={interaction.attention}
             disabled={interaction.enabled === false}
             onClick={() => sendAction({

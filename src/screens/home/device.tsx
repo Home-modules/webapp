@@ -10,7 +10,7 @@ import { ContextMenuItem } from "../../ui/context-menu";
 import promiseTimeout from "../../utils/promise-timeout";
 import { refreshFavoriteDeviceStates, refreshDeviceStates } from "./room";
 import './device.scss';
-import DeviceInteractions from "./device-interactions/interactions";
+import DeviceInteractions, { DeviceInteraction, getSendActionF } from "./device-interactions/interactions";
 
 type DeviceProps = {
     state: HMApi.T.DeviceState;
@@ -20,6 +20,17 @@ type DeviceProps = {
 
 export function Device({ state, isInFavorites, roomName }: DeviceProps) {
     const [intermittent, setIntermittent] = React.useState(false);
+
+    let defaultInteraction: string | undefined, defaultInteraction2: string | undefined;
+    if (state.type.defaultInteraction?.includes('+')) {
+        [defaultInteraction2, defaultInteraction] = state.type.defaultInteraction.split('+')
+    } else {
+        if (state.type.defaultInteraction && state.type.interactions[state.type.defaultInteraction].type === 'twoButtonNumber') {
+            defaultInteraction2 = state.type.defaultInteraction;
+        } else {
+            defaultInteraction = state.type.defaultInteraction;
+        }
+    }
 
     if(state.disabled) {
         return <DisabledDevice state={state} roomName={roomName} isInFavorites={isInFavorites} />;
@@ -104,17 +115,41 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
             }}
             disabled={intermittent}
         >
-            {state.iconText ?
-                <div className={`icon-text ${state.iconColor || ''}`}>{state.iconText}</div> :
-                <FontAwesomeIcon icon={fas['fa' + (state.icon || state.type.icon)]} className={state.iconColor || ''} />}
+            {defaultInteraction2 ? (
+                <DeviceInteraction
+                    interaction={state.type.interactions[defaultInteraction2]}
+                    sendAction={getSendActionF(state, defaultInteraction2, isInFavorites)}
+                    state={state.interactions[defaultInteraction2]}
+                    isDefault
+                />
+            ) : (
+                state.iconText ?
+                    <div className={`icon-text ${state.iconColor || ''}`}>{state.iconText}</div> :
+                    <FontAwesomeIcon icon={fas['fa' + (state.icon || state.type.icon)]} className={state.iconColor || ''} />
+            )}
 
             <div className="name">
                 {isInFavorites ?
                     <>{roomName} <FontAwesomeIcon icon={faChevronRight} /> {state.name}</> :
                     state.name}
             </div>
-            <div className="state">
-                {state.statusText}
+            <div className="default-interaction" onClick={e => {
+                if (defaultInteraction && state.type.interactions[defaultInteraction].type !== 'label') {
+                    e.stopPropagation();
+                }
+            }}>
+                {defaultInteraction ? (
+                    <DeviceInteraction
+                        interaction={state.type.interactions[defaultInteraction]}
+                        sendAction={getSendActionF(state, defaultInteraction, isInFavorites)}
+                        state={state.interactions[defaultInteraction]}
+                        isDefault
+                    />
+                ) : (
+                    <div className="label">
+                        {state.hasMainToggle ? (state.mainToggleState ? "ON" : "OFF") : ' '}
+                    </div>
+                )}
             </div>
         </button>
     );

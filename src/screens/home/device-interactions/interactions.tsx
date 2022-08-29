@@ -12,6 +12,25 @@ import { DeviceInteractionTypeToggleButton } from "./toggleButton";
 import { DeviceInteractionTypeTwoButtonNumber } from "./twoButtonNumber";
 import { DeviceInteractionTypeUIColorInput } from "./uiColorInput";
 
+export function getSendActionF(deviceState: HMApi.T.DeviceState, interactionId: string, isInFavorites: boolean) {
+    return async (action: HMApi.T.DeviceInteraction.Action, refresh = true) => {
+        await sendRequest({
+            type: "devices.interactions.sendAction",
+            roomId: deviceState.roomId,
+            deviceId: deviceState.id,
+            interactionId: interactionId,
+            action
+        }).catch(handleError);
+        if (refresh) {
+            if (isInFavorites) {
+                await refreshFavoriteDeviceStates();
+            } else {
+                await refreshDeviceStates(deviceState.roomId);
+            }
+        }
+    }
+}
+
 export type DeviceInteractionsProps = {
     roomId: string, deviceId: string,
     children: (React.ReactElement<ContextMenuItemProps, typeof ContextMenuItem> | null)[],
@@ -41,22 +60,7 @@ const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: Stor
                             key={interaction.id}
                             interaction={interaction}
                             state={deviceState.interactions[interaction.id]}
-                            sendAction={async (action, refresh = true) => {
-                                await sendRequest({
-                                    type: "devices.interactions.sendAction",
-                                    roomId: deviceState.roomId,
-                                    deviceId: deviceState.id,
-                                    interactionId: interaction.id,
-                                    action
-                                }).catch(handleError);
-                                if (refresh) {
-                                    if (isInFavorites) {
-                                        await refreshFavoriteDeviceStates();
-                                    } else {
-                                        await refreshDeviceStates(deviceState.roomId);
-                                    }
-                                }
-                            }}
+                            sendAction={getSendActionF(deviceState, interaction.id, isInFavorites)}
                         />
                     ))}
                 </div>
@@ -71,23 +75,24 @@ export default DeviceInteractions;
 export type DeviceInteractionTypeProps<T extends HMApi.T.DeviceInteraction.Type> = {
     interaction: T,
     state?: HMApi.T.DeviceInteraction.State<T>,
-    sendAction: (action: HMApi.T.DeviceInteraction.Action<T>, refresh?: boolean) => Promise<void>
+    sendAction: (action: HMApi.T.DeviceInteraction.Action<T>, refresh?: boolean) => Promise<void>,
+    isDefault?: boolean
 }
 
-export function DeviceInteraction({ interaction, state, sendAction }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type>) {
+export function DeviceInteraction({ interaction, state, sendAction, isDefault }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type>) {
     switch (interaction.type) {
         case 'slider':
-            return <DeviceInteractionTypeSlider interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Slider} sendAction={sendAction} />;
+            return <DeviceInteractionTypeSlider interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Slider} sendAction={sendAction} isDefault={isDefault} />;
         case 'button':
-            return <DeviceInteractionTypeButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Button} sendAction={sendAction} />;
+            return <DeviceInteractionTypeButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Button} sendAction={sendAction} isDefault={isDefault} />;
         case 'label':
-            return <DeviceInteractionTypeLabel interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Label} sendAction={sendAction} />;
+            return <DeviceInteractionTypeLabel interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Label} sendAction={sendAction} isDefault={isDefault} />;
         case 'toggleButton':
-            return <DeviceInteractionTypeToggleButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.ToggleButton} sendAction={sendAction} />;
+            return <DeviceInteractionTypeToggleButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.ToggleButton} sendAction={sendAction} isDefault={isDefault} />;
         case 'twoButtonNumber':
-            return <DeviceInteractionTypeTwoButtonNumber interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.TwoButtonNumber} sendAction={sendAction} />;
+            return <DeviceInteractionTypeTwoButtonNumber interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.TwoButtonNumber} sendAction={sendAction} isDefault={isDefault} />;
         case 'uiColorInput':
-            return <DeviceInteractionTypeUIColorInput interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.UIColorInput} sendAction={sendAction} />;
+            return <DeviceInteractionTypeUIColorInput interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.UIColorInput} sendAction={sendAction} isDefault={isDefault} />;
         default:
             return null;
     }

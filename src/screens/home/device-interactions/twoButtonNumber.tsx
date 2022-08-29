@@ -9,7 +9,8 @@ import "./twoButtonNumber.scss";
 export function DeviceInteractionTypeTwoButtonNumber({
     interaction,
     state = { value: interaction.min === undefined ? 0 : interaction.min },
-    sendAction
+    sendAction,
+    isDefault = false
 }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type.TwoButtonNumber>) {
 
     interaction.decreaseButton ||= {
@@ -20,6 +21,9 @@ export function DeviceInteractionTypeTwoButtonNumber({
     }
     if (interaction.step === undefined) {
         interaction.step = 1;
+    }
+    if (isDefault) {
+        interaction.label = undefined;
     }
 
     return (
@@ -39,7 +43,7 @@ export function DeviceInteractionTypeTwoButtonNumber({
                     }
                 />
                 <div className="value">
-                    {state.value}
+                    {state.value}{interaction.postfix}
                 </div>
                 <ChangeButton
                     disabled={state.value >= interaction.max}
@@ -66,20 +70,23 @@ function ChangeButton({ disabled, settings, onClick }: ChangeButtonProps) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     return (
-        <button
-            className={`button primary ${settings.color || ''} ${intermittent?'intermittent-spin':''}`}
-            onClick={() => {
-                const res = onClick();
-                promiseTimeout(res, 100, () => {
-                    setIntermittent(true);
-                    res.finally(() => setIntermittent(false))
-                })
-            }}
-            disabled={disabled || intermittent}
-        >
-            {'icon' in settings ? (
-                <FontAwesomeIcon icon={fas['fa' + settings.icon]} />
-            ) : settings.text}
-        </button>
+        <div className="button-container">
+            <button
+                className={`button primary ${settings.color || ''} ${intermittent?'intermittent-spin':''}`}
+                onClick={e => {
+                    e.stopPropagation();
+                    const res = onClick();
+                    promiseTimeout(res, 100, () => {
+                        setIntermittent(true);
+                        res.finally(() => setIntermittent(false))
+                    })
+                }}
+                disabled={disabled || intermittent}
+            >
+                {'icon' in settings ? (
+                    <FontAwesomeIcon icon={fas['fa' + settings.icon]} />
+                ) : settings.text}
+            </button>
+        </div>
     );
 }

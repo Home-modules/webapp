@@ -6,7 +6,8 @@ import { DeviceInteractionTypeProps } from "./interactions";
 export function DeviceInteractionTypeSlider({
     interaction,
     state = { value: interaction.min === undefined ? 0 : interaction.min },
-    sendAction
+    sendAction,
+    isDefault = false
 }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type.Slider>) {
     const [value, setValue] = React.useState(state.value);
     React.useEffect(() => {
@@ -17,6 +18,10 @@ export function DeviceInteractionTypeSlider({
     // -Infinity means never called, Infinity means current call is in progress. 
     // setSliderValue should only be called if the last call is finished and older than 120ms.
     const [lastTimeLiveChanged, setLastTimeLiveChanged] = React.useState(-Infinity);
+
+    if (isDefault) {
+        interaction.label = undefined;
+    }
 
     return (
         <Slider

@@ -11,10 +11,15 @@ export function DeviceInteractionTypeUIColorInput({
         defaultValue = allowed[0]
     },
     state = { color: defaultValue },
-    sendAction
+    sendAction,
+    isDefault = false
 }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type.UIColorInput>) {
     const [id] = React.useState(uniqueId('color-select-'));
     const [intermittent, setIntermittent] = React.useState(false);
+
+    if (isDefault) {
+        label = undefined;
+    }
 
     return (
         <div className="ui-color-input">

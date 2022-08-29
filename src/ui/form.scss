@@ -416,8 +416,10 @@ label.slider {
             background: transparent;
             height: 20px;
 
-            --thumb-background: var(--color-button-primary-hover-background);
-            --thumb-background-hover: var(--color-button-primary-background);
+            --thumb-background: var(--color-button-primary-background);
+            --thumb-background-hover: var(--color-button-primary-hover-background);
+            --track-background: var(--color-button-secondary-background);
+            --track-background-hover: var(--color-button-secondary-hover-background);
 
             $colors: "red", "orange", "yellow", "green", "blue", "purple", "pink", "brown";
             @each $color in $colors {
@@ -445,7 +447,7 @@ label.slider {
                 width: 100%;
                 height: 8px;
                 border-radius: 5px;
-                background-color: var(--color-button-secondary-background);
+                background-color: var(--track-background);
                 cursor: pointer;
                 box-shadow: 0 0 0 0 var(--color-input-active-border);
                 transition: background-color 200ms, box-shadow 200ms;
@@ -470,7 +472,7 @@ label.slider {
                 width: 100%;
                 height: 8px;
                 border-radius: 5px;
-                background-color: var(--color-button-secondary-background);
+                background-color: var(--track-background);
                 cursor: pointer;
                 box-shadow: 0 0 0 0 var(--color-input-active-border);
                 transition: background-color 200ms, box-shadow 200ms;
@@ -482,7 +484,7 @@ label.slider {
                 }
 
                 &::-webkit-slider-runnable-track {
-                    background-color: var(--color-button-secondary-hover-background);
+                    background-color: var(--track-background-hover);
                 }
 
                 &::-moz-range-thumb {
@@ -490,7 +492,7 @@ label.slider {
                 }
 
                 &::-moz-range-track {
-                    background-color: var(--color-button-secondary-hover-background);
+                    background-color: var(--track-background-hover);
                 }
             }
 
@@ -602,7 +604,7 @@ label.toggle-button {
             height: 30px;
             margin: 0;
             border: 0px solid var(--color-checkbox-background-checked);
-            transition: border 200ms, background-color 200ms;
+            transition: border 200ms, background-color 200ms, opacity 200ms;
             background-color: white;
 
             &:first-child {
@@ -626,6 +628,10 @@ label.toggle-button {
 
             &:checked {
                 border: 5px solid var(--color-checkbox-background-checked);
+            }
+
+            &:disabled {
+                opacity: 0.5;
             }
         }
     }

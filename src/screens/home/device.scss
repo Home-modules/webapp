@@ -8,8 +8,9 @@
         width: 100%;
         max-width: 100%;
     }
-    padding: 10px;
+    padding: 10px 0 0;
     box-sizing: border-box;
+    user-select: none;
 
     border: none;
     background-color: var(--color-button-secondary-background);
@@ -123,7 +124,7 @@
 
     .name {
         margin-top: 10px;
-        font-size: 1.2em;
+        font-size: 1.4em;
 
         svg { // fa-chevron-right
             font-size: 0.75em;
@@ -132,8 +133,8 @@
         }
     }
 
-    .state {
+    .default-interaction {
         margin-top: 8px;
-        font-size: 0.9em;
+        height: 35px;
     }
 }

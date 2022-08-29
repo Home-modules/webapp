@@ -2,30 +2,8 @@
     .interactions {
         padding: 15px;
 
-        > button {
-            display: block;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        > .label {
-            margin-bottom: 15px;
-
-            &.align-start {text-align: start;}
-            &.align-center {text-align: center;}
-            &.align-end {text-align: end;}
-
-            &.small {font-size: 15px;}
-            &.medium {font-size: 17px;}
-            &.large {font-size: 20px;}
-
-            @each $color in (red, orange, yellow, green, blue, purple, pink, brown) {
-                &.#{$color} {color: var(--color-foreground-#{$color});}
-            }
-        }
-
         > :last-child {
-            margin-bottom: 0;
+            margin-bottom: 0 !important;
         }
     }
 
@@ -46,6 +24,121 @@
             span {
                 display: none;
             }
+        }
+    }
+}
+
+.device-interactions .interactions {
+    > button {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    > .label {
+        margin-bottom: 15px;
+
+        &.align-start {text-align: start;}
+        &.align-center {text-align: center;}
+        &.align-end {text-align: end;}
+
+        &.small {font-size: 15px;}
+        &.medium {font-size: 17px;}
+        &.large {font-size: 20px;}
+    }
+}
+
+.device-interactions .interactions,
+#home .devices .device .default-interaction {
+    > .label {
+        @each $color in ("red", "orange", "yellow", "green", "blue", "purple", "pink", "brown") {
+            &.#{$color} {color: var(--color-foreground-#{$color});}
+        }
+    }
+}
+
+#home .devices .device .default-interaction {
+    > label.slider {
+        padding: 0 20px;
+    }
+
+    > .label {
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    > .button {
+        height: 100%;
+        width: 100%;
+        border-radius: 0 0 10px 10px;
+    }
+
+    > .ui-color-input {
+        height: 100%;
+
+        .colors {
+            height: 100%;
+
+            input {
+                height: 100%;
+
+                &:first-child {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 10px;
+                }
+                &:last-child {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 10px;
+                }
+            }
+        }
+    }
+
+    > label.toggle-button {
+        padding: 0 20px;
+    }
+}
+
+#home .devices .device{
+    &.active {
+        .two-button-number {
+            .button {
+                --color-button-primary-background: var(--color-button-secondary-background);
+                --color-button-primary-hover-background: var(--color-button-secondary-hover-background);
+            }
+        }
+
+        .default-interaction > label.slider input {
+            --thumb-background: var(--color-button-primary-hover-background);
+            --thumb-background-hover: var(--thumb-background);
+        }
+        &:hover .default-interaction > label.slider input {
+            --thumb-background: var(--color-button-primary-background);
+        }
+
+        .default-interaction > label.toggle-button input:checked {
+            background-color: var(--color-button-primary-hover-background);
+        }
+        &:hover .default-interaction > label.toggle-button input:checked {
+            background-color: var(--color-button-primary-background);
+        }
+    }
+    &:not(.active) {
+        .default-interaction > label.slider input {
+            --track-background: var(--color-button-secondary-hover-background);
+            --track-background-hover: var(--track-background);
+        }
+        &:hover .default-interaction > label.slider input {
+            --track-background: var(--color-button-secondary-background);
+        }
+
+        .default-interaction > label.toggle-button input:not(:checked) {
+            background-color: var(--color-button-secondary-hover-background);
+        }
+        &:hover .default-interaction > label.toggle-button input:not(:checked) {
+            background-color: var(--color-button-secondary-background);
         }
     }
 }
