@@ -5,7 +5,7 @@ import platform from "platform";
 import { delay } from '../utils/promise-timeout';
 
 const ax = axios.create({
-    baseURL: `http://${window.location.hostname}:703`,
+    baseURL: `${window.location.protocol}//${window.location.hostname}:703`,
     headers: {
         'Content-Type': 'text/plain' // Avoid pre-flight request
     },
