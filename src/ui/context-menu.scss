@@ -30,6 +30,8 @@
             
             .context-menu-item {
                 display: block;
+                width: 100%;
+                text-align: start;
                 padding: 10px;
                 border: none;
                 color: var(--color-foreground);

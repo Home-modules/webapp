@@ -1,4 +1,4 @@
-import { faExclamationCircle, faPen, faPlug, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle, faPen, faPlug, faRotate, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
@@ -134,6 +134,12 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
                             y: e.clientY,
                             children: [
                                 <ContextMenuItem key={0}
+                                    icon={faRotate}
+                                    onClick={()=> refreshDeviceStates(roomState.id)}
+                                >
+                                    Refresh
+                                </ContextMenuItem>,
+                                <ContextMenuItem key={1}
                                     icon={faPen}
                                     href={`/settings/rooms/${roomState.id}/devices`}
                                 >
@@ -180,7 +186,27 @@ const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({fa
 
     return favoriteDeviceStates instanceof Array ? (
         favoriteDeviceStates.length ? (
-            <ScrollView className="devices">
+            <ScrollView
+                className="devices"
+                onContextMenu={e => {
+                    e.preventDefault();
+                    store.dispatch({
+                        type: 'SET_CONTEXT_MENU',
+                        contextMenu: {
+                            x: e.clientX,
+                            y: e.clientY,
+                            children: [
+                                <ContextMenuItem key={0}
+                                    icon={faRotate}
+                                    onClick={refreshFavoriteDeviceStates}
+                                >
+                                    Refresh
+                                </ContextMenuItem>
+                            ]
+                        }
+                    })
+                }}
+            >
                 {favoriteDeviceStates.map(state => (
                     <Device 
                         key={state.id} 

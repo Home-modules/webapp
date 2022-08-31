@@ -158,6 +158,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
 function DisabledDevice({ state, isInFavorites, roomName }: DeviceProps) {
     function showContextMenu(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
+        e.stopPropagation();
         store.dispatch({
             type: 'SET_CONTEXT_MENU',
             contextMenu: {

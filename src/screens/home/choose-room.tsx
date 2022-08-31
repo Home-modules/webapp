@@ -1,4 +1,4 @@
-import { faPen, faRotate, faStar, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faRotate, faRotateRight, faStar, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 import { HMApi } from "../../hub/api";
@@ -38,6 +38,12 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                         y: e.clientY,
                         children: [
                             <ContextMenuItem key={0}
+                                icon={faRotate}
+                                onClick={refreshRoomStates}
+                            >
+                                Refresh
+                            </ContextMenuItem>,
+                            <ContextMenuItem key={1}
                                 icon={faPen}
                                 href="/settings/rooms"
                             >
@@ -77,7 +83,7 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                                     children: [
                                         (roomState.disabled ? (
                                             <ContextMenuItem key={0}
-                                                icon={faRotate}
+                                                icon={faRotateRight}
                                                 onClick={async () => {
                                                     await sendRequest({
                                                         type: 'rooms.restartRoom',
