@@ -9,6 +9,7 @@ import { HMApi } from "../../../../hub/api";
 import { handleError, sendRequest } from "../../../../hub/request";
 import { store, StoreState } from "../../../../store";
 import { addConfirmationFlyout } from "../../../../ui/flyout";
+import { PlaceHolders } from "../../../../ui/placeholders";
 import ScrollView from "../../../../ui/scrollbar";
 import SearchKeywordHighlight from "../../../../ui/search-highlight";
 import './devices.scss';
@@ -178,63 +179,59 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                     </div>
                 </h1>
                 <div className='list'>
-                    {devices === undefined ? (
-                        <div className="loading">
-                            <span className="circle" />
-                            Loading...
-                        </div>
-                    ) : devices === false ? (
-                        <div className="error">
-                            <FontAwesomeIcon icon={faTimesCircle} />
-                            Error loading rooms
-                        </div>
-                    ) : search ? (
-                        devices
-                            .filter(device=>(device.name.toLowerCase().includes(search.toLowerCase()) || device.id.toLowerCase().includes(search.toLowerCase())))
-                            .map(device => (
-                                <DeviceItem 
-                                    key={device.id} 
-                                    device={device} 
-                                    disableReorder 
-                                    search={search} 
-                                    deviceType={types? types.find(t=> t.id === device.type): undefined}
-                                    action={selectedDevices.length===0 ? 'edit' : 'check'}
-                                    selected={selectedDevices.includes(device.id)}
-                                    onSelectChange={()=> {
-                                        if(selectedDevices.includes(device.id)) {
-                                            setSelectedDevices(val=> val.filter(el=> el!==device.id));
-                                        } else {
-                                            setSelectedDevices(val=> [...val, device.id])
-                                        }
-                                    }}
-                                />
-                            ))
-                    ) : (<>
-                        <ReactSortable 
-                            list={devices} setList={setDevices} onSort={onSort}
-                            animation={200} easing='ease' 
-                            handle='.drag-handle' ghostClass='ghost'>
-                            {devices.map(device => (
-                                <DeviceItem 
-                                    key={device.id} 
-                                    device={device} 
-                                    deviceType={types? types.find(t=> t.id === device.type): undefined}
-                                    action={selectedDevices.length===0 ? 'edit' : 'check'}
-                                    selected={selectedDevices.includes(device.id)}
-                                    onSelectChange={()=> {
-                                        if(selectedDevices.includes(device.id)) {
-                                            setSelectedDevices(val=> val.filter(el=> el!==device.id));
-                                        } else {
-                                            setSelectedDevices(val=> [...val, device.id])
-                                        }
-                                    }}
-                                />
-                            ))}
-                        </ReactSortable>
-                        <Link to="new" className="add">
-                            <FontAwesomeIcon icon={faPlus} />
-                        </Link>
-                    </>)}
+                    <PlaceHolders
+                        content={devices}
+                        Wrapper={devices => (
+                            search ? <>{
+                                devices
+                                    .filter(device => (device.name.toLowerCase().includes(search.toLowerCase()) || device.id.toLowerCase().includes(search.toLowerCase())))
+                                    .map(device => (
+                                        <DeviceItem
+                                            key={device.id}
+                                            device={device}
+                                            disableReorder
+                                            search={search}
+                                            deviceType={types ? types.find(t => t.id === device.type) : undefined}
+                                            action={selectedDevices.length === 0 ? 'edit' : 'check'}
+                                            selected={selectedDevices.includes(device.id)}
+                                            onSelectChange={() => {
+                                                if (selectedDevices.includes(device.id)) {
+                                                    setSelectedDevices(val => val.filter(el => el !== device.id));
+                                                } else {
+                                                    setSelectedDevices(val => [...val, device.id])
+                                                }
+                                            }}
+                                        />
+                                    ))
+                            }</> : <>
+                                <ReactSortable
+                                    list={devices} setList={setDevices} onSort={onSort}
+                                    animation={200} easing='ease'
+                                    handle='.drag-handle' ghostClass='ghost'>
+                                    {devices.map(device => (
+                                        <DeviceItem
+                                            key={device.id}
+                                            device={device}
+                                            deviceType={types ? types.find(t => t.id === device.type) : undefined}
+                                            action={selectedDevices.length === 0 ? 'edit' : 'check'}
+                                            selected={selectedDevices.includes(device.id)}
+                                            onSelectChange={() => {
+                                                if (selectedDevices.includes(device.id)) {
+                                                    setSelectedDevices(val => val.filter(el => el !== device.id));
+                                                } else {
+                                                    setSelectedDevices(val => [...val, device.id])
+                                                }
+                                            }}
+                                        />
+                                    ))}
+                                </ReactSortable>
+                                <Link to="new" className="add">
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </Link>
+                            </>
+                        )}
+                        errorPlaceholder="Error loading devices"
+                    />
                 </div>
             </ScrollView>
             <Outlet />

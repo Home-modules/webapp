@@ -8,12 +8,13 @@ import { connect } from "react-redux";
 import React from "react";
 import { handleError, sendRequest } from "../../../../hub/request";
 import ScrollView from "../../../../ui/scrollbar";
+import { PlaceHoldersArray } from "../../../../ui/placeholders";
 
 function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState, 'deviceTypes'|'rooms'>) {
     let hideList = !useMatch('/settings/rooms/:roomId/devices/new/');
     const {roomId= ''} = useParams();
-    const controllerType = rooms ? rooms.find(r=> r.id === roomId)?.controllerType : undefined;
-    const types = controllerType ? deviceTypes[controllerType.type] : false;
+    const controllerType = rooms ? (rooms.find(r=> r.id === roomId)?.controllerType || false) : undefined;
+    const types = controllerType && deviceTypes[controllerType.type];
 
     React.useEffect(() => {
         if((!types) && roomId && controllerType) {
@@ -50,22 +51,27 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                 <div className="subtitle">
                     Select device type
                 </div>
-                <div className="device-types">
-                    {types === undefined ?
-                        <div className="loading">
-                            Loading device types...
+                <PlaceHoldersArray
+                    className="device-types"
+                    items={types}
+                    Wrapper={types => (
+                        <div className="device-types">
+                            {types.map(type => (
+                                <Link key={type.id} to={type.id} className="button">
+                                    <FontAwesomeIcon icon={fas['fa'+type.icon]} />
+                                    {type.name}
+                                </Link>
+                            ))}
                         </div>
-                    : types === false ? 
-                        <div className="error">
-                            Error loading device types
-                        </div>
-                    : types.map(type => (
-                        <Link key={type.id} to={type.id} className="button">
-                            <FontAwesomeIcon icon={fas['fa'+type.icon]} />
-                            {type.name}
-                        </Link>
-                    ))}
-                </div>
+                    )}
+                    loadingPlaceholder="Loading device types"
+                    errorPlaceholder="Error loading device types"
+                    emptyPlaceholder={(
+                        <p>
+                            No device type is available at the moment.
+                        </p>
+                    )}
+                />
             </ScrollView>
             <Outlet />
         </main>

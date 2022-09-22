@@ -9,7 +9,7 @@
         top: 2px;
     }
 
-    > div:first-child {
+    &.scroll-view > div:first-child {
         display: flex;
         overflow-y: auto !important; // These two lines prevent a margin on the right from appearing when centering the active tab.
         margin-right: 0 !important;
@@ -56,11 +56,8 @@
         }
     }
     
-    &.loading > div:first-child, 
-    &.error > div:first-child {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    &.loading, 
+    &.error {
         font-size: 15px;
 
         svg, .circle {
@@ -72,16 +69,7 @@
         .circle {
             border-radius: 50%;
             box-sizing: border-box;
-            border: 3px solid;
-            border-top-color: transparent;
-            animation: fa-spin 1s linear infinite;
+            border-width: 3px;
         }
-
-    }
-    &.loading > div:first-child  {
-        color: var(--color-status-placeholder);
-    }
-    &.error > div:first-child {
-        color: var(--color-status-error);
     }
 }

@@ -1,5 +1,5 @@
 import './rooms.scss';
-import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimesCircle, faTimes, faUtensils, IconDefinition, faPlug, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimes, faUtensils, IconDefinition, faPlug, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ReactSortable, Store } from "react-sortablejs";
@@ -12,6 +12,7 @@ import { Link, Navigate, Outlet, useMatch, useParams, useSearchParams } from 're
 import SearchKeywordHighlight from '../../../ui/search-highlight';
 import ScrollView from '../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../ui/flyout';
+import { PlaceHolders } from '../../../ui/placeholders';
 
 function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
     let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
@@ -133,63 +134,58 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                     </div>
                 </h1>
                 <div className='list'>
-                    {rooms === null ? (
-                        <div className="loading">
-                            <span className="circle" />
-                            Loading...
-                        </div>
-                    ) : rooms === false ? (
-                        <div className="error">
-                            <FontAwesomeIcon icon={faTimesCircle} />
-                            Error loading rooms
-                        </div>
-                    ) : search ? (
-                        rooms
-                            .filter(room=>(room.name.toLowerCase().includes(search.toLowerCase()) || room.id.toLowerCase().includes(search.toLowerCase())))
-                            .map(room => (
-                                <RoomItem 
-                                    key={room.id} 
-                                    room={room} 
-                                    disableReorder 
-                                    search={search} 
-                                    active={collapseList ? roomId===room.id : false} 
-                                    action={selectedRooms.length===0 ? (collapseList ? 'devices':'edit') : 'check'}
-                                    selected={selectedRooms.includes(room.id)}
-                                    onSelectChange={()=> {
-                                        if(selectedRooms.includes(room.id)) {
-                                            setSelectedRooms(val=> val.filter(el=> el!==room.id));
-                                        } else {
-                                            setSelectedRooms(val=> [...val, room.id])
-                                        }
-                                    }}
-                                />
-                            ))
-                    ) : (<>
-                        <ReactSortable 
-                            list={rooms} setList={setRooms} onSort={onSort}
-                            animation={200} easing='ease' 
-                            handle='.drag-handle' ghostClass='ghost'>
-                            {rooms.map(room => (
-                                <RoomItem 
-                                    key={room.id} 
-                                    room={room} 
-                                    active={collapseList ? roomId===room.id : false} 
-                                    action={selectedRooms.length===0 ? (collapseList ? 'devices':'edit') : 'check'}
-                                    selected={selectedRooms.includes(room.id)}
-                                    onSelectChange={()=> {
-                                        if(selectedRooms.includes(room.id)) {
-                                            setSelectedRooms(val=> val.filter(el=> el!==room.id));
-                                        } else {
-                                            setSelectedRooms(val=> [...val, room.id])
-                                        }
-                                    }}
-                                />
-                            ))}
-                        </ReactSortable>
-                        <Link to="/settings/rooms/new" className="add">
-                            <FontAwesomeIcon icon={faPlus} />
-                        </Link>
-                    </>)}
+                    <PlaceHolders
+                        content={rooms}
+                        errorPlaceholder="Error loading rooms"
+                        Wrapper={rooms => (search ? (<>
+                            {rooms
+                                .filter(room => (room.name.toLowerCase().includes(search.toLowerCase()) || room.id.toLowerCase().includes(search.toLowerCase())))
+                                .map(room => (
+                                    <RoomItem
+                                        key={room.id}
+                                        room={room}
+                                        disableReorder
+                                        search={search}
+                                        active={collapseList ? roomId === room.id : false}
+                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices' : 'edit') : 'check'}
+                                        selected={selectedRooms.includes(room.id)}
+                                        onSelectChange={() => {
+                                            if (selectedRooms.includes(room.id)) {
+                                                setSelectedRooms(val => val.filter(el => el !== room.id));
+                                            } else {
+                                                setSelectedRooms(val => [...val, room.id])
+                                            }
+                                        }}
+                                    />
+                                ))}
+                        </>) : (<>
+                            <ReactSortable
+                                list={rooms} setList={setRooms} onSort={onSort}
+                                animation={200} easing='ease'
+                                handle='.drag-handle' ghostClass='ghost'>
+                                {rooms.map(room => (
+                                    <RoomItem
+                                        key={room.id}
+                                        room={room}
+                                        active={collapseList ? roomId === room.id : false}
+                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices' : 'edit') : 'check'}
+                                        selected={selectedRooms.includes(room.id)}
+                                        onSelectChange={() => {
+                                            if (selectedRooms.includes(room.id)) {
+                                                setSelectedRooms(val => val.filter(el => el !== room.id));
+                                            } else {
+                                                setSelectedRooms(val => [...val, room.id])
+                                            }
+                                        }}
+                                    />
+                                ))}
+                            </ReactSortable>
+                            <Link to="/settings/rooms/new" className="add">
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Link>
+                        </>))}
+                    />
+
                 </div>
             </ScrollView>
             <Outlet />

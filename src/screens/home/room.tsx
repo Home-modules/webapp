@@ -1,4 +1,4 @@
-import { faExclamationCircle, faPen, faPlug, faRotate, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle, faPen, faPlug, faRotate } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
@@ -13,6 +13,7 @@ import { HMApi } from "../../hub/api";
 import ScrollView from "../../ui/scrollbar";
 import { Device } from "./device";
 import { ContextMenuItem } from "../../ui/context-menu";
+import { PlaceHoldersArray } from "../../ui/placeholders";
 
 const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(function Room({roomStates}: Pick<StoreState, 'roomStates'>) {
     const {roomId} = useParams();
@@ -121,41 +122,44 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
 
     React.useEffect(()=> {refreshDeviceStates(roomState.id)}, [roomState.id]);
 
-    return thisRoomDeviceStates instanceof Array ? (
-        thisRoomDeviceStates.length ? (
-            <ScrollView
-                className="devices"
-                onContextMenu={e => {
-                    e.preventDefault();
-                    store.dispatch({
-                        type: 'SET_CONTEXT_MENU',
-                        contextMenu: {
-                            x: e.clientX,
-                            y: e.clientY,
-                            children: [
-                                <ContextMenuItem key={0}
-                                    icon={faRotate}
-                                    onClick={()=> refreshDeviceStates(roomState.id)}
-                                >
-                                    Refresh
-                                </ContextMenuItem>,
-                                <ContextMenuItem key={1}
-                                    icon={faPen}
-                                    href={`/settings/rooms/${roomState.id}/devices`}
-                                >
-                                    Edit devices
-                                </ContextMenuItem>
-                            ]
-                        }
-                    })
-                }}
-            >
-                {thisRoomDeviceStates.map(state => (
-                    <Device key={state.id} state={state} isInFavorites={false}/>
-                ))}
-            </ScrollView>
-        ) : (
-            <div className="devices empty">
+    return (
+        <PlaceHoldersArray
+            className="devices"
+            items={thisRoomDeviceStates}
+            Wrapper={states => (
+                <ScrollView
+                    className="devices"
+                    onContextMenu={e => {
+                        e.preventDefault();
+                        store.dispatch({
+                            type: 'SET_CONTEXT_MENU',
+                            contextMenu: {
+                                x: e.clientX,
+                                y: e.clientY,
+                                children: [
+                                    <ContextMenuItem key={0}
+                                        icon={faRotate}
+                                        onClick={() => refreshDeviceStates(roomState.id)}
+                                    >
+                                        Refresh
+                                    </ContextMenuItem>,
+                                    <ContextMenuItem key={1}
+                                        icon={faPen}
+                                        href={`/settings/rooms/${roomState.id}/devices`}
+                                    >
+                                        Edit devices
+                                    </ContextMenuItem>
+                                ]
+                            }
+                        })
+                    }}
+                >
+                    {states.map(state => (
+                        <Device key={state.id} state={state} isInFavorites={false} />
+                    ))}
+                </ScrollView>
+            )}
+            emptyPlaceholder={<>
                 <FontAwesomeIcon icon={faPlug} className="placeholder" />
                 <h1>No devices</h1>
                 <p>Add devices to <em>{roomState.name}</em> in the settings.</p>
@@ -164,78 +168,63 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
                         Edit devices
                     </Link>
                 </div>
-            </div>
-        )
-    ) : (
-        thisRoomDeviceStates === undefined ? (
-            <div className="devices loading">
-                <div className="circle" />
-                Loading devices...
-            </div>
-        ) : (
-            <div className="devices error">
-                <FontAwesomeIcon icon={faTimesCircle} />
-                There was an error loading the devices
-            </div>
-        )
-    )
+            </>}
+            errorPlaceholder="There was an error loading the devices"
+            loadingPlaceholder="Loading devices..."
+        />
+    );
 })
 
 const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({favoriteDeviceStates, roomStates}))(function Favorites({favoriteDeviceStates, roomStates}: Pick<StoreState, 'favoriteDeviceStates'|'roomStates'>) {
     React.useEffect(()=> {refreshFavoriteDeviceStates()}, []);
 
-    return favoriteDeviceStates instanceof Array ? (
-        favoriteDeviceStates.length ? (
-            <ScrollView
-                className="devices"
-                onContextMenu={e => {
-                    e.preventDefault();
-                    store.dispatch({
-                        type: 'SET_CONTEXT_MENU',
-                        contextMenu: {
-                            x: e.clientX,
-                            y: e.clientY,
-                            children: [
-                                <ContextMenuItem key={0}
-                                    icon={faRotate}
-                                    onClick={refreshFavoriteDeviceStates}
-                                >
-                                    Refresh
-                                </ContextMenuItem>
-                            ]
-                        }
-                    })
-                }}
-            >
-                {favoriteDeviceStates.map(state => (
-                    <Device 
-                        key={state.id} 
-                        state={state} 
-                        isInFavorites 
-                        roomName={roomStates? roomStates.find(r=> r.id === state.roomId)?.name : undefined} 
-                    />
-                ))}
-            </ScrollView>
-        ) : (
-            <div className="devices favorites empty">
-                <FontAwesomeIcon icon={farStar} className="placeholder" />
-                <h1>No favorite devices</h1>
-                <p>
-                    Add devices to this list by {navigator.maxTouchPoints ? 'long pressing' : 'right clicking'} a device and selecting the <FontAwesomeIcon icon={farStar} /> button.
-                </p>
-            </div>
-        )
-    ) : (
-        favoriteDeviceStates === undefined ? (
-            <div className="devices loading">
-                <div className="circle" />
-                Loading devices...
-            </div>
-        ) : (
-            <div className="devices error">
-                <FontAwesomeIcon icon={faTimesCircle} />
-                There was an error loading the devices
-            </div>
-        )
-    )
+    return (
+        <PlaceHoldersArray
+            className="devices"
+            items={favoriteDeviceStates}
+            Wrapper={states => (
+                <ScrollView
+                    className="devices"
+                    onContextMenu={e => {
+                        e.preventDefault();
+                        store.dispatch({
+                            type: 'SET_CONTEXT_MENU',
+                            contextMenu: {
+                                x: e.clientX,
+                                y: e.clientY,
+                                children: [
+                                    <ContextMenuItem key={0}
+                                        icon={faRotate}
+                                        onClick={refreshFavoriteDeviceStates}
+                                    >
+                                        Refresh
+                                    </ContextMenuItem>
+                                ]
+                            }
+                        })
+                    }}
+                >
+                    {states.map(state => (
+                        <Device
+                            key={state.id}
+                            state={state}
+                            isInFavorites
+                            roomName={roomStates ? roomStates.find(r => r.id === state.roomId)?.name : undefined}
+                        />
+                    ))}
+                </ScrollView>
+            )}
+            emptyPlaceholder={<>
+                <div className="devices favorites empty">
+                    <FontAwesomeIcon icon={farStar} className="placeholder" />
+                    <h1>No favorite devices</h1>
+                    <p>
+                        Add devices to this list by {navigator.maxTouchPoints ? 'long pressing' : 'right clicking'} a device and selecting the <FontAwesomeIcon icon={farStar} /> button.
+                    </p>
+                </div>
+            </>}
+            loadingPlaceholder="Loading devices..."
+            errorPlaceholder="There was an error loading the devices"
+        />
+    );
 });
