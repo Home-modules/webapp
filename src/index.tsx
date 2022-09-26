@@ -26,6 +26,7 @@ import SettingsPageRoomsDevicesEditDevice from './screens/settings/rooms/devices
 import InvalidVersionPage from './screens/invalid-version';
 import ActiveSessions from './screens/settings/account/active-sessions';
 import HomePageRoom from './screens/home/room';
+import SettingsPagePlugins, { SettingsPagePluginsTab } from './screens/settings/plugins/plugins';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -57,6 +58,12 @@ ReactDOM.render(
                                     <Route path="edit/:deviceId" element={<SettingsPageRoomsDevicesEditDevice />} />
                                 </Route>
                                 <Route path="*" element={<Navigate to="/settings/rooms" />} />
+                            </Route>
+                            <Route path="plugins" element={<SettingsPagePlugins />}>
+                                <Route path="installed" element={<SettingsPagePluginsTab tab="installed" />} />
+                                <Route path="all" element={<SettingsPagePluginsTab tab="all" />} />
+                                <Route path="*" element={<Navigate to="/settings/plugins/installed" />} />
+                                <Route index element={<Navigate to="/settings/plugins/installed" />} />
                             </Route>
                             <Route path="*" element={<Navigate to="/settings/account" />} />
                             <Route index element={<Navigate to="/settings/account" />} />

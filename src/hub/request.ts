@@ -3,6 +3,7 @@ import axios from 'axios'
 import { store } from '../store';
 import platform from "platform";
 import { delay } from '../utils/promise-timeout';
+import { uniqueId } from '../utils/uniqueId';
 
 const ax = axios.create({
     baseURL: `${window.location.protocol}//${window.location.hostname}:703`,
@@ -12,10 +13,15 @@ const ax = axios.create({
     timeout: 20_000
 });
 
-export async function sendRequest<R extends HMApi.Request>(req: R): Promise<HMApi.ResponseOrError<R>> {
+type ResponseWithoutError<R extends HMApi.Request> = {
+    type: "ok",
+    data: HMApi.Response<R>
+};
+
+export async function sendRequest<R extends HMApi.Request>(req: R): Promise<ResponseWithoutError<R>> {
     console.log('Request: ', req);
     try {
-        const e = await ax.post<HMApi.ResponseOrError<R>>(String(store.getState().token), req);
+        const e = await ax.post<ResponseWithoutError<R>>(String(store.getState().token), req);
         console.log('Response: ', e.data);
         return e.data;
     } catch(e: any) {
@@ -142,4 +148,58 @@ export function handleError(e: HMApiResponseWithNetworkError<HMApi.Request>): vo
             }
         });
     }
+}
+
+export function sendRestartingRequest<R extends HMApi.Request>(req: R): Promise<ResponseWithoutError<R>> {
+    return sendRequest(req).then(async (res) => {
+
+        const notificationId = uniqueId();
+        store.dispatch({
+            "type": "ADD_NOTIFICATION",
+            id: notificationId,
+            notification: {
+                timeout: 0, // We'll delete it after reconnection.
+                type: 'info',
+                hideCloseButton: true,
+                message: "The hub is restarting..."
+            }
+        });
+
+        await delay(500); // Wait for a bit until the hub has shut down
+        while (true) { // Now wait until the hub has restarted
+            const delayPromise = delay(500); // Start the timer here, but wait for its completion at the end. This way, retries are limited to 2 per second but there will be no wait if the request takes >=500ms.
+            try {
+                await sendRequest({ type: "empty" });
+                // Three possible outcomes:
+                // - Respond as normal: Not shut down yet
+                // - NETWORK_ERROR: Shut down, not started yet
+                // - TOKEN_INVALID: Restart complete
+            } catch (e: any) {
+                if (e instanceof Error) throw e;
+                if(e.type === 'error') {
+                    const err = e.error as HMApi.Error<HMApi.Request.Empty>;
+                    if (err.message === "TOKEN_INVALID") {
+                        break;
+                    }
+                }
+            }
+            await delayPromise;
+        }
+
+        store.dispatch({
+            type: "REMOVE_NOTIFICATION",
+            id: notificationId
+        });
+        store.dispatch({
+            "type": "ADD_NOTIFICATION",
+            id: notificationId,
+            notification: {
+                timeout: 2500,
+                type: 'success',
+                message: "Restarted the hub successfully."
+            }
+        });
+
+        return res;
+    })
 }

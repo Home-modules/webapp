@@ -41,7 +41,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
         name: '',
         icon: 'other',
         controllerType: {
-            type: 'arduino:serial',
+            type: '',
             settings: {
 
             }
@@ -60,12 +60,17 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const [icon, setIcon] = React.useState(icons[room.icon]);
 
     const [controller, setController] = React.useState(room.controllerType);
-    const [controllerTypes, setControllerTypes] = React.useState<HMApi.T.RoomControllerType[]|0|-1>(0); // 0= loading -1= error
+    const [controllerTypes, setControllerTypes] = React.useState<HMApi.T.RoomControllerType[] | 0 | -1>(0); // 0= loading -1= error
+    const [controllerTypeError, setControllerTypeError] = React.useState('');
 
     const [fields, setFields] = React.useState<HMApi.T.SettingsField[]>([]);
     const [fieldErrors, setFieldErrors] = React.useState<Record<string, string|undefined>>({});
 
     function onSave() {
+        if (controller.type === '') {
+            setControllerTypeError('Please select a room controller type & mode.');
+            return Promise.reject();
+        }
         const [hasError, errors] = getFieldsErrors(getFlatFields(fields), controller.settings);
         setFieldErrors({ });
         if(hasError) {
@@ -116,7 +121,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
 
     function onChangeControllerType(val?: string) { // val is not set when called by useEffect, and the existing settings must be kept in that case.
         if(!(controllerTypes instanceof Array)) return;
-        const defaultRCType = room ? room.controllerType.type : 'arduino:serial';
+        const defaultRCType = room ? room.controllerType.type : '';
         const controller: HMApi.T.RoomController = {
             type: val || defaultRCType,
             settings: ((!val) && room) ? room.controllerType.settings : { }
@@ -240,11 +245,12 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                         isLazy: true,
                         loadOn: 'render',
                         fallbackTexts: {
-                            whenEmpty: 'No room controller types found',
+                            whenEmpty: 'No room controller types found. Go to plugin settings and activate a plugin to add room controller types to this list.',
                             whenError: 'Error loading room controller types'
                         }
                     }}
                     value={controller.type}
+                    error={controllerTypeError}
                 />
 
                 <Fields 

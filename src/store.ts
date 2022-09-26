@@ -18,6 +18,10 @@ export type StoreState = {
     roomStates: HMApi.T.RoomState[] | false | undefined;
     deviceStates: Record<string, HMApi.T.DeviceState[] | false | undefined>;
     favoriteDeviceStates: HMApi.T.DeviceState[] | false | undefined;
+    plugins: {
+        installed: HMApi.T.Plugin[] | false | undefined,
+        all: HMApi.T.Plugin[] | false | undefined,
+    }
 };
 
 export type StoreAction = {
@@ -25,6 +29,7 @@ export type StoreAction = {
     token: string | null
 } | {
     type: "ADD_NOTIFICATION",
+    id?: string,
     notification: Omit<NotificationProps, "id">
 } | {
     type: "REMOVE_NOTIFICATION",
@@ -65,6 +70,10 @@ export type StoreAction = {
 } | {
     type: "SET_FAVORITE_DEVICE_STATES",
     states: StoreState['favoriteDeviceStates']
+} | {
+    type: "SET_PLUGINS",
+    list: "all" | "installed",
+    plugins: HMApi.T.Plugin[] | false | undefined
 };
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
@@ -79,6 +88,10 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     roomStates: undefined,
     deviceStates: {},
     favoriteDeviceStates: undefined,
+    plugins: {
+        all: undefined,
+        installed: undefined
+    }
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -93,7 +106,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                     ...state.notifications,
                     {
                         ...action.notification,
-                        id: uniqueId()
+                        id: action.id || uniqueId()
                     }
                 ]
             };
@@ -178,6 +191,14 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                 ...state,
                 favoriteDeviceStates: action.states
             };
+        case 'SET_PLUGINS':
+            return {
+                ...state,
+                plugins: {
+                    ...state.plugins,
+                    [action.list]: action.plugins
+                }
+            }
         default:
             return state;
     }

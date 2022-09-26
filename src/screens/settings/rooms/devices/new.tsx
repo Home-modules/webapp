@@ -68,7 +68,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                     errorPlaceholder="Error loading device types"
                     emptyPlaceholder={(
                         <p>
-                            No device type is available at the moment.
+                            No device type is available at the moment. Go to <Link to="/settings/plugins">plugin settings</Link> and install/activate a plugin to add device types to this list.
                         </p>
                     )}
                 />
