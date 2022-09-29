@@ -108,6 +108,10 @@
                         padding: 10px;
                         position: relative;
                         overflow: hidden;
+                        
+                        &:not(:last-child) {
+                            margin-bottom: 15px;
+                        }
 
                         &.installed {
                             border-color: var(--color-input-border);
