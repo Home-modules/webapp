@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, NavLink, Outlet, useSearchParams } from 'react-router-dom';
 import { handleError, sendRequest, sendRestartingRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
-import Button from '../../../ui/button';
+import Button, { IntermittentButton } from '../../../ui/button';
 import { PlaceHoldersArray } from '../../../ui/placeholders';
 import ScrollView from '../../../ui/scrollbar';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
@@ -128,7 +128,7 @@ export const SettingsPagePluginsTab = connect(({ plugins: { installed, all } }: 
                                         </div>
                                     )}
                                     <div className="actions">
-                                        {activated ? (
+                                        {compatible ? (activated ? (
                                             <Button attention onClick={e => store.dispatch({
                                                 type: "ADD_FLYOUT",
                                                 flyout: {
@@ -186,6 +186,17 @@ export const SettingsPagePluginsTab = connect(({ plugins: { installed, all } }: 
                                             })}>
                                                 Activate
                                             </Button>
+                                        )) : activated && (
+                                            <IntermittentButton
+                                                primary
+                                                onClick={() => sendRestartingRequest({
+                                                    type: "plugins.togglePluginIsActivated",
+                                                    id,
+                                                    isActivated: false
+                                                }).catch(handleError)}
+                                            >
+                                                Deactivate
+                                            </IntermittentButton>
                                         )}
                                     </div>
                                 </div>
