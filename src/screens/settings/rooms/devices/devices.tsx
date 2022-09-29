@@ -72,7 +72,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
     React.useEffect(updateDevices , [hideList, roomId, setDevices]);
 
     React.useEffect(()=> {
-        if ((!types) && roomId && controllerType) {
+        if (roomId && controllerType) {
             sendRequest({
                 type: "devices.getDeviceTypes",
                 controllerType: controllerType.type
@@ -88,7 +88,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                 }
             }, handleError);
         }
-    }, [types, roomId, controllerType]);
+    }, [roomId, controllerType]);
 
     function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
         if(devices) {

@@ -3,10 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, Navigate, Outlet, useMatch, useParams } from "react-router-dom";
 import './new.scss';
 import './edit-device';
-import { store, StoreState } from "../../../../store";
+import { StoreState } from "../../../../store";
 import { connect } from "react-redux";
 import React from "react";
-import { handleError, sendRequest } from "../../../../hub/request";
 import ScrollView from "../../../../ui/scrollbar";
 import { PlaceHoldersArray } from "../../../../ui/placeholders";
 
@@ -15,25 +14,6 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
     const {roomId= ''} = useParams();
     const controllerType = rooms ? (rooms.find(r=> r.id === roomId)?.controllerType || false) : undefined;
     const types = controllerType && deviceTypes[controllerType.type];
-
-    React.useEffect(() => {
-        if((!types) && roomId && controllerType) {
-            sendRequest({
-                type: "devices.getDeviceTypes",
-                controllerType: controllerType.type
-            }).then(res=> {
-                if(res.type === 'ok') {
-                    store.dispatch({
-                        type: "SET_DEVICE_TYPES",
-                        roomController: controllerType.type,
-                        deviceTypes: res.data.types
-                    });
-                } else {
-                    handleError(res);
-                }
-            }, handleError)
-        }
-    }, [types, roomId, controllerType]);
 
     if(!roomId) {
         return <Navigate to="/settings/rooms" />
