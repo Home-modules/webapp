@@ -1,8 +1,8 @@
 main#settings main#settings-rooms .edit-devices .new-device {
     .choose-type {
         height: 100%;
-        
-        > div:first-child {
+
+        >div:first-child {
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -30,28 +30,124 @@ main#settings main#settings-rooms .edit-devices .new-device {
         }
 
         .device-types {
+            position: relative;
             margin: auto;
             flex-grow: 1;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            align-content: center;
+            width: 100%;
             max-width: 800px; // Limit to 3 columns
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
-            a {
-                padding: 15px;
-                font-size: 1.5em;
+            .super-type {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1;
+                animation: new-device-super-types-appear 250ms;
+                opacity: 1;
+                transform: scale(1);
+                transition: opacity 250ms, transform 250ms;
+
+                @keyframes new-device-super-types-appear {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.3);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+
+                &.closing {
+                    opacity: 0;
+                    transform: scale(0.3);
+                    pointer-events: none;
+                }
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                .close {
+                    font-size: 2em;
+                    color: var(--color-foreground-subtext);
+                    transition: color 200ms;
+                    cursor: pointer;
+                    padding: 10px;
+                    width: 43px;
+                    text-align: center;
+
+                    &:hover {
+                        color: var(--color-foreground);
+                    }
+                }
+
+                h2 {
+                    margin: 0 0 15px;
+                }
+
+                .items {
+                    display: flex;
+                    align-content: center;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    gap: 15px;
+                    max-width: 600px;
+                }
+
+                &:not(.closing)~.category {
+                    opacity: 0.5;
+                    filter: blur(10px);
+                    pointer-events: none;
+                }
+            }
+
+            .category {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center;
+                align-content: center;
+                opacity: 1;
+                filter: blur(0px);
+                transition: opacity 250ms, filter 250ms;
+
+                &:not(:last-child) {
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid var(--color-navbar-border);
+                    margin-bottom: 15px;
+                }
+            }
+
+            .button {
+                padding: 10px;
+                font-size: 1.3em;
                 width: 200px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 text-align: center;
+                gap: 10px;
 
                 svg {
-                    margin-right: 10px;
+                    font-size: 1.4em;
+                }
+
+                * {
+                    pointer-events: none;
                 }
             }
         }
 
-        transition: opacity 250ms, transform 250ms;
+        transition: opacity 250ms,
+        transform 250ms;
 
         &.hidden {
             opacity: 0;
