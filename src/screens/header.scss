@@ -23,7 +23,7 @@ header {
 
         transition: padding-bottom 0.2s;
 
-        &::after {
+        span {
             content: '';
             display: flex;
             align-items: center;
@@ -48,8 +48,8 @@ header {
             padding-bottom: 15px;
             outline: none;
         }
-        &:hover::after,
-        &:focus-visible::after {
+        &:hover span,
+        &:focus-visible span {
             height: 20px;
             background-color: var(--color-navbar-hover-title);
             color: var(--color-foreground);
@@ -57,11 +57,11 @@ header {
         &.active {
             padding-bottom: 4px;
         }
-        &.active::after {
+        &.active span {
             background-color: var(--color-navbar-active);
         }
-        &.active:hover::after,
-        &.active:focus-visible::after {
+        &.active:hover span,
+        &.active:focus-visible span {
             color: var(--color-navbar-active-text);
         }
 

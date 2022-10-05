@@ -7,14 +7,16 @@ import { NavLink } from 'react-router-dom';
 export default function Header() {
     return (
         <header>
-            <NavLink data-title="Home" 
+            <NavLink
                 className={({isActive}) => isActive ? 'active' : ''}
                 to="/home">
+                <span>Home</span>
                 <FontAwesomeIcon icon={faHome} />
             </NavLink>
-            <NavLink data-title="Settings"
+            <NavLink
                 className={({isActive}) => isActive ? 'active' : ''}
                 to="/settings">
+                <span>Settings</span>
                 <FontAwesomeIcon icon={faCog} />
             </NavLink>
         </header>
