@@ -26,6 +26,10 @@ export default function ChangePasswordDialog() {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
+    React.useEffect(() => {
+        currentPasswordRef.current?.focus();
+    }, []);
+
     function handleSubmit() {
         if(newPassword !== confirmPassword) {
             setConfirmPasswordError("Passwords don't match");
@@ -104,7 +108,7 @@ export default function ChangePasswordDialog() {
                             if(newPassword===""){
                                 setNewPasswordError('');
                             }
-                        }} 
+                        }}
                     />
                 </label>
                 <label className="text" data-error={newPasswordError}>

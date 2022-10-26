@@ -56,6 +56,12 @@
             }
         }
     }
+
+    @media (forced-colors: active) {
+        .dialog {
+            border: 1px solid;
+        }
+    }
 }
 
 @keyframes dialog-fade-in {

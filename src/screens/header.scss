@@ -24,7 +24,6 @@ header {
         transition: padding-bottom 0.2s;
 
         span {
-            content: '';
             display: flex;
             align-items: center;
             justify-content: center;
@@ -43,32 +42,64 @@ header {
             overflow: hidden;
             transition: background-color 200ms, height 200ms, color 200ms, border-radius 200ms;
         }
-        &:hover:hover,
-        &:focus-visible:focus-visible {
+        &:hover,
+        &:focus-visible {
             padding-bottom: 15px;
             outline: none;
-        }
-        &:hover span,
-        &:focus-visible span {
-            height: 20px;
-            background-color: var(--color-navbar-hover-title);
-            color: var(--color-foreground);
+
+            span {
+                height: 20px;
+                background-color: var(--color-navbar-hover-title);
+                color: var(--color-foreground);
+            }
+
+            &.active span {
+                color: var(--color-navbar-active-text);
+            }
         }
         &.active {
             padding-bottom: 4px;
-        }
-        &.active span {
-            background-color: var(--color-navbar-active);
-        }
-        &.active:hover span,
-        &.active:focus-visible span {
-            color: var(--color-navbar-active-text);
+            
+            span {
+                background-color: var(--color-navbar-active);
+            }
         }
 
         svg {
             color: var(--color-navbar-icon);
             height: 30px !important;
             width: 30px !important;
+        }
+    }
+    
+    @media (forced-colors: active) {
+        border-bottom: 1px solid;
+        
+        a {
+            padding-bottom: 20px !important;
+            outline-offset: -2px;
+
+            span {
+                height: 20px !important;
+                bottom: 2px;
+            }
+
+            svg {
+                color: inherit;
+            }
+
+            &:hover, &:focus-visible {
+                outline: 1px dashed !important;
+            }
+
+            &.active {
+                outline: 1px solid !important;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            border-top: 1px solid;
+            border-bottom: none;
         }
     }
 }

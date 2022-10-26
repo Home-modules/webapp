@@ -72,4 +72,20 @@
             border-width: 3px;
         }
     }
+
+    @media (forced-colors: active) {
+        border-bottom: 1px solid;
+
+        a {
+            outline-offset: -3px;
+
+            &:hover, &:focus-visible {
+                outline: 1px dashed;
+            }
+
+            &.active {
+                outline: 1px solid;
+            }
+        }
+    }
 }

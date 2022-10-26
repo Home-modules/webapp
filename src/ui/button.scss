@@ -102,6 +102,14 @@
         outline: none;
         box-shadow: 0 0 0 3px var(--color-input-active-border);
     }
+
+    @media (forced-colors: active) {
+        border: 1px solid;
+
+        &:hover, &:focus-visible {
+            border-style: dashed;
+        }
+    }
 }
 
 @keyframes intermittent {

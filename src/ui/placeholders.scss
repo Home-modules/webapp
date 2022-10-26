@@ -33,4 +33,12 @@
         justify-content: center;
         text-align: center;
     }
+
+    @media (forced-colors: active) {
+        &.loading .circle, &.error .circle {
+            forced-color-adjust: none;
+            border-color: white;
+            border-top-color: transparent;
+        }
+    }
 }

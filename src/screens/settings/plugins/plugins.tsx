@@ -104,7 +104,7 @@ export const SettingsPagePluginsTab = connect(({ plugins: { installed, all } }: 
                                 >
                                     <h2>
                                         <SearchKeywordHighlight term={search}>{name}</SearchKeywordHighlight>
-                                        <code><SearchKeywordHighlight term={search}>{id}</SearchKeywordHighlight></code>
+                                        <code className='subtext'><SearchKeywordHighlight term={search}>{id}</SearchKeywordHighlight></code>
                                     </h2>
                                     {author && (
                                         <div className="author">

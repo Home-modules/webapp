@@ -43,4 +43,11 @@
         padding: 20px;
         gap: 10px;
     }
+
+    @media (forced-colors: active) {
+        &.empty > svg.placeholder {
+            color: var(--color-foreground);
+            opacity: 1;
+        }
+    }
 }

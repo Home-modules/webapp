@@ -136,20 +136,12 @@
                         h2 {
                             margin: 0;
 
-                            .search-highlight {
-                                color: var(--color-foreground-highlight);
-                            }
-
                             code {
                                 margin-left: 10px;
                                 font-size: 0.5em;
                                 color: var(--color-foreground-subtext);
                                 position: relative;
                                 top: -0.2em;
-
-                                .search-highlight {
-                                    color: var(--color-foreground-subtext-highlight);
-                                }
                             }
                         }
 
@@ -182,11 +174,32 @@
                             transition: opacity 200ms;
                         }
 
-                        &:hover .actions {
+                        &:hover .actions, .actions:focus-within {
                             opacity: 1;
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @media (forced-colors: active) {
+        .tab-view {
+            .tab-bar .tab {
+                &::before {
+                    border: 1px solid;
+                }
+
+                border-radius: 7px 7px 0 0;
+
+                &:hover, &:focus-visible {
+                    outline: 1px dashed;
+                    outline-offset: -2px;
+                }
+            }
+            
+            > .tab > .toolbar {
+                border: 1px solid;
             }
         }
     }

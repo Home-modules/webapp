@@ -251,7 +251,7 @@ function RoomItem({room, disableReorder=false, search, active, action, selected,
                     </label>
                     <span><SearchKeywordHighlight term={search}>{room.name}</SearchKeywordHighlight></span>
                 </span>
-                <span className='id'>
+                <span className='id subtext'>
                     <SearchKeywordHighlight term={search}>{room.id}</SearchKeywordHighlight>
                 </span>
             </Link>

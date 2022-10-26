@@ -1,0 +1,13 @@
+.search-highlight {
+    color: var(--color-foreground-highlight);
+}
+
+.subtext .search-highlight {
+    color: var(--color-foreground-subtext-highlight);
+}
+
+@media (forced-colors: active) {
+    .search-highlight, .subtext .search-highlight {
+        color: Highlight;
+    }
+}

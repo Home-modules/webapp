@@ -211,6 +211,7 @@ main#settings main#settings-rooms {
                 background-color: var(--color-button-secondary-background);
                 border-radius: 8px;
                 padding: 10px 17px 10px 12px;
+                box-shadow: 0 0 0 0 var(--color-input-active-border);
 
                 display: flex;
                 align-items: center;
@@ -221,15 +222,24 @@ main#settings main#settings-rooms {
                 text-decoration: none;
                 color: var(--color-foreground);
 
-                transition: background-color 200ms, gap 250ms, padding-right 250ms;
+                transition: background-color 200ms, box-shadow 200ms, gap 250ms, padding-right 250ms;
 
                 &:hover {
                     background-color: var(--color-button-secondary-hover-background);
                 }
 
+                &:focus-visible, &:focus-within {
+                    outline: none;
+                    box-shadow: 0 0 0 3px var(--color-input-active-border);
+                }
+
                 &:hover:not(.rooms-list.collapsed .open), 
+                &:focus-visible:not(.rooms-list.collapsed .open), 
+                &:focus-within:not(.rooms-list.collapsed .open), 
                 &.checkbox-visible {
                     .name {
+                        overflow: visible;
+
                         svg {
                             opacity: 0;
                             pointer-events: none;
@@ -252,10 +262,6 @@ main#settings main#settings-rooms {
 
                     position: relative;
                     top: -0.5px;
-
-                    .search-highlight {
-                        color: var(--color-foreground-highlight);
-                    }
 
                     svg {
                         margin-right: 10px;
@@ -293,10 +299,6 @@ main#settings main#settings-rooms {
                     text-overflow: ellipsis;
                     direction: rtl;
                     transition: flex-shrink 250ms;
-
-                    .search-highlight {
-                        color: var(--color-foreground-subtext-highlight);
-                    }
                 }
 
             }
@@ -312,9 +314,10 @@ main#settings main#settings-rooms {
                 flex-shrink: 0;
                 flex-basis: initial;
                 position: relative;
-                height: 44px;
-                width: 44px;
+                height: 46px;
+                width: 46px;
                 padding: 0;
+                box-shadow: none !important;
                 transition: width 250ms, opacity 250ms;
 
                 > div {
@@ -330,8 +333,9 @@ main#settings main#settings-rooms {
 
                 svg {
                     padding: 10px;
-                    height: 24px;
-                    width: 24px;
+                    height: 46px;
+                    width: 46px;
+                    box-sizing: border-box;
                     background-color: var(--color-button-secondary-background);
                     transition: background-color 200ms;
                     border-radius: inherit;
@@ -342,17 +346,13 @@ main#settings main#settings-rooms {
                     z-index: 2;
                 }
 
-                &:hover svg {
-                    background-color: var(--color-button-secondary-hover-background);
-                }
-
                 > div::before {
                     content: "Edit devices";
                     position: absolute;
                     z-index: 1;
                     top: 0;
                     bottom: 0;
-                    right: calc(44px - 16px); // 16px = 2 * border radius
+                    right: calc(44px - 14px); // 16px = 2 * border radius - 2 * border width
                     pointer-events: initial; // Undo the inheritance of this property
                     padding: 10px;
                     padding-right: 16px;
@@ -364,11 +364,17 @@ main#settings main#settings-rooms {
                     transition: background-color 200ms, transform 300ms, box-shadow 300ms;
                 }
 
-                &:hover > div::before {
-                    display: block;
-                    background-color: var(--color-button-secondary-hover-background);
-                    transform: translateX(0);
-                    box-shadow: 0 0 10px 4px var(--color-notification-shadow);
+                &:hover, &:focus-visible { 
+                    svg {
+                        background-color: var(--color-button-secondary-hover-background);
+                    }
+                    
+                    > div::before {
+                        display: block;
+                        background-color: var(--color-button-secondary-hover-background);
+                        transform: translateX(0);
+                        box-shadow: 0 0 10px 4px var(--color-notification-shadow);
+                    }
                 }
             }
 
@@ -397,6 +403,12 @@ main#settings main#settings-rooms {
             &:hover {
                 border-color: var(--color-foreground-subtext);
                 color: var(--color-foreground-subtext);
+            }
+
+            &:focus-visible {
+                border-color: var(--color-foreground);
+                color: var(--color-foreground);
+                outline: none;
             }
         }
 
@@ -517,6 +529,64 @@ main#settings main#settings-rooms {
             opacity: 0;
             pointer-events: none;
             transform: scale(0.75);
+        }
+    }
+
+    @media (forced-colors: active) {
+        h1.searchable { 
+            .title svg, .search svg:last-child, .selected svg {
+                color: ButtonText !important;
+
+                &:hover, &:focus-visible {
+                    outline: 1px dashed;
+                }
+            }
+
+            .search input {
+                opacity: 1 !important;
+            }
+        }
+
+        .list { 
+            .item {
+                .drag-handle {
+                    fill: currentColor;
+                }
+
+                .open {
+                    border: 1px solid;
+                }
+
+                .devices {
+                    border: none; // Disable the border to prevent misalignment in the children's borders.
+
+                    div::before {
+                        border: 1px solid;
+                        border-right: none;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                    }
+
+                    div svg {
+                        background: Background !important;
+                        margin-left: 10px;
+                        padding-left: 0;
+                        width: 34px;
+                        border: 1px solid;
+                        border-left: 0;
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+                }
+            }
+
+            .add {
+                border-style: solid;
+
+                &:hover, &:focus-visible {
+                    border-style: dashed;
+                }
+            }
         }
     }
 }

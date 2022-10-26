@@ -70,7 +70,7 @@
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             border: 1px solid var(--color-input-border);
-            border-left: none;
+            border-left-width: 0px;
 
             // Tiny height / position correction
             height: 36px;
@@ -216,10 +216,6 @@
                 .label {
                     position: relative;
                     top: -1px;
-
-                    .search-highlight {
-                        color: var(--color-foreground-highlight);
-                    }
                 }
 
                 .subtext {
@@ -227,10 +223,6 @@
                     color: var(--color-foreground-subtext);
                     transition: color 200ms;
                     float: right;
-
-                    .search-highlight {
-                        color: var(--color-foreground-subtext-highlight);
-                    }
                 }
 
                 &:hover {
@@ -239,10 +231,6 @@
                     .subtext {
                         color: var(--color-dropdown-item-hover-text);
                     }
-
-                    .search-highlight {
-                        color: inherit;
-                    }
                 }
 
                 &.selected,
@@ -250,10 +238,10 @@
                     background-color: var(--color-dropdown-item-active-background);
                     color: var(--color-dropdown-item-active-text);
                     cursor: default;
+                }
 
-                    .search-highlight {
-                        color: var(--color-foreground-highlight);
-                    }
+                &.selected .subtext .search-highlight {
+                    color: var(--color-foreground-highlight);
                 }
 
                 &.focus {
@@ -310,6 +298,46 @@
         color: var(--color-foreground-subtext);
         font-size: 0.9em;
         margin-bottom: 15px;
+    }
+
+    @media (forced-colors: active) {
+        > button {
+            border: 1px solid;
+
+            svg {
+                color: var(--color-foreground);
+            }
+
+            &:hover, &:focus-visible {
+                border-style: dashed;
+            }
+        }
+
+        > input + button {
+            border-left-width: 1px;
+        }
+
+        .dropdown {
+            > .items .item {
+                outline: none;
+
+                &:hover, &.focus {
+                    outline: 1px dashed;
+                }
+
+                &.selected {
+                    outline: 1px solid;
+                    
+                    .subtext .search-highlight {
+                        color: Highlight;
+                    }
+                }
+            }
+
+            .search-bar svg {
+                color: var(--color-foreground);
+            }
+        }
     }
 }
 

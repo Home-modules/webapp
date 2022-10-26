@@ -137,4 +137,29 @@
         margin-top: 8px;
         height: 35px;
     }
+
+    @media (forced-colors: active) {
+        border: 1px solid;
+
+        &.active, &.active:hover {
+            background-color: Highlight !important;
+            border-color: Highlight;
+            color: Background !important;
+
+            .name {
+                forced-color-adjust: none; // To disable backplate
+            }
+
+            &:hover, &:focus-visible {
+                outline: 2px dashed;
+                outline-offset: -5px;
+            }
+        }
+
+        &:not(.active) {
+            &:hover, &:focus-visible {
+                border-style: dashed;
+            }
+        }
+    }
 }

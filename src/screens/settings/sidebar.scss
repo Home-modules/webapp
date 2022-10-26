@@ -96,10 +96,8 @@ main#settings nav.settings-sidebar {
         text-align: center;
         word-wrap: break-word;
     }
-}
-
-@media screen and (max-width: 600px) {
-    main#settings nav.settings-sidebar {
+    
+    @media screen and (max-width: 600px) {
         width: 70px !important;
         box-shadow: inset 0 -1px 0 0 var(--color-navbar-border);
 
@@ -113,6 +111,29 @@ main#settings nav.settings-sidebar {
             }
 
             span {
+                display: none;
+            }
+        }
+    }
+
+    @media (forced-colors: active) {
+            border-right: 1px solid;
+
+        a {
+            outline-offset: -2px;
+            svg {
+                color: inherit !important;
+            }
+
+            &:hover, &:focus-visible {
+                outline: 1px dashed !important;
+            }
+
+            &.active {
+                outline: 1px solid !important;
+            }
+
+            &::after {
                 display: none;
             }
         }

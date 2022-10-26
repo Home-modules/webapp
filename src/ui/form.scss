@@ -223,6 +223,12 @@ label.checkbox {
         font-size: 0.9em;
         margin-bottom: 15px;
     }
+
+    @media (forced-colors: active) {
+        input[type="checkbox"] {
+            border: 1px solid;
+        }
+    }
 }
 
 div.radio-group {
@@ -248,8 +254,8 @@ div.radio-group {
             &::after {
                 content: "";
                 position: absolute;
-                top: 10px;
-                left: 10px;
+                top: 50%;
+                left: 50%;
                 height: 0;
                 width: 0;
                 opacity: 0;
@@ -260,10 +266,10 @@ div.radio-group {
 
             &:checked::after {
                 opacity: 1;
-                top: 3px;
-                left: 3px;
-                height: 14px;
-                width: 14px;
+                top: 15%;
+                left: 15%;
+                height: 70%;
+                width: 70%;
             }
 
             &:focus-visible {
@@ -313,6 +319,16 @@ div.radio-group {
         color: var(--color-foreground-subtext);
         font-size: 0.9em;
         margin-bottom: 15px;
+    }
+
+    @media (forced-colors: active) {
+        label input[type="radio"] {
+            border: 1px solid;
+
+            &::after {
+                background-color: CanvasText;
+            }
+        }
     }
 }
 
@@ -517,6 +533,27 @@ label.slider {
             }
         }
     }
+
+    @media (forced-colors: active) {
+        .input-and-value input {
+            &::-webkit-slider-thumb {
+                background-color: Highlight !important;
+                border: 1px solid Background;
+                box-sizing: border-box;
+            }
+            &::-moz-range-thumb {
+                background-color: Highlight !important;
+                border: 1px solid Background;
+                box-sizing: border-box;
+            }
+            &::-webkit-slider-runnable-track {
+                border: 1px solid;
+            }
+            &::-moz-range-track {
+                border: 1px solid;
+            }
+        }
+    }
 }
 
 label.toggle-button {
@@ -588,6 +625,8 @@ label.toggle-button {
 }
 
 .ui-color-input {
+    forced-color-adjust: none; // A color input should show colors properly
+
     .label {
         margin-bottom: 5px;
     }
@@ -655,6 +694,15 @@ input[type=submit] {
 
     &:disabled {
         opacity: var(--color-button-primary-disable-opacity)
+    }
+
+    @media (forced-colors: active) {
+        border: 1px solid;
+
+        &:hover, &:focus-visible {
+            border-style: dashed;
+            outline: none;
+        }
     }
 }
 input[type=submit] + .intermittent {

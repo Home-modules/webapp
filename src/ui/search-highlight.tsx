@@ -1,4 +1,5 @@
 import React from 'react';
+import './search-highlight.scss';
 
 type SearchKeywordHighlightProps = {
     children: string;
