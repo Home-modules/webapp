@@ -95,6 +95,10 @@ main#settings nav.settings-sidebar {
         font-size: 0.75em;
         text-align: center;
         word-wrap: break-word;
+
+        .mobile {
+            display: none;
+        }
     }
     
     @media screen and (max-width: 600px) {
@@ -112,6 +116,15 @@ main#settings nav.settings-sidebar {
 
             span {
                 display: none;
+            }
+        }
+
+        .footer {
+            .desktop  {
+                display: none;
+            }
+            .mobile {
+                display: block;
             }
         }
     }

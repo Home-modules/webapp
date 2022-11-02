@@ -49,7 +49,8 @@ export default function SettingsSidebar() {
 
             <div className="space-filler" />
             <div className="footer">
-                Home_modules {version}
+                <span className="mobile">v{version}</span>
+                <span className="desktop">Home_modules {version}</span>
             </div>
         </ScrollView>
     );
