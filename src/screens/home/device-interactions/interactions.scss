@@ -60,6 +60,10 @@
 #home .devices .device .default-interaction {
     > label.slider {
         padding: 0 20px;
+
+        input[type="range"] {
+            min-width: 0;
+        }
     }
 
     > .label {
