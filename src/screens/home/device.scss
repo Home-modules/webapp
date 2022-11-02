@@ -18,7 +18,8 @@
     font-family: var(--main-font-stack);
     border-radius: 10px;
     text-align: center;
-    transition: background-color 200ms, color 200ms, opacity 200ms;
+    box-shadow: 0 0 0 0 var(--color-input-active-border);
+    transition: background-color 200ms, color 200ms, opacity 200ms, box-shadow 200ms;
     cursor: default;
     
     &.clickable {
@@ -73,6 +74,11 @@
 
     &.disabled {
         color: var(--color-status-error) !important;
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 3px var(--color-input-active-border);
+        outline: none;
     }
 
     &.intermittent {
