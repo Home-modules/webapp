@@ -26,6 +26,19 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
         });
     }
 
+    function onKeyDown(e: React.KeyboardEvent<HTMLAnchorElement>) {
+        const element =
+            e.key === 'ArrowLeft' ?
+                (e.target as HTMLElement).previousElementSibling :
+            e.key === 'ArrowRight' ?
+                (e.target as HTMLElement).nextElementSibling :
+            null;
+        
+        if (element?.tagName === 'A') {
+            (element as HTMLElement).focus();
+        }
+    }
+
     return (
         <PlaceHolders
             className="choose-room"
@@ -64,6 +77,7 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                         className={({ isActive }) => `${isActive ? 'active' : ''} favorites`}
                         end
                         onClick={navigated}
+                        onKeyDown={onKeyDown}
                     >
                         <FontAwesomeIcon icon={faStar} />
                         <span>
@@ -76,6 +90,7 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                             to={`/home/${roomState.id}`}
                             className={({ isActive }) => `${isActive ? 'active' : ''} ${roomState.disabled ? 'disabled' : ''}`}
                             onClick={navigated}
+                            onKeyDown={onKeyDown}
                             onContextMenu={e => {
                                 e.preventDefault();
                                 e.stopPropagation();

@@ -35,10 +35,24 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
     if(state.disabled) {
         return <DisabledDevice state={state} roomName={roomName} isInFavorites={isInFavorites} />;
     }
+    
+    function onKeyDown(e: React.KeyboardEvent<HTMLButtonElement>) {
+        const element =
+            e.key === 'ArrowLeft' ?
+                (e.target as HTMLElement).previousElementSibling :
+            e.key === 'ArrowRight' ?
+                (e.target as HTMLElement).nextElementSibling :
+            null;
+        
+        if (element?.tagName === 'BUTTON') {
+            (element as HTMLElement).focus();
+        }
+    }
 
     return (
         <button
             className={`device ${state.mainToggleState ? 'active' : ''} ${intermittent ? 'intermittent' : ''} ${state.clickable ? 'clickable' : ''} ${state.activeColor || ''}`}
+            onKeyDown={onKeyDown}
             onClick={() => {
                 if (!state.clickable)
                     return;
