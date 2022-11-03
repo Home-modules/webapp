@@ -1,9 +1,12 @@
+import { faRotate } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, NavLink, Outlet, useSearchParams } from 'react-router-dom';
 import { handleError, sendRequest, sendRestartingRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
 import Button, { IntermittentButton } from '../../../ui/button';
+import { addConfirmationFlyout } from '../../../ui/flyout';
 import { PlaceHoldersArray } from '../../../ui/placeholders';
 import ScrollView from '../../../ui/scrollbar';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
@@ -37,7 +40,18 @@ export default function SettingsPagePlugins() {
 
     return (
         <div id="settings-plugins">
-            <h1>Plugins</h1>
+            <h1>
+                <span>Plugins</span>
+                <button className="icon restart" onClick={e => addConfirmationFlyout({
+                    element: e.target,
+                    text: "Restart the hub?",
+                    confirmText: "Restart",
+                    async: true,
+                    onConfirm: ()=> sendRestartingRequest({ type: "restart" }),
+                })}>
+                    <FontAwesomeIcon icon={faRotate} />
+                </button>
+            </h1>
 
             <div className="tab-view">
                 <div className="tab-bar">

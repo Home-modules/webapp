@@ -6,6 +6,17 @@
 
     h1 {
         margin: 0 0 20px;
+        display: flex;
+        align-items: center;
+
+        span {
+            flex-grow: 1;
+        }
+
+        .restart {
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
     }
 
     .tab-view {

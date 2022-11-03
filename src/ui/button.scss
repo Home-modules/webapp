@@ -147,3 +147,27 @@
         left: 100%;
     }
 }
+
+button.icon {
+    display: contents;
+    font-size: 2rem;
+
+    svg {
+        color: var(--color-foreground-subtext);
+        transition: color 200ms;
+        height: 0.75em;
+        width: 0.75em;
+        padding: 0.25em;
+        cursor: pointer;
+    }
+
+    &:hover svg {
+        color: var(--color-foreground);
+    }
+
+    @media (forced-colors: active) {
+        &:hover, &:focus-visible {
+            outline: 1px dashed;
+        }
+    }
+}
