@@ -42,6 +42,15 @@ header {
             overflow: hidden;
             transition: background-color 200ms, height 200ms, color 200ms, border-radius 200ms;
         }
+        &.active {
+            padding-bottom: 4px;
+            
+            span, 
+            &:hover span, 
+            &:focus-visible span {
+                background-color: var(--color-navbar-active);
+            }
+        }
         &:hover,
         &:focus-visible {
             padding-bottom: 15px;
@@ -55,13 +64,6 @@ header {
 
             &.active span {
                 color: var(--color-navbar-active-text);
-            }
-        }
-        &.active {
-            padding-bottom: 4px;
-            
-            span {
-                background-color: var(--color-navbar-active);
             }
         }
 
