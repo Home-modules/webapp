@@ -180,7 +180,7 @@ const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({fa
 
     return (
         <PlaceHoldersArray
-            className="devices"
+            className="devices favorites"
             items={favoriteDeviceStates}
             Wrapper={states => (
                 <ScrollView
@@ -215,13 +215,11 @@ const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({fa
                 </ScrollView>
             )}
             emptyPlaceholder={<>
-                <div className="devices favorites empty">
-                    <FontAwesomeIcon icon={farStar} className="placeholder" />
-                    <h1>No favorite devices</h1>
-                    <p>
-                        Add devices to this list by {navigator.maxTouchPoints ? 'long pressing' : 'right clicking'} a device and selecting the <FontAwesomeIcon icon={farStar} /> button.
-                    </p>
-                </div>
+                <FontAwesomeIcon icon={farStar} className="placeholder" />
+                <h1>No favorite devices</h1>
+                <p>
+                    Add devices to this list by {navigator.maxTouchPoints ? 'long pressing' : 'right clicking'} a device and selecting the <FontAwesomeIcon icon={farStar} /> button.
+                </p>
             </>}
             loadingPlaceholder="Loading devices..."
             errorPlaceholder="There was an error loading the devices"
