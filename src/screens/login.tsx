@@ -81,6 +81,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                         type="password" 
                         value={password} 
                         ref={passwordRef}
+                        autoComplete="current-password"
                         onChange={(event) => {
                             setPassword(event.target.value); 
                             setPasswordError('');
