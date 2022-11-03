@@ -148,7 +148,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         // General background & text
-        --color-background: rgb(19, 19, 19); // Background color
+        --color-background: rgb(19, 19, 20); // Background color
         --color-foreground: #fff; // Text color
         --color-foreground-highlight: #ffee00; // Text color for highlighted text
         --color-foreground-subtext: rgb(163, 163, 163); // Text color for secondary text
@@ -185,8 +185,7 @@
         --color-background-brown-hover: #f0873b; // Brown background color when hovered
 
         // Login screen
-        --color-login-background: #151515; // Login background color (around the box)
-        --color-login-card-background: #1d1d1d; // Login background color (in the box)
+        --color-login-card-background: rgb(29, 29, 31); // Login background color (in the box)
         --color-login-card-shadow: rgba(0, 0, 0, 0.1); // Shadow cast from the box in the middle
 
         // Buttons
@@ -195,9 +194,9 @@
         --color-button-primary-hover-background: #0353d8; // Primary (blue) button background color on hover
         --color-button-primary-hover-foreground: #fff; // Primary (blue) button text color on hover
         --color-button-primary-disable-opacity: 0.25; // Primary (blue) button opacity when disabled
-        --color-button-secondary-background: rgb(53, 53, 53); // Secondary (gray) button background color
+        --color-button-secondary-background: rgb(53, 53, 56); // Secondary (gray) button background color
         --color-button-secondary-foreground: var(--color-foreground); // Primary (blue) button text color
-        --color-button-secondary-hover-background: #494949; // Secondary (gray) button background color on hover
+        --color-button-secondary-hover-background: rgb(73, 73, 76); // Secondary (gray) button background color on hover
         --color-button-secondary-hover-foreground: var(--color-foreground); // Primary (blue) button text color on hover
         --color-button-secondary-disable-opacity: 0.5; // Secondary (gray) button opacity when disabled
         --color-button-secondary-disabled-foreground: rgba(255, 255, 255, 0.274); // Secondary (gray) button text color when disabled
@@ -214,8 +213,8 @@
         --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
 
         // Text fields
-        --color-input-background: #1d1d1d; // Text field background color
-        --color-input-border: #484848; // Text field default border color
+        --color-input-background: rgb(29, 29, 31); // Text field background color
+        --color-input-border: rgb(72, 72, 75); // Text field default border color
         --color-input-active-border: #1770ff65; // Active text field border color (thicker)
         --color-input-error-border: #ff3b257c; // Text field with error border color (thicker)
         --color-input-error-message: #ff1900; // Error message above fields with errors background color
@@ -228,8 +227,8 @@
         --color-checkbox-check: white; // Checkbox tick color when checked
 
         // Header and settings sidebar
-        --color-navbar-background: #1d1d1d; // Background for the header and settings navigation menu
-        --color-navbar-border: #2b2b2b; // Border between the header and settings navigation menu
+        --color-navbar-background: rgb(29 29 31); // Background for the header and settings navigation menu
+        --color-navbar-border: rgb(43 43 46); // Border between the header and settings navigation menu
         --color-navbar-hover-title: #2c2c2c; // Header button title background color vern hovered
         --color-navbar-active: #007bff; // Header active item underline / Settings navigation active item background color
         --color-navbar-active-text: #fff; // Header active item title / Settings navigation active item text color
@@ -237,8 +236,8 @@
         --color-navbar-hover-text: #4696ff; // Settings navigation menu inactive item text color when hovered
 
         // Notifications
-        --color-notification-background: rgb(56, 56, 56); // Notification background color
-        --color-notification-background-with-blur: rgb(56, 56, 56, 0.67); // Notification background color with background blur effect
+        --color-notification-background: rgb(53, 53, 56); // Notification background color
+        --color-notification-background-with-blur: rgba(56, 56, 59, 0.67); // Notification background color with background blur effect
         --color-notification-shadow: rgba(0, 0, 0, 0.446); // Notification shadow color
         --color-notification-border-info: #2277ff; // Notification border color for information messages
         --color-notification-border-success: #00d523; // Notification border color for success messages
@@ -248,12 +247,12 @@
 
         // Dialogs
         --color-dialog-background-overlay: rgba(0, 0, 0, 0.5); // Overlay for content behind dialogs
-        --color-dialog-background: rgb(46, 46, 46); // Background for dialogs
-        --color-dialog-background-with-blur: rgba(46, 46, 46, 0.67); // Background for dialogs with background blur effect
+        --color-dialog-background: rgb(43, 43, 46); // Background for dialogs
+        --color-dialog-background-with-blur: rgba(46, 46, 49, 0.67); // Background for dialogs with background blur effect
         
         // Flyouts
         --color-flyout-background: var(--color-navbar-background); // Flyout background color
-        --color-flyout-background-with-blur: #1d1d1da9; // Flyout background color with background blur effect
+        --color-flyout-background-with-blur: rgba(29, 29, 31, 0.66); // Flyout background color with background blur effect
         --color-flyout-border: var(--color-input-border); // Flyout border color
         --color-flyout-shadow: var(--color-notification-shadow); // Flyout shadow color
 
@@ -267,7 +266,7 @@
         --color-context-menu-item-attention-hover-background: var(--color-button-attention-secondary-hover-background); // Context menu item background color when hovered and attention is needed
         --color-context-menu-item-attention-hover-foreground: var(--color-button-attention-secondary-hover-foreground); // Context menu item text color when hovered and attention is needed
 
-        --color-tap-highlight: rgba(127, 127, 127, 0.1);
+        --color-tap-highlight: rgba(127, 127, 130, 0.1);
 
         // Horizontal select (like the icon selector in room edit page
         --color-horizontal-select-active-background: var(--color-button-secondary-background); // Background color for the active item
@@ -286,9 +285,9 @@
     
         // Scrollbar
         --color-scrollbar-background: transparent; // Scrollbar background color
-        --color-scrollbar-thumb: rgba(255, 255, 255, 0.1); // Scrollbar thumb color
-        --color-scrollbar-hover-background: rgba(255, 255, 255, 0.025); // Scrollbar background color when hovered
-        --color-scrollbar-hover-thumb: rgba(255, 255, 255, 0.15); // Scrollbar thumb color when hovered
-        --color-scrollbar-active-thumb: rgba(255, 255, 255, 0.2); // Scrollbar thumb color when active
+        --color-scrollbar-thumb: rgba(252, 252, 252, 0.1); // Scrollbar thumb color
+        --color-scrollbar-hover-background: rgba(252, 252, 252, 0.025); // Scrollbar background color when hovered
+        --color-scrollbar-hover-thumb: rgba(252, 252, 252, 0.15); // Scrollbar thumb color when hovered
+        --color-scrollbar-active-thumb: rgba(252, 252, 252, 0.2); // Scrollbar thumb color when active
     }
 }
