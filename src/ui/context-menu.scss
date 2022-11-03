@@ -9,22 +9,26 @@
 
     .context-menu {
         position: fixed;
+
         border-radius: 5px;
         overflow: hidden;
+        width: max-content;
+
         background-color: var(--color-context-menu-background);
         border: 1px solid var(--color-context-menu-border);
         color: var(--color-context-menu-item-foreground);
         box-shadow: 4px 4px 10px var(--color-context-menu-shadow);
+
         transform: scale(1);
-        transform-origin: top left;
+        --transform-origin: top left;
+        transform-origin: var(--transform-origin);
         filter: opacity(1);
         transition: transform 200ms, filter 200ms;
         animation: context-menu-appear 200ms;
-        background-color: var(--color-context-menu-background);
 
         > .content {
             transform: scale(1);
-            transform-origin: top left;
+            transform-origin: var(--transform-origin);
             animation: context-menu-content-appear 200ms;
             transition: transform 200ms;
             

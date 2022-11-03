@@ -6,6 +6,13 @@ import { Link } from "react-router-dom"
 import { store, StoreState } from "../store"
 import './context-menu.scss'
 
+window.addEventListener('blur', () => {
+    store.dispatch({
+        type: "SET_CONTEXT_MENU",
+        contextMenu: null
+    });
+});
+
 export type ContextMenuProps = {
     x: number,
     y: number,
@@ -13,7 +20,21 @@ export type ContextMenuProps = {
 }
 
 export function ContextMenu({x, y, children}: ContextMenuProps) {
-    const [closing, setClosing] = React.useState(false)
+    const [closing, setClosing] = React.useState(false);
+    const contentRef = React.useRef<HTMLDivElement>(null);
+    const [position, setPosition] = React.useState<React.CSSProperties>({});
+
+    React.useEffect(() => { // Check for overflow and change context menu direction if required
+        const menu = contentRef.current!;
+        const overflowX = x + menu.clientWidth > window.innerWidth;
+        const overflowY = y + menu.clientHeight > window.innerHeight;
+
+        setPosition({
+            ["--transform-origin" as any]: (overflowY ? 'bottom' : 'top') + ' ' + (overflowX ? 'right' : 'left'), // Transform origin is the opposite of the menu direction
+            ...(overflowX ? { right: window.innerWidth - x } : { left: x }),
+            ...(overflowY ? { bottom: window.innerHeight - y } : { top: y }),
+        });
+    }, [x, y, children]);
 
     return (
         <div className={`context-menu-container ${closing?'closing':''}`} onClick={e=> {
@@ -25,8 +46,8 @@ export function ContextMenu({x, y, children}: ContextMenuProps) {
                 });
             }, 500);
         }}>
-            <div className="context-menu" style={{ left: x, top: y }}>
-                <div className="content">
+            <div className="context-menu" style={position}>
+                <div className="content" ref={contentRef}>
                     {children}
                 </div>
             </div>
