@@ -75,13 +75,16 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                                             ]);
                                         }}>
                                             <FontAwesomeIcon icon={fas['fa' + types[0].icon]} />
-                                            <div>{types[0].name}</div>
+                                            <div className="name">{types[0].name}</div>
                                             <FontAwesomeIcon icon={faChevronRight} />
                                         </Button>
                                     ) : (
                                         <Link key={superType} to={types[0].id} className="button">
                                             <FontAwesomeIcon icon={fas['fa' + types[0].icon]} />
-                                            <div>{types[0].name}</div>
+                                                <div className="text">
+                                                    <div className="name">{types[0].name}</div>
+                                                    <div className="sub-name">{types[0].sub_name}</div>
+                                                </div>
                                         </Link>
                                     ))}
                                 </div>

@@ -140,6 +140,15 @@ main#settings main#settings-rooms .edit-devices .new-device {
                     font-size: 1.4em;
                 }
 
+                .text {
+                    text-align: start;
+                }
+
+                .sub-name {
+                    font-size: 1rem;
+                    color: var(--color-foreground-subtext)
+                }
+
                 * {
                     pointer-events: none;
                 }
