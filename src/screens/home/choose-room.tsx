@@ -74,6 +74,7 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                 >
                     <NavLink
                         to="/home"
+                        caseSensitive
                         className={({ isActive }) => `${isActive ? 'active' : ''} favorites`}
                         end
                         onClick={navigated}
@@ -88,6 +89,7 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                         <NavLink
                             key={roomState.id}
                             to={`/home/${roomState.id}`}
+                            caseSensitive
                             className={({ isActive }) => `${isActive ? 'active' : ''} ${roomState.disabled ? 'disabled' : ''}`}
                             onClick={navigated}
                             onKeyDown={onKeyDown}
