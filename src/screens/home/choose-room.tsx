@@ -1,8 +1,7 @@
-import { faPen, faRotate, faRotateRight, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faPen, faRotate, faRotateRight, faStar, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink } from "react-router-dom";
-import { HMApi } from "../../hub/api";
-import { store } from "../../store";
+import { NavLink, useSearchParams } from "react-router-dom";
+import { store, StoreState } from "../../store";
 import ScrollView from "../../ui/scrollbar";
 import { roomIcons } from "../settings/rooms/rooms";
 import { ContextMenuItem } from "../../ui/context-menu";
@@ -11,13 +10,11 @@ import { handleError, sendRequest } from "../../hub/request";
 import { refreshRoomStates } from "./home";
 import { PlaceHolders } from "../../ui/placeholders";
 
-export type HomePageChooseRoomProps = {
-    roomStates: HMApi.T.RoomState[] | undefined | false,
-    currentRoomId: string,
-    onRoomSelected: (roomId: string) => void
-}
 
-export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSelected }: HomePageChooseRoomProps) {
+export default function HomePageChooseRoom({ roomStates }: Pick<StoreState, 'roomStates'>) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const isDesktopMode = searchParams.get('desktop') !== null;
+
     function navigated(e: React.MouseEvent<HTMLAnchorElement>) {
         e.currentTarget.scrollIntoView({
             inline: 'center',
@@ -44,8 +41,8 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
             className="choose-room"
             content={roomStates}
             Wrapper={(states => (
+                <div className="choose-room">
                 <ScrollView
-                    className="choose-room"
                     tagName="nav"
                     onContextMenu={e => {
                         e.preventDefault();
@@ -73,7 +70,7 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                     }}
                 >
                     <NavLink
-                        to="/home"
+                        to={isDesktopMode ? "/home?desktop" : "/home"}
                         caseSensitive
                         className={({ isActive }) => `${isActive ? 'active' : ''} favorites`}
                         end
@@ -88,7 +85,7 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                     {states.map(roomState => (
                         <NavLink
                             key={roomState.id}
-                            to={`/home/${roomState.id}`}
+                            to={`/home/${roomState.id}${isDesktopMode?'?desktop':''}`}
                             caseSensitive
                             className={({ isActive }) => `${isActive ? 'active' : ''} ${roomState.disabled ? 'disabled' : ''}`}
                             onClick={navigated}
@@ -134,7 +131,20 @@ export default function HomePageChooseRoom({ roomStates, currentRoomId, onRoomSe
                         </NavLink>
                     ))}
                 </ScrollView>
-            ))}
+                <button
+                    className="icon"
+                    onClick={() => {
+                        if (isDesktopMode)
+                            document.exitFullscreen();
+                        else
+                            document.body.requestFullscreen({ navigationUI: "hide" });
+                        setSearchParams(isDesktopMode ? {} : 'desktop');
+                    }}
+                    title={isDesktopMode ? 'Quit desktop mode' : 'Enter desktop mode'}
+                >
+                    <FontAwesomeIcon icon={isDesktopMode ? faTimes : faMinus} />
+                </button>
+            </div>))}
             loadingPlaceholder="Loading rooms..."
             errorPlaceholder="There was an error loading the rooms"
         />

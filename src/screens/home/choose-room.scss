@@ -1,6 +1,7 @@
 #home .choose-room {
     height: 50px !important;
     flex-shrink: 0;
+    display: flex;
     --scrollbar-width: 6px;
     box-shadow: inset 0 -1px 0 var(--color-navbar-border);
 
@@ -9,7 +10,7 @@
         top: 2px;
     }
 
-    &.scroll-view > div:first-child {
+    .scroll-view > div:first-child {
         display: flex;
         overflow-y: auto !important; // These two lines prevent a margin on the right from appearing when centering the active tab.
         margin-right: 0 !important;
@@ -55,9 +56,13 @@
             }
         }
     }
+
+    button.icon svg {
+        margin: auto 0.25em auto auto; // Go to right center
+    }
     
-    &.loading, 
-    &.error {
+    .loading, 
+    .error {
         font-size: 15px;
 
         svg, .circle {

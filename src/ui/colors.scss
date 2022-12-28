@@ -9,6 +9,8 @@
     --color-status-error: #ff1b02; // Color for error fallback text
     --color-status-success: #00b300; // Color for success fallback text
     --color-status-warning: #c88d00; // Color for warning fallback text
+    --color-background-hover-1: #f9f9f9; // Background color for large hovered elements
+    --color-background-hover-2: #f5f5f5; // Background color for large active elements
 
     // Custom colors
     --color-foreground-red: #ff1b02; // Red text color
@@ -143,6 +145,12 @@
     --color-scrollbar-hover-background: rgba(0, 0, 0, 0.1); // Scrollbar background color when hovered
     --color-scrollbar-hover-thumb: rgba(0, 0, 0, 0.3); // Scrollbar thumb color when hovered
     --color-scrollbar-active-thumb: rgba(0, 0, 0, 0.4); // Scrollbar thumb color when active
+
+    // Desktop mode
+    --color-desktop-mode-device-background: rgba(255, 255, 255, 0.1);
+    --color-desktop-mode-device-hover-background: rgba(255, 255, 255, 0.175);
+    --color-desktop-mode-device-active-background: rgba(4, 100, 255, 0.5);
+    --color-desktop-mode-device-active-hover-background: rgba(4, 100, 255, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -157,6 +165,8 @@
         --color-status-error: #ff1b02; // Color for error fallback text
         --color-status-success: #00b300; // Color for success fallback text
         --color-status-warning: var(--color-notification-border-warning); // Color for warning fallback text
+        --color-background-hover-1: rgb(25, 25, 26); // Background color for large hovered elements
+        --color-background-hover-2: rgb(30, 30, 32); // Background color for large active elements
 
         // Custom colors
         --color-foreground-red: #ff1b02; // Red text color
@@ -289,5 +299,9 @@
         --color-scrollbar-hover-background: rgba(252, 252, 252, 0.025); // Scrollbar background color when hovered
         --color-scrollbar-hover-thumb: rgba(252, 252, 252, 0.15); // Scrollbar thumb color when hovered
         --color-scrollbar-active-thumb: rgba(252, 252, 252, 0.2); // Scrollbar thumb color when active
+
+        // Desktop mode
+        --color-desktop-mode-device-background: rgba(0, 0, 0, 0.1);
+        --color-desktop-mode-device-hover-background: rgba(0, 0, 0, 0.175);
     }
 }

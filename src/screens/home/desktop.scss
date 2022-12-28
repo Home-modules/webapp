@@ -1,0 +1,53 @@
+#home.desktop {
+    flex-direction: column-reverse;
+    background-color: var(--color-background);
+    position: absolute; // Hide the header
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0px -140px 110px -100px black;
+
+    .choose-room {
+        margin: 0 20px;
+        box-shadow: none; // Remove the gray border
+        --color-foreground: white;
+
+        a:not(:hover) {
+            box-shadow: inset 0 0 0 var(--color-navbar-active), inset 0 -0 0 var(--color-navbar-hover-title);
+        
+            &.active {
+                box-shadow: inset 0 -3px 0 var(--color-navbar-active), inset 0 0 0 var(--color-navbar-hover-title);
+            }
+        }
+    }
+
+    .devices, .devices.scroll-view {
+        height: auto !important;
+        width: auto !important;
+        flex-grow: initial;
+        margin: 0 20px;
+
+        > div:first-child {
+            position: static !important;
+            flex-wrap: nowrap;
+            padding: 0 0 5px 0;
+            margin: 0 !important;
+            overflow: auto !important;
+        }
+
+        .track-horizontal, .track-vertical {
+            display: none;
+        }
+
+        .device {
+            --color-button-secondary-background: var(--color-desktop-mode-device-background);
+            --color-button-secondary-hover-background: var(--color-desktop-mode-device-hover-background);
+            --color-button-primary-background: var(--color-desktop-mode-device-active-background);
+            --color-button-primary-hover-background: var(--color-desktop-mode-device-active-hover-background);
+            backdrop-filter: blur(10px);
+        }
+    }
+}

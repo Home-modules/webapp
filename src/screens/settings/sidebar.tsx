@@ -1,6 +1,6 @@
 import './sidebar.scss';
 import React from 'react';
-import { faDoorClosed, faPuzzlePiece, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBrush, faDoorClosed, faPuzzlePiece, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
 import version from '../../version';
@@ -45,6 +45,14 @@ export default function SettingsSidebar() {
             >
                 <FontAwesomeIcon icon={faPuzzlePiece}/>
                 <span>Plugins</span>
+            </NavLink>
+            <NavLink
+                to="/settings/appearance"
+                className={({ isActive }) => isActive ? 'active' : ''}
+                onKeyDown={onKeyDown}
+            >
+                <FontAwesomeIcon icon={faBrush}/>
+                <span>Appearance</span>
             </NavLink>
 
             <div className="space-filler" />

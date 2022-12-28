@@ -27,6 +27,7 @@ import InvalidVersionPage from './screens/invalid-version';
 import ActiveSessions from './screens/settings/account/active-sessions';
 import HomePageRoom from './screens/home/room';
 import SettingsPagePlugins, { SettingsPagePluginsTab } from './screens/settings/plugins/plugins';
+import SettingsPageAppearance from './screens/settings/appearance/appearance';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -65,6 +66,7 @@ ReactDOM.render(
                                 <Route path="*" element={<Navigate to="/settings/plugins/installed" />} />
                                 <Route index element={<Navigate to="/settings/plugins/installed" />} />
                             </Route>
+                            <Route path="appearance" element={<SettingsPageAppearance />} />
                             <Route path="*" element={<Navigate to="/settings/account" />} />
                             <Route index element={<Navigate to="/settings/account" />} />
                         </Route>

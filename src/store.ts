@@ -21,6 +21,8 @@ export type StoreState = {
     plugins: {
         installed: HMApi.T.Plugin[] | false | undefined,
         all: HMApi.T.Plugin[] | false | undefined,
+    },
+    appearanceSettings: {
     }
 };
 
@@ -91,7 +93,9 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     plugins: {
         all: undefined,
         installed: undefined
-    }
+    },
+    appearanceSettings: JSON.parse(localStorage.getItem('home_modules_appearance_settings') || 'null') || {
+    },
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -203,3 +207,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
             return state;
     }
 }, (window as any).__REDUX_DEVTOOLS_EXTENSION__ ?.());
+
+store.subscribe(() => {
+    localStorage.setItem('home_modules_appearance_settings', JSON.stringify(store.getState().appearanceSettings));
+});

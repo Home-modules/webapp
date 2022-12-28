@@ -5,10 +5,11 @@ import { handleError, sendRequest } from "../../hub/request";
 import { store, StoreState } from "../../store";
 import HomePageChooseRoom from "./choose-room";
 import './home.scss';
+import './desktop.scss';
 
 const HomePage = connect(({roomStates}: StoreState)=>({roomStates}))(function Home({roomStates}: Pick<StoreState, 'roomStates'>) {
-    const [currentRoomId, setCurrentRoomId] = React.useState<string>("");
     const [searchParams] = useSearchParams();
+    const isDesktopMode = searchParams.get('desktop') !== null;
 
     React.useEffect(()=>{refreshRoomStates()}, []);
 
@@ -17,8 +18,12 @@ const HomePage = connect(({roomStates}: StoreState)=>({roomStates}))(function Ho
     }
 
     return (
-        <main id="home">
-            <HomePageChooseRoom roomStates={roomStates} currentRoomId={currentRoomId} onRoomSelected={setCurrentRoomId} />
+        <main
+            id="home"
+            className={isDesktopMode ? 'desktop' : ''}
+            style={isDesktopMode ? {backgroundImage: `url(${localStorage.getItem('home_modules_wallpaper')})`} : {}}
+    >
+            <HomePageChooseRoom roomStates={roomStates} />
             <Outlet />
         </main>
     )
