@@ -1,0 +1,157 @@
+label.text, label.number {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 18px;
+    position: relative;
+    
+    input {
+        width: 100%;
+        display: block;
+        box-sizing: border-box;
+        background-color: var(--color-input-background);
+        padding: 10px;
+        --postfix-width: 0px; // Fallback value for when there is no suffix
+        padding-right: calc( var(--postfix-width) + 10px );
+        border-radius: 7px;
+        border: 1px solid var(--color-input-border);
+        box-shadow: 0 0 0 0 transparent, inset 0 0 0 100px var(--color-input-background);
+        font-size: 16px;
+        color: var(--color-foreground);
+        transition: box-shadow 200ms, border-color 200ms, padding-right 200ms;
+
+        -moz-appearance: textfield;
+        &::-webkit-inner-spin-button {
+            appearance: none;
+        }
+        
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover, 
+        &:-webkit-autofill:focus, 
+        &:-webkit-autofill:active{
+            transition: background-color 999999s, color 999999s, // Prevent Chrome from filling the input with the autofill color by setting a very long transition (999999s= 11.5 days)
+                box-shadow 200ms, border-color 200ms; // The usual transitions
+        }
+
+        &:focus {
+            border-color: transparent;
+            box-shadow: 0 0 0 3px var(--color-input-active-border), inset 0 0 0 100px var(--color-input-background);
+            outline: none;
+        }
+    }
+
+    &[data-error]:not([data-error=""]) {
+        input {
+            border-color: transparent;
+            box-shadow: 0 0 0 3px var(--color-input-error-border), inset 0 0 0 100px var(--color-input-background);
+            animation: shake 0.7s;
+            position: relative;
+            z-index: 1;
+        }
+
+        &::before {
+            content: attr(data-error);
+            position: absolute;
+            bottom: 30px;
+            right: 0;
+            padding: 3px;
+            padding-bottom: 13px;
+            background-color: var(--color-input-error-message);
+            color: var(--color-input-error-message-text);
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            animation: shake 0.7s;
+        }
+    }
+
+    .postfix {
+        position: absolute;
+        right: 11px;
+        bottom: 11px;
+        font-size: 0.9em;
+        color: var(--color-foreground-subtext);
+        transition: right 200ms;
+    }
+
+    button.spin {
+        position: absolute;
+        right: 9px;
+        border: none;
+        background: none;
+        height: 13px;
+        width: 12px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 200ms;
+
+        &:disabled {
+            cursor: initial;
+
+            &::after {
+                opacity: 0.5;
+            }
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 4px;
+            left: 2px;
+            height: 7px;
+            width: 7px;
+            transform: rotate(45deg);
+            border: 1px var(--color-input-border);
+            border-style: solid none none solid;
+            transition: border-color 200ms, top 200ms;
+        }
+
+        &:hover:not(:disabled)::after,
+        &.active:not(:disabled)::after {
+            border-color: var(--color-foreground);
+        }
+
+        &:active:active::after,
+        &.active.active::after {
+            top: 2px;
+        }
+
+        &.up {
+            bottom: 20px;
+        }
+        &.down {
+            bottom: 7px;
+
+            &::after {
+                top: 0;
+                transform: rotate(-135deg);
+            }
+        }
+    }
+
+    &:hover button.spin,
+    input:focus ~ button.spin {
+        opacity: 1;
+    }
+
+    &.has-buttons:hover .postfix,
+    &.has-buttons input:focus ~ .postfix {
+        right: 30px;
+    }
+
+    &.has-buttons:hover input,
+    &.has-buttons input:focus {
+        padding-right: calc( var(--postfix-width) + 30px );
+    }
+
+    &.has-description {
+        margin-bottom: 0;
+    }
+
+    + .description {
+        color: var(--color-foreground-subtext);
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+}

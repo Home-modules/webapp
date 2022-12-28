@@ -1,6 +1,7 @@
 import React from 'react';
 import { HMApi } from '../../hub/api';
 import { FieldProps } from './fields';
+import "./text-number.scss";
 
 export function FieldTypeText({ field, value, setValue, error, setError }: FieldProps<string, HMApi.T.SettingsField.TypeText>) {
     const pfRef = React.useRef<HTMLSpanElement>(null);

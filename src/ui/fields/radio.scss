@@ -1,0 +1,97 @@
+div.radio-group {
+    margin-bottom: 15px;
+    position: relative;
+
+    label {
+        cursor: pointer;
+
+        input[type=radio] {
+            margin: 2px 5px 2px 0;
+            appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 10px;
+            background-color: var(--color-checkbox-background);
+            vertical-align: middle;
+            position: relative;
+            box-shadow: 0 0 0 0 var(--color-input-active-border);
+            transition: box-shadow 200ms;
+            cursor: pointer;
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                height: 0;
+                width: 0;
+                opacity: 0;
+                border-radius: 100%;
+                background-color: var(--color-checkbox-background-checked);
+                transition: opacity 200ms, top 200ms, left 200ms, height 200ms, width 200ms;
+            }
+
+            &:checked::after {
+                opacity: 1;
+                top: 15%;
+                left: 15%;
+                height: 70%;
+                width: 70%;
+            }
+
+            &:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px var(--color-input-active-border);
+            }
+        }
+
+        .label {
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+    }
+
+    &.horizontal label {
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    &.vertical {
+        label {
+            display: block;
+
+            &.has-description {
+                margin-bottom: 0;
+            }
+        
+            + .description {
+                color: var(--color-foreground-subtext);
+                font-size: 0.9em;
+                margin-bottom: 3px;
+                margin-top: -3px;
+                text-indent: 25px;
+            }
+        }
+    }
+
+    &.has-description {
+        margin-bottom: 0;
+    }
+
+    + .description {
+        color: var(--color-foreground-subtext);
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+
+    @media (forced-colors: active) {
+        label input[type="radio"] {
+            border: 1px solid;
+
+            &::after {
+                background-color: CanvasText;
+            }
+        }
+    }
+}

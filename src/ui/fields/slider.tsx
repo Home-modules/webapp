@@ -1,5 +1,6 @@
 import { HMApi } from "../../hub/api";
 import { FieldProps } from "./fields";
+import "./slider.scss";
 
 export function FieldTypeSlider({ field, value, setValue, error, setError }: FieldProps<number, HMApi.T.SettingsField.TypeSlider>) {
     return (

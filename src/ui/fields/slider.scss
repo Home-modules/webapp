@@ -1,0 +1,190 @@
+label.slider {
+    display: block;
+    margin-bottom: 15px;
+    width: auto;
+
+    .description {
+        color: var(--color-foreground-subtext);
+        font-size: 0.9em;
+    }
+
+    .input-and-value {
+        display: flex;
+        gap: 10px;
+        margin-top: 5px;
+
+        &.horizontal {
+            align-items: center;
+
+            &.small input {
+                max-width: 150px;
+            }
+            &.large input {
+                max-width: 250px;
+            }
+        }
+
+        &.vertical {
+            width: max-content;
+            flex-direction: column;
+
+            div {
+                margin: 0 15px;
+                width: 20px;
+                overflow: hidden;
+            }
+
+            &.small div {
+                height: 150px;
+
+                input {
+                    width: 150px;
+                    transform: rotate(-90deg) translate(-65px, -65px);
+                }
+            }
+            &.large div {
+                height: 250px;
+
+                input {
+                    width: 250px;
+                    transform: rotate(-90deg) translate(-115px, -115px);
+                }
+            }
+
+            .value {
+                display: block;
+                text-align: center;
+            }
+        }
+
+        input {
+            margin: 0;
+            flex-grow: 1;
+            
+            appearance: none;
+            background: transparent;
+            height: 20px;
+
+            --thumb-background: var(--color-button-primary-background);
+            --thumb-background-hover: var(--color-button-primary-hover-background);
+            --track-background: var(--color-button-secondary-background);
+            --track-background-hover: var(--color-button-secondary-hover-background);
+
+            $colors: "red", "orange", "yellow", "green", "blue", "purple", "pink", "brown";
+            @each $color in $colors {
+                &.#{$color} {
+                    --thumb-background: var(--color-background-#{$color});
+                    --thumb-background-hover: var(--color-background-#{$color}-hover);
+                }
+            }
+
+            &::-webkit-slider-thumb {
+                appearance: none;
+                width: 20px;
+                height: 20px;
+                border-radius: 10px;
+                background-color: var(--thumb-background);
+                cursor: pointer;
+                position: relative;
+                top: -6px;
+                box-shadow: 0 0 0 0 var(--color-input-active-border);
+                transition: background-color 200ms, box-shadow 200ms;
+            }
+
+            &::-webkit-slider-runnable-track {
+                appearance: none;
+                width: 100%;
+                height: 8px;
+                border-radius: 5px;
+                background-color: var(--track-background);
+                cursor: pointer;
+                box-shadow: 0 0 0 0 var(--color-input-active-border);
+                transition: background-color 200ms, box-shadow 200ms;
+            }
+
+            &::-moz-range-thumb {
+                appearance: none;
+                width: 20px;
+                height: 20px;
+                border-radius: 10px;
+                background-color: var(--thumb-background);
+                border: none;
+                cursor: pointer;
+                position: relative;
+                top: -6px;
+                box-shadow: 0 0 0 0 var(--color-input-active-border);
+                transition: background-color 200ms, box-shadow 200ms;
+            }
+
+            &::-moz-range-track {
+                appearance: none;
+                width: 100%;
+                height: 8px;
+                border-radius: 5px;
+                background-color: var(--track-background);
+                cursor: pointer;
+                box-shadow: 0 0 0 0 var(--color-input-active-border);
+                transition: background-color 200ms, box-shadow 200ms;
+            }
+
+            &:hover {
+                &::-webkit-slider-thumb {
+                    background-color: var(--thumb-background-hover);
+                }
+
+                &::-webkit-slider-runnable-track {
+                    background-color: var(--track-background-hover);
+                }
+
+                &::-moz-range-thumb {
+                    background-color: var(--thumb-background-hover);
+                }
+
+                &::-moz-range-track {
+                    background-color: var(--track-background-hover);
+                }
+            }
+
+            &:focus-visible {
+                outline: none;
+
+                &::-webkit-slider-thumb {
+                    box-shadow: 0 0 0 3px var(--color-input-active-border);
+                }
+
+                &::-webkit-slider-runnable-track {
+                    box-shadow: 0 0 0 1px var(--color-input-active-border);
+                }
+
+                &::-moz-range-thumb {
+                    box-shadow: 0 0 0 3px var(--color-input-active-border);
+                }
+
+                &::-moz-range-track {
+                    box-shadow: 0 0 0 1px var(--color-input-active-border);
+                }
+            }
+        }
+    }
+
+    @media (forced-colors: active) {
+        .input-and-value input {
+            &::-webkit-slider-thumb {
+                background-color: Highlight !important;
+                border: 1px solid Background;
+                box-sizing: border-box;
+            }
+            &::-moz-range-thumb {
+                background-color: Highlight !important;
+                border: 1px solid Background;
+                box-sizing: border-box;
+            }
+            &::-webkit-slider-runnable-track {
+                border: 1px solid;
+            }
+            &::-moz-range-track {
+                border: 1px solid;
+            }
+        }
+    }
+}
