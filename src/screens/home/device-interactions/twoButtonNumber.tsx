@@ -12,6 +12,7 @@ export function DeviceInteractionTypeTwoButtonNumber({
     sendAction,
     isDefault = false
 }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type.TwoButtonNumber>) {
+    interaction = { ...interaction }; // Create a copy so we can mutate it safely
 
     interaction.decreaseButton ||= {
         icon: "Minus"

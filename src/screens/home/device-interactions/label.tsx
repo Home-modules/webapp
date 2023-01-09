@@ -10,8 +10,11 @@ export function DeviceInteractionTypeLabel({
 }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type.Label>) {
 
     if (isDefault) {
-        interaction.align = "center";
-        interaction.size = "medium";
+        interaction = {
+            ...interaction,
+            align: "center",
+            size: "medium"
+        };
     }
 
     return (

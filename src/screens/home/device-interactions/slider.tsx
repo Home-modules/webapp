@@ -20,7 +20,7 @@ export function DeviceInteractionTypeSlider({
     const [lastTimeLiveChanged, setLastTimeLiveChanged] = React.useState(-Infinity);
 
     if (isDefault) {
-        interaction.label = undefined;
+        interaction = { ...interaction, label: undefined };
     }
 
     return (
