@@ -66,6 +66,9 @@ export type StoreAction = {
     type: "SET_ROOM_STATES",
     states: StoreState['roomStates']
 } | {
+    type: "SET_ROOM_STATE",
+    state: HMApi.T.RoomState
+} | {
     type: "SET_DEVICE_STATES",
     roomId: string,
     states: StoreState['deviceStates'][string]
@@ -182,6 +185,11 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                 ...state,
                 roomStates: action.states
             };
+        case 'SET_ROOM_STATE':
+            return state.roomStates ? {
+                ...state,
+                roomStates: state.roomStates.map(state => state.id === action.state.id ? action.state : state)
+            } : state;
         case 'SET_DEVICE_STATES':
             return {
                 ...state,

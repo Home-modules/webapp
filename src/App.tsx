@@ -4,7 +4,7 @@ import './App.scss';
 import Header from './screens/header';
 import { StoreState } from './store';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { sendRequest } from './hub/request';
+import { authorizeWebSocket, sendRequest } from './hub/request';
 import version from './version';
 
 function App({token}: Pick<StoreState, 'token'>) {
@@ -15,13 +15,15 @@ function App({token}: Pick<StoreState, 'token'>) {
         if(token) {
             sendRequest({
                 type: "getVersion"
-            }).then(e=>{
-                if(e.type === 'ok') {
-                    if(e.data.version !== version) {
+            }).then(e => {
+                if (e.type === 'ok') {
+                    if (e.data.version !== version) {
                         navigate(`/invalid-version?current=${e.data.version}`);
                     }
                 }
-            })
+            });
+
+            authorizeWebSocket(token);
         }
         /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [token]);

@@ -1,17 +1,49 @@
+import axios from 'axios';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { HMApi } from './api';
-import axios from 'axios'
 import { store } from '../store';
 import platform from "platform";
 import { delay } from '../utils/promise-timeout';
 import { uniqueId } from '../utils/uniqueId';
 
 const ax = axios.create({
-    baseURL: `${window.location.protocol}//${window.location.hostname}:703`,
+    baseURL: `${window.location.protocol}//${window.location.hostname}:703/request`,
     headers: {
         'Content-Type': 'text/plain' // Avoid pre-flight request
     },
     timeout: 20_000
 });
+
+const ws = new ReconnectingWebSocket(`${{'http:':'ws:', 'https:':'wss:'}[window.location.protocol]}${window.location.hostname}:703`);
+ws.onerror = (e) => {
+    console.error(e);
+}
+ws.onmessage = e => {
+    const message = e.data as string;
+    console.log(message);
+    if (message === "LOGGED_OUT" || message === "TOKEN_INVALID") {
+        dropToken();
+    } 
+    else if (message.startsWith("UPDATE ")) {
+        const update = JSON.parse(message.slice(7)) as HMApi.Update;
+        switch (update.type) {
+            case "rooms.roomStateChanged":
+                store.dispatch({
+                    type: "SET_ROOM_STATE",
+                    state: update.state
+                });
+                break;
+        }
+    }
+}
+
+export function authorizeWebSocket(token: string) {
+    if (ws.readyState === ws.CONNECTING) {
+        ws.onopen =
+            () => ws.send("auth " + token);
+    } else
+        ws.send("auth " + token);
+}
 
 type ResponseWithoutError<R extends HMApi.Request> = {
     type: "ok",
@@ -29,11 +61,7 @@ export async function sendRequest<R extends HMApi.Request>(req: R): Promise<Resp
             const err= e.response.data as HMApi.ResponseOrError<R>;
             console.error('Error: ', err);
             if(err.type==='error' && err.error.message==='TOKEN_INVALID') {
-                store.dispatch({
-                    type: 'SET_TOKEN',
-                    token: null
-                });
-                localStorage.removeItem('home_modules_token');
+                dropToken();
             }
             if(err.type==='error' && err.error.message==='TOO_MANY_REQUESTS') {
                 await delay(1000);
@@ -51,6 +79,14 @@ export async function sendRequest<R extends HMApi.Request>(req: R): Promise<Resp
             };
         }
     }
+}
+
+function dropToken() {
+    store.dispatch({
+        type: 'SET_TOKEN',
+        token: null
+    });
+    localStorage.removeItem('home_modules_token');
 }
 
 export function loginToHub(username: string, password: string): Promise<HMApi.ResponseOrError<HMApi.Request.Login>> {
