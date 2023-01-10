@@ -73,6 +73,9 @@ export type StoreAction = {
     roomId: string,
     states: StoreState['deviceStates'][string]
 } | {
+    type: "SET_DEVICE_STATE",
+    state: HMApi.T.DeviceState
+} | {
     type: "SET_FAVORITE_DEVICE_STATES",
     states: StoreState['favoriteDeviceStates']
 } | {
@@ -198,6 +201,16 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                     [action.roomId]: action.states
                 }
             };
+        case 'SET_DEVICE_STATE': {
+            const states = state.deviceStates[action.state.roomId];
+            return {
+                ...state,
+                deviceStates: {
+                    ...state.deviceStates,
+                    [action.state.roomId]: states ? states.map(state => state.id === action.state.id ? action.state : state) : states
+                }
+            };
+        }
         case 'SET_FAVORITE_DEVICE_STATES':
             return {
                 ...state,

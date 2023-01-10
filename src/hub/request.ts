@@ -33,6 +33,12 @@ ws.onmessage = e => {
                     state: update.state
                 });
                 break;
+            
+            case "devices.deviceStateChanged":
+                store.dispatch({
+                    type: "SET_DEVICE_STATE",
+                    state: update.state
+                })
         }
     }
 }
@@ -40,7 +46,7 @@ ws.onmessage = e => {
 export function authorizeWebSocket(token: string) {
     if (ws.readyState === ws.CONNECTING) {
         ws.onopen =
-            () => ws.send("auth " + token);
+            () => ws.send("AUTH " + token);
     } else
         ws.send("AUTH " + token);
 }
