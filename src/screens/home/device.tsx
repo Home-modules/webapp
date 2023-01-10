@@ -1,7 +1,7 @@
 import { faChevronRight, faPen, faRotateRight, fas, faStar as fasStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { handleError, sendRequest } from "../../hub/request";
+import { handleAnyErrors, handleError, sendRequest } from "../../hub/request";
 import { store } from "../../store";
 import { refreshRoomStates } from "./home";
 import React from "react";
@@ -49,6 +49,13 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
         }
     }
 
+    const startSliderStream = () => handleAnyErrors(sendRequest({
+        type: "devices.interactions.initSliderLiveValue",
+        deviceId: state.id,
+        roomId: state.roomId,
+        interactionId: defaultInteraction!,
+    }));
+    
     return (
         <button
             className={`device ${state.mainToggleState ? 'active' : ''} ${intermittent ? 'intermittent' : ''} ${state.clickable ? 'clickable' : ''} ${state.activeColor || ''}`}
@@ -133,8 +140,9 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                 <DeviceInteraction
                     interaction={state.type.interactions[defaultInteraction2]}
                     sendAction={getSendActionF(state, defaultInteraction2, isInFavorites)}
-                    state={state.interactions[defaultInteraction2]}
+                    state={state.interactions[defaultInteraction2]!}
                     isDefault
+                    startSliderStream={startSliderStream}
                 />
             ) : (
                 state.iconText ?
@@ -156,8 +164,9 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                     <DeviceInteraction
                         interaction={state.type.interactions[defaultInteraction]}
                         sendAction={getSendActionF(state, defaultInteraction, isInFavorites)}
-                        state={state.interactions[defaultInteraction]}
+                        state={state.interactions[defaultInteraction]!}
                         isDefault
+                        startSliderStream={startSliderStream}
                     />
                 ) : (
                     <div className="label">

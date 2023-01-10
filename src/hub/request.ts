@@ -14,7 +14,7 @@ const ax = axios.create({
     timeout: 20_000
 });
 
-const ws = new ReconnectingWebSocket(`${{'http:':'ws:', 'https:':'wss:'}[window.location.protocol]}${window.location.hostname}:703`);
+export const ws = new ReconnectingWebSocket(`${{'http:':'ws:', 'https:':'wss:'}[window.location.protocol]}${window.location.hostname}:703`);
 ws.onerror = (e) => {
     console.error(e);
 }
@@ -42,13 +42,17 @@ export function authorizeWebSocket(token: string) {
         ws.onopen =
             () => ws.send("auth " + token);
     } else
-        ws.send("auth " + token);
+        ws.send("AUTH " + token);
 }
 
-type ResponseWithoutError<R extends HMApi.Request> = {
+export type ResponseWithoutError<R extends HMApi.Request> = {
     type: "ok",
     data: HMApi.Response<R>
 };
+
+export function handleAnyErrors<T>(promise: Promise<T>) {
+    return new Promise<T>(resolve => promise.then(resolve, handleError));
+}
 
 export async function sendRequest<R extends HMApi.Request>(req: R): Promise<ResponseWithoutError<R>> {
     console.log('Request: ', req);

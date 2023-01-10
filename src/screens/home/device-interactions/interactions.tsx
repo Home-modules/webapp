@@ -1,5 +1,5 @@
 import { HMApi } from "../../../hub/api";
-import { handleError, sendRequest } from "../../../hub/request";
+import { handleAnyErrors, handleError, ResponseWithoutError, sendRequest } from "../../../hub/request";
 import { ContextMenuItem, ContextMenuItemProps } from "../../../ui/context-menu";
 import { refreshDeviceStates, refreshFavoriteDeviceStates } from "../room";
 import { DeviceInteractionTypeSlider } from "./slider";
@@ -59,8 +59,14 @@ const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: Stor
                         <DeviceInteraction
                             key={interaction.id}
                             interaction={interaction}
-                            state={deviceState.interactions[interaction.id]}
+                            state={deviceState.interactions[interaction.id]!}
                             sendAction={getSendActionF(deviceState, interaction.id, isInFavorites)}
+                            startSliderStream={() =>  handleAnyErrors(sendRequest({
+                                type: "devices.interactions.initSliderLiveValue",
+                                deviceId,
+                                roomId,
+                                interactionId: interaction.id
+                            }))}
                         />
                     ))}
                 </div>
@@ -74,25 +80,26 @@ export default DeviceInteractions;
 
 export type DeviceInteractionTypeProps<T extends HMApi.T.DeviceInteraction.Type> = {
     interaction: T,
-    state?: HMApi.T.DeviceInteraction.State<T>,
+    state: HMApi.T.DeviceInteraction.State<T>,
     sendAction: (action: HMApi.T.DeviceInteraction.Action<T>, refresh?: boolean) => Promise<void>,
     isDefault?: boolean
-}
+    startSliderStream: () => Promise<ResponseWithoutError<HMApi.Request.InitSliderLiveValue>>
+};
 
-export function DeviceInteraction({ interaction, state, sendAction, isDefault }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type>) {
+export function DeviceInteraction({ interaction, state, sendAction, ...props }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type>) {
     switch (interaction.type) {
         case 'slider':
-            return <DeviceInteractionTypeSlider interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Slider} sendAction={sendAction} isDefault={isDefault} />;
+            return <DeviceInteractionTypeSlider interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Slider} sendAction={sendAction} {...props} />;
         case 'button':
-            return <DeviceInteractionTypeButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Button} sendAction={sendAction} isDefault={isDefault} />;
+            return <DeviceInteractionTypeButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Button} sendAction={sendAction} {...props} />;
         case 'label':
-            return <DeviceInteractionTypeLabel interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Label} sendAction={sendAction} isDefault={isDefault} />;
+            return <DeviceInteractionTypeLabel interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.Label} sendAction={sendAction} {...props} />;
         case 'toggleButton':
-            return <DeviceInteractionTypeToggleButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.ToggleButton} sendAction={sendAction} isDefault={isDefault} />;
+            return <DeviceInteractionTypeToggleButton interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.ToggleButton} sendAction={sendAction} {...props} />;
         case 'twoButtonNumber':
-            return <DeviceInteractionTypeTwoButtonNumber interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.TwoButtonNumber} sendAction={sendAction} isDefault={isDefault} />;
+            return <DeviceInteractionTypeTwoButtonNumber interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.TwoButtonNumber} sendAction={sendAction} {...props} />;
         case 'uiColorInput':
-            return <DeviceInteractionTypeUIColorInput interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.UIColorInput} sendAction={sendAction} isDefault={isDefault} />;
+            return <DeviceInteractionTypeUIColorInput interaction={interaction} state={state as HMApi.T.DeviceInteraction.State.UIColorInput} sendAction={sendAction} {...props} />;
         default:
             return null;
     }
