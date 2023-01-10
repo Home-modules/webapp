@@ -20,7 +20,6 @@ export function DeviceInteractionTypeSlider({
     // -Infinity means never called, Infinity means current call is in progress. 
     // value should only be sent if the last call is finished and older than 6ms.
     const [lastTimeLiveChanged, setLastTimeLiveChanged] = React.useState(-Infinity);
-    // const [startedLiveValue, setStartedLiveValue] = React.useState(false);
     const [liveValueID, setLiveValueID] = React.useState<number | undefined>(undefined);
 
     React.useEffect(() => {
