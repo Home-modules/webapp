@@ -83,7 +83,7 @@ export type DeviceInteractionTypeProps<T extends HMApi.T.DeviceInteraction.Type>
     state: HMApi.T.DeviceInteraction.State<T>,
     sendAction: (action: HMApi.T.DeviceInteraction.Action<T>, refresh?: boolean) => Promise<void>,
     isDefault?: boolean
-    startSliderStream: () => Promise<ResponseWithoutError<HMApi.Request.InitSliderLiveValue>>
+    startSliderStream: () => Promise<ResponseWithoutError<HMApi.Request.Devices.Interactions.InitSliderLiveValue>>
 };
 
 export function DeviceInteraction({ interaction, state, sendAction, ...props }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type>) {

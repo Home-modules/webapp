@@ -97,7 +97,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             else {
                 throw res;
             }
-        }).catch((err: HMApi.ResponseOrError<HMApi.Request.EditRoom|HMApi.Request.AddRoom>) => {
+        }).catch((err: HMApi.ResponseOrError<HMApi.Request.Rooms.EditRoom|HMApi.Request.Rooms.AddRoom>) => {
             if(err.type==='error') {
                 if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.name') {
                     setNameError(name.length ? 'Name is too long' : 'Name is empty');

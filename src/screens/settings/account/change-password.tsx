@@ -63,7 +63,7 @@ const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(
                         message: "Password changed successfully"
                     }
                 });
-            }, (err: HMApi.ResponseOrError<HMApi.Request.ChangePassword>) => {
+            }, (err: HMApi.ResponseOrError<HMApi.Request.Account.ChangePassword>) => {
                 if (err.type === 'error') {
                     if (err.error.message === 'LOGIN_PASSWORD_INCORRECT') {
                         setCurrentPasswordError("Password incorrect");

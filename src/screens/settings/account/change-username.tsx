@@ -60,7 +60,7 @@ export default function ChangeUsernameDialog() {
             } else {
                 handleError(res);
             }
-        }, (res: HMApi.ResponseOrError<HMApi.Request.ChangeUsername>) => {
+        }, (res: HMApi.ResponseOrError<HMApi.Request.Account.ChangeUsername>) => {
             if(res.type==='error') {
                 if(res.error.message==="USERNAME_ALREADY_TAKEN"){
                     setUsernameError("Username already taken");

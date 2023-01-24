@@ -134,7 +134,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
             else {
                 throw res;
             }
-        }).catch((err: HMApi.ResponseOrError<HMApi.Request.EditDevice|HMApi.Request.AddDevice>)=> {
+        }).catch((err: HMApi.ResponseOrError<HMApi.Request.Devices.EditDevice|HMApi.Request.Devices.AddDevice>)=> {
             if(err.type==='error') {
                 if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='device.name') {
                     setNameError(name.length ? 'Name is too long' : 'Name is empty');

@@ -68,7 +68,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                         type: 'devices.toggleDeviceMainToggle',
                         roomId: state.roomId,
                         id: state.id
-                    }).catch((err: { type: "error"; error: HMApi.Error<HMApi.Request.ToggleDeviceMainToggle>; }) => {
+                    }).catch((err: { type: "error"; error: HMApi.Error<HMApi.Request.Devices.ToggleDeviceMainToggle>; }) => {
                         if (err.error.message === 'ROOM_DISABLED') {
                             refreshRoomStates(); // refresh room states to show the room is disabled
                         }

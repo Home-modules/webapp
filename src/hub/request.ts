@@ -99,7 +99,7 @@ function dropToken() {
     localStorage.removeItem('home_modules_token');
 }
 
-export function loginToHub(username: string, password: string): Promise<HMApi.ResponseOrError<HMApi.Request.Login>> {
+export function loginToHub(username: string, password: string): Promise<HMApi.ResponseOrError<HMApi.Request.Account.Login>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
             type: "account.login",
@@ -122,7 +122,7 @@ export function loginToHub(username: string, password: string): Promise<HMApi.Re
     })
 }
 
-export function logoutFromHub(): Promise<HMApi.ResponseOrError<HMApi.Request.Logout>> {
+export function logoutFromHub(): Promise<HMApi.ResponseOrError<HMApi.Request.Account.Logout>> {
     return new Promise((resolve, reject)=> {
         sendRequest({
             type: "account.logout"
