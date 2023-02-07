@@ -5,25 +5,16 @@ main#settings-account-info {
 
     h1 {
         margin-top: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-        strong {
-            font-weight: 900;
-        }
         button {
-            vertical-align: middle;
-            margin-left: 6px;
-            padding: 5px;
+            font-size: 1rem;
         }
     }
 
-    .session-count {
-        margin-bottom: 10px; // Default is 16px
-
-        &.loading {
-            opacity: 0.6;
-        }
-        &.error {
-            color: var(--color-status-error);
-        }
+    .setting-item:last-child {
+        border-bottom: none;
     }
 }
