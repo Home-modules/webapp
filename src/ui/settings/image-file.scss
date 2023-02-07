@@ -1,0 +1,48 @@
+.setting-item.image-file {
+    > .value {
+        flex-shrink: 0;
+        
+        .value {
+            position: relative;
+            height: 75px;
+            width: 100px;
+            display: flex;
+            cursor: pointer;
+            background-color: var(--color-button-secondary-background);
+            border-radius: 7px;
+            overflow: hidden;
+            transition: background-color 200ms;
+
+            &:hover {
+                background-color: var(--color-button-secondary-hover-background);
+            }
+
+            input {
+                display: none;
+            }
+
+            img {
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                filter: brightness(75%);
+            }
+
+            img {
+                object-fit: cover;
+            }
+
+            .label {
+                margin: auto;
+                text-align: center;
+                display: inline-block;
+                position: relative;
+                color: white;
+            }
+        }
+    }
+}

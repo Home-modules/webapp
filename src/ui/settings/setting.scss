@@ -1,0 +1,19 @@
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    gap: 10px;
+    border-bottom: 1px solid var(--color-navbar-border);
+
+    >.title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        svg {
+            font-size: 1.3em;
+            margin: 5px;
+        }
+    }
+}
