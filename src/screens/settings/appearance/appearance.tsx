@@ -28,7 +28,8 @@ export default function SettingsPageAppearance() {
                             if(value)
                                 localStorage.setItem('home_modules_wallpaper', value);
                             else 
-                            localStorage.removeItem('home_modules_wallpaper');
+                                localStorage.removeItem('home_modules_wallpaper');
+                            setSearchParams({ field: 'desktop-wallpaper', desktop: '' }); // This causes a re-render.
                         }}
                     />
                 </section>
