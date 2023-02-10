@@ -66,6 +66,9 @@
     --color-button-attention-secondary-disabled-foreground: #ff19007c; // Attention button text color when disabled
     --color-button-intermittent: #00a2ff; // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
     --color-button-intermittent-2: #afdeff; // Intermittent bar (loading bar) color for primary buttons outside forms
+    --color-backdrop-button-foreground: white;
+    --color-backdrop-button-background: rgba(0, 0, 0, 0.448);
+    --color-backdrop-button-hover-background: rgba(0, 0, 0, 0.537);
 
     // Text fields
     --color-input-background: #fff; // Text field background color

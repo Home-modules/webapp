@@ -12,7 +12,7 @@ export function SettingItemImageFile({ title, icon, value, onChange }: SettingIt
         <SettingItem icon={icon} title={title} className="image-file">
             <label className="value">
                 {value && <img src={value} alt={title} />}
-                <span className="label">Select file</span>
+                <div className={`label ${value ? 'backdrop':''}`}>Select file</div>
                 <input type="file" accept="image/*" onChange={e => {
                     const file = (e.target as HTMLInputElement).files?.[0];
                     if (file) {

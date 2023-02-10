@@ -1,7 +1,7 @@
 .setting-item.image-file {
-    > .value {
+    >.value {
         flex-shrink: 0;
-        
+
         .value {
             position: relative;
             height: 75px;
@@ -15,6 +15,7 @@
 
             &:hover {
                 background-color: var(--color-button-secondary-hover-background);
+                --color-backdrop-button-background: var(--color-backdrop-button-hover-background);
             }
 
             input {
@@ -29,7 +30,6 @@
                 bottom: 0;
                 width: 100%;
                 height: 100%;
-                filter: brightness(75%);
             }
 
             img {
@@ -37,11 +37,17 @@
             }
 
             .label {
-                margin: auto;
-                text-align: center;
-                display: inline-block;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 position: relative;
-                color: white;
+
+                &.backdrop {
+                    color: var(--color-backdrop-button-foreground);
+                    background-color: var(--color-backdrop-button-background);
+                    transition: background-color 200ms;
+                }
             }
         }
     }
