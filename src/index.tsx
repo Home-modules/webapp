@@ -64,11 +64,11 @@ ReactDOM.render(
                                 <Route path="installed" element={<SettingsPagePluginsTab tab="installed" />} />
                                 <Route path="all" element={<SettingsPagePluginsTab tab="all" />} />
                                 <Route path="*" element={<Navigate to="/settings/plugins/installed" />} />
-                                <Route index element={<Navigate to="/settings/plugins/installed" />} />
+                                <Route index element={<Navigate to="/settings/plugins/installed" replace />} />
                             </Route>
                             <Route path="appearance" element={<SettingsPageAppearance />} />
                             <Route path="*" element={<Navigate to="/settings/account" />} />
-                            <Route index element={<Navigate to="/settings/account" />} />
+                            <Route index element={<Navigate to="/settings/account" replace />} />
                         </Route>
                         <Route index element={<AppRedirect />} />
                         <Route path="*" element={<AppRedirect />} />
