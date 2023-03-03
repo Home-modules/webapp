@@ -1,0 +1,20 @@
+.setting-item.container {
+    padding: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+
+    > .title {
+        padding: 10px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    > .content {
+        margin-left: 20px;
+
+        :last-child {
+            border-bottom: 0;
+        }
+    }
+}

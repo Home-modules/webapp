@@ -7,9 +7,9 @@ export type SettingItemImageFileProps = SettingItemProps & {
     onChange: (value: string | null) => void
 }
 
-export function SettingItemImageFile({ title, icon, value, onChange }: SettingItemImageFileProps) {
+export function SettingItemImageFile({ title, description, icon, className='', value, onChange }: SettingItemImageFileProps) {
     return (
-        <SettingItem icon={icon} title={title} className="image-file">
+        <SettingItem icon={icon} title={title} description={description} className={`image-file ${className}`}>
             <label className="value">
                 {value && <img src={value} alt={title} />}
                 <div className={`label ${value ? 'backdrop':''}`}>Select file</div>

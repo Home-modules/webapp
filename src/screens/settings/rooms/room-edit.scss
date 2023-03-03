@@ -49,45 +49,31 @@ main#settings main#settings-rooms .edit-room {
         }
     }
 
-    .name-and-id {
-        clear: both;
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-
-        label {
-            margin: 0;
-        }
-
-        label:first-child {
-            flex-basis: 67%;
-        }
-        label:last-child {
-            flex-basis: 33%;
-
-            input {
-                font-family: var(--code-font-stack);
-            }
-
-            &[data-disabled=true] {
-                opacity: 0.5;
-
-                &, input {
-                    cursor: not-allowed;
-                }
-            }
-        }
+    .setting-item.thick-border {
+        border-bottom-width: 3px;
     }
 
-    .icon-select-title,
-    .controller-type-select-title {
-        font-size: 18px;
+    .options > .setting-item:last-child {
+        border-bottom: none;
+        margin-bottom: 20px;
     }
 
-    .save {
-        margin-top: 50px;
-        padding: 12px;
-        font-size: 17px;
+    .save-container {
+        position: sticky;
+        bottom: 0;
+        box-shadow: 0 20px 20px 30px var(--color-background);
+        border-radius: 7px;
+
+        .save {
+            padding: 12px;
+            font-size: 17px;
+            width: 100%;
+            display: block;
+
+            svg {
+                margin-right: 5px;
+            }
+        }
     }
 }
 

@@ -205,48 +205,52 @@ input[type=submit] + .intermittent::after {
 
 @keyframes shake {
     0% {
-        transform: translateX(0);
+        transform: translateX(0) translateY(var(--shake-translate-y));
     }
 
     10% {
-        transform: translateX(-6px);
+        transform: translateX(-6px) translateY(var(--shake-translate-y));
     }
 
     20% {
-        transform: translateX(6px);
+        transform: translateX(6px) translateY(var(--shake-translate-y));
     }
 
     30% {
-        transform: translateX(-6px);
+        transform: translateX(-6px) translateY(var(--shake-translate-y));
     }
 
     40% {
-        transform: translateX(6px);
+        transform: translateX(6px) translateY(var(--shake-translate-y));
     }
 
     50% {
-        transform: translateX(-6px);
+        transform: translateX(-6px) translateY(var(--shake-translate-y));
     }
 
     60% {
-        transform: translateX(6px);
+        transform: translateX(6px) translateY(var(--shake-translate-y));
     }
 
     70% {
-        transform: translateX(-6px);
+        transform: translateX(-6px) translateY(var(--shake-translate-y));
     }
 
     80% {
-        transform: translateX(6px);
+        transform: translateX(6px) translateY(var(--shake-translate-y));
     }
 
     90% {
-        transform: translateX(-6px);
+        transform: translateX(-6px) translateY(var(--shake-translate-y));
     }
 
     100% {
-        transform: translateX(0);
+        transform: translateX(0) translateY(var(--shake-translate-y));
     }
+}
+
+:root {
+    --shake-translate-y: 0;
 }
 
 fieldset {

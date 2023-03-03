@@ -1,0 +1,12 @@
+.setting-item.slider > .value {
+    flex-grow: 1;
+
+    .slider {
+        margin: 0;
+
+        .input-and-value {
+            margin: 0;
+            flex-direction: row-reverse;
+        }
+    }
+}

@@ -1,20 +1,21 @@
 import './room-edit.scss';
 import { HMApi } from "../../../hub/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faSave, faTrash, faUtensils, IconName } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faTrash, faUtensils, IconName } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import Button, { IntermittentButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../hub/request';
-import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
 import { StoreState } from '../../../store';
 import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import machineFriendlyName from '../../../utils/machine-friendly-name';
 import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../ui/fields/fields';
 import getFlatFields from '../../../utils/flat-fields';
-import IconSelect from '../../../ui/fields/icon-select';
 import ScrollView from '../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../ui/flyout';
+import { SettingItemText } from '../../../ui/settings/text';
+import { SettingItemIconSelect } from '../../../ui/settings/icon-select';
+import { SettingItemLazyDropdown } from '../../../ui/settings/lazydropdown';
 
 export type SettingsPageRoomsEditRoomProps = {
     room: HMApi.T.Room & {new?: boolean};
@@ -147,7 +148,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     }
 
     return (
-        <ScrollView className={`edit-room`}>
+        <ScrollView className="edit-room">
             <h1>
                 <Link to="/settings/rooms">
                     <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
@@ -183,38 +184,49 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 )}
             </h1>
 
-            <div className="name-and-id">
-                <label className='text' data-error={nameError}>
-                    Name
-                    <input type="text" value={name} ref={nameRef} onChange={e=>{
-                        setName(e.target.value);
+            <div className="options">
+                <SettingItemText
+                    title='Name'
+                    value={name}
+                    onChange={val => {
+                        setName(val);
                         setNameError('');
-                    }} onBlur={e=> {
-                        if(!id) {
+                    }}
+                    error={nameError}
+                    onBlur={e => {
+                        if (!id) {
                             // If the ID is empty, set it to a machine-friendly version of the name
                             setId(machineFriendlyName(e.target.value));
                         }
-                    }} autoFocus={isNew} />
-                </label>
-                <label className='text' data-error={idError} data-disabled={!isNew} title={(!isNew) ? 'Room ID cannot be changed after it is created': undefined}>
-                    ID (permanent)
-                    <input type="text" disabled={!isNew} value={id} ref={idRef} onChange={e=>{
-                        if(isNew) {
-                            setId(e.target.value);
+                    }}
+                    autofocus={isNew}
+                    iRef={nameRef}
+                />
+                <SettingItemText
+                    title='ID'
+                    description='Cannot be changed after saving'
+                    value={id}
+                    onChange={val => {
+                        if (isNew) {
+                            setId(val);
                             setIdError('');
                         }
-                    }} />
-                </label>
-            </div>
+                    }}
+                    disabled={!isNew}
+                    error={idError}
+                    iRef={idRef}
+                />
 
-            <div className="icon-select-title">Icon</div>
-            <IconSelect value={icon} onChange={setIcon} icons={[faCouch, faUtensils, faBed, faBath, faDoorClosed]} />
+                <SettingItemIconSelect
+                    title='Icon'
+                    value={icon}
+                    onChange={setIcon}
+                    icons={[faCouch, faUtensils, faBed, faBath, faDoorClosed]}
+                />
 
-            <fieldset>
-                <legend>Controller</legend>
-
-                <div className="controller-type-select-title">Controller type &amp; mode</div>
-                <LazyDropDownSelect
+                <SettingItemLazyDropdown
+                    title='Controller'
+                    className='thick-border'
                     callback={()=> {
                         if(!(controllerTypes instanceof Array)) { // If the list has been loaded before, do not show 'Loading'. Do so otherwise
                             setControllerTypes(0);
@@ -264,13 +276,14 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                         controller: controller.type
                     }} 
                 />
+            </div>
 
-            </fieldset>
-
-            <IntermittentButton
-                primary className='save' onClick={onSave}>
-                <FontAwesomeIcon icon={faSave} /> Save
-            </IntermittentButton>
+            <div className="save-container">
+                <IntermittentButton
+                    primary className='save' onClick={onSave}>
+                    Save
+                </IntermittentButton>
+            </div>
         </ScrollView>
     );
 }

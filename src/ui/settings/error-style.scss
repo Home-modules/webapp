@@ -1,0 +1,11 @@
+@mixin setting-error {
+    font-size: 0.9em;
+    font-weight: normal;
+    right: 100%;
+    width: max-content;
+    padding: 5px;
+    bottom: 50%;
+    transform: translateY(50%);
+    --shake-translate-y: 50%;
+    border-radius: 7px 0 0 7px;
+}

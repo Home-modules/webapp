@@ -4,7 +4,7 @@ import { StoreState } from '../../../../store';
 import { connect } from 'react-redux';
 import { HMApi } from '../../../../hub/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../../ui/fields/fields';
 import getFlatFields from '../../../../utils/flat-fields';
@@ -13,6 +13,7 @@ import Button, { IntermittentButton } from '../../../../ui/button';
 import machineFriendlyName from '../../../../utils/machine-friendly-name';
 import ScrollView from '../../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../../ui/flyout';
+import { SettingItemText } from '../../../../ui/settings/text';
 
 /** Resolves all needed objects from their IDs (and redirects to the proper location if something wasn't found) */
 function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : Pick<StoreState, 'deviceTypes'|'rooms'|'devices'>) {
@@ -196,47 +197,61 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                 )}
             </h1>
 
-            <div className="name-and-id">
-                <label className='text' data-error={nameError}>
-                    Name
-                    <input type="text" value={name} ref={nameRef} onChange={e=>{
-                        setName(e.target.value);
+            <div className="options">
+
+                <SettingItemText
+                    title='Name'
+                    value={name}
+                    onChange={val => {
+                        setName(val);
                         setNameError('');
-                    }} onBlur={e=> {
-                        if(!id) {
+                    }}
+                    error={nameError}
+                    onBlur={e => {
+                        if (!id) {
                             // If the ID is empty, set it to a machine-friendly version of the name
                             setId(machineFriendlyName(e.target.value));
                         }
-                    }} autoFocus={isNew} />
-                </label>
-                <label className='text' data-error={idError} data-disabled={!isNew} title={(!isNew) ? 'Device ID cannot be changed after it is created': undefined}>
-                    ID (permanent)
-                    <input type="text" disabled={!isNew} value={id} ref={idRef} onChange={e=>{
-                        if(isNew) {
-                            setId(e.target.value);
+                    }}
+                    autofocus={isNew}
+                    iRef={nameRef}
+                />
+                <SettingItemText
+                    title='ID'
+                    description='Cannot be changed after saving'
+                    value={id}
+                    onChange={val => {
+                        if (isNew) {
+                            setId(val);
                             setIdError('');
                         }
-                    }} />
-                </label>
+                    }}
+                    disabled={!isNew}
+                    error={idError}
+                    iRef={idRef}
+                    className="thick-border"
+                />
+
+                <Fields 
+                    fields={deviceType.settings} 
+                    fieldErrors={fieldErrors} 
+                    fieldValues={fieldValues} 
+                    setFieldValues={setFieldValues} 
+                    setFieldErrors={setFieldErrors}
+                    context={{
+                        for: "device",
+                        controller: room.controllerType.type,
+                        deviceType: deviceType.id
+                    }} 
+                />
             </div>
 
-            <Fields 
-                fields={deviceType.settings} 
-                fieldErrors={fieldErrors} 
-                fieldValues={fieldValues} 
-                setFieldValues={setFieldValues} 
-                setFieldErrors={setFieldErrors}
-                context={{
-                    for: "device",
-                    controller: room.controllerType.type,
-                    deviceType: deviceType.id
-                }} 
-            />
-
-            <IntermittentButton
-                primary className='save' onClick={onSave}>
-                <FontAwesomeIcon icon={faSave} /> Save
-            </IntermittentButton>
+            <div className="save-container">
+                <IntermittentButton
+                    primary className='save' onClick={onSave}>
+                    Save
+                </IntermittentButton>
+            </div>
         </ScrollView>
     );
 }

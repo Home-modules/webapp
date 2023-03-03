@@ -1,17 +1,18 @@
 import { HMApi } from "../../hub/api";
+import { SettingItemSlider } from "../settings/slider";
 import { FieldProps } from "./fields";
 import "./slider.scss";
 
 export function FieldTypeSlider({ field, value, setValue, error, setError }: FieldProps<number, HMApi.T.SettingsField.TypeSlider>) {
     return (
-        <Slider
+        <SettingItemSlider
             onChange={setValue}
             value={value}
             appearance={field.appearance}
             color={field.color}
             min={field.min}
             description={field.description}
-            label={field.label}
+            title={field.label}
             max={field.max}
             postfix={field.postfix}
             showValue={field.showValue}

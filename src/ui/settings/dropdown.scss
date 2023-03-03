@@ -1,0 +1,21 @@
+@import "./error-style.scss";
+
+.setting-item.dropdown .value {
+    .dropdown-select {
+        margin-bottom: 0;
+        
+        .dropdown {
+            left: initial;
+            right: 0;
+        }
+
+        &::before {
+            display: none;
+        }
+
+        &::after {
+            @include setting-error;
+            left: initial;
+        }
+    }
+}

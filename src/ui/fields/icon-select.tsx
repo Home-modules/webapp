@@ -5,7 +5,7 @@ import { uniqueId } from "../../utils/uniqueId";
 import './icon-select.scss';
 
 export type IconSelectProps = {
-    /** A list of icon */
+    /** A list of icons */
     icons: IconDefinition[],
     /** The index of the selected icon */
     value: IconName,
@@ -31,7 +31,7 @@ export default function IconSelect({icons, value, onChange}: IconSelectProps) {
     }, [value])
 
     return(
-        <div className='icon-select' data-icon={value} ref={ref}>
+        <div className='icon-select' ref={ref}>
             {icons.map((icon, index) => (
                 <label key={icon.iconName}>
                     <input 

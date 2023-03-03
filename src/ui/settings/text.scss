@@ -1,0 +1,29 @@
+@import "./error-style.scss";
+
+.setting-item.text {
+    .value {
+        min-width: 100px;
+        flex-shrink: 1;
+
+        label {
+            margin: 0;
+
+            &::before {
+                @include setting-error;
+            }
+        }
+
+        input {
+            width: 200px;
+            max-width: 100%;
+
+            &:disabled {
+                opacity: 0.5;
+
+                & {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

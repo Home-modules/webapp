@@ -11,12 +11,13 @@ export type SettingItemEditableInfoProps = SettingItemProps & {
     buttonText?: string
 }
 
-export function SettingItemEditableInfo({ title, icon, value, onEdit, buttonText }: SettingItemEditableInfoProps) {
+export function SettingItemEditableInfo({ title, description, icon, className='', value, onEdit, buttonText }: SettingItemEditableInfoProps) {
     return (
         <SettingItem
             title={title}
             icon={icon}
-            className="editable-info"
+            description={description}
+            className={`editable-info ${className}`}
         >
             <span>{value}</span>
             {typeof onEdit === "string" ? (

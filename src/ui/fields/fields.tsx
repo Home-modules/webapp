@@ -7,6 +7,7 @@ import { FieldTypeNumber } from './number';
 import { FieldTypeText } from './text';
 import { FieldTypeSelect } from './select';
 import { FieldTypeSlider } from './slider';
+import { SettingItemContainer } from '../settings/container';
 
 export type FieldsProps = {
     fields: HMApi.T.SettingsField[],
@@ -27,19 +28,10 @@ export type FieldsProps = {
 export default function Fields({fields, fieldValues, setFieldValues, fieldErrors, setFieldErrors, context}: FieldsProps) {
     return <>
         {fields.map((field, index)=>(
-            field.type === 'horizontal_wrapper' ? (
-                <div className="horizontal-wrapper" key={index} data-responsive={String(field.responsive !== false)}>
-                    {field.columns.map((col, index) => (
-                        <div key={index} style={{flexGrow: col.width}}>
-                            <Fields fields={col.fields} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
-                        </div>
-                    ))}
-                </div>
-            ) : field.type === 'container' ? (
-                <fieldset key={index}>
-                    <legend>{field.label}</legend>
+            field.type === 'container' ? (
+                <SettingItemContainer title={field.label}>
                     <Fields fields={field.children} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
-                </fieldset>
+                </SettingItemContainer>
             ) : (
                 <Field 
                     key={index} 

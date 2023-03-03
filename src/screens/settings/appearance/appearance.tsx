@@ -1,8 +1,6 @@
 import { faImage } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react"
 import { useSearchParams } from "react-router-dom";
-import { store } from "../../../store";
 import { SettingItemImageFile } from "../../../ui/settings/image-file";
 import HomePage from "../../home/home";
 import './appearance.scss';
