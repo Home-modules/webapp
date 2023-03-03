@@ -5,4 +5,8 @@ main#settings {
     > .content {
         flex-grow: 1;
     }
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column-reverse;
+    }
 }
