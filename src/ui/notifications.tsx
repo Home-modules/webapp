@@ -54,16 +54,25 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
     }, []);
 
     return (
-        <div className={`notification ${visible} ${isNew?'new':''}`} 
-            style={{'--height': height, visibility: hide ? 'hidden':undefined} as any}>
-            <div ref={divRef} className={type}>
-                {!hideCloseButton && <button className="close" onClick={() => {
+        <div
+            className={`notification ${visible} ${isNew ? 'new' : ''}`} 
+            style={{ '--height': height, visibility: hide ? 'hidden' : undefined } as any}
+            onMouseUp={e => {
+                if ((!hideCloseButton) && e.button === 1)  // Middle click
                     close();
-                }}>
-                    <FontAwesomeIcon icon={faTimes} />
-                </button>}
+            }}
+        >
+            <div ref={divRef} className={type}>
+                {!hideCloseButton && (
+                    <button className="close" onClick={() => {
+                        close();
+                    }}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                )}
                 {title && <h1>{title}</h1>}
                 <div className="content">{message}</div>
+
                 {buttons.map((button, i) => (
                     'route' in button ? (
                         <Link key={i}
