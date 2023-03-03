@@ -20,6 +20,10 @@
                 border-right-width: 2px;
                 background-color: var(--color-background-hover-2);
             }
+
+            .setting-item {
+                padding: 10px;
+            }
         }
     }
 
@@ -27,5 +31,33 @@
         flex-basis: 0;
         flex-grow: 1;
         position: relative;
+
+        > .placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-foreground-subtext);
+            font-size: 2em;
+            opacity: 0.5;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column;
+
+        .fields {
+            border-right: none;
+            border-bottom: 1px solid var(--color-navbar-border);
+        }
+
+        .fields,
+        .preview {
+            height: 50%;
+        }
     }
 }

@@ -39,8 +39,13 @@ export default function SettingsPageAppearance() {
                 {{
                     'desktop-wallpaper': (
                         <HomePage />
+                    ),
+                    'default': (
+                        <div className="placeholder">
+                            Preview
+                        </div>
                     )
-                }[currentField||'']}
+                }[currentField||'default']}
             </div>
         </div>
     )
