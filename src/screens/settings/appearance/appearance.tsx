@@ -32,7 +32,7 @@ export default function SettingsPageAppearance() {
                     />
                 </section>
 
-                <div className="rest"/>
+                <div className="rest" onClick={()=>setSearchParams({})}/>
             </div>
 
             <div className={`preview ${currentField || 'closed'}`}>
