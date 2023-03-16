@@ -131,6 +131,9 @@ function Session({session, onTerminated}: {session: HMApi.T.Session, onTerminate
                             },
                         });
                     }}
+                    onFocus={() => {
+                        setExpanded(true);
+                    }}
                     attention
                     className="terminate"
                 >

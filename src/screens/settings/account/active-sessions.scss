@@ -23,7 +23,8 @@
                     padding: 10px;
                     transition: background-color 200ms, height 200ms;
                     cursor: pointer;
-                    overflow: hidden;
+                    overflow: hidden; // Backwards compatibility
+                    overflow: clip; // Prevents scrolling, just in case
 
                     &:not(:last-child) {
                         border-bottom: 1px solid var(--color-button-secondary-hover-background);
