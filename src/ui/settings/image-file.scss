@@ -11,7 +11,13 @@
             background-color: var(--color-button-secondary-background);
             border-radius: 7px;
             overflow: hidden;
-            transition: background-color 200ms;
+            box-shadow: 0 0 0 0 var(--color-input-active-border);
+            transition: background-color 200ms, box-shadow 200ms;
+
+            &:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px var(--color-input-active-border);
+            }
 
             &:hover {
                 background-color: var(--color-button-secondary-hover-background);
