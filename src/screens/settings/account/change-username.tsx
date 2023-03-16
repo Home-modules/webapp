@@ -85,6 +85,7 @@ export default function ChangeUsernameDialog() {
                         type="text"
                         value={username}
                         ref={usernameRef}
+                        autoFocus
                         onChange={(event) => {
                             setUsername(event.target.value);
                             setUsernameError('');
