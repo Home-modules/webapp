@@ -39,7 +39,7 @@ export function Dialog({title, className='', children: Children, onClose, id, ca
             className={`dialog-container ${closing ? 'closing' : ''} ${className}`} 
             ref={ref}
             onClick={handleClose}
-            tabIndex={0}
+            tabIndex={-1}
             onKeyDown={e => {
                 if(e.key==='Escape') {
                     cancellable && close();
@@ -95,12 +95,17 @@ export function RouteDialog({title, className='', children, cancellable= true, p
     }, []);
 
     return (
-        <div className={`dialog-container ${className}`} 
-            ref={ref} onClick={handleClose} tabIndex={0} onKeyDown={e=>{
+        <div
+            className={`dialog-container ${className}`} 
+            ref={ref}
+            onClick={handleClose}
+            tabIndex={-1}
+            onKeyDown={e => {
                 if (e.key === 'Escape') {
                     cancellable && close();
                 }
-            }}>
+            }}
+        >
             <div className="dialog">
                 {title && <h1>{title}</h1>}
                 <div className="content">
