@@ -42,7 +42,7 @@ export default function SettingsPageAppearance() {
                     ),
                     'default': (
                         <div className="placeholder">
-                            Preview
+                            Select a setting to preview
                         </div>
                     )
                 }[currentField||'default']}
