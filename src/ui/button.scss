@@ -149,8 +149,11 @@
 }
 
 button.icon {
-    display: contents;
     font-size: 2rem;
+    background: none;
+    border: none;
+    padding: 0;
+    height: 1.25em;
 
     svg {
         color: var(--color-foreground-subtext);
