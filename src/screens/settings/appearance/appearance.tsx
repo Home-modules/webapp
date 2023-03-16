@@ -16,6 +16,8 @@ export default function SettingsPageAppearance() {
                 <section
                     className={`setting desktop-wallpaper ${currentField === 'desktop-wallpaper' ? 'active' : ''}`}
                     onClick={() => setSearchParams({ field: 'desktop-wallpaper', desktop: '' })}
+                    onFocusCapture={() => setSearchParams({ field: 'desktop-wallpaper', desktop: '' })}
+                    onBlurCapture={()=> setSearchParams({})}
                 >
                     <SettingItemImageFile
                         title="Desktop mode wallpaper"
