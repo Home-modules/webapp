@@ -60,6 +60,7 @@
 #home .devices .device .default-interaction {
     > label.slider {
         padding: 0 20px;
+        --color-input-active-border: var(--color-input-active-border-alternate);
 
         input[type="range"] {
             min-width: 0;
