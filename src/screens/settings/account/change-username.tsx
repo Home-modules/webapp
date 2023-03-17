@@ -39,6 +39,10 @@ export default function ChangeUsernameDialog() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [username]);
 
+    React.useEffect(() => {
+        usernameRef.current?.focus();
+    }, []);
+
     function onSubmit() {
         return sendRequest({
             type: 'account.changeUsername',
@@ -85,7 +89,6 @@ export default function ChangeUsernameDialog() {
                         type="text"
                         value={username}
                         ref={usernameRef}
-                        autoFocus
                         onChange={(event) => {
                             setUsername(event.target.value);
                             setUsernameError('');

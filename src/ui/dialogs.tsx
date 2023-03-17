@@ -30,7 +30,7 @@ export function Dialog({title, className='', children: Children, onClose, id, ca
         close();
     }
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         ref.current?.focus();
     }, []);
 
@@ -77,12 +77,14 @@ export type RouteDialogProps = {
 }
 
 export function RouteDialog({title, className='', children, cancellable= true, parentRoute='..'}: RouteDialogProps) {
-    const ref= React.useRef<HTMLDivElement>(null);
+    const ref = React.useRef<HTMLDivElement>(null);
+    const [pastFocus, setPastFocus] = React.useState<Element | null>(null);
 
     const navigate= useNavigate();
 
     function close() {
         navigate(parentRoute);
+        (pastFocus as HTMLElement | null)?.focus();
     }
 
     function handleClose(e: React.MouseEvent<HTMLDivElement>) {
@@ -90,7 +92,8 @@ export function RouteDialog({title, className='', children, cancellable= true, p
         close();
     }
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
+        setPastFocus(document.activeElement);
         ref.current?.focus();
     }, []);
 

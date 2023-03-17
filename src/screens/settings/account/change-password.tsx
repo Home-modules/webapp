@@ -105,7 +105,6 @@ const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(
                             value={currentPassword}
                             ref={currentPasswordRef}
                             autoComplete="current-password"
-                            autoFocus
                             onChange={(event) => {
                                 setCurrentPassword(event.target.value);
                                 setCurrentPasswordError('');
