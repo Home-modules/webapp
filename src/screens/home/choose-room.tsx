@@ -32,7 +32,9 @@ export default function HomePageChooseRoom({ roomStates }: Pick<StoreState, 'roo
             null;
         
         if (element?.tagName === 'A') {
+            e.preventDefault();
             (element as HTMLElement).focus();
+            (element as HTMLElement).click();
         }
     }
 

@@ -17,6 +17,7 @@ export default function SettingsSidebar() {
         
         if (element?.tagName === 'A') {
             (element as HTMLElement).focus();
+            (element as HTMLElement).click();
         }
     }
 

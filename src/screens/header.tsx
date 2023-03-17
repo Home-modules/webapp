@@ -15,6 +15,7 @@ export default function Header() {
         
         if (element?.tagName === 'A') {
             (element as HTMLElement).focus();
+            (element as HTMLElement).click();
         }
     }
 
