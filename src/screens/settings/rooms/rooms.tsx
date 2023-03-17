@@ -77,21 +77,42 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                 <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedRooms.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">
                         <span>Edit Rooms</span>
-                        <FontAwesomeIcon icon={faSearch} onClick={()=>{
-                            setSearchParams({search: ''});
-                            searchFieldRef.current?.focus();
-                        }} />
+                        <button
+                            className="icon"
+                            tabIndex={(search===null && selectedRooms.length===0) ? 0 : -1}
+                            onClick={() => {
+                                setSearchParams({search: ''});
+                                searchFieldRef.current?.focus();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faSearch} />
+                        </button>
                     </div>
                     <div className="search">
                         <FontAwesomeIcon icon={faSearch} />
-                        <input type="text" placeholder="Search" value={search||''} onChange={(e)=>setSearchParams({search: e.target.value})} ref={searchFieldRef} />
-                        <FontAwesomeIcon icon={faTimes} onClick={()=>setSearchParams({})} />
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            value={search || ''}
+                            tabIndex={(search!==null && selectedRooms.length===0) ? 0 : -1}
+                            onChange={(e) => setSearchParams({ search: e.target.value })}
+                            ref={searchFieldRef}
+                            onKeyDown={e => {if(e.key === "Escape") setSearchParams({})}}
+                        />
+                        <button
+                            className="icon"
+                            onClick={() => setSearchParams({})}
+                            tabIndex={(search!==null && selectedRooms.length===0) ? 0 : -1}
+                        >
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
                     </div>
                     <div className="selected">
                         <label className="checkbox">
                             <input 
                                 type="checkbox" 
                                 checked={rooms ? selectedRooms.length === rooms.length: false}
+                                tabIndex={(selectedRooms.length!==0) ? 0 : -1}
                                 onChange={e=> {
                                     if(rooms && e.target.checked) {
                                         setSelectedRooms(rooms.map(r=>r.id));
@@ -103,34 +124,46 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                             />
                         </label>
                         <span>{selectedRooms.length}</span>
-                        <FontAwesomeIcon icon={faTrash} onClick={e=> {
-                            addConfirmationFlyout({
-                                element: e.target,
-                                text: `Are you sure you want to delete ${selectedRooms.length} ${selectedRooms.length===1 ? 'room':'rooms'}?`,
-                                confirmText: "Delete",
-                                attention: true,
-                                async: true,
-                                onConfirm: ()=> (async()=> {
-                                    const rooms = [...selectedRooms]; // Clone array it case it changes during the process
-                                    for(const roomId of rooms) {
-                                        await sendRequest({
-                                            type: "rooms.removeRoom",
-                                            id: roomId
-                                        })
-                                    }
-                                    store.dispatch({
-                                        type: "ADD_NOTIFICATION",
-                                        notification: {
-                                            type: "success",
-                                            message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
+                        <button
+                            className="icon"
+                            tabIndex={(selectedRooms.length!==0) ? 0 : -1}
+                            onClick={e => {
+                                addConfirmationFlyout({
+                                    element: e.target,
+                                    text: `Are you sure you want to delete ${selectedRooms.length} ${selectedRooms.length===1 ? 'room':'rooms'}?`,
+                                    confirmText: "Delete",
+                                    attention: true,
+                                    async: true,
+                                    onConfirm: ()=> (async()=> {
+                                        const rooms = [...selectedRooms]; // Clone array it case it changes during the process
+                                        for(const roomId of rooms) {
+                                            await sendRequest({
+                                                type: "rooms.removeRoom",
+                                                id: roomId
+                                            })
                                         }
-                                    });
-                                    updateRooms();
-                                    setSelectedRooms([]);
-                                })().catch(handleError)
-                            });
-                        }}/>
-                        <FontAwesomeIcon icon={faTimes} onClick={()=>setSelectedRooms([])} />
+                                        store.dispatch({
+                                            type: "ADD_NOTIFICATION",
+                                            notification: {
+                                                type: "success",
+                                                message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
+                                            }
+                                        });
+                                        updateRooms();
+                                        setSelectedRooms([]);
+                                    })().catch(handleError)
+                                });
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                        <button
+                            className="icon"
+                            onClick={() => setSelectedRooms([])}
+                            tabIndex={(selectedRooms.length!==0) ? 0 : -1}
+                        >
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
                     </div>
                 </h1>
                 <div className='list'>

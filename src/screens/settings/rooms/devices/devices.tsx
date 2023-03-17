@@ -117,19 +117,43 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
             <ScrollView className={`devices-list ${hideList? 'hidden':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedDevices.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">
-                        <Link to="/settings/rooms">
+                        <Link
+                            to="/settings/rooms"
+                            className="icon"
+                            tabIndex={(search === null && selectedDevices.length === 0) ? 0 : -1}
+                        >
                             <FontAwesomeIcon icon={faArrowLeft} />
                         </Link>
                         <span>{room.name} devices</span>
-                        <FontAwesomeIcon icon={faSearch} onClick={()=>{
-                            setSearchParams({search: ''});
-                            searchFieldRef.current?.focus();
-                        }} />
+                        <button
+                            className="icon"
+                            tabIndex={(search === null && selectedDevices.length === 0) ? 0 : -1}
+                            onClick={() => {
+                                setSearchParams({search: ''});
+                                searchFieldRef.current?.focus();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faSearch} />
+                        </button>
                     </div>
                     <div className="search">
                         <FontAwesomeIcon icon={faSearch} />
-                        <input type="text" placeholder="Search" value={search||''} onChange={(e)=>setSearchParams({search: e.target.value})} ref={searchFieldRef} />
-                        <FontAwesomeIcon icon={faTimes} onClick={()=>setSearchParams({})} />
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            value={search || ''}
+                            onChange={(e) => setSearchParams({ search: e.target.value })}
+                            ref={searchFieldRef}
+                            tabIndex={(search !== null && selectedDevices.length === 0) ? 0 : -1}
+                            onKeyDown={e => {if(e.key === "Escape") setSearchParams({})}}
+                        />
+                        <button
+                            className="icon"
+                            onClick={() => setSearchParams({})}
+                            tabIndex={(search !== null && selectedDevices.length === 0) ? 0 : -1}
+                        >
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
                     </div>
                     <div className="selected">
                         <label className="checkbox">
@@ -144,38 +168,51 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                                     }
                                 }} 
                                 title="Select all"
+                                tabIndex={(selectedDevices.length !== 0) ? 0 : -1}
                             />
                         </label>
                         <span>{selectedDevices.length}</span>
-                        <FontAwesomeIcon icon={faTrash} onClick={e=> {
-                            addConfirmationFlyout({
-                                element: e.target,
-                                text: `Are you sure you want to delete ${selectedDevices.length} ${selectedDevices.length===1 ? 'device':'devices'}?`,
-                                confirmText: "Delete",
-                                attention: true,
-                                async: true,
-                                onConfirm: ()=> (async()=> {
-                                    const devices = [...selectedDevices]; // Clone array it case it changes during the process
-                                    for(const deviceId of devices) {
-                                        await sendRequest({
-                                            type: "devices.removeDevice",
-                                            roomId,
-                                            id: deviceId
-                                        });
-                                    }
-                                    store.dispatch({
-                                        type: "ADD_NOTIFICATION",
-                                        notification: {
-                                            type: "success",
-                                            message: `Deleted ${devices.length} ${devices.length===1?'device':'devices'}`
+                        <button
+                            className="icon"
+                            tabIndex={(selectedDevices.length !== 0) ? 0 : -1}
+                            onClick={e => {
+                                addConfirmationFlyout({
+                                    element: e.target,
+                                    text: `Are you sure you want to delete ${selectedDevices.length} ${selectedDevices.length===1 ? 'device':'devices'}?`,
+                                    confirmText: "Delete",
+                                    attention: true,
+                                    async: true,
+                                    onConfirm: ()=> (async()=> {
+                                        const devices = [...selectedDevices]; // Clone array it case it changes during the process
+                                        for(const deviceId of devices) {
+                                            await sendRequest({
+                                                type: "devices.removeDevice",
+                                                roomId,
+                                                id: deviceId
+                                            });
                                         }
-                                    });
-                                    updateDevices();
-                                    setSelectedDevices([]);
-                                })().catch(handleError)
-                            });
-                        }}/>
-                        <FontAwesomeIcon icon={faTimes} onClick={()=>setSelectedDevices([])} />
+                                        store.dispatch({
+                                            type: "ADD_NOTIFICATION",
+                                            notification: {
+                                                type: "success",
+                                                message: `Deleted ${devices.length} ${devices.length===1?'device':'devices'}`
+                                            }
+                                        });
+                                        updateDevices();
+                                        setSelectedDevices([]);
+                                    })().catch(handleError)
+                                });
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faTrash}/>
+                        </button>
+                        <button
+                            className="icon"
+                            onClick={() => setSelectedDevices([])}
+                            tabIndex={(selectedDevices.length !== 0) ? 0 : -1}
+                        >
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
                     </div>
                 </h1>
                 <div className='list'>

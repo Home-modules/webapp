@@ -23,20 +23,8 @@ main#settings main#settings-rooms {
                 flex-shrink: 1;
             }
 
-            svg {
-                flex-shrink: 0;
-                height: 0.75em;
-                width: 0.75em;
-                padding: 10px;
+            button.icon {
                 margin-left: 15px;
-                cursor: pointer;
-
-                color: var(--color-foreground-subtext);
-                transition: color 200ms;
-
-                &:hover {
-                    color: var(--color-foreground);
-                }
             }
         }
 
@@ -50,22 +38,15 @@ main#settings main#settings-rooms {
             align-items: center;
             gap: 15px;
 
-            svg {
+            > svg {
                 flex-shrink: 0;
                 height: 0.75em;
                 width: 0.75em;
                 padding: 10px 0;
+            }
 
-                &:last-child {
-                    padding-right: 10px;
-                    color: var(--color-foreground-subtext);
-                    transition: color 200ms;
-                    cursor: pointer;
-
-                    &:hover {
-                        color: var(--color-foreground);
-                    }
-                }
+            button.icon svg {
+                padding-left: 0;
             }
 
             input {
@@ -122,25 +103,15 @@ main#settings main#settings-rooms {
                 flex-grow: 1;
             }
 
-            svg {
-                flex-shrink: 0;
-                height: 0.75em;
-                width: 0.75em;
-                padding: 10px 0;
-                cursor: pointer;
-
-                &:last-child {
-                    padding-right: 10px;
-                    color: var(--color-foreground-subtext);
-                    transition: color 200ms;
-
-                    &:hover {
-                        color: var(--color-foreground);
-                    }
+            button.icon {
+                &:first-of-type svg {
+                    color: var(--color-button-attention-secondary-foreground);
+                    padding-left: 0;
+                    padding-right: 0;
                 }
 
-                &:first-of-type {
-                    color: var(--color-button-attention-secondary-foreground);
+                &:last-child svg {
+                    padding-left: 0;
                 }
             }
 
