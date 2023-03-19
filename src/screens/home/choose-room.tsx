@@ -1,4 +1,4 @@
-import { faMinus, faPen, faRotate, faRotateRight, faStar, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faPen, faRotate, faRotateRight, faStar, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink, useSearchParams } from "react-router-dom";
 import { store, StoreState } from "../../store";
@@ -144,7 +144,7 @@ export default function HomePageChooseRoom({ roomStates }: Pick<StoreState, 'roo
                     }}
                     title={isDesktopMode ? 'Quit desktop mode' : 'Enter desktop mode'}
                 >
-                    <FontAwesomeIcon icon={isDesktopMode ? faTimes : faMinus} />
+                    <FontAwesomeIcon icon={isDesktopMode ? faTimes : faDesktop} />
                 </button>
             </div>))}
             loadingPlaceholder="Loading rooms..."
