@@ -1,4 +1,4 @@
-import { faRotate } from '@fortawesome/free-solid-svg-icons';
+import { faRotate, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -49,7 +49,7 @@ export default function SettingsPagePlugins() {
                     async: true,
                     onConfirm: ()=> sendRestartingRequest({ type: "restart" }),
                 })}>
-                    <FontAwesomeIcon icon={faRotate} />
+                    <FontAwesomeIcon icon={faRotateRight} />
                 </button>
             </h1>
 
