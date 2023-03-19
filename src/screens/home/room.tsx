@@ -145,7 +145,7 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
                                     </ContextMenuItem>,
                                     <ContextMenuItem key={1}
                                         icon={faPen}
-                                        href={`/settings/rooms/${roomState.id}/devices`}
+                                        href={`/settings/devices/${roomState.id}`}
                                     >
                                         Edit devices
                                     </ContextMenuItem>
@@ -164,7 +164,7 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
                 <h1>No devices</h1>
                 <p>Add devices to <em>{roomState.name}</em> in the settings.</p>
                 <div className="actions">
-                    <Link to={`/settings/rooms/${roomState.id}/devices`} className="button primary">
+                    <Link to={`/settings/devices/${roomState.id}`} className="button primary">
                         Edit devices
                     </Link>
                 </div>

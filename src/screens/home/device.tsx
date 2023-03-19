@@ -125,7 +125,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                                 </ContextMenuItem>
                                 <ContextMenuItem key={1}
                                     icon={faPen}
-                                    href={`/settings/rooms/${state.roomId}/devices/edit/${state.id}`}
+                                    href={`/settings/devices/${state.roomId}/edit/${state.id}`}
                                 >
                                     Edit
                                     </ContextMenuItem>
@@ -207,7 +207,7 @@ function DisabledDevice({ state, isInFavorites, roomName }: DeviceProps) {
                     </ContextMenuItem>,
                     <ContextMenuItem key={1}
                         icon={faPen}
-                        href={`/settings/rooms/${state.roomId}/devices/edit/${state.id}`}
+                        href={`/settings/devices/${state.roomId}/edit/${state.id}`}
                     >
                         Edit device
                     </ContextMenuItem>
