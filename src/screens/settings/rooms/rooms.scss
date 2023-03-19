@@ -156,7 +156,6 @@ main#settings main#settings-rooms {
         .item {
             position: relative;
             display: flex;
-            align-items: center;
             margin-bottom: 10px;
             gap: 10px;
             transition: opacity 200ms, gap 250ms;
@@ -285,8 +284,8 @@ main#settings main#settings-rooms {
                 flex-shrink: 0;
                 flex-basis: initial;
                 position: relative;
-                height: 46px;
-                width: 46px;
+                height: 44px;
+                width: 44px;
                 padding: 0;
                 box-shadow: none !important;
                 transition: width 250ms, opacity 250ms;
@@ -304,8 +303,8 @@ main#settings main#settings-rooms {
 
                 svg {
                     padding: 10px;
-                    height: 46px;
-                    width: 46px;
+                    height: 44px;
+                    width: 44px;
                     box-sizing: border-box;
                     background-color: var(--color-button-secondary-background);
                     transition: background-color 200ms;
