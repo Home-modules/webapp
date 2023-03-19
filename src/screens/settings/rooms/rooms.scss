@@ -204,9 +204,9 @@ main#settings main#settings-rooms {
                     box-shadow: 0 0 0 3px var(--color-input-active-border);
                 }
 
-                &:hover:not(.rooms-list.collapsed .open), 
-                &:focus-visible:not(.rooms-list.collapsed .open), 
-                &:focus-within:not(.rooms-list.collapsed .open), 
+                &:hover:not(.checkbox-hidden), 
+                &:focus-visible:not(.checkbox-hidden), 
+                &:focus-within:not(.checkbox-hidden), 
                 &.checkbox-visible {
                     .name {
                         overflow: visible;

@@ -52,13 +52,15 @@ ReactDOM.render(
                             <Route path="rooms" element={<SettingsPageRooms />}>
                                 <Route path=":roomId/edit" element={<SettingsPageRoomsEditRoom />} />
                                 <Route path="new" element={<SettingsPageRoomsEditRoom />} />
-                                <Route path=":roomId/devices" element={<SettingsPageRoomsDevices />}>
+                                <Route path="*" element={<Navigate to="/settings/rooms" />} />
+                            </Route>
+                            <Route path="devices" element={<SettingsPageRooms devicesScreen />}>
+                                <Route path=":roomId" element={<SettingsPageRoomsDevices />}>
                                     <Route path="new" element={<SettingsPageRoomsDevicesNewDevice />} >
                                         <Route path=":deviceType" element={<SettingsPageRoomsDevicesEditDevice   />} />
                                     </Route>
                                     <Route path="edit/:deviceId" element={<SettingsPageRoomsDevicesEditDevice />} />
                                 </Route>
-                                <Route path="*" element={<Navigate to="/settings/rooms" />} />
                             </Route>
                             <Route path="plugins" element={<SettingsPagePlugins />}>
                                 <Route path="installed" element={<SettingsPagePluginsTab tab="installed" />} />

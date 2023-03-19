@@ -14,12 +14,12 @@ import ScrollView from '../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../ui/flyout';
 import { PlaceHolders } from '../../../ui/placeholders';
 
-function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
+function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'rooms'> & {devicesScreen?: boolean}) {
     let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
     hideList = !!(useMatch('/settings/rooms/new')) || hideList;
-    let collapseList = !!(useMatch('/settings/rooms/:roomId/devices'));
-    collapseList = !!(useMatch('/settings/rooms/:roomId/devices/new/*')) || collapseList;
-    collapseList = !!(useMatch('/settings/rooms/:roomId/devices/edit/:deviceId')) || collapseList;
+    let collapseList = !!(useMatch('/settings/devices/:roomId'));
+    collapseList = !!(useMatch('/settings/devices/:roomId/new/*')) || collapseList;
+    collapseList = !!(useMatch('/settings/devices/:roomId/edit/:deviceId')) || collapseList;
     const {roomId= ''} = useParams();
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -76,7 +76,9 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
             <ScrollView className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedRooms.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">
-                        <span>Edit Rooms</span>
+                        {devicesScreen ?
+                            <span>Edit Devices</span> : 
+                            <span>Edit Rooms</span>}
                         <button
                             className="icon"
                             tabIndex={(search===null && selectedRooms.length===0) ? 0 : -1}
@@ -180,7 +182,7 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                         disableReorder
                                         search={search}
                                         active={collapseList ? roomId === room.id : false}
-                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices' : 'edit') : 'check'}
+                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices' : (devicesScreen ? 'devices' : 'edit')) : 'check'}
                                         selected={selectedRooms.includes(room.id)}
                                         onSelectChange={() => {
                                             if (selectedRooms.includes(room.id)) {
@@ -200,8 +202,9 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                     <RoomItem
                                         key={room.id}
                                         room={room}
+                                        disableReorder={devicesScreen}
                                         active={collapseList ? roomId === room.id : false}
-                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices' : 'edit') : 'check'}
+                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices-collapsed' : (devicesScreen ? 'devices' : 'edit')) : 'check'}
                                         selected={selectedRooms.includes(room.id)}
                                         onSelectChange={() => {
                                             if (selectedRooms.includes(room.id)) {
@@ -213,9 +216,11 @@ function SettingsPageRooms({rooms}: Pick<StoreState, 'rooms'>) {
                                     />
                                 ))}
                             </ReactSortable>
-                            <Link to="/settings/rooms/new" className="add">
-                                <FontAwesomeIcon icon={faPlus} />
-                            </Link>
+                            {devicesScreen || (
+                                <Link to="/settings/rooms/new" className="add">
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </Link>
+                            )}
                         </>))}
                     />
 
@@ -242,7 +247,7 @@ type RoomItemProps= {
     disableReorder?: boolean;
     search?: string;
     active?: boolean;
-    action: "edit"|"devices"|"check",
+    action: "edit"|"devices-collapsed"|"devices"|"check",
     selected: boolean,
     onSelectChange: ()=>void
 }
@@ -256,9 +261,14 @@ function RoomItem({room, disableReorder=false, search, active, action, selected,
                 </svg>
             )}
             <Link 
-                to={action==='check' ? '#' : `/settings/rooms/${room.id}/${action}`} 
-                className={`open ${action==='check'? 'checkbox-visible': ''}`}
-                title={action==='devices'? room.name : undefined}
+                to={{
+                    "edit": `/settings/rooms/${room.id}/${action}`,
+                    "devices": `/settings/devices/${room.id}`,
+                    "devices-collapsed": `/settings/devices/${room.id}`,
+                    "check": "#",
+                }[action]} 
+                className={`open ${action==='check'? 'checkbox-visible': ''} ${['devices','devices-collapsed'].includes(action) ? 'checkbox-hidden': ''}`}
+                title={action==='devices-collapsed'? room.name : undefined}
                 onClick={e=> {
                     if(action==='check') {
                         e.preventDefault();
@@ -288,11 +298,13 @@ function RoomItem({room, disableReorder=false, search, active, action, selected,
                     <SearchKeywordHighlight term={search}>{room.id}</SearchKeywordHighlight>
                 </span>
             </Link>
-            <Link to={`${room.id}/devices`} className="devices">
-                <div>
-                    <FontAwesomeIcon icon={faPlug} />
-                </div>
-            </Link>
+            {action === "devices" || (
+                <Link to={`/settings/devices/${room.id}`} className="devices">
+                    <div>
+                        <FontAwesomeIcon icon={faPlug} />
+                    </div>
+                </Link>
+            )}
         </div>
     );
 }

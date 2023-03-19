@@ -12,7 +12,7 @@ import { HMApi } from "../../../../hub/api";
 import Button from "../../../../ui/button";
 
 function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState, 'deviceTypes'|'rooms'>) {
-    let hideList = !useMatch('/settings/rooms/:roomId/devices/new/');
+    let hideList = !useMatch('/settings/devices/:roomId/new/');
     const {roomId= ''} = useParams();
     const controllerType = rooms ? (rooms.find(r=> r.id === roomId)?.controllerType || false) : undefined;
     const types = controllerType && deviceTypes[controllerType.type];
@@ -21,7 +21,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
     const deviceTypesDivRef = React.useRef<HTMLDivElement>(null);
 
     if(!roomId) {
-        return <Navigate to="/settings/rooms" />
+        return <Navigate to="/settings/devices" />
     }
 
     return (

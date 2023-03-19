@@ -22,32 +22,32 @@ function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : P
 
     const room = rooms ? rooms.find(r=> r.id === roomId) : undefined;
     if(!rooms) { // Rooms are not loaded yet
-        return <Navigate to={`/settings/rooms?redirect=${location.pathname}`} />
+        return <Navigate to={`/settings/devices?redirect=${location.pathname}`} />
     }
     if((!roomId) || (!room)) { // Room not found
-        return <Navigate to="/settings/rooms" />
+        return <Navigate to="/settings/devices" />
     }
 
     if(deviceId) { // Editing existing device
 
         const devicesInRoom = devices[roomId];
         if(!devicesInRoom) { // Devices not loaded yet
-            return <Navigate to={`/settings/rooms/${roomId}/devices?redirect=${location.pathname}`} />
+            return <Navigate to={`/settings/devices/${roomId}?redirect=${location.pathname}`} />
         }
 
         const device = devicesInRoom.find(d=> d.id === deviceId);
         if (!device) { // Device not found
-            return <Navigate to={`/settings/rooms/${roomId}/devices`} />
+            return <Navigate to={`/settings/devices/${roomId}`} />
         }
 
         const deviceTypesForController = deviceTypes[room.controllerType.type];
         if(!deviceTypesForController) { // Device types not loaded yet
-            return <Navigate to={`/settings/rooms/${roomId}/devices?redirect=${location.pathname}`} />
+            return <Navigate to={`/settings/devices/${roomId}?redirect=${location.pathname}`} />
         }
 
         const deviceType = deviceTypesForController ? deviceTypesForController.find(t=> t.id === device.type) : undefined;
         if(!deviceType) { // Device type not found
-            return <Navigate to={`/settings/rooms/${roomId}/devices`} />
+            return <Navigate to={`/settings/devices/${roomId}`} />
         }
 
         return <EditDevice deviceType={deviceType} room={room} device={device} />
@@ -56,18 +56,18 @@ function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : P
 
         const deviceTypesForController = deviceTypes[room.controllerType.type];
         if(!deviceTypesForController) { // Device types not loaded yet
-            return <Navigate to={`/settings/rooms/${roomId}/devices?redirect=${location.pathname}`} />
+            return <Navigate to={`/settings/devices/${roomId}?redirect=${location.pathname}`} />
         }
 
         const deviceType = deviceTypesForController ? deviceTypesForController.find(t=> t.id === deviceTypeId) : undefined;
         if(!deviceType) { // Device type not found
-            return <Navigate to={`/settings/rooms/${roomId}/devices`} />
+            return <Navigate to={`/settings/devices/${roomId}`} />
         }
 
         return <EditDevice deviceType={deviceType} room={room} />
     }
     else {
-        return <Navigate to={`/settings/rooms/${roomId}/devices`} />
+        return <Navigate to={`/settings/devices/${roomId}`} />
     }
 }
 
@@ -130,7 +130,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
             device: nDevice
         }).then(res=> {
             if(res.type==='ok') {
-                navigate(`/settings/rooms/${room.id}/devices`);
+                navigate(`/settings/devices/${room.id}`);
             }
             else {
                 throw res;
@@ -183,7 +183,7 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                                     id
                                 }).then(res=>{
                                     if(res.type==='ok') {
-                                        navigate(`/settings/rooms/${room.id}/devices`);
+                                        navigate(`/settings/devices/${room.id}`);
                                     }
                                     else handleError(res);
                                 }, handleError)

@@ -39,9 +39,9 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
     const controllerType = rooms ? rooms.find(r=> r.id === roomId)?.controllerType : undefined;
     const types = controllerType ? deviceTypes[controllerType.type] : false;
 
-    let hideList = useMatch('/settings/rooms/:roomId/devices/new');
-    hideList = useMatch('/settings/rooms/:roomId/devices/new/:deviceType') || hideList;
-    hideList = useMatch('/settings/rooms/:roomId/devices/edit/:deviceId') || hideList;
+    let hideList = useMatch('/settings/devices/:roomId/new');
+    hideList = useMatch('/settings/devices/:roomId/new/:deviceType') || hideList;
+    hideList = useMatch('/settings/devices/:roomId/edit/:deviceId') || hideList;
 
     const setDevices= React.useCallback(function setDevices(devices: StoreState['devices'][string]) {
         store.dispatch({
@@ -102,9 +102,9 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
 
     if (!roomExists) {
         if (searchParams.has('redirect')) { // Don't override the redirect if it's already set
-            return <Navigate to={`/settings/rooms?redirect=${searchParams.get('redirect')}`} />;
+            return <Navigate to={`/settings/devices?redirect=${searchParams.get('redirect')}`} />;
         } else if(!hideList) {
-            return <Navigate to={`/settings/rooms?redirect=/settings/rooms/${roomId}/devices`} />;
+            return <Navigate to={`/settings/devices?redirect=/settings/devices/${roomId}`} />;
         }
     }
 
@@ -118,7 +118,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                 <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedDevices.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">
                         <Link
-                            to="/settings/rooms"
+                            to="/settings/devices"
                             className="icon"
                             tabIndex={(search === null && selectedDevices.length === 0) ? 0 : -1}
                         >

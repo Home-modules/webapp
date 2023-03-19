@@ -1,6 +1,6 @@
 import './sidebar.scss';
 import React from 'react';
-import { faBrush, faDoorClosed, faPuzzlePiece, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBrush, faDoorClosed, faPlug, faPuzzlePiece, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
 import version from '../../version';
@@ -38,6 +38,14 @@ export default function SettingsSidebar() {
             >
                 <FontAwesomeIcon icon={faDoorClosed}/>
                 <span>Rooms</span>
+            </NavLink>
+            <NavLink
+                to="/settings/devices"
+                className={({ isActive }) => isActive ? 'active' : ''}
+                onKeyDown={onKeyDown}
+            >
+                <FontAwesomeIcon icon={faPlug}/>
+                <span>Devices</span>
             </NavLink>
             <NavLink
                 to="/settings/plugins"
