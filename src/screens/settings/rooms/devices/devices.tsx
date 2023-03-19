@@ -1,4 +1,4 @@
-import { faArrowLeft, faPlus, fas, faSearch, faTimes, faTimesCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPlus, fas, faSearch, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
