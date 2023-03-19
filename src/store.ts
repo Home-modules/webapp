@@ -1,5 +1,6 @@
 import { createStore } from "redux";
 import { HMApi } from "./hub/api";
+import { defaultAppearanceSettings } from "./screens/settings/appearance/appearance";
 import { ContextMenuProps } from "./ui/context-menu";
 import { DialogProps } from "./ui/dialogs";
 import { FlyoutProps } from "./ui/flyout";
@@ -23,6 +24,7 @@ export type StoreState = {
         all: HMApi.T.Plugin[] | false | undefined,
     },
     appearanceSettings: {
+        showDesktopModeButton: boolean
     }
 };
 
@@ -82,7 +84,10 @@ export type StoreAction = {
     type: "SET_PLUGINS",
     list: "all" | "installed",
     plugins: HMApi.T.Plugin[] | false | undefined
-};
+} | {
+    type: "SET_APPEARANCE_SETTINGS",
+    settings: Partial<StoreState['appearanceSettings']>;
+}
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     token: localStorage.getItem('home_modules_token') || null,
@@ -100,8 +105,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
         all: undefined,
         installed: undefined
     },
-    appearanceSettings: JSON.parse(localStorage.getItem('home_modules_appearance_settings') || 'null') || {
-    },
+    appearanceSettings: JSON.parse(localStorage.getItem('home_modules_appearance_settings') || 'null') || defaultAppearanceSettings,
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -224,11 +228,18 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                     [action.list]: action.plugins
                 }
             }
+        case 'SET_APPEARANCE_SETTINGS': {
+            const newSettings = {
+                ...state.appearanceSettings,
+                ...action.settings
+            }
+            localStorage.setItem('home_modules_appearance_settings', JSON.stringify(newSettings));
+            return {
+                ...state,
+                appearanceSettings: newSettings
+            }
+        }
         default:
             return state;
     }
-}, (window as any).__REDUX_DEVTOOLS_EXTENSION__ ?.());
-
-store.subscribe(() => {
-    localStorage.setItem('home_modules_appearance_settings', JSON.stringify(store.getState().appearanceSettings));
-});
+}, (window as any).__REDUX_DEVTOOLS_EXTENSION__?.());

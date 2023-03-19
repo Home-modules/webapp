@@ -7,7 +7,7 @@ import HomePageChooseRoom from "./choose-room";
 import './home.scss';
 import './desktop.scss';
 
-const HomePage = connect(({roomStates}: StoreState)=>({roomStates}))(function Home({roomStates}: Pick<StoreState, 'roomStates'>) {
+const HomePage = connect(({roomStates, appearanceSettings}: StoreState)=>({roomStates, appearanceSettings}))(function Home({roomStates, appearanceSettings}: Pick<StoreState, 'roomStates'|'appearanceSettings'>) {
     const [searchParams] = useSearchParams();
     const isDesktopMode = searchParams.get('desktop') !== null;
 
@@ -53,7 +53,7 @@ const HomePage = connect(({roomStates}: StoreState)=>({roomStates}))(function Ho
             className={isDesktopMode ? 'desktop' : ''}
             style={isDesktopMode ? {backgroundImage: `url(${localStorage.getItem('home_modules_wallpaper')})`} : {}}
     >
-            <HomePageChooseRoom roomStates={roomStates} />
+            <HomePageChooseRoom roomStates={roomStates} appearanceSettings={appearanceSettings} />
             <Outlet />
         </main>
     )

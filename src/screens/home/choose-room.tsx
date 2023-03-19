@@ -9,9 +9,10 @@ import './choose-room.scss';
 import { handleError, sendRequest } from "../../hub/request";
 import { refreshRoomStates } from "./home";
 import { PlaceHolders } from "../../ui/placeholders";
+import { getAppearanceSetting } from "../settings/appearance/appearance";
 
 
-export default function HomePageChooseRoom({ roomStates }: Pick<StoreState, 'roomStates'>) {
+export default function HomePageChooseRoom({ roomStates, appearanceSettings }: Pick<StoreState, 'roomStates'|'appearanceSettings'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const isDesktopMode = searchParams.get('desktop') !== null;
 
@@ -133,19 +134,21 @@ export default function HomePageChooseRoom({ roomStates }: Pick<StoreState, 'roo
                         </NavLink>
                     ))}
                 </ScrollView>
-                <button
-                    className="icon"
-                    onClick={() => {
-                        if (isDesktopMode)
-                            document.exitFullscreen();
-                        else
-                            document.body.requestFullscreen({ navigationUI: "hide" });
-                        setSearchParams(isDesktopMode ? {} : 'desktop');
-                    }}
-                    title={isDesktopMode ? 'Quit desktop mode' : 'Enter desktop mode'}
-                >
-                    <FontAwesomeIcon icon={isDesktopMode ? faTimes : faDesktop} />
-                </button>
+                    {getAppearanceSetting('showDesktopModeButton', appearanceSettings) && (
+                        <button
+                            className="icon"
+                            onClick={() => {
+                                if (isDesktopMode)
+                                    document.exitFullscreen();
+                                else
+                                    document.body.requestFullscreen({ navigationUI: "hide" });
+                                setSearchParams(isDesktopMode ? {} : 'desktop');
+                            }}
+                            title={isDesktopMode ? 'Quit desktop mode' : 'Enter desktop mode'}
+                        >
+                            <FontAwesomeIcon icon={isDesktopMode ? faTimes : faDesktop} />
+                        </button>
+                    )}
             </div>))}
             loadingPlaceholder="Loading rooms..."
             errorPlaceholder="There was an error loading the rooms"
