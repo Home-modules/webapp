@@ -11,7 +11,37 @@ const HomePage = connect(({roomStates}: StoreState)=>({roomStates}))(function Ho
     const [searchParams] = useSearchParams();
     const isDesktopMode = searchParams.get('desktop') !== null;
 
-    React.useEffect(()=>{refreshRoomStates()}, []);
+    React.useEffect(() => { refreshRoomStates() }, []);
+    
+    React.useEffect(() => {
+        if (
+            isDesktopMode &&
+            (!localStorage.getItem('home_modules_wallpaper')) &&
+            localStorage.getItem("home_modules_ever_shown_wallpaper_notification") !== 'true' &&
+            window.location.pathname !== "/settings/appearance"
+        ) {
+            localStorage.setItem("home_modules_ever_shown_wallpaper_notification", 'true');
+            store.dispatch({
+                type: "ADD_NOTIFICATION",
+                notification: {
+                    message: "You can set a wallpaper to be shown here.",
+                    type: "info",
+                    timeout: 60000,
+                    buttons: [
+                        {
+                            isPrimary: true,
+                            label: "Appearance settings",
+                            route: "/settings/appearance?field=desktop-wallpaper&desktop",
+                            onClick() {
+                                if(document.fullscreenElement)
+                                    document.exitFullscreen();
+                            },
+                        }
+                    ]
+                }
+            })
+        }
+    }, [isDesktopMode])
 
     if (roomStates && searchParams.has("redirect")) {
         return <Navigate to={searchParams.get("redirect")!} replace />

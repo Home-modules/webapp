@@ -14,11 +14,12 @@ export type NotificationProps= {
     buttons?: ({
         label: string,
         onClick: () => void,
-        isPrimary?: boolean
+        isPrimary?: boolean,
     } | {
         label: string,
         route: string,
-        isPrimary?: boolean
+        onClick?: () => void,
+        isPrimary?: boolean,
     })[],
     hideCloseButton?: boolean,
     timeout?: number
@@ -77,15 +78,16 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
                     'route' in button ? (
                         <Link key={i}
                             className={`button ${button.isPrimary?'primary':''}`}
-                            to={button.route} onClick={()=>close()}>
-                                
+                            to={button.route}
+                            onClick={() => { close(); button.onClick?.() }}
+                        >
                             {button.label}
                         </Link>
                     ) : (
                         <button key={i} 
                             className={`button ${button.isPrimary ? 'primary' : ''}`} 
-                            onClick={()=>{close(); button.onClick()}}>
-                                
+                            onClick={() => { close(); button.onClick() }}
+                        >
                             {button.label}
                         </button>
                     )
