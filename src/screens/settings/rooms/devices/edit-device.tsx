@@ -106,6 +106,13 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
     );
     const [fieldErrors, setFieldErrors] = React.useState<Record<string, string|undefined>>({});
 
+    const saveButtonRef = React.useRef<HTMLButtonElement>(null);
+
+    React.useEffect(() => {
+        if(!isNew)
+            saveButtonRef.current?.parentElement?.parentElement?.parentElement?.focus();
+    }, [isNew]);
+
     function onSave() {
         device = device as HMApi.T.Device;
         const [hasError, errors] = getFieldsErrors(getFlatFields(deviceType.settings), fieldValues);
@@ -159,7 +166,17 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
     }
 
     return (
-        <ScrollView className={`edit-device`}>
+        <ScrollView
+            className={`edit-device`}
+            onKeyDown={e => {
+                console.log(e)
+                if (e.ctrlKey && e.key === "s") {
+                    e.preventDefault();
+                    saveButtonRef.current ? saveButtonRef.current.click() : onSave();
+                }
+            }}
+            tabIndex={-1}
+        >
             <h1>
                 <Link to="..">
                     <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
@@ -248,7 +265,11 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
 
             <div className="save-container">
                 <IntermittentButton
-                    primary className='save' onClick={onSave}>
+                    primary
+                    className='save'
+                    onClick={onSave}
+                    buttonRef={saveButtonRef}
+                >
                     Save
                 </IntermittentButton>
             </div>

@@ -65,7 +65,9 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     const [controllerTypeError, setControllerTypeError] = React.useState('');
 
     const [fields, setFields] = React.useState<HMApi.T.SettingsField[]>([]);
-    const [fieldErrors, setFieldErrors] = React.useState<Record<string, string|undefined>>({});
+    const [fieldErrors, setFieldErrors] = React.useState<Record<string, string | undefined>>({});
+    
+    const saveButtonRef = React.useRef<HTMLButtonElement>(null);
 
     function onSave() {
         if (controller.type === '') {
@@ -143,12 +145,27 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     //eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(onChangeControllerType, [controllerTypes])
 
+    React.useEffect(() => {
+        if(!isNew)
+            saveButtonRef.current?.parentElement?.parentElement?.parentElement?.focus();
+    }, [isNew]);
+
     if(!(roomExists || isNew)) {
         return <Navigate to={`/settings/rooms?redirect=/settings/rooms/${roomId}/edit`} />
     }
 
     return (
-        <ScrollView className="edit-room">
+        <ScrollView
+            className="edit-room"
+            onKeyDown={e => {
+                console.log(e)
+                if (e.ctrlKey && e.key === "s") {
+                    e.preventDefault();
+                    saveButtonRef.current ? saveButtonRef.current.click() : onSave();
+                }
+            }}
+            tabIndex={-1}
+        >
             <h1>
                 <Link to="/settings/rooms">
                     <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
@@ -280,7 +297,11 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
 
             <div className="save-container">
                 <IntermittentButton
-                    primary className='save' onClick={onSave}>
+                    primary
+                    className='save'
+                    onClick={onSave}
+                    buttonRef={saveButtonRef}
+                >
                     Save
                 </IntermittentButton>
             </div>
