@@ -23,7 +23,7 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
     const {roomId= ''} = useParams();
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const search= searchParams.get('search');
+    const search= collapseList ? null : searchParams.get('search');
     const searchFieldRef = React.useRef<HTMLInputElement>(null);
 
     const [selectedRooms, setSelectedRooms] = React.useState<string[]>([])
@@ -72,7 +72,25 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
     }
 
     return (
-        <main id="settings-rooms">
+        <main
+            id="settings-rooms"
+            tabIndex={-1}
+            onKeyDown={e => {
+                if (e.ctrlKey && e.key === 'f' && !(hideList || collapseList)) {
+                    e.preventDefault();
+                    setSearchParams({search: ''});
+                    searchFieldRef.current?.focus();
+                }
+            }}
+            onKeyPress={e => {
+                if (
+                    document.activeElement === e.currentTarget &&
+                    e.key.length === 1 && /^[\p{L}\p{N}]*$/u.test(e.key)
+                ) {
+                    searchFieldRef.current?.focus();
+                }
+            }}
+        >
             <ScrollView className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedRooms.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">

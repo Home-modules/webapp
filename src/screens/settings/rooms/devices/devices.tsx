@@ -113,7 +113,25 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
     }
 
     return (
-        <div className="edit-devices">
+        <div
+            className="edit-devices"
+            tabIndex={-1}
+            onKeyDown={e => {
+                if (e.ctrlKey && e.key === 'f' && !hideList) {
+                    e.preventDefault();
+                    setSearchParams({search: ''});
+                    searchFieldRef.current?.focus();
+                }
+            }}
+            onKeyPress={e => {
+                if (
+                    document.activeElement === e.currentTarget &&
+                    e.key.length === 1 && /^[\p{L}\p{N}]*$/u.test(e.key)
+                ) {
+                    searchFieldRef.current?.focus();
+                }
+            }}
+        >
             <ScrollView className={`devices-list ${hideList? 'hidden':''}`}>
                 <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedDevices.length===0 ? '' : 'selected-active'}`}>
                     <div className="title">
