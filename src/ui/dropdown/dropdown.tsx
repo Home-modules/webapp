@@ -217,12 +217,20 @@ export default function DropDownSelect<T extends string>({
     }
 
     return (
-        <div className={`dropdown-select ${className||''}`} data-error={error} onBlur={()=> {
-            console.log(document.activeElement)
-            setTimeout(()=> {
-                if(document.activeElement !== document.body && !ref.current?.contains(document.activeElement)) close(); // Close the dropdown when it is no longer in focus.
-            }, 5);
-        }} ref={ref}>
+        <div
+            className={`dropdown-select ${className || ''}`}
+            data-error={error}
+            onBlur={() => {
+                setTimeout(()=> {
+                    if (
+                        document.activeElement !== document.body &&
+                        !ref.current?.contains(document.activeElement)
+                    )
+                        close(); // Close the dropdown when it is no longer in focus.
+                }, 5);
+            }}
+            ref={ref}
+        >
             { allowCustomValue ? (
                 <>
                     <input 
@@ -287,7 +295,7 @@ export default function DropDownSelect<T extends string>({
                         />
                     </label>
                 )}
-                <div className="items">
+                <div className="items" tabIndex={-1}>
                     {(open||closing) && (
                         options.length? options.filter(o=> {
                             if(!search) {
