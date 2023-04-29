@@ -1,5 +1,4 @@
-@mixin setting-error {
-    font-size: 0.9em;
+@mixin setting-error {font-size: 0.9em;
     font-weight: normal;
     right: 100%;
     width: max-content;
@@ -7,5 +6,9 @@
     bottom: 50%;
     transform: translateY(50%);
     --shake-translate-y: 50%;
-    border-radius: 7px 0 0 7px;
+    border-radius: 7px;
+    left: initial;
+    max-width: calc(80vw - 100%);
+    margin-right: -10px;
+    padding-right: 15px;
 }
