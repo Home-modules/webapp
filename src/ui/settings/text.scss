@@ -8,7 +8,7 @@
         label {
             margin: 0;
 
-            &::before {
+            &[data-error]:not([data-error=""])::before {
                 @include setting-error;
             }
         }
