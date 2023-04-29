@@ -2,6 +2,7 @@
     // General background & text
     --color-background: #fff; // Background color
     --color-foreground: #000; // Text color
+    --color-background-with-blur: #fffb; // Background color for some elements with background blur
     --color-foreground-highlight: rgb(75, 57, 0); // Text color for highlighted text
     --color-foreground-subtext: #666; // Text color for secondary text
     --color-foreground-subtext-highlight: rgb(141, 111, 45); // Text color for secondary text for highlighted text
@@ -163,6 +164,7 @@
         // General background & text
         --color-background: rgb(19, 19, 20); // Background color
         --color-foreground: #fff; // Text color
+        --color-background-with-blur: #000b; // Background color for some elements with background blur
         --color-foreground-highlight: #ffee00; // Text color for highlighted text
         --color-foreground-subtext: rgb(163, 163, 163); // Text color for secondary text
         --color-foreground-subtext-highlight: rgb(181, 169, 0); // Text color for secondary text highlighted

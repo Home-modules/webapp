@@ -380,6 +380,11 @@ main#settings main#settings-rooms {
                 color: var(--color-foreground);
                 outline: none;
             }
+
+            @supports (backdrop-filter: blur(10px)) {
+                background-color: var(--color-background-with-blur);
+                backdrop-filter: blur(10px);
+            }
         }
 
         .loading, .error {
