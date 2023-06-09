@@ -8,6 +8,7 @@ import { FieldTypeText } from './text';
 import { FieldTypeSelect } from './select';
 import { FieldTypeSlider } from './slider';
 import { SettingItemContainer } from '../settings/container';
+import ToggleButton from './toggle-button';
 
 export type FieldsProps = {
     fields: HMApi.T.SettingsField[],
@@ -29,9 +30,11 @@ export default function Fields({fields, fieldValues, setFieldValues, fieldErrors
     return <>
         {fields.map((field, index)=>(
             field.type === 'container' ? (
-                <SettingItemContainer title={field.label}>
-                    <Fields fields={field.children} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
-                </SettingItemContainer>
+                <Container
+                    key={index}
+                    field={field}
+                    {...{context, fieldValues, fieldErrors, setFieldErrors, setFieldValues}}
+                />
             ) : (
                 <Field 
                     key={index} 
@@ -45,6 +48,34 @@ export default function Fields({fields, fieldValues, setFieldValues, fieldErrors
             )
         ))}
     </>
+}
+
+type ContainerProps = {
+    field: HMApi.T.SettingsField.TypeContainer
+} & Omit<FieldsProps, "fields">;
+function Container({field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues }: ContainerProps) {
+    
+    const firstChild = field.children[0];
+    if(firstChild?.type === "checkbox" && firstChild.label === "Enable") {
+        return (
+            <SettingItemContainer title={field.label} field={
+                <ToggleButton 
+                    label=""
+                    value={fieldValues[firstChild.id] as boolean} 
+                    onChange={value=>setFieldValues({...fieldValues, [firstChild.id]: value})} 
+                />
+            }>
+                {fieldValues[firstChild.id]===true ?
+                    <Fields fields={field.children.slice(1)} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
+                : <></>}
+            </SettingItemContainer>
+        )
+    }
+    return (
+        <SettingItemContainer title={field.label}>
+            <Fields fields={field.children} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
+        </SettingItemContainer>
+    )
 }
 
 export type FieldProps<
