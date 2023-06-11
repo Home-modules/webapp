@@ -4,16 +4,26 @@
     align-items: stretch;
     gap: 0;
 
-    > .title {
-        padding: 10px 0;
-        font-size: 1.2em;
-        font-weight: bold;
+    > .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        > .title {
+            padding: 10px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        > .value > .toggle-button {
+            --size: 20px;
+        }
     }
 
     > .content {
         margin-left: 20px;
 
-        :last-child {
+        > :last-child {
             border-bottom: 0;
         }
     }

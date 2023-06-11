@@ -36,19 +36,20 @@ label.toggle-button {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    --size: 16px;
     
     .right {
         position: relative;
-        height: 20px;
+        height: calc( var(--size) + 4px );
     }
 
     input {
         cursor: pointer;
         appearance: none;
         margin: 0;
-        height: 20px;
-        width: 40px;
-        border-radius: 10px;
+        height: calc( var(--size) + 4px );
+        width: calc( var(--size) * 2 + 6px );
+        border-radius: calc( var(--size) / 2 + 2px );
         background-color: var(--color-checkbox-background);
         position: relative;
         transition: background-color 200ms, opacity 200ms;
@@ -58,9 +59,9 @@ label.toggle-button {
             position: absolute;
             left: 2px;
             top: 2px;
-            width: 16px;
-            height: 16px;
-            border-radius: 8px;
+            width: var(--size);
+            height: var(--size);
+            border-radius: calc(var(--size) / 2);
             background-color: var(--color-checkbox-check);
             transition: left 200ms;
         }
@@ -69,7 +70,7 @@ label.toggle-button {
             background-color: var(--color-checkbox-background-checked);
 
             &::after {
-                left: 22px;
+                left: calc( var(--size) + 4px);
             }
         }
 
