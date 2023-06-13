@@ -53,27 +53,53 @@ export default function Fields({fields, fieldValues, setFieldValues, fieldErrors
 type ContainerProps = {
     field: HMApi.T.SettingsField.TypeContainer
 } & Omit<FieldsProps, "fields">;
-function Container({field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues }: ContainerProps) {
-    
+function Container(props: ContainerProps) {
+    const {field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues } = props
+
     const firstChild = field.children[0];
     if(firstChild?.type === "checkbox" && firstChild.label === "Enable") {
         return (
-            <SettingItemContainer title={field.label} field={
-                <ToggleButton 
-                    label=""
-                    value={fieldValues[firstChild.id] as boolean} 
-                    onChange={value=>setFieldValues({...fieldValues, [firstChild.id]: value})} 
-                />
-            }>
-                {fieldValues[firstChild.id]===true ?
-                    <Fields fields={field.children.slice(1)} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
-                : <></>}
-            </SettingItemContainer>
+            <ToggleContainer {...props} toggleField={firstChild} />
         )
     }
     return (
         <SettingItemContainer title={field.label}>
             <Fields fields={field.children} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
+        </SettingItemContainer>
+    )
+}
+
+type ToggleContainerProps = ContainerProps & {
+    toggleField: HMApi.T.SettingsField.TypeCheckbox;
+}
+
+function ToggleContainer({field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues, toggleField }: ToggleContainerProps) {
+    const childrenRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(()=> {
+        if(fieldValues[toggleField.id]) {
+            childrenRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+    }, [fieldValues[toggleField.id]]);
+
+    return (
+        <SettingItemContainer 
+            title={field.label}
+            divRef={childrenRef} 
+            field={
+                <ToggleButton 
+                    label=""
+                    value={fieldValues[toggleField.id] as boolean} 
+                    onChange={value=> setFieldValues({...fieldValues, [toggleField.id]: value})}
+                />
+            }
+        >
+            {fieldValues[toggleField.id]===true ?
+                <Fields fields={field.children.slice(1)} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
+            : <></>}
         </SettingItemContainer>
     )
 }

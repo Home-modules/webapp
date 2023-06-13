@@ -1,6 +1,7 @@
 main#settings main#settings-rooms {
     position: relative;
     overflow: hidden;
+    overflow: clip;
 
     h1.searchable {
         margin-top: 0;

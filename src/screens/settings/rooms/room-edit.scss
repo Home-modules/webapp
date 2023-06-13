@@ -1,5 +1,6 @@
 main#settings main#settings-rooms .edit-room {
     outline: none !important;
+    overflow: clip !important;
 
     > div:first-child {
         padding: 20px;
