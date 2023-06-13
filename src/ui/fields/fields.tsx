@@ -75,15 +75,16 @@ type ToggleContainerProps = ContainerProps & {
 
 function ToggleContainer({field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues, toggleField }: ToggleContainerProps) {
     const childrenRef = React.useRef<HTMLDivElement>(null);
+    const [everToggled, setEverToggled]= React.useState(false);
 
     React.useEffect(()=> {
-        if(fieldValues[toggleField.id]) {
+        if(fieldValues[toggleField.id] && everToggled) {
             childrenRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });
         }
-    }, [fieldValues[toggleField.id]]);
+    }, [fieldValues[toggleField.id], everToggled]);
 
     return (
         <SettingItemContainer 
@@ -93,7 +94,10 @@ function ToggleContainer({field, fieldErrors, fieldValues, context, setFieldErro
                 <ToggleButton 
                     label=""
                     value={fieldValues[toggleField.id] as boolean} 
-                    onChange={value=> setFieldValues({...fieldValues, [toggleField.id]: value})}
+                    onChange={value=> {
+                        setFieldValues({...fieldValues, [toggleField.id]: value});
+                        setEverToggled(true);
+                    }}
                 />
             }
         >
