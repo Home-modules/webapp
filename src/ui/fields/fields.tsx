@@ -9,6 +9,8 @@ import { FieldTypeSelect } from './select';
 import { FieldTypeSlider } from './slider';
 import { SettingItemContainer } from '../settings/container';
 import ToggleButton from './toggle-button';
+import checkSettingsFieldCondition from '../../utils/field-condition';
+import getFlatFields from '../../utils/flat-fields';
 
 export type FieldsProps = {
     fields: HMApi.T.SettingsField[],
@@ -35,7 +37,7 @@ export default function Fields({fields, fieldValues, setFieldValues, fieldErrors
                     field={field}
                     {...{context, fieldValues, fieldErrors, setFieldErrors, setFieldValues}}
                 />
-            ) : (
+            ) : checkSettingsFieldCondition(getFlatFields(fields), field.id, fieldValues) && (
                 <Field 
                     key={index} 
                     field={field} 
