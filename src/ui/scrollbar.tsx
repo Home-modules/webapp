@@ -6,7 +6,7 @@ export type ScrollViewProps = {
 
 } & ScrollbarProps;
 
-export default function ScrollView({className, ...rest}: ScrollViewProps) {
+const ScrollView = React.forwardRef<Scrollbars, ScrollViewProps>(function ScrollView({className, ...rest}: ScrollViewProps, ref) {
     return (
         <Scrollbars
             hideTracksWhenNotNeeded={true} 
@@ -15,7 +15,9 @@ export default function ScrollView({className, ...rest}: ScrollViewProps) {
             renderTrackHorizontal={props => <div {...props} className="track-horizontal"/>}
             renderTrackVertical={props => <div {...props} className="track-vertical"/>}
             {...rest}
+            ref={ref}
             className={`scroll-view ${className || ""}`}
         />
     )
-}
+});
+export default ScrollView;

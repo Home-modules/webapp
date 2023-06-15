@@ -9,18 +9,26 @@ export type PlaceHoldersProps<T> = {
     loadingPlaceholder?: string,
     errorPlaceholder?: string,
     Wrapper: (children: T) => JSX.Element,
+    placeholderProps?: React.HTMLAttributes<HTMLDivElement>,
 }
 
-export function PlaceHolders<T>({ className = "", content, loadingPlaceholder = "Loading...", errorPlaceholder = "Error", Wrapper }: PlaceHoldersProps<T>) {
+export function PlaceHolders<T>({
+    className = "",
+    content,
+    loadingPlaceholder = "Loading...",
+    errorPlaceholder = "Error",
+    Wrapper,
+    placeholderProps = {},
+}: PlaceHoldersProps<T>) {
     className += " placeholders";
 
     return (content === null || content === undefined) ? (
-        <div className={`${className} loading`}>
+        <div className={`${className} loading`} {...placeholderProps}>
             <div className="circle" />
             {loadingPlaceholder}
         </div>
     ) : content === false ? (
-        <div className={`${className} error`}>
+        <div className={`${className} error`} {...placeholderProps}>
             <FontAwesomeIcon icon={faTimesCircle} />
             {errorPlaceholder}
         </div>
@@ -34,11 +42,20 @@ export type PlaceHoldersArrayProps<T> = {
     errorPlaceholder?: string,
     emptyPlaceholder: React.ReactChild | React.ReactChild[],
     Wrapper: (children: T[]) => JSX.Element,
+    placeholderProps?: React.HTMLAttributes<HTMLDivElement>,
 }
 
-export function PlaceHoldersArray<T>({ className, items, loadingPlaceholder, errorPlaceholder, emptyPlaceholder, Wrapper }: PlaceHoldersArrayProps<T>) {
+export function PlaceHoldersArray<T>({
+    className,
+    items,
+    loadingPlaceholder,
+    errorPlaceholder,
+    emptyPlaceholder,
+    Wrapper,
+    placeholderProps = {}
+}: PlaceHoldersArrayProps<T>) {
     return (items instanceof Array && !items.length) ? (
-        <div className={`${className} placeholders empty`}>
+        <div className={`${className} placeholders empty`} {...placeholderProps}>
             {emptyPlaceholder}
         </div>
     ) : (
@@ -48,6 +65,7 @@ export function PlaceHoldersArray<T>({ className, items, loadingPlaceholder, err
             className={className}
             content={items}
             Wrapper={Wrapper}
+            placeholderProps={placeholderProps}
         />
     );
 }

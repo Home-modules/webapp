@@ -37,12 +37,14 @@
         }
     }
 
-    &.scroll-view > div:first-child {
+    &.scroll-view > div:first-child > div {
         display: flex;
         flex-wrap: wrap;
         align-content: flex-start;
         padding: 20px;
         gap: 10px;
+        box-sizing: border-box;
+        height: 100%;
     }
 
     @media (forced-colors: active) {

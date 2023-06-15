@@ -4,6 +4,7 @@
         "flyouts",
         "fontawesome",
         "fortawesome",
-        "sortablejs"
+        "sortablejs",
+        "Swipeable"
     ]
 }

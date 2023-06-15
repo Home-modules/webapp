@@ -2,7 +2,7 @@ import { faExclamationCircle, faPen, faPlug, faRotate } from "@fortawesome/free-
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { handleError, sendRequest } from "../../hub/request";
 import { store, StoreState } from "../../store";
 import { IntermittentButton } from "../../ui/button";
@@ -14,9 +14,44 @@ import ScrollView from "../../ui/scrollbar";
 import { Device } from "./device";
 import { ContextMenuItem } from "../../ui/context-menu";
 import { PlaceHoldersArray } from "../../ui/placeholders";
+import { SwipeableProps, useSwipeable } from "react-swipeable";
+import { useNavigate } from "react-router-dom";
+
+function swipeableOptions(
+    roomStates: StoreState['roomStates'],
+    roomId: string | undefined,
+    navigate: ReturnType<typeof useNavigate>,
+    searchParams: ReturnType<typeof useSearchParams>[0],
+): SwipeableProps {
+    return {
+        onSwipedLeft() {
+            if (searchParams.get("desktop") !== null) return;
+            if (!roomStates) return;
+            const i = roomStates.findIndex(r => r.id === roomId);
+            if (i === -1) return;
+            const nextRoom = roomStates[i + 1];
+            if (!nextRoom) return;
+            navigate("/home/" + nextRoom.id);
+        },
+        onSwipedRight() {
+            if (searchParams.get("desktop") !== null) return;
+            if (!roomStates) return;
+            const i = roomStates.findIndex(r => r.id === roomId);
+            if (i === -1) return;
+            if (i === 0) {
+                navigate("/home");
+                return;
+            }
+            const prevRoom = roomStates[i - 1];
+            if (!prevRoom) return;
+            navigate("/home/" + prevRoom.id);
+        }
+    };
+}
 
 const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(function Room({roomStates}: Pick<StoreState, 'roomStates'>) {
     const {roomId} = useParams();
+    const callbacks = useSwipeable(swipeableOptions(roomStates, roomId, useNavigate(), useSearchParams()[0]))
 
     if(!roomId) return (
         <Favorites />
@@ -32,7 +67,7 @@ const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(functio
 
     if(state.disabled) {
         return (
-            <div className="devices disabled">
+            <div className="devices disabled" {...callbacks}>
                 <FontAwesomeIcon icon={faExclamationCircle} className="error" />
                 <h1>This room has been disabled because of a fatal error</h1>
                 <p>{state.error}</p>
@@ -117,16 +152,20 @@ type DevicesProps = {
     };
 }
 
-const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function Devices({roomState, deviceStates}: DevicesProps & Pick<StoreState, 'deviceStates'>) {
+const Devices = connect(({deviceStates, roomStates}: StoreState)=>({deviceStates, roomStates}))(function Devices({roomState, deviceStates, roomStates}: DevicesProps & Pick<StoreState, 'deviceStates'|'roomStates'>) {
     const thisRoomDeviceStates = deviceStates[roomState.id];
 
-    React.useEffect(()=> {refreshDeviceStates(roomState.id)}, [roomState.id]);
+    React.useEffect(() => { refreshDeviceStates(roomState.id) }, [roomState.id]);
+
+    const callbacks = useSwipeable(swipeableOptions(roomStates, roomState.id, useNavigate(), useSearchParams()[0]))
 
     return (
         <PlaceHoldersArray
             className="devices"
             items={thisRoomDeviceStates}
+            placeholderProps={callbacks}
             Wrapper={states => (
+                //@ts-ignore
                 <ScrollView
                     className="devices"
                     onContextMenu={e => {
@@ -154,9 +193,11 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
                         })
                     }}
                 >
-                    {states.map(state => (
-                        <Device key={state.id} state={state} isInFavorites={false} />
-                    ))}
+                    <div {...callbacks}>
+                        {states.map(state => (
+                            <Device key={state.id} state={state} isInFavorites={false} />
+                        ))}
+                    </div>
                 </ScrollView>
             )}
             emptyPlaceholder={<>
@@ -178,10 +219,22 @@ const Devices = connect(({deviceStates}: StoreState)=>({deviceStates}))(function
 const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({favoriteDeviceStates, roomStates}))(function Favorites({favoriteDeviceStates, roomStates}: Pick<StoreState, 'favoriteDeviceStates'|'roomStates'>) {
     React.useEffect(()=> {refreshFavoriteDeviceStates()}, []);
 
+    const navigate = useNavigate(), searchParams = useSearchParams()[0];
+    const callbacks = useSwipeable({
+        onSwipedLeft() {
+            if (searchParams.get("desktop") !== null) return;
+            if (!roomStates) return;
+            const firstRoom = roomStates[0];
+            if (!firstRoom) return;
+            navigate("/home/" + firstRoom.id);
+        }
+    })
+
     return (
         <PlaceHoldersArray
             className="devices favorites"
             items={favoriteDeviceStates}
+            placeholderProps={callbacks}
             Wrapper={states => (
                 <ScrollView
                     className="devices"
@@ -204,14 +257,16 @@ const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({fa
                         })
                     }}
                 >
-                    {states.map(state => (
-                        <Device
-                            key={state.id}
-                            state={state}
-                            isInFavorites
-                            roomName={roomStates ? roomStates.find(r => r.id === state.roomId)?.name : undefined}
-                        />
-                    ))}
+                    <div {...callbacks}>
+                        {states.map(state => (
+                            <Device
+                                key={state.id}
+                                state={state}
+                                isInFavorites
+                                roomName={roomStates ? roomStates.find(r => r.id === state.roomId)?.name : undefined}
+                            />
+                        ))}
+                    </div>
                 </ScrollView>
             )}
             emptyPlaceholder={<>

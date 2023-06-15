@@ -32,10 +32,13 @@
 
         > div:first-child {
             position: static !important;
+
+            > div {
             flex-wrap: nowrap;
             padding: 0 0 5px 0;
             margin: 0 !important;
             overflow: auto !important;
+            }
         }
 
         .track-horizontal, .track-vertical {

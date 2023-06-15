@@ -25,6 +25,7 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-sortablejs": "^6.1.1",
+    "react-swipeable": "^7.0.1",
     "reconnecting-websocket": "^4.4.0",
     "redux": "^4.1.2",
     "sass": "^1.49.7",
