@@ -1,14 +1,13 @@
-import { faExclamationTriangle, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HMApi } from "../../../hub/api";
 import { handleError, sendRequest } from "../../../hub/request";
 import { store, StoreState } from "../../../store";
 import { IntermittentSubmitButton } from "../../../ui/button";
 import { RouteDialog } from "../../../ui/dialogs";
 import './change-password.scss';
+import zxcvbn from "zxcvbn";
 
 const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(
     function ChangePasswordDialog({ token }: Pick<StoreState, 'token'>) {
@@ -24,13 +23,22 @@ const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(
         const [confirmPasswordError, setConfirmPasswordError] = React.useState('');
         const confirmNewPasswordRef = React.useRef<HTMLInputElement>(null);
 
-        const navigate = useNavigate();
+        const username = token?.split(':')[0];
 
-        const [searchParams, setSearchParams] = useSearchParams();
+        const [passwordScore, setPasswordScore] = React.useState(-1);
+
+        const navigate = useNavigate();
 
         React.useEffect(() => {
             currentPasswordRef.current?.focus();
         }, []);
+
+        React.useEffect(() => {
+            if (newPassword)
+                setPasswordScore(zxcvbn(newPassword, username ? [username] : undefined).score);
+            else
+                setPasswordScore(-1);
+        }, [newPassword, username]);
 
         function handleSubmit() {
             if (newPassword !== confirmPassword) {
@@ -77,27 +85,8 @@ const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(
 
         return (
             <RouteDialog className="change-password-dialog" title="Change password">
-
-                {(searchParams.get('usingDefaultPassword') === 'true') && (
-                    <div className="default-password-warning">
-                        <div className="header">
-                            <FontAwesomeIcon icon={faExclamationTriangle} />
-                            You are currently using the default password
-                            <FontAwesomeIcon icon={faTimes} onClick={() => setSearchParams({})} />
-                        </div>
-                        <div className="body">
-                            Using the default password is not secure:
-                            <ul>
-                                <li>It is easy to guess and makes it very easy to hack.</li>
-                                <li>It disables the 24-hour period required before doing sensitive actions.</li>
-                            </ul>
-                            It is recommended that you change your password as soon as possible.
-                        </div>
-                    </div>
-                )}
-
                 <form onSubmit={e => { e.preventDefault() }}>
-                    <input hidden autoComplete="username" name="username" readOnly value={token?.split(':')[0]} />
+                    <input hidden autoComplete="username" name="username" readOnly value={username} />
                     <label className="text" data-error={currentPasswordError}>
                         Current Password
                         <input
@@ -141,6 +130,9 @@ const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(
                             }}
                         />
                     </label>
+                    <div className={`score s${passwordScore}`}>
+                        <span>{["Password strength", "Very Weak", "Weak", "Moderate", "Strong", "Very Strong"][passwordScore+1]}</span>
+                    </div>
                     <IntermittentSubmitButton onClick={handleSubmit}>
                         Change Password
                     </IntermittentSubmitButton>

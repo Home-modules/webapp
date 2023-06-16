@@ -35,7 +35,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                         buttons: [
                             {
                                 label: 'Change password',
-                                route: '/settings/account/change-password?usingDefaultPassword=true',
+                                route: '/settings/account/change-password',
                                 isPrimary: true
                             }
                         ]

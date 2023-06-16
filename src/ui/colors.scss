@@ -157,6 +157,13 @@
     --color-desktop-mode-device-hover-background: rgba(255, 255, 255, 0.175);
     --color-desktop-mode-device-active-background: rgba(4, 100, 255, 0.5);
     --color-desktop-mode-device-active-hover-background: rgba(4, 100, 255, 0.7);
+
+    // Password score
+    --color-score-0: rgb(255, 40, 40);
+    --color-score-1: rgb(255, 167, 52);
+    --color-score-2: rgb(224, 224, 0);
+    --color-score-3: rgb(162, 255, 22);
+    --color-score-4: rgb(41, 255, 41);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -312,5 +319,12 @@
         // Desktop mode
         --color-desktop-mode-device-background: rgba(0, 0, 0, 0.1);
         --color-desktop-mode-device-hover-background: rgba(0, 0, 0, 0.175);
+
+        // Password score
+        --color-score-0: rgb(211, 0, 0);
+        --color-score-1: rgb(172, 112, 0);
+        --color-score-2: rgb(134, 134, 0);
+        --color-score-3: rgb(91, 151, 0);
+        --color-score-4: green;
     }
 }
