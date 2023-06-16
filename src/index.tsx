@@ -6,7 +6,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, HashRouter } from 'react-router-dom';
 import Notifications from './ui/notifications';
 import Dialogs from './ui/dialogs';
 import {Flyouts} from './ui/flyout';
@@ -32,7 +32,7 @@ import SettingsPageAppearance from './screens/settings/appearance/appearance';
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <BrowserRouter>
+            <HashRouter>
                 <Notifications />
                 <Routes>
                     <Route path="/login" element={<LoginForm />} />
@@ -79,7 +79,7 @@ ReactDOM.render(
                 <Dialogs />
                 <Flyouts />
                 <CurrentContextMenu />
-            </BrowserRouter>
+            </HashRouter>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')

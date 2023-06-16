@@ -6,15 +6,18 @@ import platform from "platform";
 import { delay } from '../utils/promise-timeout';
 import { uniqueId } from '../utils/uniqueId';
 
+const host = process.env.NODE_ENV === "production" ?
+    "" :
+    `${window.location.protocol}//${window.location.hostname}${localStorage.getItem("port") || ""}`
+
 const ax = axios.create({
-    baseURL: `${window.location.protocol}//${window.location.hostname}:703/request`,
-    headers: {
-        'Content-Type': 'text/plain' // Avoid pre-flight request
-    },
+    baseURL: `${host}/request`,
     timeout: 20_000
 });
 
-export const ws = new ReconnectingWebSocket(`${{'http:':'ws:', 'https:':'wss:'}[window.location.protocol]}${window.location.hostname}:703`);
+export const ws = new ReconnectingWebSocket(
+    `${{ 'http:': 'ws:', 'https:': 'wss:' }[window.location.protocol]}${window.location.hostname}${localStorage.getItem("port") || ""}`
+);
 ws.onerror = (e) => {
     console.error(e);
 }
@@ -63,7 +66,10 @@ export function handleAnyErrors<T>(promise: Promise<T>) {
 export async function sendRequest<R extends HMApi.Request>(req: R): Promise<ResponseWithoutError<R>> {
     console.log('Request: ', req);
     try {
-        const e = await ax.post<ResponseWithoutError<R>>(String(store.getState().token), req);
+        const token = store.getState().token;
+        const e = await ax.post<ResponseWithoutError<R>>('.', req, {
+            headers: token ? { token } : undefined
+        });
         console.log('Response: ', e.data);
         return e.data;
     } catch(e: any) {

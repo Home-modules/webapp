@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Navigate, Outlet, useSearchParams } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useSearchParams } from "react-router-dom";
 import { handleError, sendRequest } from "../../hub/request";
 import { store, StoreState } from "../../store";
 import HomePageChooseRoom from "./choose-room";
@@ -9,6 +9,7 @@ import './desktop.scss';
 
 const HomePage = connect(({roomStates, appearanceSettings}: StoreState)=>({roomStates, appearanceSettings}))(function Home({roomStates, appearanceSettings}: Pick<StoreState, 'roomStates'|'appearanceSettings'>) {
     const [searchParams] = useSearchParams();
+    const location = useLocation();
     const isDesktopMode = searchParams.get('desktop') !== null;
 
     React.useEffect(() => { refreshRoomStates() }, []);
@@ -18,7 +19,7 @@ const HomePage = connect(({roomStates, appearanceSettings}: StoreState)=>({roomS
             isDesktopMode &&
             (!localStorage.getItem('home_modules_wallpaper')) &&
             localStorage.getItem("home_modules_ever_shown_wallpaper_notification") !== 'true' &&
-            window.location.pathname !== "/settings/appearance"
+            location.pathname !== "/settings/appearance"
         ) {
             localStorage.setItem("home_modules_ever_shown_wallpaper_notification", 'true');
             store.dispatch({

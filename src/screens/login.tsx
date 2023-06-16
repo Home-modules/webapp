@@ -5,10 +5,11 @@ import { HMApi } from '../hub/api';
 import { IntermittentSubmitButton } from '../ui/button';
 import { store, StoreState } from '../store';
 import { connect } from 'react-redux';
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useLocation, useSearchParams } from 'react-router-dom';
 
 function LoginForm({token}: Pick<StoreState, 'token'>) {
     const [searchParams] = useSearchParams();
+    const location = useLocation()
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -17,7 +18,7 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
     const usernameRef = React.useRef<HTMLInputElement>(null);
     const passwordRef = React.useRef<HTMLInputElement>(null);
     
-    if(window.location.pathname === '/login' && token) {
+    if(location.pathname === '/login' && token) {
         return <Navigate to={searchParams.get('redirect') || '/home'} />
     }
 
