@@ -65,20 +65,32 @@ const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(functio
         return <Navigate to="/home" />
     }
 
-    if(state.disabled) {
+    if (state.disabled) {
+        const isRestarting = state.retries < state.maxRetries;
         return (
             <div className="devices disabled" {...callbacks}>
                 <FontAwesomeIcon icon={faExclamationCircle} className="error" />
                 <h1>This room has been disabled because of a fatal error</h1>
                 <p>{state.error}</p>
+                {isRestarting ? (
+                    <p>Restarting automatically (try {state.retries + 1} out of {state.maxRetries})</p>
+                ) : (
+                    state.retries === state.maxRetries ? (
+                        <p>{state.retries} automatic restarts failed</p>
+                    ) : null
+                )}
                 <div className="actions">
-                    <IntermittentButton onClick={async()=> {
-                        await sendRequest({
-                            type: 'rooms.restartRoom',
-                            id: roomId
-                        }).catch(handleError);
-                        await refreshRoomStates();
-                    }} primary>
+                    <IntermittentButton
+                        onClick={async () => {
+                            await sendRequest({
+                                type: 'rooms.restartRoom',
+                                id: roomId
+                            }).catch(handleError);
+                            await refreshRoomStates();
+                        }}
+                        primary
+                        disabled={isRestarting}
+                    >
                         Restart room
                     </IntermittentButton>
                     <Link to={`/settings/rooms/${roomId}/edit`} className="button">
