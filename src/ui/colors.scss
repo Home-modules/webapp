@@ -212,6 +212,7 @@
         --color-background-brown-hover: #f0873b; // Brown background color when hovered
 
         // Login screen
+        --color-login-background: var(--color-background); // Login background color (around the box)
         --color-login-card-background: rgb(29, 29, 31); // Login background color (in the box)
         --color-login-card-shadow: rgba(0, 0, 0, 0.1); // Shadow cast from the box in the middle
 
