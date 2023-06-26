@@ -164,10 +164,11 @@
     --color-score-2: rgb(224, 224, 0);
     --color-score-3: rgb(162, 255, 22);
     --color-score-4: rgb(41, 255, 41);
-}
+    
 
-@media (prefers-color-scheme: dark) {
-    :root {
+
+
+    &.dark {
         // General background & text
         --color-background: rgb(19, 19, 20); // Background color
         --color-foreground: #fff; // Text color

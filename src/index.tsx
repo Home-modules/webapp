@@ -27,7 +27,22 @@ import InvalidVersionPage from './screens/invalid-version';
 import ActiveSessions from './screens/settings/account/active-sessions';
 import HomePageRoom from './screens/home/room';
 import SettingsPagePlugins, { SettingsPagePluginsTab } from './screens/settings/plugins/plugins';
-import SettingsPageAppearance from './screens/settings/appearance/appearance';
+import SettingsPageAppearance, { getAppearanceSetting } from './screens/settings/appearance/appearance';
+
+export const darkThemeMediaQuery = matchMedia("(prefers-color-scheme: dark)");
+export function updateTheme() {
+    const setting = getAppearanceSetting('colorTheme');
+    const isDarkNow = (setting === 'system') ?
+        darkThemeMediaQuery.matches :
+        setting === 'dark';
+
+    if (isDarkNow)
+        document.documentElement.classList.add('dark');
+    else
+        document.documentElement.classList.remove('dark');
+};
+darkThemeMediaQuery.addEventListener('change', updateTheme);
+updateTheme();
 
 ReactDOM.render(
     <React.StrictMode>

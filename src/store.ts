@@ -24,7 +24,8 @@ export type StoreState = {
         all: HMApi.T.Plugin[] | false | undefined,
     },
     appearanceSettings: {
-        showDesktopModeButton: boolean
+        showDesktopModeButton: boolean,
+        colorTheme: 'dark'|'light'|'system'
     }
 };
 
