@@ -22,6 +22,10 @@
                 box-shadow: inset 0 -3px 0 var(--color-navbar-active), inset 0 0 0 var(--color-navbar-hover-title);
             }
         }
+
+        button.icon svg {
+            color: var(--color-foreground) !important;
+        }
     }
 
     .devices, .devices.scroll-view {
