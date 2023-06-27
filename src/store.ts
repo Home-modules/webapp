@@ -7,6 +7,8 @@ import { FlyoutProps } from "./ui/flyout";
 import { NotificationProps } from "./ui/notifications";
 import { uniqueId } from "./utils/uniqueId";
 
+const mobileMediaQuery = matchMedia("screen and (max-width: 600px)");
+
 export type StoreState = {
     token: string | null;
     notifications: NotificationProps[];
@@ -26,7 +28,8 @@ export type StoreState = {
     appearanceSettings: {
         showDesktopModeButton: boolean,
         colorTheme: 'dark'|'light'|'system'
-    }
+    },
+    allowDesktopMode: boolean,
 };
 
 export type StoreAction = {
@@ -88,6 +91,9 @@ export type StoreAction = {
 } | {
     type: "SET_APPEARANCE_SETTINGS",
     settings: Partial<StoreState['appearanceSettings']>;
+} | {
+    type: "SET_ALLOW_DESKTOP_MODE",
+    allowDesktopMode: boolean
 }
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
@@ -107,6 +113,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
         installed: undefined
     },
     appearanceSettings: JSON.parse(localStorage.getItem('home_modules_appearance_settings') || 'null') || defaultAppearanceSettings,
+    allowDesktopMode: !mobileMediaQuery.matches
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -240,7 +247,20 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                 appearanceSettings: newSettings
             }
         }
+        case 'SET_ALLOW_DESKTOP_MODE': {
+            return {
+                ...state,
+                allowDesktopMode: action.allowDesktopMode
+            }
+        }
         default:
             return state;
     }
 }, (window as any).__REDUX_DEVTOOLS_EXTENSION__?.());
+
+mobileMediaQuery.addEventListener('change', e => {
+    store.dispatch({
+        'type': "SET_ALLOW_DESKTOP_MODE",
+        allowDesktopMode: !e.matches
+    });
+})

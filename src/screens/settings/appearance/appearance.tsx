@@ -21,7 +21,7 @@ export function getAppearanceSetting<T extends keyof StoreState['appearanceSetti
     return settings[name] === undefined ? defaultAppearanceSettings[name] : settings[name];
 }
 
-function AppearanceSettings({ appearanceSettings }: Pick<StoreState, 'appearanceSettings'>) {
+function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<StoreState, 'appearanceSettings'|'allowDesktopMode'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const currentField = searchParams.get('field');
     const [wallpaperUrl, setWallpaperUrl] = React.useState(localStorage.getItem('home_modules_wallpaper'));
@@ -29,7 +29,6 @@ function AppearanceSettings({ appearanceSettings }: Pick<StoreState, 'appearance
     const theme = getAppearanceSetting('colorTheme', appearanceSettings);
     const [systemThemeIsDark, setSystemThemeIsDark] = React.useState(darkThemeMediaQuery.matches);
     const isDarkNow = theme === 'system' ? systemThemeIsDark : theme === 'dark';
-    console.log(isDarkNow ? 'dark' : 'light');
     React.useEffect(() => {
         const onChange = () => setSystemThemeIsDark(darkThemeMediaQuery.matches);
         darkThemeMediaQuery.addEventListener('change', onChange);
@@ -38,54 +37,15 @@ function AppearanceSettings({ appearanceSettings }: Pick<StoreState, 'appearance
     }, []);
     React.useEffect(() => {
         updateTheme();
-        console.log("Broooo update PLEASE");
     }, [isDarkNow]);
 
     return (
         <div id="settings-appearance">
             <div className="fields">
                 <section
-                    className={`setting show-desktop-mode-icon ${currentField === 'show-desktop-mode-icon' ? 'active' : ''}`}
-                    onClick={() => setSearchParams({ field: 'show-desktop-mode-icon' })}
-                    onFocusCapture={() => setSearchParams({ field: 'show-desktop-mode-icon' })}
-                    onBlurCapture={()=> setSearchParams({})}
-                >
-                    <SettingItemToggle
-                        title="Show desktop mode button"
-                        description="Whether to show the desktop mode button in the home page"
-                        icon={faDesktop}
-                        state={getAppearanceSetting('showDesktopModeButton', appearanceSettings)}
-                        onChange={value => store.dispatch({
-                            type: "SET_APPEARANCE_SETTINGS",
-                            settings: {showDesktopModeButton: value}
-                        })}
-                    />
-                </section>
-                <section
-                    className={`setting desktop-wallpaper ${currentField === 'desktop-wallpaper' ? 'active' : ''}`}
-                    onClick={() => setSearchParams({ field: 'desktop-wallpaper', desktop: '' })}
-                    onFocusCapture={() => setSearchParams({ field: 'desktop-wallpaper', desktop: '' })}
-                    onBlurCapture={()=> setSearchParams({})}
-                >
-                    <SettingItemImageFile
-                        title="Desktop mode wallpaper"
-                        icon={faImage}
-                        value={wallpaperUrl}
-                        onChange={value => {
-                            setWallpaperUrl(value);
-                            if(value)
-                                localStorage.setItem('home_modules_wallpaper', value);
-                            else 
-                                localStorage.removeItem('home_modules_wallpaper');
-                            setSearchParams({ field: 'desktop-wallpaper', desktop: '' }); // This causes a re-render.
-                        }}
-                    />
-                </section>
-                <section
                     className={`setting color-theme ${currentField === 'color-theme' ? 'active' : ''}`}
                     onClick={() => setSearchParams({ field: 'color-theme' })}
                     onFocusCapture={() => setSearchParams({ field: 'color-theme' })}
-                    // onBlurCapture={()=> setSearchParams({})}
                 >
                     <SettingItemIconSelect
                         title="Color theme"
@@ -112,6 +72,46 @@ function AppearanceSettings({ appearanceSettings }: Pick<StoreState, 'appearance
                     />
                 </section>
 
+                {allowDesktopMode && <>
+                    <section
+                        className={`setting show-desktop-mode-icon ${currentField === 'show-desktop-mode-icon' ? 'active' : ''}`}
+                        onClick={() => setSearchParams({ field: 'show-desktop-mode-icon' })}
+                        onFocusCapture={() => setSearchParams({ field: 'show-desktop-mode-icon' })}
+                        onBlurCapture={() => setSearchParams({})}
+                    >
+                        <SettingItemToggle
+                            title="Show desktop mode button"
+                            description="Whether to show the desktop mode button in the home page"
+                            icon={faDesktop}
+                            state={getAppearanceSetting('showDesktopModeButton', appearanceSettings)}
+                            onChange={value => store.dispatch({
+                                type: "SET_APPEARANCE_SETTINGS",
+                                settings: { showDesktopModeButton: value }
+                            })}
+                        />
+                    </section>
+                    <section
+                        className={`setting desktop-wallpaper ${currentField === 'desktop-wallpaper' ? 'active' : ''}`}
+                        onClick={() => setSearchParams({ field: 'desktop-wallpaper', desktop: '' })}
+                        onFocusCapture={() => setSearchParams({ field: 'desktop-wallpaper', desktop: '' })}
+                        onBlurCapture={() => setSearchParams({})}
+                    >
+                        <SettingItemImageFile
+                            title="Desktop mode wallpaper"
+                            icon={faImage}
+                            value={wallpaperUrl}
+                            onChange={value => {
+                                setWallpaperUrl(value);
+                                if (value)
+                                    localStorage.setItem('home_modules_wallpaper', value);
+                                else
+                                    localStorage.removeItem('home_modules_wallpaper');
+                                setSearchParams({ field: 'desktop-wallpaper', desktop: '' }); // This causes a re-render.
+                            }}
+                        />
+                    </section>
+                </>}
+
                 <div className="rest" onClick={()=>setSearchParams({})}/>
             </div>
 
@@ -134,5 +134,5 @@ function AppearanceSettings({ appearanceSettings }: Pick<StoreState, 'appearance
     )
 }
 
-const SettingsPageAppearance = connect(({ appearanceSettings }: StoreState) => ({ appearanceSettings }))(AppearanceSettings);
+const SettingsPageAppearance = connect(({ appearanceSettings, allowDesktopMode }: StoreState) => ({ appearanceSettings, allowDesktopMode }))(AppearanceSettings);
 export default SettingsPageAppearance;

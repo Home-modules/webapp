@@ -7,14 +7,19 @@ import HomePageChooseRoom from "./choose-room";
 import './home.scss';
 import './desktop.scss';
 
-const HomePage = connect(({roomStates, appearanceSettings}: StoreState)=>({roomStates, appearanceSettings}))(function Home({roomStates, appearanceSettings}: Pick<StoreState, 'roomStates'|'appearanceSettings'>) {
-    const [searchParams] = useSearchParams();
+const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: StoreState)=>({roomStates, appearanceSettings, allowDesktopMode}))(function Home({roomStates, appearanceSettings, allowDesktopMode}: Pick<StoreState, 'roomStates'|'appearanceSettings'|'allowDesktopMode'>) {
+    const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
     const isDesktopMode = searchParams.get('desktop') !== null;
 
     React.useEffect(() => { refreshRoomStates() }, []);
     
     React.useEffect(() => {
+        if (isDesktopMode)
+            document.body.requestFullscreen({ navigationUI: "hide" });
+        else
+            document.exitFullscreen();
+        
         if (
             isDesktopMode &&
             (!localStorage.getItem('home_modules_wallpaper')) &&
@@ -44,6 +49,11 @@ const HomePage = connect(({roomStates, appearanceSettings}: StoreState)=>({roomS
         }
     }, [isDesktopMode])
 
+    React.useEffect(() => {
+        if(!allowDesktopMode)
+            setSearchParams({});
+    }, [allowDesktopMode, setSearchParams])
+
     if (roomStates && searchParams.has("redirect")) {
         return <Navigate to={searchParams.get("redirect")!} replace />
     }
@@ -54,7 +64,7 @@ const HomePage = connect(({roomStates, appearanceSettings}: StoreState)=>({roomS
             className={isDesktopMode ? 'desktop' : ''}
             style={isDesktopMode ? {backgroundImage: `url(${localStorage.getItem('home_modules_wallpaper')})`} : {}}
     >
-            <HomePageChooseRoom roomStates={roomStates} appearanceSettings={appearanceSettings} />
+            <HomePageChooseRoom roomStates={roomStates} appearanceSettings={appearanceSettings} allowDesktopMode={allowDesktopMode} />
             <Outlet />
         </main>
     )

@@ -12,7 +12,7 @@ import { PlaceHolders } from "../../ui/placeholders";
 import { getAppearanceSetting } from "../settings/appearance/appearance";
 
 
-export default function HomePageChooseRoom({ roomStates, appearanceSettings }: Pick<StoreState, 'roomStates'|'appearanceSettings'>) {
+export default function HomePageChooseRoom({ roomStates, appearanceSettings, allowDesktopMode }: Pick<StoreState, 'roomStates'|'appearanceSettings'|'allowDesktopMode'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const isDesktopMode = searchParams.get('desktop') !== null;
 
@@ -134,14 +134,10 @@ export default function HomePageChooseRoom({ roomStates, appearanceSettings }: P
                         </NavLink>
                     ))}
                 </ScrollView>
-                    {getAppearanceSetting('showDesktopModeButton', appearanceSettings) && (
+                    {(allowDesktopMode && getAppearanceSetting('showDesktopModeButton', appearanceSettings)) && (
                         <button
                             className="icon"
                             onClick={() => {
-                                if (isDesktopMode)
-                                    document.exitFullscreen();
-                                else
-                                    document.body.requestFullscreen({ navigationUI: "hide" });
                                 setSearchParams(isDesktopMode ? {} : 'desktop');
                             }}
                             title={isDesktopMode ? 'Quit desktop mode' : 'Enter desktop mode'}
