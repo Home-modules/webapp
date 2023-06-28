@@ -15,7 +15,7 @@
         box-shadow: 4px 4px 10px var(--color-flyout-shadow);
         transform: translateY(0);
         filter: opacity(1);
-        transition: transform 200ms, filter 200ms;
+        transition: transform 200ms, filter 200ms, background-color 200ms, border 200ms, box-shadow 200ms;
 
         &.top {
             animation: flyout-appear 200ms, flyout-appear-top 200ms;
@@ -67,7 +67,7 @@
         .flyout {
             backdrop-filter: opacity(1) blur(10px);
             background-color: var(--color-flyout-background-with-blur);
-            transition: transform 200ms, filter 200ms, backdrop-filter 200ms;
+            transition: transform 200ms, filter 200ms, backdrop-filter 200ms, background-color 200ms, border 200ms, box-shadow 200ms;
 
             &.top {
                 animation: flyout-appear-with-blur 200ms, flyout-appear-top 200ms;

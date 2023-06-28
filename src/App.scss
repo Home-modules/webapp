@@ -6,6 +6,7 @@
 main {
     flex-grow: 1;
     background-color: var(--color-background);
+    transition: background-color 200ms;
 }
 
 @media screen and (max-width: 600px) {

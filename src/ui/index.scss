@@ -14,6 +14,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
   color: var(--color-foreground);
+  transition: color 200ms, background-color 200ms;
 }
 
 html, body, #root {

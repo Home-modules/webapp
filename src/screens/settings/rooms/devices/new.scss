@@ -2,7 +2,7 @@ main#settings main#settings-rooms .edit-devices .new-device {
     .choose-type {
         height: 100%;
 
-        >div:first-child {
+        > div:first-child {
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -123,6 +123,7 @@ main#settings main#settings-rooms .edit-devices .new-device {
                     padding-bottom: 15px;
                     border-bottom: 1px solid var(--color-navbar-border);
                     margin-bottom: 15px;
+                    transition: border-color 200ms, opacity 250ms, filter 250ms;
                 }
             }
 
@@ -146,7 +147,8 @@ main#settings main#settings-rooms .edit-devices .new-device {
 
                 .sub-name {
                     font-size: 1rem;
-                    color: var(--color-foreground-subtext)
+                    color: var(--color-foreground-subtext);
+                    transition: color 200ms;
                 }
 
                 * {

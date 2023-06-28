@@ -42,6 +42,6 @@
         background-color: var(--color-horizontal-select-active-background);
         border-radius: 8px;
         pointer-events: none;
-        transition: left 200ms, top 200ms;
+        transition: left 200ms, top 200ms, background-color 200ms;
     }
 }

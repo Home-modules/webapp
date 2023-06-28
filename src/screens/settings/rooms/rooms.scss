@@ -58,6 +58,7 @@ main#settings main#settings-rooms {
                 font-size: 1.5rem;
                 color: var(--color-foreground);
                 min-width: 0;
+                transition: color 200ms;
 
                 &::placeholder {
                     transition: opacity 200ms;
@@ -169,7 +170,7 @@ main#settings main#settings-rooms {
                 cursor: grab;
                 z-index: 1;
                 fill: var(--color-foreground-subtext);
-                transition: opacity 250ms;
+                transition: opacity 250ms, fill 200ms;
 
                 &:active {
                     cursor: grabbing;
@@ -193,7 +194,7 @@ main#settings main#settings-rooms {
                 text-decoration: none;
                 color: var(--color-foreground);
 
-                transition: background-color 200ms, box-shadow 200ms, gap 250ms, padding-right 250ms;
+                transition: background-color 200ms, box-shadow 200ms, gap 250ms, padding-right 250ms, color 200ms;
 
                 &:hover {
                     background-color: var(--color-button-secondary-hover-background);
@@ -269,7 +270,7 @@ main#settings main#settings-rooms {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     direction: rtl;
-                    transition: flex-shrink 250ms;
+                    transition: flex-shrink 250ms, color 200ms;
                 }
 
             }
@@ -289,7 +290,7 @@ main#settings main#settings-rooms {
                 width: 44px;
                 padding: 0;
                 box-shadow: none !important;
-                transition: width 250ms, opacity 250ms;
+                transition: width 250ms, opacity 250ms, color 200ms;
 
                 > div {
                     position: absolute;
@@ -369,7 +370,7 @@ main#settings main#settings-rooms {
             cursor: pointer;
             box-sizing: border-box;
             width: 100%;
-            transition: color 200ms, border-color 200ms, opacity 250ms, margin-top 250ms, width 250ms;
+            transition: color 200ms, border-color 200ms, opacity 250ms, margin-top 250ms, width 250ms, background-color 200ms;
 
             &:hover {
                 border-color: var(--color-foreground-subtext);

@@ -4,6 +4,7 @@ main#settings nav.settings-sidebar {
     background-color: var(--color-navbar-background);
     overflow: hidden;
     box-shadow: inset 0 1px 0 0 var(--color-navbar-border);
+    transition: background-color 200ms, box-shadow 200ms;
 
     --scrollbar-width: 6px;
     --scrollbar-margin: 2px;
@@ -61,7 +62,7 @@ main#settings nav.settings-sidebar {
             width: 15px;
             height: 15px;
             background-color: var(--color-background);
-            transition: right 150ms, top 150ms;
+            transition: right 150ms, top 150ms, background-color 200ms;
         }
 
         &:hover:not(.active) {
@@ -96,6 +97,7 @@ main#settings nav.settings-sidebar {
         font-size: 0.75em;
         text-align: center;
         word-wrap: break-word;
+        transition: color 200ms;
 
         .mobile {
             display: none;

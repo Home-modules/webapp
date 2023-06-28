@@ -8,6 +8,7 @@
         border-right: 1px solid var(--color-navbar-border);
         display: flex;
         flex-direction: column;
+        transition: border-right 200ms;
 
         .setting {
             border-right: 0px solid var(--color-navbar-active);
@@ -51,6 +52,7 @@
             color: var(--color-foreground-subtext);
             font-size: 1.1em;
             opacity: 0.5;
+            transition: color 200ms;
         }
     }
 

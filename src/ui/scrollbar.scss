@@ -11,7 +11,7 @@
         height: var(--scrollbar-width) !important;
         border-radius: 999em;
         background-color: var(--color-scrollbar-background);
-        transition: background-color 0.2s;
+        transition: background-color 200ms;
 
         &:hover {
             background-color: var(--color-scrollbar-hover-background);
@@ -20,7 +20,7 @@
         > .thumb-horizontal {
             border-radius: 999em;
             background-color: var(--color-scrollbar-thumb);
-            transition: background-color 0.2s;
+            transition: background-color 200ms;
 
             &:hover {
                 background-color: var(--color-scrollbar-hover-thumb);
@@ -39,7 +39,7 @@
         width: var(--scrollbar-width) !important;
         border-radius: 999em;
         background-color: var(--color-scrollbar-background);
-        transition: background-color 0.2s;
+        transition: background-color 200ms;
 
         &:hover {
             background-color: var(--color-scrollbar-hover-background);
@@ -48,7 +48,7 @@
         > .thumb-vertical {
             border-radius: 999em;
             background-color: var(--color-scrollbar-thumb);
-            transition: background-color 0.2s;
+            transition: background-color 200ms;
 
             &:hover {
                 background-color: var(--color-scrollbar-hover-thumb);

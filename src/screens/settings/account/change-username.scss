@@ -2,6 +2,7 @@
     .warning {
         color: var(--color-status-warning);
         margin: -0.5em 0 1em 0;
+        transition: color 200ms
     }
 
     .status {

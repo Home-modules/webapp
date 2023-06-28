@@ -18,6 +18,7 @@
                 overflow: auto;
                 background-color: var(--color-button-secondary-background);
                 border-radius: 10px;
+                transition: background-color 200ms;
 
                 .item {
                     padding: 10px;
@@ -48,6 +49,7 @@
                         margin: 5px 0 0;
                         color: var(--color-foreground-subtext);
                         font-size: 0.8em;
+                        transition: color 200ms;
 
                         .terminate {
                             margin-top: 10px;

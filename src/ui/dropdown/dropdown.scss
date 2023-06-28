@@ -31,6 +31,7 @@
             margin-left: 15px;
             vertical-align: middle;
             color: var(--color-dropdown-button-arrow);
+            transition: color 200ms;
         }
 
         &:hover {
@@ -55,6 +56,7 @@
         font-size: 16px;
         color: var(--color-foreground);
         width: 200px;
+        transition: background-color 200ms, border-color 200ms, color 200ms;
 
         // Tiny height / position correction
         height: 36px;
@@ -75,6 +77,7 @@
             border-left-width: 0px;
             position: relative;
             z-index: 1;
+            transition: background-color 200ms, border-color 200ms;
 
             // Tiny height / position correction
             height: 36px;
@@ -116,7 +119,7 @@
         box-shadow: 2px 2px 10px var(--color-dropdown-list-shadow);
         filter: opacity(0);
         pointer-events: none;
-        transition: filter 200ms, top 200ms;
+        transition: filter 200ms, top 200ms, background-color 200ms, border 200ms;
         display: flex;
         flex-direction: column;
 
@@ -129,7 +132,7 @@
         @supports (backdrop-filter: blur(10px)) {
             background-color: var(--color-dropdown-list-background-with-blur);
             backdrop-filter: opacity(0) blur(10px);
-            transition: backdrop-filter 200ms, filter 200ms, top 200ms;
+            transition: backdrop-filter 200ms, filter 200ms, top 200ms, background-color 200ms, border-color 200ms;
 
             &.open {
                 backdrop-filter: opacity(1) blur(10px);
@@ -178,12 +181,14 @@
             font-size: 16px;
             color: var(--color-foreground);
             margin: 5px;
+            transition: background-color 200ms, border-color 200ms, color 200ms;
 
             svg {
                 flex-shrink: 0;
                 margin-right: 5px;
                 vertical-align: middle;
                 color: var(--color-foreground-subtext);
+                transition: color 200ms;
             }
 
             input {
@@ -276,6 +281,7 @@
         .loading, .error, .empty {
             padding: 10px;
             text-align: center;
+            transition: color 200ms;
 
             &.loading { color: var(--color-status-placeholder); }
             &.error { color: var(--color-status-error); }
@@ -302,6 +308,7 @@
         color: var(--color-foreground-subtext);
         font-size: 0.9em;
         margin-bottom: 15px;
+        transition: color 200ms;
     }
 
     @media (forced-colors: active) {
@@ -355,7 +362,7 @@
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.8);
             transform-origin: center;
-            transition: opacity 200ms, transform 200ms;
+            transition: opacity 200ms, transform 200ms, background-color 200ms, border-color 200ms;
 
             &.open {
                 opacity: 1;

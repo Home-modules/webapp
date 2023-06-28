@@ -21,7 +21,7 @@
         max-height: calc(100vh - 80px);
         filter: opacity(1);
         animation: dialog-fade-in 200ms, dialog-grow 200ms;
-        transition: transform 200ms, filter 200ms;
+        transition: transform 200ms, filter 200ms, background-color 200ms;
 
         h1 {
             font-size: 25px;
@@ -46,7 +46,7 @@
             backdrop-filter: opacity(1) blur(10px);
             background-color: var(--color-dialog-background-with-blur);
             animation: dialog-fade-in-with-blur 200ms, dialog-grow 200ms;
-            transition: transform 200ms, filter 200ms, backdrop-filter 200ms;
+            transition: transform 200ms, filter 200ms, backdrop-filter 200ms, background-color 200ms;
         }
 
         &.closing {

@@ -77,6 +77,7 @@ main#settings main#settings-rooms .edit-devices .edit-device {
         bottom: 0;
         box-shadow: 0 20px 20px 30px var(--color-background);
         border-radius: 7px;
+        transition: box-shadow 200ms;
 
         .save {
             padding: 12px;
