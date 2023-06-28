@@ -1,6 +1,6 @@
 import React from "react";
 import { HMApi } from "../../../hub/api";
-import { sendRequest, ws } from "../../../hub/request";
+import { handleAnyErrors, sendRequest, ws } from "../../../hub/request";
 import Slider from "../../../ui/fields/slider";
 import { DeviceInteractionTypeProps } from "./interactions";
 
@@ -21,11 +21,13 @@ export function DeviceInteractionTypeSlider({
     // value should only be sent if the last call is finished and older than 6ms.
     const [lastTimeLiveChanged, setLastTimeLiveChanged] = React.useState(-Infinity);
     const [liveValueID, setLiveValueID] = React.useState<number | undefined>(undefined);
+    
+    const startLiveRequest = startSliderStream();
 
     React.useEffect(() => {
         let id: number;
         if (interaction.live) {
-            startSliderStream().then(res=> setLiveValueID(id = res.data.id));
+            handleAnyErrors(sendRequest(startLiveRequest)).then(res=> setLiveValueID(id = res.data.id));
         }
 
         return () => {
@@ -36,7 +38,8 @@ export function DeviceInteractionTypeSlider({
                 });
             }
         }
-    }, [interaction])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [interaction.live, startLiveRequest.roomId, startLiveRequest.deviceId, startLiveRequest.interactionId])
 
     if (isDefault) {
         interaction = { ...interaction, label: undefined };

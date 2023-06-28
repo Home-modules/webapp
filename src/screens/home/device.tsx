@@ -49,12 +49,12 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
         }
     }
 
-    const startSliderStream = () => handleAnyErrors(sendRequest({
+    const startSliderStream = () => ({
         type: "devices.interactions.initSliderLiveValue",
         deviceId: state.id,
         roomId: state.roomId,
         interactionId: defaultInteraction!,
-    }));
+    } as const);
     
     return (
         <button

@@ -61,12 +61,12 @@ const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: Stor
                             interaction={interaction}
                             state={deviceState.interactions[interaction.id]!}
                             sendAction={getSendActionF(deviceState, interaction.id, isInFavorites)}
-                            startSliderStream={() =>  handleAnyErrors(sendRequest({
+                            startSliderStream={() =>  ({
                                 type: "devices.interactions.initSliderLiveValue",
                                 deviceId,
                                 roomId,
                                 interactionId: interaction.id
-                            }))}
+                            })}
                         />
                     ))}
                 </div>
@@ -83,7 +83,7 @@ export type DeviceInteractionTypeProps<T extends HMApi.T.DeviceInteraction.Type>
     state: HMApi.T.DeviceInteraction.State<T>,
     sendAction: (action: HMApi.T.DeviceInteraction.Action<T>, refresh?: boolean) => Promise<void>,
     isDefault?: boolean
-    startSliderStream: () => Promise<ResponseWithoutError<HMApi.Request.Devices.Interactions.InitSliderLiveValue>>
+    startSliderStream: () => HMApi.Request.Devices.Interactions.InitSliderLiveValue
 };
 
 export function DeviceInteraction({ interaction, state, sendAction, ...props }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type>) {
