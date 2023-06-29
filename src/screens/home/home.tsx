@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Navigate, Outlet, useLocation, useSearchParams } from "react-router-dom";
+import { Navigate, Outlet, useMatch, useSearchParams } from "react-router-dom";
 import { handleError, sendRequest } from "../../hub/request";
 import { store, StoreState } from "../../store";
 import HomePageChooseRoom from "./choose-room";
@@ -9,14 +9,13 @@ import './desktop.scss';
 
 const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: StoreState)=>({roomStates, appearanceSettings, allowDesktopMode}))(function Home({roomStates, appearanceSettings, allowDesktopMode}: Pick<StoreState, 'roomStates'|'appearanceSettings'|'allowDesktopMode'>) {
     const [searchParams, setSearchParams] = useSearchParams();
-    const location = useLocation();
+    const inAppearanceSettings = useMatch("/settings/appearance")
     const isDesktopMode = searchParams.get('desktop') !== null;
 
     React.useEffect(() => { refreshRoomStates() }, []);
     
     React.useEffect(() => {
-        if (isDesktopMode !== (!!document.fullscreenElement) &&
-            location.pathname !== "/settings/appearance") {
+        if (isDesktopMode !== (!!document.fullscreenElement) && !inAppearanceSettings) {
             if (isDesktopMode)
                 document.body.requestFullscreen({ navigationUI: "hide" });
             else
@@ -27,7 +26,7 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
             isDesktopMode &&
             (!localStorage.getItem('home_modules_wallpaper')) &&
             localStorage.getItem("home_modules_ever_shown_wallpaper_notification") !== 'true' &&
-            location.pathname !== "/settings/appearance"
+            (!inAppearanceSettings)
         ) {
             localStorage.setItem("home_modules_ever_shown_wallpaper_notification", 'true');
             store.dispatch({
