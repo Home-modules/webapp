@@ -15,10 +15,12 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
     React.useEffect(() => { refreshRoomStates() }, []);
     
     React.useEffect(() => {
-        if (isDesktopMode)
-            document.body.requestFullscreen({ navigationUI: "hide" });
-        else
-            document.exitFullscreen();
+        if (isDesktopMode !== (!!document.fullscreenElement)) {
+            if (isDesktopMode)
+                document.body.requestFullscreen({ navigationUI: "hide" });
+            else
+                document.exitFullscreen();
+        }
         
         if (
             isDesktopMode &&
