@@ -1,7 +1,7 @@
 import { faChevronRight, faPen, faRotateRight, fas, faStar as fasStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { handleAnyErrors, handleError, sendRequest } from "../../hub/request";
+import { handleError, sendRequest } from "../../hub/request";
 import { store } from "../../store";
 import { refreshRoomStates } from "./home";
 import React from "react";

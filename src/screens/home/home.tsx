@@ -6,11 +6,13 @@ import { store, StoreState } from "../../store";
 import HomePageChooseRoom from "./choose-room";
 import './home.scss';
 import './desktop.scss';
+import { darkThemeMediaQuery } from "../..";
 
 const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: StoreState)=>({roomStates, appearanceSettings, allowDesktopMode}))(function Home({roomStates, appearanceSettings, allowDesktopMode}: Pick<StoreState, 'roomStates'|'appearanceSettings'|'allowDesktopMode'>) {
     const [searchParams, setSearchParams] = useSearchParams();
-    const inAppearanceSettings = useMatch("/settings/appearance")
+    const inAppearanceSettings = useMatch({path: "/settings/appearance", end: false})
     const isDesktopMode = searchParams.get('desktop') !== null;
+    const [wallpaper, setWallpaper] = React.useState<string|null>(null);
 
     React.useEffect(() => { refreshRoomStates() }, []);
     
@@ -52,6 +54,21 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
     }, [isDesktopMode])
 
     React.useEffect(() => {
+        if (isDesktopMode) {
+            const update = () => {
+                setWallpaper(`url(${localStorage.getItem(darkThemeMediaQuery.matches ?
+                    "home_modules_wallpaper" :
+                    "home_modules_wallpaper_dark")}`);
+            }
+            update();
+            darkThemeMediaQuery.addEventListener("change", update);
+            return () => darkThemeMediaQuery.removeEventListener("change", update);
+        } else {
+            setWallpaper(null);
+        }
+    }, [isDesktopMode])
+
+    React.useEffect(() => {
         if(!allowDesktopMode)
             setSearchParams({});
     }, [allowDesktopMode, setSearchParams])
@@ -64,10 +81,10 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
         <main
             id="home"
             className={isDesktopMode ? 'desktop' : ''}
-            style={isDesktopMode ? {backgroundImage: `url(${localStorage.getItem('home_modules_wallpaper')})`} : {}}
+            style={wallpaper ? {backgroundImage: wallpaper} : {}}
     >
             <HomePageChooseRoom roomStates={roomStates} appearanceSettings={appearanceSettings} allowDesktopMode={allowDesktopMode} />
-            <Outlet />
+            {(!inAppearanceSettings) && <Outlet />}
         </main>
     )
 })

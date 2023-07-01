@@ -1,6 +1,9 @@
 #home {
     display: flex;
     flex-direction: column;
+    background-size: cover;
+    background-position: center;
+    transition: background 200ms;
 
     .devices {
         flex-grow: 1;
