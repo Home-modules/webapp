@@ -57,8 +57,8 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
         if (isDesktopMode) {
             const update = () => {
                 setWallpaper(`url(${localStorage.getItem(darkThemeMediaQuery.matches ?
-                    "home_modules_wallpaper" :
-                    "home_modules_wallpaper_dark")}`);
+                    "home_modules_wallpaper_dark" :
+                    "home_modules_wallpaper")}`);
             }
             update();
             darkThemeMediaQuery.addEventListener("change", update);
