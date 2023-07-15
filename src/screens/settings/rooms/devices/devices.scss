@@ -32,24 +32,6 @@ main#settings main#settings-rooms .edit-devices {
             pointer-events: none;
             transform: scale(1.25);
         }
-
-        > div:first-child {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        h1 .title {
-            a {
-                margin-right: 15px;
-                
-                > svg {
-                    height: 1em;
-                    width: 1em;
-                    padding: 0.125em;
-                }
-            }
-        }
     }
 
     .new-device {

@@ -14,6 +14,7 @@ import machineFriendlyName from '../../../../utils/machine-friendly-name';
 import ScrollView from '../../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../../ui/flyout';
 import { SettingItemText } from '../../../../ui/settings/text';
+import { PageWithHeader } from '../../../../ui/header';
 
 /** Resolves all needed objects from their IDs (and redirects to the proper location if something wasn't found) */
 function SettingsPageRoomsDevicesEditDevice_({ deviceTypes, rooms, devices } : Pick<StoreState, 'deviceTypes'|'rooms'|'devices'>) {
@@ -166,7 +167,35 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
     }
 
     return (
-        <ScrollView
+        <PageWithHeader
+            title={isNew ? `New ${deviceType.name}` : `Editing ${device.name} (${deviceType.name})`}
+            buttons={isNew ? [] : [{
+                icon: faTrash,
+                label: "Delete device",
+                attention: true,
+                onClick(e) {
+                    addConfirmationFlyout({
+                        element: e.target,
+                        text: "Are you sure you want to delete this device?",
+                        width: 190,
+                        confirmText: "Delete",
+                        attention: true,
+                        async: true,
+                        onConfirm: ()=> sendRequest({
+                            'type': 'devices.removeDevice',
+                            roomId: room.id,
+                            id
+                        }).then(res=>{
+                            if(res.type==='ok') {
+                                navigate(`/settings/devices/${room.id}`);
+                            }
+                            else handleError(res);
+                        }, handleError)
+                    })
+                }
+            }]}
+            backLink=".."
+
             className={`edit-device`}
             onKeyDown={e => {
                 console.log(e)
@@ -177,42 +206,6 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
             }}
             tabIndex={-1}
         >
-            <h1>
-                <Link to="..">
-                    <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
-                </Link>
-                <span className="title">
-                    {isNew ? <>New {deviceType.name}</> : <>Editing {device.name} ({deviceType.name})</>}
-                </span>
-                {isNew || (
-                    <Button 
-                        onClick={(e)=> {
-                            addConfirmationFlyout({
-                                element: e.target,
-                                text: "Are you sure you want to delete this device?",
-                                width: 190,
-                                confirmText: "Delete",
-                                attention: true,
-                                async: true,
-                                onConfirm: ()=> sendRequest({
-                                    'type': 'devices.removeDevice',
-                                    roomId: room.id,
-                                    id
-                                }).then(res=>{
-                                    if(res.type==='ok') {
-                                        navigate(`/settings/devices/${room.id}`);
-                                    }
-                                    else handleError(res);
-                                }, handleError)
-                            })
-                        }}
-                        title="Delete device"
-                        attention
-                    >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                )}
-            </h1>
 
             <div className="options">
 
@@ -273,6 +266,6 @@ function EditDevice({ deviceType, room,  device }: EditDeviceProps) {
                     Save
                 </IntermittentButton>
             </div>
-        </ScrollView>
+        </PageWithHeader>
     );
 }

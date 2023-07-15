@@ -1,4 +1,4 @@
-import { faArrowLeft, faPlus, fas, faSearch, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, fas, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
@@ -10,9 +10,9 @@ import { handleError, sendRequest } from "../../../../hub/request";
 import { store, StoreState } from "../../../../store";
 import { addConfirmationFlyout } from "../../../../ui/flyout";
 import { PlaceHolders } from "../../../../ui/placeholders";
-import ScrollView from "../../../../ui/scrollbar";
 import SearchKeywordHighlight from "../../../../ui/search-highlight";
 import './devices.scss';
+import { PageWithHeader } from "../../../../ui/header";
 
 function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pick<StoreState, 'rooms'|'devices'|'deviceTypes'>) {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -113,182 +113,122 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
     }
 
     return (
-        <div
-            className="edit-devices"
-            tabIndex={-1}
-            onKeyDown={e => {
-                if (e.ctrlKey && e.key === 'f' && !hideList) {
-                    e.preventDefault();
-                    setSearchParams({search: ''});
-                    searchFieldRef.current?.focus();
-                }
-            }}
-            onKeyPress={e => {
-                if (
-                    document.activeElement === e.currentTarget &&
-                    e.key.length === 1 && /^[\p{L}\p{N}]*$/u.test(e.key)
-                ) {
-                    searchFieldRef.current?.focus();
-                }
-            }}
-        >
-            <ScrollView className={`devices-list ${hideList? 'hidden':''}`}>
-                <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedDevices.length===0 ? '' : 'selected-active'}`}>
-                    <div className="title">
-                        <Link
-                            to="/settings/devices"
-                            className="icon"
-                            tabIndex={(search === null && selectedDevices.length === 0) ? 0 : -1}
-                        >
-                            <FontAwesomeIcon icon={faArrowLeft} />
-                        </Link>
-                        <span>{room.name} devices</span>
-                        <button
-                            className="icon"
-                            tabIndex={(search === null && selectedDevices.length === 0) ? 0 : -1}
-                            onClick={() => {
-                                setSearchParams({search: ''});
-                                searchFieldRef.current?.focus();
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faSearch} />
-                        </button>
-                    </div>
-                    <div className="search">
-                        <FontAwesomeIcon icon={faSearch} />
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            value={search || ''}
-                            onChange={(e) => setSearchParams({ search: e.target.value })}
-                            ref={searchFieldRef}
-                            tabIndex={(search !== null && selectedDevices.length === 0) ? 0 : -1}
-                            onKeyDown={e => {if(e.key === "Escape") setSearchParams({})}}
-                        />
-                        <button
-                            className="icon"
-                            onClick={() => setSearchParams({})}
-                            tabIndex={(search !== null && selectedDevices.length === 0) ? 0 : -1}
-                        >
-                            <FontAwesomeIcon icon={faTimes} />
-                        </button>
-                    </div>
-                    <div className="selected">
-                        <label className="checkbox">
-                            <input 
-                                type="checkbox" 
-                                checked={devices ? selectedDevices.length === devices.length: false}
-                                onChange={e=> {
-                                    if(devices && e.target.checked) {
-                                        setSelectedDevices(devices.map(r=>r.id));
-                                    } else {
-                                        setSelectedDevices([]);
-                                    }
-                                }} 
-                                title="Select all"
-                                tabIndex={(selectedDevices.length !== 0) ? 0 : -1}
-                            />
-                        </label>
-                        <span>{selectedDevices.length}</span>
-                        <button
-                            className="icon"
-                            tabIndex={(selectedDevices.length !== 0) ? 0 : -1}
-                            onClick={e => {
-                                addConfirmationFlyout({
-                                    element: e.target,
-                                    text: `Are you sure you want to delete ${selectedDevices.length} ${selectedDevices.length===1 ? 'device':'devices'}?`,
-                                    confirmText: "Delete",
-                                    attention: true,
-                                    async: true,
-                                    onConfirm: ()=> (async()=> {
-                                        const devices = [...selectedDevices]; // Clone array it case it changes during the process
-                                        for(const deviceId of devices) {
-                                            await sendRequest({
-                                                type: "devices.removeDevice",
-                                                roomId,
-                                                id: deviceId
-                                            });
-                                        }
-                                        store.dispatch({
-                                            type: "ADD_NOTIFICATION",
-                                            notification: {
-                                                type: "success",
-                                                message: `Deleted ${devices.length} ${devices.length===1?'device':'devices'}`
-                                            }
+        <div className="edit-devices">
+            <PageWithHeader
+                title={`${room.name} Devices`}
+                search={{
+                    value: search,
+                    onChange(search) { setSearchParams(search === null ? {} : { search }) }
+                }}
+                select={{
+                    totalCount: devices ? devices.length : Infinity,
+                    selectedCount: selectedDevices.length,
+                    onToggle(checked) {
+                        if(devices && checked) {
+                            setSelectedDevices(devices.map(d=>d.id));
+                        } else {
+                            setSelectedDevices([]);
+                        }
+                    },
+                    buttons: [{
+                        icon: faTrash,
+                        label: "Delete selected",
+                        attention: true,
+                        onClick(e) {
+                            addConfirmationFlyout({
+                                element: e.target,
+                                text: `Are you sure you want to delete ${selectedDevices.length} ${selectedDevices.length===1 ? 'device':'devices'}?`,
+                                confirmText: "Delete",
+                                attention: true,
+                                async: true,
+                                onConfirm: ()=> (async()=> {
+                                    const devices = [...selectedDevices]; // Clone array it case it changes during the process
+                                    for(const deviceId of devices) {
+                                        await sendRequest({
+                                            type: "devices.removeDevice",
+                                            roomId,
+                                            id: deviceId
                                         });
-                                        updateDevices();
-                                        setSelectedDevices([]);
-                                    })().catch(handleError)
-                                });
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faTrash}/>
-                        </button>
-                        <button
-                            className="icon"
-                            onClick={() => setSelectedDevices([])}
-                            tabIndex={(selectedDevices.length !== 0) ? 0 : -1}
-                        >
-                            <FontAwesomeIcon icon={faTimes} />
-                        </button>
-                    </div>
-                </h1>
-                <div className='list'>
-                    <PlaceHolders
-                        content={devices}
-                        Wrapper={devices => (
-                            search ? <>{
-                                devices
-                                    .filter(device => (device.name.toLowerCase().includes(search.toLowerCase()) || device.id.toLowerCase().includes(search.toLowerCase())))
-                                    .map(device => (
-                                        <DeviceItem
-                                            key={device.id}
-                                            device={device}
-                                            disableReorder
-                                            search={search}
-                                            deviceType={types ? types.find(t => t.id === device.type) : undefined}
-                                            action={selectedDevices.length === 0 ? 'edit' : 'check'}
-                                            selected={selectedDevices.includes(device.id)}
-                                            onSelectChange={() => {
-                                                if (selectedDevices.includes(device.id)) {
-                                                    setSelectedDevices(val => val.filter(el => el !== device.id));
-                                                } else {
-                                                    setSelectedDevices(val => [...val, device.id])
-                                                }
-                                            }}
-                                        />
-                                    ))
-                            }</> : <>
-                                <ReactSortable
-                                    list={devices} setList={setDevices} onSort={onSort}
-                                    animation={200} easing='ease'
-                                    handle='.drag-handle' ghostClass='ghost'>
-                                    {devices.map(device => (
-                                        <DeviceItem
-                                            key={device.id}
-                                            device={device}
-                                            deviceType={types ? types.find(t => t.id === device.type) : undefined}
-                                            action={selectedDevices.length === 0 ? 'edit' : 'check'}
-                                            selected={selectedDevices.includes(device.id)}
-                                            onSelectChange={() => {
-                                                if (selectedDevices.includes(device.id)) {
-                                                    setSelectedDevices(val => val.filter(el => el !== device.id));
-                                                } else {
-                                                    setSelectedDevices(val => [...val, device.id])
-                                                }
-                                            }}
-                                        />
-                                    ))}
-                                </ReactSortable>
-                                <Link to="new" className="add">
-                                    <FontAwesomeIcon icon={faPlus} />
-                                </Link>
-                            </>
-                        )}
-                        errorPlaceholder="Error loading devices"
-                    />
-                </div>
-            </ScrollView>
+                                    }
+                                    store.dispatch({
+                                        type: "ADD_NOTIFICATION",
+                                        notification: {
+                                            type: "success",
+                                            message: `Deleted ${devices.length} ${devices.length===1?'device':'devices'}`
+                                        }
+                                    });
+                                    updateDevices();
+                                    setSelectedDevices([]);
+                                })().catch(handleError)
+                            });
+                        }
+                    }]
+                }}
+
+                className={`devices-list ${hideList ? 'hidden' : ''}`}
+                tabIndex={-1}
+                onKeyDown={e => {
+                    if (e.ctrlKey && e.key === 'f' && !hideList) {
+                        e.preventDefault();
+                        setSearchParams({search: ''});
+                        searchFieldRef.current?.focus();
+                    }
+                }}
+            >
+                <PlaceHolders
+                    content={devices}
+                    Wrapper={devices => (
+                        search ? <>{
+                            devices
+                                .filter(device => (device.name.toLowerCase().includes(search.toLowerCase()) || device.id.toLowerCase().includes(search.toLowerCase())))
+                                .map(device => (
+                                    <DeviceItem
+                                        key={device.id}
+                                        device={device}
+                                        disableReorder
+                                        search={search}
+                                        deviceType={types ? types.find(t => t.id === device.type) : undefined}
+                                        action={selectedDevices.length === 0 ? 'edit' : 'check'}
+                                        selected={selectedDevices.includes(device.id)}
+                                        onSelectChange={() => {
+                                            if (selectedDevices.includes(device.id)) {
+                                                setSelectedDevices(val => val.filter(el => el !== device.id));
+                                            } else {
+                                                setSelectedDevices(val => [...val, device.id])
+                                            }
+                                        }}
+                                    />
+                                ))
+                        }</> : <>
+                            <ReactSortable
+                                list={devices} setList={setDevices} onSort={onSort}
+                                animation={200} easing='ease'
+                                handle='.drag-handle' ghostClass='ghost'>
+                                {devices.map(device => (
+                                    <DeviceItem
+                                        key={device.id}
+                                        device={device}
+                                        deviceType={types ? types.find(t => t.id === device.type) : undefined}
+                                        action={selectedDevices.length === 0 ? 'edit' : 'check'}
+                                        selected={selectedDevices.includes(device.id)}
+                                        onSelectChange={() => {
+                                            if (selectedDevices.includes(device.id)) {
+                                                setSelectedDevices(val => val.filter(el => el !== device.id));
+                                            } else {
+                                                setSelectedDevices(val => [...val, device.id])
+                                            }
+                                        }}
+                                    />
+                                ))}
+                            </ReactSortable>
+                            <Link to="new" className="add">
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Link>
+                        </>
+                    )}
+                    errorPlaceholder="Error loading devices"
+                />
+            </PageWithHeader>
             <Outlet />
         </div>
     )

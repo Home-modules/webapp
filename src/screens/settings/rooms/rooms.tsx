@@ -1,5 +1,5 @@
 import './rooms.scss';
-import { faBath, faBed, faCouch, faDoorClosed, faPlus, faSearch, faTimes, faUtensils, IconDefinition, faPlug, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faCouch, faDoorClosed, faPlus, faUtensils, IconDefinition, faPlug, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { ReactSortable, Store } from "react-sortablejs";
@@ -10,9 +10,9 @@ import { store, StoreState } from '../../../store';
 import { connect } from 'react-redux';
 import { Link, Navigate, Outlet, useMatch, useParams, useSearchParams } from 'react-router-dom';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
-import ScrollView from '../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../ui/flyout';
 import { PlaceHolders } from '../../../ui/placeholders';
+import { PageWithHeader } from '../../../ui/header';
 
 function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'rooms'> & {devicesScreen?: boolean}) {
     let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
@@ -72,178 +72,122 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
     }
 
     return (
-        <main
-            id="settings-rooms"
-            tabIndex={-1}
-            onKeyDown={e => {
-                if (e.ctrlKey && e.key === 'f' && !(hideList || collapseList)) {
-                    e.preventDefault();
-                    setSearchParams({search: ''});
-                    searchFieldRef.current?.focus();
-                }
-            }}
-            onKeyPress={e => {
-                if (
-                    document.activeElement === e.currentTarget &&
-                    e.key.length === 1 && /^[\p{L}\p{N}]*$/u.test(e.key)
-                ) {
-                    searchFieldRef.current?.focus();
-                }
-            }}
-        >
-            <ScrollView className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}>
-                <h1 className={`searchable ${search===null ? '' : 'search-active'} ${selectedRooms.length===0 ? '' : 'selected-active'}`}>
-                    <div className="title">
-                        {devicesScreen ?
-                            <span>Edit Devices</span> : 
-                            <span>Edit Rooms</span>}
-                        <button
-                            className="icon"
-                            tabIndex={(search===null && selectedRooms.length===0) ? 0 : -1}
-                            onClick={() => {
-                                setSearchParams({search: ''});
-                                searchFieldRef.current?.focus();
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faSearch} />
-                        </button>
-                    </div>
-                    <div className="search">
-                        <FontAwesomeIcon icon={faSearch} />
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            value={search || ''}
-                            tabIndex={(search!==null && selectedRooms.length===0) ? 0 : -1}
-                            onChange={(e) => setSearchParams({ search: e.target.value })}
-                            ref={searchFieldRef}
-                            onKeyDown={e => {if(e.key === "Escape") setSearchParams({})}}
-                        />
-                        <button
-                            className="icon"
-                            onClick={() => setSearchParams({})}
-                            tabIndex={(search!==null && selectedRooms.length===0) ? 0 : -1}
-                        >
-                            <FontAwesomeIcon icon={faTimes} />
-                        </button>
-                    </div>
-                    <div className="selected">
-                        <label className="checkbox">
-                            <input 
-                                type="checkbox" 
-                                checked={rooms ? selectedRooms.length === rooms.length: false}
-                                tabIndex={(selectedRooms.length!==0) ? 0 : -1}
-                                onChange={e=> {
-                                    if(rooms && e.target.checked) {
-                                        setSelectedRooms(rooms.map(r=>r.id));
-                                    } else {
-                                        setSelectedRooms([]);
+        <main id="settings-rooms">
+            <PageWithHeader
+                title={devicesScreen ? "Edit Devices" : "Edit Rooms"}
+                search={{
+                    value: search,
+                    onChange(search) { setSearchParams(search === null ? {} : { search }) }
+                }}
+                select={{
+                    totalCount: rooms ? rooms.length : Infinity,
+                    selectedCount: selectedRooms.length,
+                    onToggle(checked) {
+                        if(rooms && checked) {
+                            setSelectedRooms(rooms.map(r=>r.id));
+                        } else {
+                            setSelectedRooms([]);
+                        }
+                    },
+                    buttons: [{
+                        icon: faTrash,
+                        label: "Delete selected",
+                        attention: true,
+                        onClick(e) {
+                            addConfirmationFlyout({
+                                element: e.target,
+                                text: `Are you sure you want to delete ${selectedRooms.length} ${selectedRooms.length===1 ? 'room':'rooms'}?`,
+                                confirmText: "Delete",
+                                attention: true,
+                                async: true,
+                                onConfirm: ()=> (async()=> {
+                                    const rooms = [...selectedRooms]; // Clone array it case it changes during the process
+                                    for(const roomId of rooms) {
+                                        await sendRequest({
+                                            type: "rooms.removeRoom",
+                                            id: roomId
+                                        })
                                     }
-                                }} 
-                                title="Select all"
-                            />
-                        </label>
-                        <span>{selectedRooms.length}</span>
-                        <button
-                            className="icon"
-                            tabIndex={(selectedRooms.length!==0) ? 0 : -1}
-                            onClick={e => {
-                                addConfirmationFlyout({
-                                    element: e.target,
-                                    text: `Are you sure you want to delete ${selectedRooms.length} ${selectedRooms.length===1 ? 'room':'rooms'}?`,
-                                    confirmText: "Delete",
-                                    attention: true,
-                                    async: true,
-                                    onConfirm: ()=> (async()=> {
-                                        const rooms = [...selectedRooms]; // Clone array it case it changes during the process
-                                        for(const roomId of rooms) {
-                                            await sendRequest({
-                                                type: "rooms.removeRoom",
-                                                id: roomId
-                                            })
+                                    store.dispatch({
+                                        type: "ADD_NOTIFICATION",
+                                        notification: {
+                                            type: "success",
+                                            message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
                                         }
-                                        store.dispatch({
-                                            type: "ADD_NOTIFICATION",
-                                            notification: {
-                                                type: "success",
-                                                message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
-                                            }
-                                        });
-                                        updateRooms();
-                                        setSelectedRooms([]);
-                                    })().catch(handleError)
-                                });
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                        <button
-                            className="icon"
-                            onClick={() => setSelectedRooms([])}
-                            tabIndex={(selectedRooms.length!==0) ? 0 : -1}
-                        >
-                            <FontAwesomeIcon icon={faTimes} />
-                        </button>
-                    </div>
-                </h1>
-                <div className='list'>
-                    <PlaceHolders
-                        content={rooms}
-                        errorPlaceholder="Error loading rooms"
-                        Wrapper={rooms => (search ? (<>
-                            {rooms
-                                .filter(room => (room.name.toLowerCase().includes(search.toLowerCase()) || room.id.toLowerCase().includes(search.toLowerCase())))
-                                .map(room => (
-                                    <RoomItem
-                                        key={room.id}
-                                        room={room}
-                                        disableReorder
-                                        search={search}
-                                        active={collapseList ? roomId === room.id : false}
-                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices' : (devicesScreen ? 'devices' : 'edit')) : 'check'}
-                                        selected={selectedRooms.includes(room.id)}
-                                        onSelectChange={() => {
-                                            if (selectedRooms.includes(room.id)) {
-                                                setSelectedRooms(val => val.filter(el => el !== room.id));
-                                            } else {
-                                                setSelectedRooms(val => [...val, room.id])
-                                            }
-                                        }}
-                                    />
-                                ))}
-                        </>) : (<>
-                            <ReactSortable
-                                list={rooms} setList={setRooms} onSort={onSort}
-                                animation={200} easing='ease'
-                                handle='.drag-handle' ghostClass='ghost'>
-                                {rooms.map(room => (
-                                    <RoomItem
-                                        key={room.id}
-                                        room={room}
-                                        disableReorder={devicesScreen}
-                                        active={collapseList ? roomId === room.id : false}
-                                        action={selectedRooms.length === 0 ? (collapseList ? 'devices-collapsed' : (devicesScreen ? 'devices' : 'edit')) : 'check'}
-                                        selected={selectedRooms.includes(room.id)}
-                                        onSelectChange={() => {
-                                            if (selectedRooms.includes(room.id)) {
-                                                setSelectedRooms(val => val.filter(el => el !== room.id));
-                                            } else {
-                                                setSelectedRooms(val => [...val, room.id])
-                                            }
-                                        }}
-                                    />
-                                ))}
-                            </ReactSortable>
-                            {devicesScreen || (
-                                <Link to="/settings/rooms/new" className="add">
-                                    <FontAwesomeIcon icon={faPlus} />
-                                </Link>
-                            )}
-                        </>))}
-                    />
-
-                </div>
-            </ScrollView>
+                                    });
+                                    updateRooms();
+                                    setSelectedRooms([]);
+                                })().catch(handleError)
+                            });
+                        }
+                    }]
+                }}
+                
+                className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}
+                tabIndex={-1}
+                onKeyDown={e => {
+                    if (e.ctrlKey && e.key === 'f' && !(hideList || collapseList)) {
+                        e.preventDefault();
+                        setSearchParams({search: ''});
+                        searchFieldRef.current?.focus();
+                    }
+                }}
+            >
+                <PlaceHolders
+                    content={rooms}
+                    errorPlaceholder="Error loading rooms"
+                    Wrapper={rooms => (search ? (<>
+                        {rooms
+                            .filter(room => (room.name.toLowerCase().includes(search.toLowerCase()) || room.id.toLowerCase().includes(search.toLowerCase())))
+                            .map(room => (
+                                <RoomItem
+                                    key={room.id}
+                                    room={room}
+                                    disableReorder
+                                    search={search}
+                                    active={collapseList ? roomId === room.id : false}
+                                    action={selectedRooms.length === 0 ? (collapseList ? 'devices' : (devicesScreen ? 'devices' : 'edit')) : 'check'}
+                                    selected={selectedRooms.includes(room.id)}
+                                    onSelectChange={() => {
+                                        if (selectedRooms.includes(room.id)) {
+                                            setSelectedRooms(val => val.filter(el => el !== room.id));
+                                        } else {
+                                            setSelectedRooms(val => [...val, room.id])
+                                        }
+                                    }}
+                                />
+                            ))}
+                    </>) : (<>
+                        <ReactSortable
+                            list={rooms} setList={setRooms} onSort={onSort}
+                            animation={200} easing='ease'
+                            handle='.drag-handle' ghostClass='ghost'>
+                            {rooms.map(room => (
+                                <RoomItem
+                                    key={room.id}
+                                    room={room}
+                                    disableReorder={devicesScreen}
+                                    active={collapseList ? roomId === room.id : false}
+                                    action={selectedRooms.length === 0 ? (collapseList ? 'devices-collapsed' : (devicesScreen ? 'devices' : 'edit')) : 'check'}
+                                    selected={selectedRooms.includes(room.id)}
+                                    onSelectChange={() => {
+                                        if (selectedRooms.includes(room.id)) {
+                                            setSelectedRooms(val => val.filter(el => el !== room.id));
+                                        } else {
+                                            setSelectedRooms(val => [...val, room.id])
+                                        }
+                                    }}
+                                />
+                            ))}
+                        </ReactSortable>
+                        {devicesScreen || (
+                            <Link to="/settings/rooms/new" className="add">
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Link>
+                        )}
+                    </>))}
+                />
+            </PageWithHeader>
             <Outlet />
         </main>
     )

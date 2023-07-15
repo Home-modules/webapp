@@ -11,6 +11,7 @@ import { PlaceHoldersArray } from '../../../ui/placeholders';
 import ScrollView from '../../../ui/scrollbar';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
 import './plugins.scss';
+import { PageWithHeader } from '../../../ui/header';
 
 export function updateInstalledPlugins() {
     sendRequest({
@@ -32,6 +33,7 @@ export function updateInstalledPlugins() {
 }
 
 export default function SettingsPagePlugins() {
+    const [searchParams, setSearchParams] = useSearchParams();
 
     function updatePlugins() {
         updateInstalledPlugins();
@@ -39,67 +41,44 @@ export default function SettingsPagePlugins() {
     React.useEffect(updatePlugins, []);
 
     return (
-        <div id="settings-plugins">
-            <h1>
-                <span>Plugins</span>
-                <button className="icon restart" onClick={e => addConfirmationFlyout({
+        <PageWithHeader
+            title='Plugins'
+            buttons={[{
+                icon: faRotateRight,
+                label: "Restart hub",
+                onClick: e => addConfirmationFlyout({
                     element: e.target,
                     text: "Restart the hub?",
                     confirmText: "Restart",
                     async: true,
                     onConfirm: ()=> sendRestartingRequest({ type: "restart" }),
-                })}>
-                    <FontAwesomeIcon icon={faRotateRight} />
-                </button>
-            </h1>
+                })
+            }]}
+            search={{
+                value: searchParams.get("search"),
+                onChange: search => setSearchParams(search === null ? {} : {search})
+            }}
 
-            <div className="tab-view">
-                <div className="tab-bar">
-                    <NavLink
-                        to="/settings/plugins/installed"
-                        className={({ isActive }) => `tab ${isActive ? 'active' : ''}`}
-                    >
-                        <span>Installed</span>
-
-                    </NavLink>
-                    <NavLink
-                        to="/settings/plugins/all"
-                        className={({ isActive }) => `tab ${isActive ? 'active' : ''}`}
-                    >
-                        <span>All</span>
-
-                    </NavLink>
-                </div>
-                <Outlet />
-            </div>
-        </div>
+            id="settings-plugins"
+            onKeyDown={e => {
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    setSearchParams({search: ''});
+                }
+            }}
+        >
+            <Outlet />
+        </PageWithHeader>
     )
 }
 
 export const SettingsPagePluginsTab = connect(({ plugins: { installed, all } }: StoreState) => ({ installed, all }))(
     function SettingsPagePluginsTab({ installed, all, tab }: StoreState['plugins'] & { tab: "installed" | "all" }) {
-        const [searchParams, setSearchParams] = useSearchParams();
+        
+        const [searchParams] = useSearchParams();
         const search = searchParams.get('search') || undefined;
 
         return (
-            <div className="tab installed">
-                <div className="toolbar">
-                    <label className="text search">
-                        <input
-                            type="text"
-                            value={search || ''}
-                            placeholder="Search..."
-                            onChange={e => {
-                                const value = e.target.value;
-                                if (value) {
-                                    setSearchParams({ search: value });
-                                } else {
-                                    setSearchParams({});
-                                }
-                            }}
-                        />
-                    </label>
-                </div>
                 <PlaceHoldersArray
                     className="content"
                     errorPlaceholder="Error loading plugins"
@@ -110,7 +89,7 @@ export const SettingsPagePluginsTab = connect(({ plugins: { installed, all } }: 
                     emptyPlaceholder={search ? <>No plugins match your search.</> :
                         <>There are no installed plugins. Install one by going to the <Link to="/settings/plugins/all">All</Link> tab.</>}
                     Wrapper={items => (
-                        <ScrollView className="content">
+                        <>
                             {items.map(({ id, name, author, description, activated, compatible, version, authorWebsite, homepage }) => (
                                 <div
                                     key={id}
@@ -215,10 +194,9 @@ export const SettingsPagePluginsTab = connect(({ plugins: { installed, all } }: 
                                     </div>
                                 </div>
                             ))}
-                        </ScrollView>
+                        </>
                     )}
                 />
-            </div>
         );
     }
 );

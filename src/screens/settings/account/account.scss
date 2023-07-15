@@ -1,17 +1,6 @@
 main#settings-account-info {
-    > div:first-child {
-        padding: 20px;
-    }
-
-    h1 {
-        margin-top: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        button {
-            font-size: 1rem;
-        }
+    .settings {
+        padding: 10px 20px;
     }
 
     .setting-item:last-child {

@@ -2,59 +2,14 @@ main#settings main#settings-rooms .edit-room {
     outline: none !important;
     overflow: clip !important;
 
-    > div:first-child {
+    > div:first-child > .content {
         padding: 20px;
+        padding-top: 10px;
     }
 
     > .track-horizontal, 
     > .track-vertical {
         z-index: 1;
-    }
-
-    h1 {
-        margin: 0;
-        margin-bottom: 20px;
-
-        display: flex;
-        align-items: center;
-
-        a {
-            display: contents;
-            color: var(--color-foreground-subtext);
-            transition: color 200ms;
-
-            &:hover {
-                color: var(--color-foreground);
-            }
-
-            > svg {
-                flex-shrink: 0;
-                margin-right: 15px;
-                cursor: pointer;
-            }
-        }
-        
-        .title {
-            flex-grow: 1;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            position: relative;
-            top: -2px;
-        }
-
-        button {
-            vertical-align: middle;
-            margin-left: 10px;
-            float: right;
-            height: 43px;
-            width: 43px;
-            font-size: 1.5rem;
-
-            svg {
-                pointer-events: none;
-            }
-        }
     }
 
     .setting-item.thick-border {
@@ -63,13 +18,13 @@ main#settings main#settings-rooms .edit-room {
 
     .options > .setting-item:last-child {
         border-bottom: none;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .save-container {
         position: sticky;
         z-index: 1;
-        bottom: 0;
+        bottom: 20px;
         box-shadow: 0 20px 20px 30px var(--color-background);
         border-radius: 7px;
         transition: box-shadow 200ms;

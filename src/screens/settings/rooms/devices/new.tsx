@@ -10,6 +10,7 @@ import ScrollView from "../../../../ui/scrollbar";
 import { PlaceHoldersArray } from "../../../../ui/placeholders";
 import { HMApi } from "../../../../hub/api";
 import Button from "../../../../ui/button";
+import { Header, PageWithHeader } from "../../../../ui/header";
 
 function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState, 'deviceTypes'|'rooms'>) {
     let hideList = !useMatch('/settings/devices/:roomId/new/');
@@ -26,16 +27,12 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
 
     return (
         <main className="new-device">
-            <ScrollView className={`choose-type ${hideList ? 'hidden' : ''}`}>
-                <h1>
-                    <Link to="..">
-                        <FontAwesomeIcon icon={faArrowLeft} />
-                    </Link>
-                    New device
-                </h1>
-                <div className="subtitle">
-                    Select device type
-                </div>
+            <PageWithHeader
+                title="New Device"
+                subtitle="Select device type"
+                backLink=".."
+                className={`choose-type ${hideList ? 'hidden' : ''}`}
+            >
                 <PlaceHoldersArray
                     className="device-types"
                     items={types}
@@ -99,7 +96,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                         </p>
                     )}
                 />
-            </ScrollView>
+            </PageWithHeader>
             <Outlet />
         </main>
     );

@@ -1,21 +1,20 @@
 import './room-edit.scss';
 import { HMApi } from "../../../hub/api";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBath, faBed, faCouch, faDoorClosed, faTrash, faUtensils, IconName } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faCouch, faDoorClosed, faTrash, faUtensils, IconName } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import Button, { IntermittentButton } from '../../../ui/button';
+import { IntermittentButton } from '../../../ui/button';
 import { handleError, sendRequest } from '../../../hub/request';
 import { StoreState } from '../../../store';
-import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import machineFriendlyName from '../../../utils/machine-friendly-name';
 import Fields, { getFieldsErrors, getSettingsFieldDefaultValue } from '../../../ui/fields/fields';
 import getFlatFields from '../../../utils/flat-fields';
-import ScrollView from '../../../ui/scrollbar';
 import { addConfirmationFlyout } from '../../../ui/flyout';
 import { SettingItemText } from '../../../ui/settings/text';
 import { SettingItemIconSelect } from '../../../ui/settings/icon-select';
 import { SettingItemLazyDropdown } from '../../../ui/settings/lazydropdown';
+import { PageWithHeader } from '../../../ui/header';
 
 export type SettingsPageRoomsEditRoomProps = {
     room: HMApi.T.Room & {new?: boolean};
@@ -155,7 +154,31 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     }
 
     return (
-        <ScrollView
+        <PageWithHeader
+            title={isNew ? "New room" : `Editing ${room.name}`}
+            buttons={isNew ? [] : [{
+                icon: faTrash,
+                label: "Delete room",
+                attention: true,
+                onClick: e=> addConfirmationFlyout({
+                    element: e.target,
+                    text: "Are you sure you want to delete this room?",
+                    confirmText: "Delete",
+                    attention: true,
+                    async: true,
+                    onConfirm: ()=> sendRequest({
+                        'type': 'rooms.removeRoom',
+                        id
+                    }).then(res=> {
+                        if(res.type==='ok') {
+                            navigate('/settings/rooms')
+                        }
+                        else handleError(res);
+                    }, handleError)
+                })
+            }]}
+            backLink="/settings/rooms"
+            
             className="edit-room"
             onKeyDown={e => {
                 console.log(e)
@@ -166,41 +189,6 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             }}
             tabIndex={-1}
         >
-            <h1>
-                <Link to="/settings/rooms">
-                    <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
-                </Link>
-                <span className="title">
-                    {isNew ? "New room" : <>Editing {room.name}</>}
-                </span>
-                {isNew || (
-                    <Button 
-                        onClick={e=> {
-                            addConfirmationFlyout({
-                                element: e.target,
-                                text: "Are you sure you want to delete this room?",
-                                confirmText: "Delete",
-                                attention: true,
-                                async: true,
-                                onConfirm: ()=> sendRequest({
-                                    'type': 'rooms.removeRoom',
-                                    id
-                                }).then(res=> {
-                                    if(res.type==='ok') {
-                                        navigate('/settings/rooms')
-                                    }
-                                    else handleError(res);
-                                }, handleError)
-                            })
-                        }}
-                        title="Delete room"
-                        attention
-                    >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                )}
-            </h1>
-
             <div className="options">
                 <SettingItemText
                     title='Name'
@@ -305,7 +293,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                     Save
                 </IntermittentButton>
             </div>
-        </ScrollView>
+        </PageWithHeader>
     );
 }
 

@@ -2,158 +2,9 @@ main#settings main#settings-rooms {
     position: relative;
     overflow: hidden;
     overflow: clip;
-
-    h1.searchable {
-        margin-top: 0;
-        flex-shrink: 0;
-        position: relative;
-        transition: opacity 250ms;
-
-        .title {
-            display: flex;
-            align-items: center;
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-            transition: opacity 250ms, transform 250ms;
-
-            span {
-                flex-grow: 1;
-                position: relative;
-                top: -3px;
-                flex-shrink: 1;
-            }
-
-            button.icon {
-                margin-left: 15px;
-            }
-        }
-
-        .search {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-
-            > svg {
-                flex-shrink: 0;
-                height: 0.75em;
-                width: 0.75em;
-                padding: 10px 0;
-            }
-
-            button.icon svg {
-                padding-left: 0;
-            }
-
-            input {
-                flex-grow: 1;
-                font-family: var(--main-font-stack);
-                background: transparent;
-                border: none;
-                font-size: 1.5rem;
-                color: var(--color-foreground);
-                min-width: 0;
-                transition: color 200ms;
-
-                &::placeholder {
-                    transition: opacity 200ms;
-                }
-
-                &:focus {
-                    outline: none;
-                    
-                    &::placeholder {
-                        opacity: 0.75;
-                    }
-                }
-            }
-
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(44px);
-            transition: opacity 250ms, transform 250ms;
-        }
-
-        .selected {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-
-            label.checkbox {
-                margin: 0;
-                margin-left: 13px;
-                height: 20px;
-                width: 20px;
-                position: relative;
-
-                input {
-                    position: absolute;
-                }
-            }
-
-            span {
-                flex-grow: 1;
-            }
-
-            button.icon {
-                &:first-of-type svg {
-                    color: var(--color-button-attention-secondary-foreground);
-                    padding-left: 0;
-                    padding-right: 0;
-                }
-
-                &:last-child svg {
-                    padding-left: 0;
-                }
-            }
-
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(44px);
-            transition: opacity 250ms, transform 250ms;
-        }
-
-        &.search-active {
-            .title {
-                opacity: 0;
-                pointer-events: none;
-                transform: translateY(-44px);
-            }
-
-            .search {
-                opacity: 1;
-                pointer-events: auto;
-                transform: translateY(0);
-            }
-        }
-
-        &.selected-active {
-            .title, .search {
-                opacity: 0;
-                pointer-events: none;
-                transform: translateY(-44px);
-            }
-
-            .selected {
-                opacity: 1;
-                pointer-events: auto;
-                transform: translateY(0);
-            }
-        }
-    }
     
-    .list {
-        flex-grow: 1;
+    .content {
+        transition: padding 250ms;
 
         .item {
             position: relative;
@@ -357,7 +208,7 @@ main#settings main#settings-rooms {
 
         .add {
             position: sticky;
-            bottom: 0;
+            bottom: 20px;
             z-index: 2;
 
             display: block;
@@ -403,10 +254,10 @@ main#settings main#settings-rooms {
         transition: opacity 250ms, transform 250ms, width 250ms;
         overflow: hidden !important;
 
-        h1 {
-            height: 44px;
-            .title span {
-                flex-shrink: 1;
+        header {
+            transition: opacity 250ms, background-color 200ms, border-color 200ms;
+
+            h1 {
                 white-space: nowrap;
             }
         }
@@ -419,27 +270,26 @@ main#settings main#settings-rooms {
 
         @media screen and (min-width: 601px) {
             &.collapsed {
-                > div:first-child {
+                width: 66.5px !important;
+
+                .content {
                     padding-left: 10px;
                     padding-right: 10px;
                 }
-                width: 66.5px !important;
 
                 &::-webkit-scrollbar {
                     width: 6px;
                 }
 
-                h1 {
+                header {
                     opacity: 0;
                     pointer-events: none;
-                    height: 44px;
-                    overflow: hidden;
 
                     .title {
                         pointer-events: none;
                     }
                 }
-                .list .item {
+                .content .item {
                     gap: 0;
 
                     .drag-handle {
@@ -466,7 +316,7 @@ main#settings main#settings-rooms {
                         }
                     }
                 }
-                .list .add {
+                .content .add {
                     opacity: 0;
                     pointer-events: none;
                     margin-top: -63px;
@@ -476,13 +326,6 @@ main#settings main#settings-rooms {
                 --scrollbar-width: 6px;
                 --scrollbar-margin: 2px;
             }
-        }
-
-        > div:first-child {
-            padding: 20px;
-            transition: padding 250ms;
-            display: flex;
-            flex-direction: column;
         }
 
         > .track-horizontal,
@@ -510,21 +353,7 @@ main#settings main#settings-rooms {
     }
 
     @media (forced-colors: active) {
-        h1.searchable { 
-            .title svg, .search svg:last-child, .selected svg {
-                color: ButtonText !important;
-
-                &:hover, &:focus-visible {
-                    outline: 1px dashed;
-                }
-            }
-
-            .search input {
-                opacity: 1 !important;
-            }
-        }
-
-        .list { 
+        .content { 
             .item {
                 .drag-handle {
                     fill: currentColor;

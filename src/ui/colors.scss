@@ -74,6 +74,12 @@ $colors: (
     "backdrop-button-background":                   (rgba(0, 0, 0, 0.448)                                             ), // Button with background image background color
     "backdrop-button-hover-background":             (rgba(0, 0, 0, 0.537)                                             ), // Button with background image background color on hover
 
+    // Icon button
+    "icon-button":                                  ("foreground-subtext"                                               ), // Color for icon buttons
+    "icon-button-hover":                            ("foreground"                                                       ), // Color for icon buttons on hover
+    "icon-button-attention":                        (#ff4d3a                        ,#e71700                        ), // Color for dangerous icon buttons
+    "icon-button-attention-hover":                  ("button-attention-secondary-foreground"                            ), // Color for dangerous icon buttons on hover
+
     // Text fields
     "input-background":                             (#fff                       ,rgb(29, 29, 31)                    ), // Text field background color
     "input-border":                                 (#cccccc                    ,rgb(72, 72, 75)                    ), // Text field default border color

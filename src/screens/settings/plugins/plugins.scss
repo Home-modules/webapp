@@ -1,216 +1,87 @@
 #settings-plugins {
     flex-grow: 1;
-    padding: 20px;
     display: flex;
     flex-direction: column;
 
-    h1 {
-        margin: 0 0 20px;
-        display: flex;
-        align-items: center;
 
-        span {
-            flex-grow: 1;
+    > div:first-child > .content {
+        > .placeholders {
+            height: 100%;
         }
-
-        .restart {
-            flex-shrink: 0;
-            margin-left: 15px;
-        }
-    }
-
-    .tab-view {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-
-        .tab-bar {
-            margin-bottom: -20px;
+        .plugin {
+            border: 1px solid var(--color-navbar-background);
+            border-radius: 10px;
+            padding: 10px;
+            position: relative;
             overflow: hidden;
-            display: flex;
             
-            .tab {
-                color: var(--color-foreground);
-                position: relative;
-                display: inline-block;
-                text-decoration: none;
-                padding: 10px 15px 30px;
-                transition: color 200ms;
-                -webkit-tap-highlight-color: transparent;
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
 
-                &::before {
-                    content: "";
-                    position: absolute;
-                    top: 0; left: 0;
-                    bottom: 0; right: 0;
-                    border-radius: 7px 7px 0 0;
-                    background-color: var(--color-navbar-background);
-                    transform: translateY(100%);
-                    transition: transform 200ms;
+            &.installed {
+                border-color: var(--color-input-border);
+            }
+
+            &.activated {
+                border-color: var(--color-status-success);
+
+                .info strong {
+                    color: var(--color-status-success);
                 }
+            }
 
-                span {
+            &.incompatible {
+                border-color: var(--color-status-error);
+
+                .info strong {
+                    color: var(--color-status-error);
+                }
+            }
+
+            h2 {
+                margin: 0;
+
+                code {
+                    margin-left: 10px;
+                    font-size: 0.5em;
+                    color: var(--color-foreground-subtext);
                     position: relative;
-                    z-index: 1;
-                }
-
-                &:not(.active):hover {
-                    color: var(--color-navbar-active);
-                }
-
-                &.active::before {
-                    transform: translateY(0%);
-                }
-
-                @media screen and (max-width: 600px) {
-                    flex-grow: 1;
-                    text-align: center;
-                    flex-basis: 0;
-                }
-            }
-        }
-
-        > .tab {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-
-            .toolbar {
-                min-height: 20px;
-                background-color: var(--color-navbar-background);
-                border-radius: 10px 10px 0 0;
-                padding: 5px;
-                position: relative;
-                z-index: 1;
-                display: flex;
-
-                .search {
-                    display: inline-block;
-                    margin: 0;
-                    flex-grow: 1;
-
-                    input {
-                        padding: 5px;
-                        --color-input-background: var(--color-background);
-                        --color-input-border: var(--color-navbar-border);
-
-                        &:focus {
-                            box-shadow: 0 0 0 2px var(--color-input-active-border), inset 0 0 0 100px var(--color-input-background);
-                            // ^ reduce focus border from 3px to 2px
-                        }
-                    }
+                    top: -0.2em;
                 }
             }
 
-            >.content {
-                flex-grow: 1;
-                border: 1px solid var(--color-navbar-background);
-                border-top: none;
-                border-radius: 0 0 10px 10px;
-                width: initial !important;
-                height: initial !important;
+            .author {
+                color: var(--color-foreground-subtext);
+            }
 
-                > div:first-child {
-                    padding: 15px;
+            .description {
+                margin-top: 10px;
+                color: var(--color-foreground-subtext);
+            }
 
-                    .plugin {
-                        border: 1px solid var(--color-navbar-background);
-                        border-radius: 10px;
-                        padding: 10px;
-                        position: relative;
-                        overflow: hidden;
-                        
-                        &:not(:last-child) {
-                            margin-bottom: 15px;
-                        }
+            .info {
+                margin-top: 10px;
+                color: var(--color-foreground-subtext);
 
-                        &.installed {
-                            border-color: var(--color-input-border);
-                        }
-
-                        &.activated {
-                            border-color: var(--color-status-success);
-
-                            .info strong {
-                                color: var(--color-status-success);
-                            }
-                        }
-
-                        &.incompatible {
-                            border-color: var(--color-status-error);
-
-                            .info strong {
-                                color: var(--color-status-error);
-                            }
-                        }
-
-                        h2 {
-                            margin: 0;
-
-                            code {
-                                margin-left: 10px;
-                                font-size: 0.5em;
-                                color: var(--color-foreground-subtext);
-                                position: relative;
-                                top: -0.2em;
-                            }
-                        }
-
-                        .author {
-                            color: var(--color-foreground-subtext);
-                        }
-
-                        .description {
-                            margin-top: 10px;
-                            color: var(--color-foreground-subtext);
-                        }
-
-                        .info {
-                            margin-top: 10px;
-                            color: var(--color-foreground-subtext);
-
-                            strong {
-                                color: var(--color-foreground);
-                            }
-                        }
-
-                        .actions {
-                            opacity: 0;
-                            position: absolute;
-                            bottom: 10px;
-                            right: 10px;
-                            background-color: var(--color-background);
-                            box-shadow: 0px 0px 7px 7px var(--color-background);
-                            border-radius: 5px;
-                            transition: opacity 200ms;
-                        }
-
-                        &:hover .actions, .actions:focus-within {
-                            opacity: 1;
-                        }
-                    }
+                strong {
+                    color: var(--color-foreground);
                 }
             }
-        }
-    }
 
-    @media (forced-colors: active) {
-        .tab-view {
-            .tab-bar .tab {
-                &::before {
-                    border: 1px solid;
-                }
-
-                border-radius: 7px 7px 0 0;
-
-                &:hover, &:focus-visible {
-                    outline: 1px dashed;
-                    outline-offset: -2px;
-                }
+            .actions {
+                opacity: 0;
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                background-color: var(--color-background);
+                box-shadow: 0px 0px 7px 7px var(--color-background);
+                border-radius: 5px;
+                transition: opacity 200ms;
             }
-            
-            > .tab > .toolbar {
-                border: 1px solid;
+
+            &:hover .actions, .actions:focus-within {
+                opacity: 1;
             }
         }
     }
