@@ -164,6 +164,7 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
                         }
                     }]
                 }}
+                backLink=".."
 
                 className={`devices-list ${hideList ? 'hidden' : ''}`}
                 tabIndex={-1}

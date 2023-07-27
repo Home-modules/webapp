@@ -3,7 +3,8 @@ main#settings main#settings-rooms {
     overflow: hidden;
     overflow: clip;
     
-    .content {
+    .rooms-list > div:first-child > .content,
+    .devices-list > div:first-child > .content {
         transition: padding 250ms;
 
         .item {
@@ -241,7 +242,7 @@ main#settings main#settings-rooms {
         }
 
         .loading, .error {
-            height: calc(100% - 20px);
+            height: 100%;
         }
     }
 
@@ -289,7 +290,8 @@ main#settings main#settings-rooms {
                         pointer-events: none;
                     }
                 }
-                .content .item {
+                > div:first-child > .content .item,
+                > div:first-child > .content .item {
                     gap: 0;
 
                     .drag-handle {
