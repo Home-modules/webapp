@@ -28,32 +28,9 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
 
     const [selectedRooms, setSelectedRooms] = React.useState<string[]>([])
 
-    function setRooms(rooms: StoreState['rooms']) {
-        store.dispatch({
-            type: 'SET_ROOMS',
-            rooms
-        });
-    }
-
     function updateRooms() {
         if(hideList) return;
-        if(rooms === false) {
-            setRooms(null);
-        }
-        sendRequest({
-            type: 'rooms.getRooms'
-        }).then(res => {
-            if(res.type==='ok') {
-                setRooms(Object.values(res.data.rooms));
-            }
-            else {
-                setRooms(false);
-                handleError(res);
-            }
-        }).catch(err=> {
-            setRooms(false);
-            handleError(err);
-        });
+        refreshRooms();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(updateRooms, [hideList]); // The `rooms` dependency should not be there because it will cause a state stack overflow
@@ -159,9 +136,17 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
                             ))}
                     </>) : (<>
                         <ReactSortable
-                            list={rooms} setList={setRooms} onSort={onSort}
-                            animation={200} easing='ease'
-                            handle='.drag-handle' ghostClass='ghost'>
+                            list={rooms}
+                            setList={() => store.dispatch({
+                                type: 'SET_ROOMS',
+                                rooms
+                            })}
+                            onSort={onSort}
+                            animation={200}
+                            easing='ease'
+                            handle='.drag-handle'
+                            ghostClass='ghost'
+                        >
                             {rooms.map(room => (
                                 <RoomItem
                                     key={room.id}
@@ -212,6 +197,30 @@ type RoomItemProps= {
     action: "edit"|"devices-collapsed"|"devices"|"check",
     selected: boolean,
     onSelectChange: ()=>void
+}
+
+export function refreshRooms() {
+    function setRooms(rooms: StoreState['rooms']) {
+        store.dispatch({ type: 'SET_ROOMS', rooms });
+    }
+
+    if (store.getState().rooms === false) {
+        setRooms(null);
+    }
+    return sendRequest({
+        type: 'rooms.getRooms'
+    }).then(res => {
+        if (res.type === 'ok') {
+            setRooms(Object.values(res.data.rooms));
+        }
+        else {
+            setRooms(false);
+            handleError(res);
+        }
+    }, err => {
+        setRooms(false);
+        handleError(err);
+    });
 }
 
 function RoomItem({room, disableReorder=false, search, active, action, selected, onSelectChange}: RoomItemProps) {

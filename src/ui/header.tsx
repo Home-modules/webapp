@@ -11,6 +11,8 @@ export type HeaderButtonProps = {
     label: string,
     attention?: boolean,
     onClick: React.MouseEventHandler<HTMLButtonElement>,
+} | {
+    content: JSX.Element
 }
 
 export type HeaderProps = {
@@ -123,7 +125,9 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     }
 );
 
-function HeaderButton({ icon, label, onClick, attention = false }: HeaderButtonProps) {
+function HeaderButton(props: HeaderButtonProps) {
+    if ('content' in props) return props.content;
+    const { icon, label, onClick, attention = false } = props;
     return (
         <button
             className={`icon ${attention ? "attention" : ""}`}

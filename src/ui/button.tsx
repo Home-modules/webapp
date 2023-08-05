@@ -1,6 +1,8 @@
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import './button.scss';
 import './form.scss';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export type ButtonProps = {
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -81,4 +83,16 @@ export function IntermittentSubmitButton({onClick, children, className='', disab
             {intermittent && <div className="intermittent"></div>}
         </>
     );
+}
+
+export type IconButtonProps = {
+    icon: IconDefinition
+} & Omit<React.HTMLProps<HTMLButtonElement>, "children"|"type">
+
+export function IconButton({ icon, className="", ...rest }: IconButtonProps) {
+    return (
+        <button className={`icon ${className}`} {...rest}>
+            <FontAwesomeIcon icon={icon} />
+        </button>
+    )
 }

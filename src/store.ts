@@ -30,6 +30,11 @@ export type StoreState = {
         colorTheme: 'dark'|'light'|'system'
     },
     allowDesktopMode: boolean,
+    routines: {
+        routines: Record<number, HMApi.T.Automation.Routine>,
+        order: number[]
+    } | false | undefined,
+    routinesEnabled: Record<number, boolean> | false | undefined,
 };
 
 export type StoreAction = {
@@ -44,7 +49,8 @@ export type StoreAction = {
     id: string
 } | {
     type: "ADD_DIALOG",
-    dialog: Omit<DialogProps, "id">
+    dialog: Omit<DialogProps, "id">,
+    id?: string
 } | {
     type: "REMOVE_DIALOG",
     id: string
@@ -94,6 +100,12 @@ export type StoreAction = {
 } | {
     type: "SET_ALLOW_DESKTOP_MODE",
     allowDesktopMode: boolean
+} | {
+    type: "SET_ROUTINES",
+    routines: StoreState['routines']
+} | {
+    type: "SET_ROUTINES_ENABLED",
+    routines: StoreState['routinesEnabled']
 }
 
 export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
@@ -113,7 +125,9 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
         installed: undefined
     },
     appearanceSettings: JSON.parse(localStorage.getItem('home_modules_appearance_settings') || 'null') || defaultAppearanceSettings,
-    allowDesktopMode: !mobileMediaQuery.matches
+    allowDesktopMode: !mobileMediaQuery.matches,
+    routines: undefined,
+    routinesEnabled: undefined,
 }, action)=> {
     switch(action.type) {
         case 'SET_TOKEN':
@@ -144,7 +158,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
                     ...state.dialogs,
                     {
                         ...action.dialog,
-                        id: uniqueId()
+                        id: action.id || uniqueId()
                     }
                 ]
             };
@@ -251,6 +265,18 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
             return {
                 ...state,
                 allowDesktopMode: action.allowDesktopMode
+            }
+        }
+        case "SET_ROUTINES": {
+            return {
+                ...state,
+                routines: action.routines
+            }
+        }
+        case "SET_ROUTINES_ENABLED": {
+            return {
+                ...state,
+                routinesEnabled: action.routines
             }
         }
         default:

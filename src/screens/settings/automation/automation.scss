@@ -1,0 +1,89 @@
+main#automation {
+    position: relative;
+    overflow: clip;
+
+    .edit-routine {
+        position: absolute !important;
+        top: 0; left: 0; right: 0; bottom: 0;
+        animation: inner-screen-appear 250ms;
+    }
+
+    .routines-list {
+        transition: opacity 250ms, transform 250ms;
+
+        &.hidden {
+            opacity: 0;
+            transform: scale(1.25);
+        }
+    }
+
+    .placeholders {
+        height: 100%;
+    }
+
+    .new {
+        position: sticky;
+        bottom: 20px;
+        z-index: 2;
+
+        display: block;
+        text-align: center;
+        padding: 10px;
+        border: 1px dashed var(--color-input-border);
+        color: var(--color-input-border);
+        background-color: var(--color-background);
+        border-radius: 8px;
+        cursor: pointer;
+        box-sizing: border-box;
+        width: 100%;
+        transition: color 200ms, border-color 200ms, opacity 250ms, margin-top 250ms, width 250ms, background-color 200ms;
+
+        &:hover:not(:disabled) {
+            border-color: var(--color-foreground-subtext);
+            color: var(--color-foreground-subtext);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        &:focus-visible {
+            border-color: var(--color-foreground);
+            color: var(--color-foreground);
+            outline: none;
+        }
+
+        @supports (backdrop-filter: blur(10px)) {
+            background-color: var(--color-background-with-blur);
+            backdrop-filter: blur(10px);
+        }
+    }
+
+    .routines-list {
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+
+            li {
+                display: block;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: stretch;
+                padding: 0 10px 0 0;
+
+                a {
+                    text-decoration: none;
+                    color: inherit;
+                    flex-grow: 1;
+                    padding: 10px;
+                }
+
+                &:not(:hover) input[type=checkbox] {
+                    --color-checkbox-background: var(--color-button-secondary-hover-background);
+                }
+            }
+        }
+    }
+}

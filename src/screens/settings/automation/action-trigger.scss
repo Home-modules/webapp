@@ -1,0 +1,74 @@
+.automation-routine-dialog {
+    .select-action-type,
+    .select-trigger-type,
+    .select-routine {
+        button.button {
+            display: block;
+            width: 100%;
+            text-align: left;
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+
+            &.devices, &.manual {
+                margin-bottom: 15px;
+                padding-right: 12px;
+
+                svg {
+                    float: right;
+                }
+            }
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+    }
+
+    .settings > :last-child {
+        border-bottom: none;
+    }
+
+    .save {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    h2 {
+        display: flex;
+        align-items: center;
+        font-size: 1.2em;
+        margin: 0 0 5px -10px;
+        gap: 5px;
+    }
+
+    .select-room-device {
+        display: flex;
+        gap: 10px;
+
+        > div {
+            flex-grow: 1;
+        }
+
+        .dropdown-select {
+            width: 100%;
+
+            button {
+                width: 100%;
+            }
+        }
+    }
+
+    .select-action {
+        h3 {
+            margin: 0 0 10px
+        }
+
+        button {
+            display: block;
+            width: 100%;
+        }
+    }
+}

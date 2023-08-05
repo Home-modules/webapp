@@ -3,6 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { store, StoreState } from "../store";
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export type DialogProps = {
     title?: string,
@@ -10,10 +12,11 @@ export type DialogProps = {
     children: React.ReactNode|React.ReactNodeArray | ((props:{close: () => void})=>void),
     onClose?: ()=> void,
     cancellable?: boolean,
+    showCloseButton?: boolean,
     id: string,
 }
 
-export function Dialog({title, className='', children: Children, onClose, id, cancellable=true}: DialogProps) {
+export function Dialog({title, className='', children: Children, onClose, id, cancellable=true, showCloseButton=false}: DialogProps) {
     const ref= React.useRef<HTMLDivElement>(null);
     const [closing, setClosing] = React.useState(false);
 
@@ -47,7 +50,14 @@ export function Dialog({title, className='', children: Children, onClose, id, ca
             }}
         >
             <div className="dialog">
-                {title && <h1>{title}</h1>}
+                {title && <h1>
+                    {title}
+                    {showCloseButton && (
+                        <button className="icon" onClick={close}>
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                    )}
+                </h1>}
                 <div className="content">
                     {typeof Children==='function'? <Children close={close}/>: Children}
                 </div>

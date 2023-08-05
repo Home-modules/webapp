@@ -5,10 +5,11 @@ import ToggleButton from "../fields/toggle-button";
 export type SettingItemToggleProps = SettingItemProps & {
     state: boolean,
     onChange: ((value: boolean) => void),
+    disabled?: boolean
 }
 
 export function SettingItemToggle({
-    title, description, icon, className,
+    title, description, icon, className, disabled,
     state, onChange,
 }: SettingItemToggleProps) {
 
@@ -23,6 +24,7 @@ export function SettingItemToggle({
                 label=""
                 value={state}
                 onChange={onChange}
+                disabled={disabled}
             />
         </SettingItem>
     )

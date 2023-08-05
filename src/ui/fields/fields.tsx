@@ -25,6 +25,12 @@ export type FieldsProps = {
     } | {
         for: "roomController",
         controller: string
+    } | {
+        for: "globalTrigger",
+        id: string
+    } | {
+        for: "globalAction",
+        id: string
     }
 }
 
@@ -171,6 +177,10 @@ export function getSettingsFieldDefaultValue(field: HMApi.T.SettingsField<false>
                 return false;
         }
     }
+}
+
+export function getSettingsFieldsDefaultValues(fields: HMApi.T.SettingsField<false>[]) {
+    return Object.fromEntries(fields.map(field=> [field.id, getSettingsFieldDefaultValue(field)]))
 }
 
 export function validateField(field: HMApi.T.SettingsField<false>, value: string|number|boolean) {

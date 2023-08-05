@@ -5,6 +5,7 @@ import { store } from '../store';
 import platform from "platform";
 import { delay } from '../utils/promise-timeout';
 import { uniqueId } from '../utils/uniqueId';
+import { updateTheme } from '..';
 
 const host = process.env.NODE_ENV === "production" ?
     "" :
@@ -42,6 +43,16 @@ ws.onmessage = e => {
                     type: "SET_DEVICE_STATE",
                     state: update.state
                 })
+                break;
+            case "setTheme":
+                store.dispatch({
+                    type: "SET_APPEARANCE_SETTINGS",
+                    settings: {
+                        colorTheme: update.theme
+                    }
+                });
+                updateTheme();
+                break;
         }
     }
 }

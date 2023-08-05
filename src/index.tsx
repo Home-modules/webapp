@@ -29,6 +29,8 @@ import HomePageRoom from './screens/home/room';
 import SettingsPagePlugins, { SettingsPagePluginsTab } from './screens/settings/plugins/plugins';
 import SettingsPageAppearance, { getAppearanceSetting } from './screens/settings/appearance/appearance';
 import SettingsPageAppearanceDesktopMode from './screens/settings/appearance/desktop-mode';
+import SettingsPageAutomation from './screens/settings/automation/automation';
+import SettingsPageAutomationEditRoutine from './screens/settings/automation/edit-routine';
 
 export const darkThemeMediaQuery = matchMedia("(prefers-color-scheme: dark)");
 export function updateTheme() {
@@ -87,6 +89,9 @@ ReactDOM.render(
                             <Route path="appearance" element={<SettingsPageAppearance />}>
                                 <Route path="desktop-mode" element={<SettingsPageAppearanceDesktopMode />} />
                                 <Route path="*" element={<Navigate to="/settings/appearance" />} />
+                            </Route>
+                            <Route path="automation" element={<SettingsPageAutomation />}>
+                                <Route path=":routineId" element={<SettingsPageAutomationEditRoutine />} />
                             </Route>
                             <Route path="*" element={<Navigate to="/settings/account" />} />
                             <Route index element={<Navigate to="/settings/account" replace />} />

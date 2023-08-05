@@ -14,6 +14,32 @@ import SearchKeywordHighlight from "../../../../ui/search-highlight";
 import './devices.scss';
 import { PageWithHeader } from "../../../../ui/header";
 
+export function refreshDevices(roomId: string) {
+    function setDevices(devices: StoreState['devices'][string]) {
+        store.dispatch({
+            type: 'SET_DEVICES',
+            devices,
+            roomId
+        });
+    }
+
+    return sendRequest({
+        type: 'devices.getDevices',
+        roomId
+    }).then(res => {
+        if(res.type==='ok') {
+            setDevices(Object.values(res.data.devices));
+        }
+        else {
+            setDevices(false);
+            handleError(res);
+        }
+    }).catch(err=> {
+        setDevices(false);
+        handleError(err);
+    });
+}
+
 function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pick<StoreState, 'rooms'|'devices'|'deviceTypes'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const search= searchParams.get('search');
@@ -51,42 +77,13 @@ function SettingsPageRoomsDevices({rooms, devices: allDevices, deviceTypes}: Pic
         });
     }, [roomId]);
 
-    function updateDevices() {
-        sendRequest({
-            type: 'devices.getDevices',
-            roomId
-        }).then(res => {
-            if(res.type==='ok') {
-                setDevices(Object.values(res.data.devices));
-            }
-            else {
-                setDevices(false);
-                handleError(res);
-            }
-        }).catch(err=> {
-            setDevices(false);
-            handleError(err);
-        });
-    }
+    const updateDevices = () => {refreshDevices(roomId);}
 
-    React.useEffect(updateDevices , [hideList, roomId, setDevices]);
+    React.useEffect(updateDevices , [hideList, roomId]);
 
     React.useEffect(()=> {
         if (roomId && controllerType) {
-            sendRequest({
-                type: "devices.getDeviceTypes",
-                controllerType: controllerType.type
-            }).then(res => {
-                if (res.type === 'ok') {
-                    store.dispatch({
-                        type: "SET_DEVICE_TYPES",
-                        roomController: controllerType.type,
-                        deviceTypes: res.data.types
-                    });
-                } else {
-                    handleError(res);
-                }
-            }, handleError);
+            refreshDeviceTypes(controllerType.type);
         }
     }, [roomId, controllerType]);
 
@@ -245,6 +242,23 @@ type DeviceItemProps = {
     action: "edit"|"check",
     selected: boolean,
     onSelectChange: ()=>void
+}
+
+export function refreshDeviceTypes(controllerType: string) {
+    return sendRequest({
+        type: "devices.getDeviceTypes",
+        controllerType: controllerType
+    }).then(res => {
+        if (res.type === 'ok') {
+            store.dispatch({
+                type: "SET_DEVICE_TYPES",
+                roomController: controllerType,
+                deviceTypes: res.data.types
+            });
+        } else {
+            handleError(res);
+        }
+    }, handleError);
 }
 
 function DeviceItem({device, deviceType, disableReorder, search, action, onSelectChange, selected}: DeviceItemProps) {
