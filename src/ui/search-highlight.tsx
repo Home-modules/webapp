@@ -9,7 +9,7 @@ type SearchKeywordHighlightProps = {
 /**
  * Highlight the occurrences of a search keyword in a string
  */
-export default function SearchKeywordHighlight({children, term}: SearchKeywordHighlightProps) {
+export default function SearchKeywordHighlight({ children, term }: SearchKeywordHighlightProps) {
     if (!term) {
         return <>{children}</>;
     }

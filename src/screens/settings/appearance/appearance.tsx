@@ -1,4 +1,4 @@
-import { faCircle as fasCircle, faDesktop, faCircleHalfStroke, faChevronRight, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { faCircle as fasCircle, faCircleHalfStroke, faChevronRight, faPalette } from "@fortawesome/free-solid-svg-icons";
 import { faCircle as farCircle } from "@fortawesome/free-regular-svg-icons";
 import React from "react"
 import { connect } from "react-redux";
@@ -20,7 +20,7 @@ export function getAppearanceSetting<T extends keyof StoreState['appearanceSetti
     return settings[name] === undefined ? defaultAppearanceSettings[name] : settings[name];
 }
 
-function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<StoreState, 'appearanceSettings'|'allowDesktopMode'>) {
+function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<StoreState, 'appearanceSettings' | 'allowDesktopMode'>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const currentField = searchParams.get('field');
 
@@ -80,7 +80,7 @@ function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<Store
                         </Link>
                     )}
 
-                    <div className="rest" onClick={()=>setSearchParams({})}/>
+                    <div className="rest" onClick={() => setSearchParams({})} />
                 </div>
             </div>
 
@@ -97,7 +97,7 @@ function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<Store
                             Select a setting to preview
                         </div>
                     )
-                }[currentField||'default']}
+                }[currentField || 'default']}
             </div>
         </div>
     )

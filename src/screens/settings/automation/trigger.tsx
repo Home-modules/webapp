@@ -1,6 +1,6 @@
-import React, { Dispatch, useEffect, useRef, useState } from "react"
+import React, { Dispatch, useEffect, useState } from "react"
 import { HMApi } from "../../../hub/api"
-import { StoreState, store } from "../../../store";
+import { store } from "../../../store";
 import Button, { IconButton } from "../../../ui/button";
 import { handleError, sendRequest } from "../../../hub/request";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,10 +10,6 @@ import Fields, { getFieldsErrors, getSettingsFieldsDefaultValues } from "../../.
 import getFlatFields from "../../../utils/flat-fields";
 import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
 import { refreshRooms } from "../rooms/rooms";
-import { refreshDeviceTypes, refreshDevices } from "../rooms/devices/devices";
-import DropDownSelect from "../../../ui/dropdown/dropdown";
-import { connect } from "react-redux";
-// import { SettingItemTextSelect } from "../../../ui/settings/text-select";
 import { SettingItemText } from "../../../ui/settings/text";
 import { DeviceDropdown, RoomAndDeviceName, RoomName } from "./action";
 
@@ -73,7 +69,7 @@ function EditTrigger({ trigger, onSubmit }: EditTriggerProps) {
                     ))}
                 </div>
             );
-        
+
         case "globalTrigger": {
             const type = globalTriggers.find(a => a.id === obj.name);
             if (!type) return <></>;
@@ -96,9 +92,9 @@ function EditTrigger({ trigger, onSubmit }: EditTriggerProps) {
                     <Button primary className="save"
                         onClick={() => {
                             const [hasError, errors] = getFieldsErrors(getFlatFields(type.fields), obj.options);
-                            setFieldErrors({ });
-                            if(hasError) {
-                                window.setTimeout(()=> { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
+                            setFieldErrors({});
+                            if (hasError) {
+                                window.setTimeout(() => { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
                                     setFieldErrors(errors);
                                 });
                                 return Promise.reject();
@@ -126,7 +122,7 @@ function EditTrigger({ trigger, onSubmit }: EditTriggerProps) {
                                 <span>Room</span>
                                 <LazyDropDownSelect
                                     lazyOptions={{ isLazy: true, loadOn: "render" }}
-                                    callback={async() => {
+                                    callback={async () => {
                                         let rooms = store.getState().rooms;
                                         if (!rooms) {
                                             await refreshRooms();
@@ -137,7 +133,7 @@ function EditTrigger({ trigger, onSubmit }: EditTriggerProps) {
                                             : { error: true };
                                     }}
                                     value={obj.room}
-                                    onChange={(room) => setObj(obj => ({ ...obj, room, device: ""}))}
+                                    onChange={(room) => setObj(obj => ({ ...obj, room, device: "" }))}
                                 />
                             </div>
                             <div className="select-device">
@@ -219,7 +215,7 @@ function EditTrigger({ trigger, onSubmit }: EditTriggerProps) {
                             title="Label"
                             placeholder="Enter label"
                             value={obj.label}
-                            onChange={label=> setObj(obj=> ({...obj, label}))}
+                            onChange={label => setObj(obj => ({ ...obj, label }))}
                         />
                     </div>
                     <Button
@@ -233,7 +229,7 @@ function EditTrigger({ trigger, onSubmit }: EditTriggerProps) {
                 </div>
             )
         }
-            
+
         default: return <></>
     }
 }
@@ -248,7 +244,7 @@ export function editTrigger(
         type: "ADD_DIALOG",
         id,
         dialog: {
-            children: (({close})=> (
+            children: (({ close }) => (
                 <EditTrigger
                     trigger={index === "new" ? { type: "" } : triggers[index]}
                     onSubmit={tr => {

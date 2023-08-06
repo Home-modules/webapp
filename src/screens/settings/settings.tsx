@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 export default function SettingsPage() {
     return (
         <main id="settings">
-            <SettingsSidebar/>
+            <SettingsSidebar />
             <Outlet />
         </main>
     );

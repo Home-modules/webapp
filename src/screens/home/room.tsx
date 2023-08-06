@@ -49,19 +49,20 @@ function swipeableOptions(
     };
 }
 
-const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(function Room({roomStates}: Pick<StoreState, 'roomStates'>) {
-    const {roomId} = useParams();
+const HomePageRoom = connect(({ roomStates }: StoreState) => ({ roomStates }))(Room);
+function Room({ roomStates }: Pick<StoreState, 'roomStates'>) {
+    const { roomId } = useParams();
     const callbacks = useSwipeable(swipeableOptions(roomStates, roomId, useNavigate(), useSearchParams()[0]))
 
-    if(!roomId) return (
+    if (!roomId) return (
         <Favorites />
     )
 
-    if((!roomStates)) {
+    if ((!roomStates)) {
         return <Navigate to={`/home?redirect=/home/${roomId}`} />
     }
-    const state = roomStates.find(s=> s.id === roomId);
-    if(!state) {
+    const state = roomStates.find(s => s.id === roomId);
+    if (!state) {
         return <Navigate to="/home" />
     }
 
@@ -102,7 +103,7 @@ const HomePageRoom = connect(({roomStates}: StoreState)=>({roomStates}))(functio
     }
 
     return <Devices roomState={state} />
-});
+};
 export default HomePageRoom;
 
 export async function refreshDeviceStates(roomId: string) {
@@ -120,7 +121,7 @@ export async function refreshDeviceStates(roomId: string) {
     }).then(res => {
         if (res.type === 'ok') {
             setStates(Object.values(res.data.states));
-            
+
         } else {
             handleError(res);
             setStates(false);
@@ -144,7 +145,7 @@ export async function refreshFavoriteDeviceStates() {
     }).then(res => {
         if (res.type === 'ok') {
             setStates(Object.values(res.data.states));
-            
+
         } else {
             handleError(res);
             setStates(false);
@@ -164,7 +165,13 @@ type DevicesProps = {
     };
 }
 
-const Devices = connect(({deviceStates, roomStates}: StoreState)=>({deviceStates, roomStates}))(function Devices({roomState, deviceStates, roomStates}: DevicesProps & Pick<StoreState, 'deviceStates'|'roomStates'>) {
+const Devices = connect(
+    ({ deviceStates, roomStates }: StoreState) =>
+        ({ deviceStates, roomStates }))(Devices_);
+function Devices_(
+    { roomState, deviceStates, roomStates }:
+        DevicesProps & Pick<StoreState, 'deviceStates' | 'roomStates'>
+) {
     const thisRoomDeviceStates = deviceStates[roomState.id];
 
     React.useEffect(() => { refreshDeviceStates(roomState.id) }, [roomState.id]);
@@ -226,10 +233,10 @@ const Devices = connect(({deviceStates, roomStates}: StoreState)=>({deviceStates
             loadingPlaceholder="Loading devices..."
         />
     );
-})
+}
 
-const Favorites = connect(({favoriteDeviceStates, roomStates}: StoreState)=>({favoriteDeviceStates, roomStates}))(function Favorites({favoriteDeviceStates, roomStates}: Pick<StoreState, 'favoriteDeviceStates'|'roomStates'>) {
-    React.useEffect(()=> {refreshFavoriteDeviceStates()}, []);
+const Favorites = connect(({ favoriteDeviceStates, roomStates }: StoreState) => ({ favoriteDeviceStates, roomStates }))(function Favorites({ favoriteDeviceStates, roomStates }: Pick<StoreState, 'favoriteDeviceStates' | 'roomStates'>) {
+    React.useEffect(() => { refreshFavoriteDeviceStates() }, []);
 
     const navigate = useNavigate(), searchParams = useSearchParams()[0];
     const callbacks = useSwipeable({

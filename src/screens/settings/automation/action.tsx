@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useRef, useState } from "react"
+import React, { Dispatch, useEffect, useState } from "react"
 import { HMApi } from "../../../hub/api"
 import { StoreState, store } from "../../../store";
 import Button, { IconButton } from "../../../ui/button";
@@ -11,7 +11,7 @@ import Fields, { getFieldsErrors, getSettingsFieldsDefaultValues } from "../../.
 import getFlatFields from "../../../utils/flat-fields";
 import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
 import { refreshRooms } from "../rooms/rooms";
-import { refreshDeviceTypes, refreshDevices } from "../rooms/devices/devices";
+import { refreshDevices } from "../rooms/devices/devices";
 import DropDownSelect from "../../../ui/dropdown/dropdown";
 import { connect } from "react-redux";
 import { SettingItemTextSelect } from "../../../ui/settings/text-select";
@@ -47,7 +47,7 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                         Devices
                         <FontAwesomeIcon icon={faChevronRight} />
                     </Button>
-                    <Button onClick={()=> setObj({type: "triggerRoutine", routine: 0})}>
+                    <Button onClick={() => setObj({ type: "triggerRoutine", routine: 0 })}>
                         Trigger another routine
                     </Button>
                     {globalActions.map(type => (
@@ -64,7 +64,7 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                     ))}
                 </div>
             );
-        
+
         case "globalAction": {
             const type = globalActions.find(a => a.id === obj.name);
             if (!type) return <></>;
@@ -87,9 +87,9 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                     <Button primary className="save"
                         onClick={() => {
                             const [hasError, errors] = getFieldsErrors(getFlatFields(type.fields), obj.options);
-                            setFieldErrors({ });
-                            if(hasError) {
-                                window.setTimeout(()=> { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
+                            setFieldErrors({});
+                            if (hasError) {
+                                window.setTimeout(() => { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
                                     setFieldErrors(errors);
                                 });
                                 return Promise.reject();
@@ -117,7 +117,7 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                                 <span>Room</span>
                                 <LazyDropDownSelect
                                     lazyOptions={{ isLazy: true, loadOn: "render" }}
-                                    callback={async() => {
+                                    callback={async () => {
                                         let rooms = store.getState().rooms;
                                         if (!rooms) {
                                             await refreshRooms();
@@ -128,7 +128,7 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                                             : { error: true };
                                     }}
                                     value={obj.room}
-                                    onChange={(room) => setObj(obj => ({ ...obj, room, device: ""}))}
+                                    onChange={(room) => setObj(obj => ({ ...obj, room, device: "" }))}
                                 />
                             </div>
                             <div className="select-device">
@@ -144,7 +144,7 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                             {(obj.room && obj.device) && <>
                                 <h3>Available actions</h3>
                                 <ProvideDeviceType room={obj.room} device={obj.device}>
-                                    {(deviceType)=> deviceType.hasMainToggle ? (
+                                    {(deviceType) => deviceType.hasMainToggle ? (
                                         <Button
                                             onClick={() => setObj(obj => ({
                                                 ...obj as HMApi.T.Automation.Action.DeviceAction,
@@ -153,7 +153,7 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                                         >
                                             Turn on/off
                                         </Button>
-                                    ): <></>}
+                                    ) : <></>}
                                 </ProvideDeviceType>
                             </>}
                         </div>
@@ -225,12 +225,12 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                             <div className="notice">
                                 No suitable routines found
                             </div>
-                        ):<></>}
+                        ) : <></>}
                     </div>
                 </div>
             )
         }
-            
+
         default: return <></>
     }
 }
@@ -239,7 +239,7 @@ export const RoomName = connect(({ rooms }: StoreState) => ({ rooms }))(
     function RoomName(
         { rooms, roomId }:
             (Pick<StoreState, "rooms">
-            & { roomId: string })
+                & { roomId: string })
     ) {
         const roomName = (rooms ? rooms.find(r => r.id === roomId)?.name : undefined) || roomId;
         useEffect(() => {
@@ -253,7 +253,7 @@ export const RoomAndDeviceName = connect(({ rooms, devices }: StoreState) => ({ 
     function RoomAndDeviceName(
         { rooms, devices, roomId, deviceId }:
             (Pick<StoreState, "rooms" | "devices">
-            & { roomId: string, deviceId: string })
+                & { roomId: string, deviceId: string })
     ) {
         const roomName = (rooms ? rooms.find(r => r.id === roomId)?.name : undefined) || roomId;
         const devicesInRoom = devices[roomId] || undefined;
@@ -272,7 +272,7 @@ export const RoomAndDeviceName = connect(({ rooms, devices }: StoreState) => ({ 
 export type DeviceDropdownProps = {
     room: string,
     device: string,
-    onChange: (room:string, device:string)=>void
+    onChange: (room: string, device: string) => void
 }
 
 export function DeviceDropdown({ room, device, onChange }: DeviceDropdownProps) {
@@ -291,11 +291,11 @@ export function DeviceDropdown({ room, device, onChange }: DeviceDropdownProps) 
                 : []);
         }
     };
-    useEffect(()=>{updateItems()}, [room]);
+    useEffect(() => { updateItems() }, [room]);
 
     return (
         <DropDownSelect
-            value={(room && device) ? room+"."+device : ""}
+            value={(room && device) ? room + "." + device : ""}
             onChange={(val) => {
                 const [room = "", device = ""] = val.split('.');
                 onChange(room, device);
@@ -311,10 +311,10 @@ export type ProvideDeviceTypeProps = {
     children: (type: HMApi.T.DeviceType) => JSX.Element;
 }
 
-export function ProvideDeviceType({ room, device, children}: ProvideDeviceTypeProps) {
+export function ProvideDeviceType({ room, device, children }: ProvideDeviceTypeProps) {
 
     const [deviceType, setDeviceType] = React.useState<HMApi.T.DeviceType | undefined>();
-    
+
     useEffect(() => {
         sendRequest({
             type: "devices.getDeviceType",
@@ -336,7 +336,7 @@ export function editAction(
         type: "ADD_DIALOG",
         id,
         dialog: {
-            children: (({close})=> (
+            children: (({ close }) => (
                 <EditAction
                     action={index === "new" ? { type: "" } : actions[index]}
                     onSubmit={ac => {

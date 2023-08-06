@@ -1,5 +1,5 @@
 import { HMApi } from "../../../hub/api";
-import { handleAnyErrors, handleError, ResponseWithoutError, sendRequest } from "../../../hub/request";
+import { handleError, sendRequest } from "../../../hub/request";
 import { ContextMenuItem, ContextMenuItemProps } from "../../../ui/context-menu";
 import { refreshDeviceStates, refreshFavoriteDeviceStates } from "../room";
 import { DeviceInteractionTypeSlider } from "./slider";
@@ -41,7 +41,7 @@ export type DeviceInteractionsProps = {
 
 const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: StoreState) => ({ deviceStates, favoriteDeviceStates }))(
     function DeviceInteractions({ deviceStates, favoriteDeviceStates, roomId, deviceId, children, isInFavorites }: DeviceInteractionsProps) {
-        
+
         const deviceStatesThisRoom = isInFavorites ? (favoriteDeviceStates) : (deviceStates[roomId]);
         if (!deviceStatesThisRoom) return <>{children}</>;
         const deviceState = deviceStatesThisRoom.find(s => s.roomId === roomId && s.id === deviceId);
@@ -61,7 +61,7 @@ const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: Stor
                             interaction={interaction}
                             state={deviceState.interactions[interaction.id]!}
                             sendAction={getSendActionF(deviceState, interaction.id, isInFavorites)}
-                            startSliderStream={() =>  ({
+                            startSliderStream={() => ({
                                 type: "devices.interactions.initSliderLiveValue",
                                 deviceId,
                                 roomId,

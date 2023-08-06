@@ -12,7 +12,7 @@ export type SettingItemIconSelectProps = SettingItemProps & {
     onChange: (value: IconName) => void
 }
 
-export function SettingItemIconSelect({ title, description, icon, className='', icons, value, onChange }: SettingItemIconSelectProps) {
+export function SettingItemIconSelect({ title, description, icon, className = '', icons, value, onChange }: SettingItemIconSelectProps) {
     return (
         <SettingItem
             title={title}
@@ -20,7 +20,7 @@ export function SettingItemIconSelect({ title, description, icon, className='', 
             description={description}
             className={`icon--select ${className}`}
         >
-            <IconSelect icons={icons} value={value} onChange={onChange}/>
+            <IconSelect icons={icons} value={value} onChange={onChange} />
         </SettingItem>
     )
 }

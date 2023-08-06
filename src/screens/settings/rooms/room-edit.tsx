@@ -17,7 +17,7 @@ import { SettingItemLazyDropdown } from '../../../ui/settings/lazydropdown';
 import { PageWithHeader } from '../../../ui/header';
 
 export type SettingsPageRoomsEditRoomProps = {
-    room: HMApi.T.Room & {new?: boolean};
+    room: HMApi.T.Room & { new?: boolean };
     onClose: () => void;
     hidden?: boolean;
 }
@@ -29,13 +29,13 @@ export const icons: Record<HMApi.T.Room['icon'], IconName> = {
     'bathroom': 'bath',
     'other': 'door-closed'
 }
-const iconNames = Object.fromEntries(Object.entries(icons).map(([k,v])=>[v,k])) as Record<IconName, HMApi.T.Room['icon']>;
+const iconNames = Object.fromEntries(Object.entries(icons).map(([k, v]) => [v, k])) as Record<IconName, HMApi.T.Room['icon']>;
 
-function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
+function SettingsPageRoomsEditRoom({ rooms }: Pick<StoreState, 'rooms'>) {
     const isNew = !!useMatch('/settings/rooms/new');
-    const {roomId= ''} = useParams();
-    let room= (rooms && rooms.find(room=>room.id===roomId))
-    const roomExists= !!room;
+    const { roomId = '' } = useParams();
+    let room = (rooms && rooms.find(room => room.id === roomId))
+    const roomExists = !!room;
     room ||= {
         id: '',
         name: '',
@@ -65,7 +65,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
 
     const [fields, setFields] = React.useState<HMApi.T.SettingsField[]>([]);
     const [fieldErrors, setFieldErrors] = React.useState<Record<string, string | undefined>>({});
-    
+
     const saveButtonRef = React.useRef<HTMLButtonElement>(null);
 
     function onSave() {
@@ -74,14 +74,14 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
             return Promise.reject();
         }
         const [hasError, errors] = getFieldsErrors(getFlatFields(fields), controller.settings);
-        setFieldErrors({ });
-        if(hasError) {
-            window.setTimeout(()=> { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
+        setFieldErrors({});
+        if (hasError) {
+            window.setTimeout(() => { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
                 setFieldErrors(errors);
             });
             return Promise.reject();
         }
-        
+
         const nRoom: HMApi.T.Room = {
             id,
             name,
@@ -92,26 +92,26 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
         return sendRequest({
             type: isNew ? 'rooms.addRoom' : 'rooms.editRoom',
             room: nRoom
-        }).then(res=> {
-            if(res.type==='ok') {
+        }).then(res => {
+            if (res.type === 'ok') {
                 navigate('/settings/rooms');
             }
             else {
                 throw res;
             }
-        }).catch((err: HMApi.ResponseOrError<HMApi.Request.Rooms.EditRoom|HMApi.Request.Rooms.AddRoom>) => {
-            if(err.type==='error') {
-                if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.name') {
+        }).catch((err: HMApi.ResponseOrError<HMApi.Request.Rooms.EditRoom | HMApi.Request.Rooms.AddRoom>) => {
+            if (err.type === 'error') {
+                if (err.error.message === 'PARAMETER_OUT_OF_RANGE' && err.error.paramName === 'room.name') {
                     setNameError(name.length ? 'Name is too long' : 'Name is empty');
                     nameRef.current?.focus();
                     return;
                 }
-                else if(err.error.message==='PARAMETER_OUT_OF_RANGE' && err.error.paramName==='room.id') {
+                else if (err.error.message === 'PARAMETER_OUT_OF_RANGE' && err.error.paramName === 'room.id') {
                     setIdError(id.length ? 'ID is too long' : 'ID is empty');
                     idRef.current?.focus();
                     return;
                 }
-                else if(err.error.message==='ROOM_ALREADY_EXISTS') {
+                else if (err.error.message === 'ROOM_ALREADY_EXISTS') {
                     setIdError('Room with this ID already exists');
                     idRef.current?.focus();
                     return;
@@ -122,17 +122,17 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     }
 
     function onChangeControllerType(val?: string) { // val is not set when called by useEffect, and the existing settings must be kept in that case.
-        if(!(controllerTypes instanceof Array)) return;
+        if (!(controllerTypes instanceof Array)) return;
         const defaultRCType = room ? room.controllerType.type : '';
         const controller: HMApi.T.RoomController = {
             type: val || defaultRCType,
-            settings: ((!val) && room) ? room.controllerType.settings : { }
+            settings: ((!val) && room) ? room.controllerType.settings : {}
         }
         const controllerType = controllerTypes.find(type => type.id === (val || defaultRCType));
-        if(!controllerType) return;
+        if (!controllerType) return;
 
-        if(val || isNew) {
-            for(const field of getFlatFields(controllerType.settings)) {
+        if (val || isNew) {
+            for (const field of getFlatFields(controllerType.settings)) {
                 controller.settings[field.id] = getSettingsFieldDefaultValue(field);
             }
         }
@@ -145,11 +145,11 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     React.useEffect(onChangeControllerType, [controllerTypes])
 
     React.useEffect(() => {
-        if(!isNew)
+        if (!isNew)
             saveButtonRef.current?.parentElement?.parentElement?.parentElement?.focus();
     }, [isNew]);
 
-    if(!(roomExists || isNew)) {
+    if (!(roomExists || isNew)) {
         return <Navigate to={`/settings/rooms?redirect=/settings/rooms/${roomId}/edit`} />
     }
 
@@ -160,17 +160,17 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 icon: faTrash,
                 label: "Delete room",
                 attention: true,
-                onClick: e=> addConfirmationFlyout({
+                onClick: e => addConfirmationFlyout({
                     element: e.target,
                     text: "Are you sure you want to delete this room?",
                     confirmText: "Delete",
                     attention: true,
                     async: true,
-                    onConfirm: ()=> sendRequest({
+                    onConfirm: () => sendRequest({
                         'type': 'rooms.removeRoom',
                         id
-                    }).then(res=> {
-                        if(res.type==='ok') {
+                    }).then(res => {
+                        if (res.type === 'ok') {
                             navigate('/settings/rooms')
                         }
                         else handleError(res);
@@ -178,7 +178,7 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 })
             }]}
             backLink="/settings/rooms"
-            
+
             className="edit-room"
             onKeyDown={e => {
                 console.log(e)
@@ -232,16 +232,16 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                 <SettingItemLazyDropdown
                     title='Controller'
                     className='thick-border'
-                    callback={()=> {
-                        if(!(controllerTypes instanceof Array)) { // If the list has been loaded before, do not show 'Loading'. Do so otherwise
+                    callback={() => {
+                        if (!(controllerTypes instanceof Array)) { // If the list has been loaded before, do not show 'Loading'. Do so otherwise
                             setControllerTypes(0);
                         }
                         return sendRequest({
                             type: 'rooms.controllers.getRoomControllerTypes'
-                        }).then(res=> {
-                            if(res.type==='ok') {
+                        }).then(res => {
+                            if (res.type === 'ok') {
                                 setControllerTypes(res.data.types);
-                                return res.data.types.map(type=>({
+                                return res.data.types.map(type => ({
                                     value: type.id,
                                     label: type.name,
                                     subtext: type.sub_name
@@ -249,12 +249,12 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                             } else {
                                 handleError(res);
                                 setControllerTypes(-1);
-                                return {error: true}; 
+                                return { error: true };
                             }
-                        }, err=> {
+                        }, err => {
                             handleError(err);
                             setControllerTypes(-1);
-                            return {error: true};
+                            return { error: true };
                         });
                     }}
                     onChange={onChangeControllerType}
@@ -270,16 +270,16 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
                     error={controllerTypeError}
                 />
 
-                <Fields 
-                    fields={fields} 
-                    fieldErrors={fieldErrors} 
-                    fieldValues={controller.settings} 
-                    setFieldValues={settings => setController(controller => ({...controller, settings}))} 
+                <Fields
+                    fields={fields}
+                    fieldErrors={fieldErrors}
+                    fieldValues={controller.settings}
+                    setFieldValues={settings => setController(controller => ({ ...controller, settings }))}
                     setFieldErrors={setFieldErrors}
                     context={{
                         for: "roomController",
                         controller: controller.type
-                    }} 
+                    }}
                 />
             </div>
 
@@ -297,4 +297,4 @@ function SettingsPageRoomsEditRoom({rooms}: Pick<StoreState, 'rooms'>) {
     );
 }
 
-export default connect(({rooms}: StoreState)=> ({rooms}))(SettingsPageRoomsEditRoom);
+export default connect(({ rooms }: StoreState) => ({ rooms }))(SettingsPageRoomsEditRoom);

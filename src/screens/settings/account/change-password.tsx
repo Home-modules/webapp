@@ -131,7 +131,7 @@ const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(
                         />
                     </label>
                     <div className={`score s${passwordScore}`}>
-                        <span>{["Password strength", "Very Weak", "Weak", "Moderate", "Strong", "Very Strong"][passwordScore+1]}</span>
+                        <span>{["Password strength", "Very Weak", "Weak", "Moderate", "Strong", "Very Strong"][passwordScore + 1]}</span>
                     </div>
                     <IntermittentSubmitButton onClick={handleSubmit}>
                         Change Password

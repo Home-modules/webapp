@@ -14,20 +14,20 @@ export function DeviceInteractionTypeSlider({
     const [value, setValue] = React.useState(state.value);
     React.useEffect(() => {
         setValue(state.value);
-    } , [state.value]);
+    }, [state.value]);
 
     // unix timestamp of the last time value was sent
     // -Infinity means never called, Infinity means current call is in progress. 
     // value should only be sent if the last call is finished and older than 6ms.
     const [lastTimeLiveChanged, setLastTimeLiveChanged] = React.useState(-Infinity);
     const [liveValueID, setLiveValueID] = React.useState<number | undefined>(undefined);
-    
+
     const startLiveRequest = startSliderStream();
 
     React.useEffect(() => {
         let id: number;
         if (interaction.live) {
-            handleAnyErrors(sendRequest(startLiveRequest)).then(res=> setLiveValueID(id = res.data.id));
+            handleAnyErrors(sendRequest(startLiveRequest)).then(res => setLiveValueID(id = res.data.id));
         }
 
         return () => {
@@ -38,7 +38,7 @@ export function DeviceInteractionTypeSlider({
                 });
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [interaction.live, startLiveRequest.roomId, startLiveRequest.deviceId, startLiveRequest.interactionId])
 
     if (isDefault) {
@@ -60,7 +60,7 @@ export function DeviceInteractionTypeSlider({
                     type: "setSliderValue",
                     value
                 });
-            } }
+            }}
             min={interaction.min}
             max={interaction.max}
             step={interaction.step}

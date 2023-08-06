@@ -45,8 +45,14 @@ export function updateRoutinesEnabled() {
     }
 }
 
-const SettingsPageAutomation = connect(({ routines, routinesEnabled }: StoreState) => ({ routines, routinesEnabled }))(
-    function SettingsPageAutomation({ routines, routinesEnabled }: Pick<StoreState, 'routines'|'routinesEnabled'>) {
+const SettingsPageAutomation = connect(
+    ({ routines, routinesEnabled }: StoreState) =>
+        ({ routines, routinesEnabled })
+)(
+    function SettingsPageAutomation(
+        { routines, routinesEnabled }:
+            Pick<StoreState, 'routines' | 'routinesEnabled'>
+    ) {
 
         React.useEffect(() => {
             updateRoutines();
@@ -66,7 +72,7 @@ const SettingsPageAutomation = connect(({ routines, routinesEnabled }: StoreStat
                     subtitle="Edit routines"
                     className={`routines-list ${hide ? "hidden" : ''}`}
                     //@ts-ignore
-                    inert={hide? "": undefined}
+                    inert={hide ? "" : undefined}
                 >
                     <PlaceHolders
                         content={routines}

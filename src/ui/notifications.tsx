@@ -6,10 +6,10 @@ import { connect } from "react-redux";
 import { store, StoreState } from "../store";
 import { Link } from 'react-router-dom';
 
-export type NotificationProps= {
+export type NotificationProps = {
     id: string,
     title?: string,
-    message: React.ReactNode|React.ReactNode[],
+    message: React.ReactNode | React.ReactNode[],
     type?: 'error' | 'success' | 'info' | 'warning',
     buttons?: ({
         label: string,
@@ -25,38 +25,38 @@ export type NotificationProps= {
     timeout?: number
 }
 
-export function Notification({id, title, message, type='info', buttons=[], hideCloseButton=false, timeout=5000}: NotificationProps) {
-    const [visible, setVisible] = React.useState<''|'closing'|'fading'>('');
+export function Notification({ id, title, message, type = 'info', buttons = [], hideCloseButton = false, timeout = 5000 }: NotificationProps) {
+    const [visible, setVisible] = React.useState<'' | 'closing' | 'fading'>('');
     const [isNew, setIsNew] = React.useState(true);
     const [height, setHeight] = React.useState('auto');
     const divRef = React.useRef<HTMLDivElement>(null);
     const [hide, setHide] = React.useState(true);
 
     function close(mode: typeof visible = 'closing') {
-        if(visible.length) return;
-        setVisible(c=> c==='closing' ? 'closing' : mode);
-        setTimeout(()=>{
-            store.dispatch({type: 'REMOVE_NOTIFICATION', id});
+        if (visible.length) return;
+        setVisible(c => c === 'closing' ? 'closing' : mode);
+        setTimeout(() => {
+            store.dispatch({ type: 'REMOVE_NOTIFICATION', id });
         }, 3000);
     }
 
     React.useEffect(() => {
-        if(timeout > 0) {
-            setTimeout(()=>{
+        if (timeout > 0) {
+            setTimeout(() => {
                 close('fading');
             }, timeout);
         }
-        setTimeout(()=>{
+        setTimeout(() => {
             setIsNew(false);
         }, 500)
-        setHeight(divRef.current!.offsetHeight+'px');
+        setHeight(divRef.current!.offsetHeight + 'px');
         setHide(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div
-            className={`notification ${visible} ${isNew ? 'new' : ''}`} 
+            className={`notification ${visible} ${isNew ? 'new' : ''}`}
             style={{ '--height': height, visibility: hide ? 'hidden' : undefined } as any}
             onMouseUp={e => {
                 if ((!hideCloseButton) && e.button === 1)  // Middle click
@@ -77,15 +77,15 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
                 {buttons.map((button, i) => (
                     'route' in button ? (
                         <Link key={i}
-                            className={`button ${button.isPrimary?'primary':''}`}
+                            className={`button ${button.isPrimary ? 'primary' : ''}`}
                             to={button.route}
                             onClick={() => { close(); button.onClick?.() }}
                         >
                             {button.label}
                         </Link>
                     ) : (
-                        <button key={i} 
-                            className={`button ${button.isPrimary ? 'primary' : ''}`} 
+                        <button key={i}
+                            className={`button ${button.isPrimary ? 'primary' : ''}`}
                             onClick={() => { close(); button.onClick() }}
                         >
                             {button.label}
@@ -97,7 +97,7 @@ export function Notification({id, title, message, type='info', buttons=[], hideC
     )
 }
 
-function Notifications({notifications}: Pick<StoreState, 'notifications'>) {
+function Notifications({ notifications }: Pick<StoreState, 'notifications'>) {
     return (
         <div id="notifications">
             {notifications.map((notification) => (
@@ -107,4 +107,4 @@ function Notifications({notifications}: Pick<StoreState, 'notifications'>) {
     )
 }
 
-export default connect<Pick<StoreState, 'notifications'>, {}, {}, StoreState>(({notifications}) => ({notifications}))(Notifications);
+export default connect<Pick<StoreState, 'notifications'>, {}, {}, StoreState>(({ notifications }) => ({ notifications }))(Notifications);

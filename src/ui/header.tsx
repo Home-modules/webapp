@@ -21,8 +21,8 @@ export type HeaderProps = {
     buttons?: HeaderButtonProps[];
     backLink?: To,
     search?: {
-        value: string|null,
-        onChange(query: string|null): void
+        value: string | null,
+        onChange(query: string | null): void
     },
     select?: {
         totalCount: number,
@@ -84,7 +84,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                             type="text"
                             placeholder="Search..."
                             value={search.value || ""}
-                            onChange={e => search.onChange( e.target.value )}
+                            onChange={e => search.onChange(e.target.value)}
                             ref={searchFieldRef}
                             onKeyDown={e => { if (e.key === "Escape") search.onChange(null) }}
                         />
@@ -102,10 +102,10 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                         inert={selectActive ? undefined : ""}
                     >
                         <label className="checkbox">
-                            <input 
-                                type="checkbox" 
+                            <input
+                                type="checkbox"
                                 checked={select.selectedCount === select.totalCount}
-                                onChange={e=> select.onToggle(e.target.checked)} 
+                                onChange={e => select.onToggle(e.target.checked)}
                                 title="Select all"
                             />
                         </label>

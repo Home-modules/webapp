@@ -8,14 +8,20 @@ import './home.scss';
 import './desktop.scss';
 import { darkThemeMediaQuery } from "../..";
 
-const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: StoreState)=>({roomStates, appearanceSettings, allowDesktopMode}))(function Home({roomStates, appearanceSettings, allowDesktopMode}: Pick<StoreState, 'roomStates'|'appearanceSettings'|'allowDesktopMode'>) {
+const HomePage = connect(
+    ({ roomStates, appearanceSettings, allowDesktopMode }: StoreState) =>
+        ({ roomStates, appearanceSettings, allowDesktopMode }))(Home);
+function Home(
+    { roomStates, appearanceSettings, allowDesktopMode }:
+        Pick<StoreState, 'roomStates' | 'appearanceSettings' | 'allowDesktopMode'>
+) {
     const [searchParams, setSearchParams] = useSearchParams();
-    const inAppearanceSettings = useMatch({path: "/settings/appearance", end: false})
+    const inAppearanceSettings = useMatch({ path: "/settings/appearance", end: false })
     const isDesktopMode = searchParams.get('desktop') !== null;
-    const [wallpaper, setWallpaper] = React.useState<string|null>(null);
+    const [wallpaper, setWallpaper] = React.useState<string | null>(null);
 
     React.useEffect(() => { refreshRoomStates() }, []);
-    
+
     React.useEffect(() => {
         if (isDesktopMode !== (!!document.fullscreenElement) && !inAppearanceSettings) {
             if (isDesktopMode)
@@ -23,7 +29,7 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
             else
                 document.exitFullscreen();
         }
-        
+
         if (
             isDesktopMode &&
             (!localStorage.getItem('home_modules_wallpaper')) &&
@@ -43,7 +49,7 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
                             label: "Appearance settings",
                             route: "/settings/appearance?field=desktop-wallpaper&desktop",
                             onClick() {
-                                if(document.fullscreenElement)
+                                if (document.fullscreenElement)
                                     document.exitFullscreen();
                             },
                         }
@@ -69,7 +75,7 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
     }, [isDesktopMode])
 
     React.useEffect(() => {
-        if(!allowDesktopMode)
+        if (!allowDesktopMode)
             setSearchParams({});
     }, [allowDesktopMode, setSearchParams])
 
@@ -81,13 +87,17 @@ const HomePage = connect(({roomStates, appearanceSettings, allowDesktopMode}: St
         <main
             id="home"
             className={isDesktopMode ? 'desktop' : ''}
-            style={wallpaper ? {backgroundImage: wallpaper} : {}}
-    >
-            <HomePageChooseRoom roomStates={roomStates} appearanceSettings={appearanceSettings} allowDesktopMode={allowDesktopMode} />
+            style={wallpaper ? { backgroundImage: wallpaper } : {}}
+        >
+            <HomePageChooseRoom
+                roomStates={roomStates}
+                appearanceSettings={appearanceSettings}
+                allowDesktopMode={allowDesktopMode}
+            />
             {(!inAppearanceSettings) && <Outlet />}
         </main>
     )
-})
+};
 export default HomePage;
 
 export function refreshRoomStates() {

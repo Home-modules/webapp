@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export type ButtonProps = {
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    children: React.ReactNode|React.ReactNodeArray;
+    children: React.ReactNode | React.ReactNodeArray;
     className?: string;
     disabled?: boolean;
     primary?: boolean;
@@ -18,9 +18,9 @@ export default function Button({
     onClick, children, className = '', disabled = false, primary = false, attention = false, buttonRef, ...rest
 }: ButtonProps) {
     return (
-        <button 
-            className={`button ${className} ${primary?'primary':''} ${attention?'attention':''}`} 
-            onClick={onClick} 
+        <button
+            className={`button ${className} ${primary ? 'primary' : ''} ${attention ? 'attention' : ''}`}
+            onClick={onClick}
             disabled={disabled}
             ref={buttonRef}
             {...rest}
@@ -40,17 +40,17 @@ export function IntermittentButton({
     const [intermittent, setIntermittent] = React.useState(false);
 
     function click(e: React.MouseEvent<HTMLButtonElement>) {
-        const promise= onClick(e);
-        if(promise) {
+        const promise = onClick(e);
+        if (promise) {
             setIntermittent(true);
-            promise.finally(()=>setIntermittent(false));
+            promise.finally(() => setIntermittent(false));
         }
     }
 
     return (
-        <button 
-            className={`button ${className} ${intermittent?'intermittent':''} ${primary?'primary':''} ${attention?'attention':''}`} 
-            onClick={click} 
+        <button
+            className={`button ${className} ${intermittent ? 'intermittent' : ''} ${primary ? 'primary' : ''} ${attention ? 'attention' : ''}`}
+            onClick={click}
             disabled={disabled || intermittent}
             ref={buttonRef}
             {...rest}
@@ -60,24 +60,24 @@ export function IntermittentButton({
     );
 }
 
-export function IntermittentSubmitButton({onClick, children, className='', disabled}: Omit<IntermittentButtonProps<HTMLInputElement>, 'primary'> & {children:string}) {
+export function IntermittentSubmitButton({ onClick, children, className = '', disabled }: Omit<IntermittentButtonProps<HTMLInputElement>, 'primary'> & { children: string }) {
     const [intermittent, setIntermittent] = React.useState(false);
 
     function click(e: React.MouseEvent<HTMLInputElement>) {
-        const promise= onClick(e);
-        if(promise) {
+        const promise = onClick(e);
+        if (promise) {
             setIntermittent(true);
-            promise.finally(()=>setIntermittent(false));
+            promise.finally(() => setIntermittent(false));
         }
     }
 
     return (
         <>
-            <input 
-                className={className} 
-                type="submit" 
-                onClick={click} 
-                disabled={disabled || intermittent} 
+            <input
+                className={className}
+                type="submit"
+                onClick={click}
+                disabled={disabled || intermittent}
                 value={children}
             />
             {intermittent && <div className="intermittent"></div>}
@@ -87,9 +87,9 @@ export function IntermittentSubmitButton({onClick, children, className='', disab
 
 export type IconButtonProps = {
     icon: IconDefinition
-} & Omit<React.HTMLProps<HTMLButtonElement>, "children"|"type">
+} & Omit<React.HTMLProps<HTMLButtonElement>, "children" | "type">
 
-export function IconButton({ icon, className="", ...rest }: IconButtonProps) {
+export function IconButton({ icon, className = "", ...rest }: IconButtonProps) {
     return (
         <button className={`icon ${className}`} {...rest}>
             <FontAwesomeIcon icon={icon} />

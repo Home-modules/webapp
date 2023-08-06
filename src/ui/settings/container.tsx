@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SettingItemProps } from "./setting";
 import "./container.scss";
 
 export type SettingItemContainerProps = {
@@ -11,7 +9,7 @@ export type SettingItemContainerProps = {
     divRef?: React.Ref<HTMLDivElement>
 };
 
-export function SettingItemContainer({ title, description, className='', children, field, divRef }: SettingItemContainerProps) {
+export function SettingItemContainer({ title, description, className = '', children, field, divRef }: SettingItemContainerProps) {
     return (
         <div className={`setting-item container ${className}`} ref={divRef}>
             <div className="head">

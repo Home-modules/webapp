@@ -12,7 +12,7 @@ export function DeviceInteractionTypeToggleButton({
         <ToggleButton
             label={interaction.label}
             value={state.on}
-            onChange={(newValue) => 
+            onChange={(newValue) =>
                 sendAction({
                     type: "toggleToggleButton",
                     value: newValue

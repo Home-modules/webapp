@@ -18,7 +18,7 @@ export type SettingItemNumberProps = SettingItemProps & {
 }
 
 export function SettingItemNumber({
-    title, description, icon, className='',
+    title, description, icon, className = '',
     value, onChange,
     postfix, placeholder, min, max,
     error, onBlur, autofocus, iRef, disabled, scrollable

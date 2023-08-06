@@ -10,7 +10,7 @@ export type SettingItemProps = {
     description?: string
 }
 
-export default function SettingItem({ title, icon, children, className="", description }: SettingItemProps & { children: React.ReactChild | React.ReactChild[] }) {
+export default function SettingItem({ title, icon, children, className = "", description }: SettingItemProps & { children: React.ReactChild | React.ReactChild[] }) {
     return (
         <div className={`setting-item ${className}`}>
             <div className="title">

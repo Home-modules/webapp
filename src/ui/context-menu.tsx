@@ -16,10 +16,10 @@ window.addEventListener('blur', () => {
 export type ContextMenuProps = {
     x: number,
     y: number,
-    children: React.ReactChild | (React.ReactChild|null)[],
+    children: React.ReactChild | (React.ReactChild | null)[],
 }
 
-export function ContextMenu({x, y, children}: ContextMenuProps) {
+export function ContextMenu({ x, y, children }: ContextMenuProps) {
     const [closing, setClosing] = React.useState(false);
     const contentRef = React.useRef<HTMLDivElement>(null);
     const [position, setPosition] = React.useState<React.CSSProperties>({});
@@ -37,9 +37,9 @@ export function ContextMenu({x, y, children}: ContextMenuProps) {
     }, [x, y, children]);
 
     return (
-        <div className={`context-menu-container ${closing?'closing':''}`} onClick={e=> {
+        <div className={`context-menu-container ${closing ? 'closing' : ''}`} onClick={e => {
             setClosing(true);
-            setTimeout(()=> {
+            setTimeout(() => {
                 store.dispatch({
                     type: "SET_CONTEXT_MENU",
                     contextMenu: null
@@ -69,23 +69,23 @@ export type ContextMenuItemProps = {
     attention?: boolean,
 }
 
-export function ContextMenuItem({children, icon, onClick, href, attention}: ContextMenuItemProps) {
-    if(href) {
+export function ContextMenuItem({ children, icon, onClick, href, attention }: ContextMenuItemProps) {
+    if (href) {
         return (
-            <Link to={href} className={`context-menu-item ${attention?'attention':''}`}>
+            <Link to={href} className={`context-menu-item ${attention ? 'attention' : ''}`}>
                 <FontAwesomeIcon icon={icon} />
                 <span>{children}</span>
             </Link>
         )
     }
     return (
-        <button className={`context-menu-item ${attention?'attention':''}`} onClick={onClick}>
+        <button className={`context-menu-item ${attention ? 'attention' : ''}`} onClick={onClick}>
             <FontAwesomeIcon icon={icon} />
             <span>{children}</span>
         </button>
     )
 }
 
-export const CurrentContextMenu = connect(({contextMenu}: StoreState)=>({contextMenu}))(function CurrentContextMenu({contextMenu}: Pick<StoreState, 'contextMenu'>) {
+export const CurrentContextMenu = connect(({ contextMenu }: StoreState) => ({ contextMenu }))(function CurrentContextMenu({ contextMenu }: Pick<StoreState, 'contextMenu'>) {
     return contextMenu && <ContextMenu {...contextMenu} />;
 });

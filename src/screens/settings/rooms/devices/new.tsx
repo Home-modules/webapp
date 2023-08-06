@@ -1,4 +1,4 @@
-import { faArrowLeft, faChevronRight, fas, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, fas, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, Navigate, Outlet, useMatch, useParams } from "react-router-dom";
 import './new.scss';
@@ -6,22 +6,21 @@ import './edit-device';
 import { StoreState } from "../../../../store";
 import { connect } from "react-redux";
 import React from "react";
-import ScrollView from "../../../../ui/scrollbar";
 import { PlaceHoldersArray } from "../../../../ui/placeholders";
 import { HMApi } from "../../../../hub/api";
 import Button from "../../../../ui/button";
-import { Header, PageWithHeader } from "../../../../ui/header";
+import { PageWithHeader } from "../../../../ui/header";
 
-function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState, 'deviceTypes'|'rooms'>) {
+function SettingsPageRoomsDevicesNewDevice({ deviceTypes, rooms }: Pick<StoreState, 'deviceTypes' | 'rooms'>) {
     let hideList = !useMatch('/settings/devices/:roomId/new/');
-    const {roomId= ''} = useParams();
-    const controllerType = rooms ? (rooms.find(r=> r.id === roomId)?.controllerType || false) : undefined;
+    const { roomId = '' } = useParams();
+    const controllerType = rooms ? (rooms.find(r => r.id === roomId)?.controllerType || false) : undefined;
     const types = controllerType && deviceTypes[controllerType.type];
     const [currentSuperType, setCurrentSuperType] = React.useState<[HMApi.T.DeviceType[], number, number] | null>(null);
     const [currentSuperTypeClosing, setCurrentSuperTypeClosing] = React.useState(false);
     const deviceTypesDivRef = React.useRef<HTMLDivElement>(null);
 
-    if(!roomId) {
+    if (!roomId) {
         return <Navigate to="/settings/devices" />
     }
 
@@ -39,7 +38,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                     Wrapper={types => (
                         <div className="device-types" ref={deviceTypesDivRef}>
                             {currentSuperType && (
-                                <div className={`super-type ${currentSuperTypeClosing?'closing':''}`} style={{
+                                <div className={`super-type ${currentSuperTypeClosing ? 'closing' : ''}`} style={{
                                     transformOrigin: `${currentSuperType[1]}px ${currentSuperType[2]}px`
                                 }}>
                                     <FontAwesomeIcon icon={faTimes} className="close" onClick={() => {
@@ -51,7 +50,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                                     }} />
                                     <h2>{currentSuperType[0][0].name}</h2>
                                     <div className="items">
-                                        {currentSuperType[0].map((type)=> (
+                                        {currentSuperType[0].map((type) => (
                                             <Link key={type.id} to={type.id} className="button">
                                                 <FontAwesomeIcon icon={fas['fa' + type.icon]} />
                                                 <div>{type.sub_name}</div>
@@ -62,7 +61,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                             )}
                             {categorizeDeviceTypes(types).map(([i, category]) => (
                                 <div className="category" key={i}>
-                                    {Object.entries(category).map(([superType, types]) => (types.length > 1 ) ? (
+                                    {Object.entries(category).map(([superType, types]) => (types.length > 1) ? (
                                         <Button key={superType} onClick={(e) => {
                                             const buttonPos = (e.target as HTMLButtonElement).getBoundingClientRect();
                                             const divPos = deviceTypesDivRef.current!.getBoundingClientRect();
@@ -78,10 +77,10 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
                                     ) : (
                                         <Link key={superType} to={types[0].id} className="button">
                                             <FontAwesomeIcon icon={fas['fa' + types[0].icon]} />
-                                                <div className="text">
-                                                    <div className="name">{types[0].name}</div>
-                                                    <div className="sub-name">{types[0].sub_name}</div>
-                                                </div>
+                                            <div className="text">
+                                                <div className="name">{types[0].name}</div>
+                                                <div className="sub-name">{types[0].sub_name}</div>
+                                            </div>
                                         </Link>
                                     ))}
                                 </div>
@@ -102,7 +101,7 @@ function SettingsPageRoomsDevicesNewDevice({deviceTypes, rooms}: Pick<StoreState
     );
 }
 
-export default connect(({deviceTypes, rooms}: StoreState) => ({deviceTypes, rooms}))(SettingsPageRoomsDevicesNewDevice);
+export default connect(({ deviceTypes, rooms }: StoreState) => ({ deviceTypes, rooms }))(SettingsPageRoomsDevicesNewDevice);
 
 function categorizeDeviceTypes(types: HMApi.T.DeviceType[]) {
     function groupSubTypes(types: HMApi.T.DeviceType[]) {

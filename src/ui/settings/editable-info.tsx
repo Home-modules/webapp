@@ -11,7 +11,7 @@ export type SettingItemEditableInfoProps = SettingItemProps & {
     buttonText?: string
 }
 
-export function SettingItemEditableInfo({ title, description, icon, className='', value, onEdit, buttonText }: SettingItemEditableInfoProps) {
+export function SettingItemEditableInfo({ title, description, icon, className = '', value, onEdit, buttonText }: SettingItemEditableInfoProps) {
     return (
         <SettingItem
             title={title}

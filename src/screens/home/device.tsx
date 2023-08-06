@@ -32,10 +32,10 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
         }
     }
 
-    if(state.disabled) {
+    if (state.disabled) {
         return <DisabledDevice state={state} roomName={roomName} isInFavorites={isInFavorites} />;
     }
-    
+
     function onKeyDown(e: React.KeyboardEvent<HTMLButtonElement>) {
         const element =
             e.key === 'ArrowLeft' ?
@@ -43,7 +43,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
             e.key === 'ArrowRight' ?
                 (e.target as HTMLElement).nextElementSibling :
             null;
-        
+
         if (element?.tagName === 'BUTTON') {
             (element as HTMLElement).focus();
         }
@@ -55,7 +55,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
         roomId: state.roomId,
         interactionId: defaultInteraction!,
     } as const);
-    
+
     return (
         <button
             className={`device ${state.mainToggleState ? 'active' : ''} ${intermittent ? 'intermittent' : ''} ${state.clickable ? 'clickable' : ''} ${state.activeColor || ''}`}
@@ -104,7 +104,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                                             roomId: state.roomId,
                                             id: state.id,
                                             isFavorite: !state.isFavorite
-                                        }).then(()=> {
+                                        }).then(() => {
                                             store.dispatch({
                                                 type: 'ADD_NOTIFICATION',
                                                 notification: {
@@ -128,7 +128,7 @@ export function Device({ state, isInFavorites, roomName }: DeviceProps) {
                                     href={`/settings/devices/${state.roomId}/edit/${state.id}`}
                                 >
                                     Edit
-                                    </ContextMenuItem>
+                                </ContextMenuItem>
                             </DeviceInteractions>
                         )
                     }
@@ -190,13 +190,13 @@ function DisabledDevice({ state, isInFavorites, roomName }: DeviceProps) {
                 children: [
                     <ContextMenuItem key={0}
                         icon={faRotateRight}
-                        onClick={async() => {
+                        onClick={async () => {
                             await sendRequest({
                                 type: 'devices.restartDevice',
                                 roomId: state.roomId,
                                 id: state.id
                             }).catch(handleError);
-                            if(isInFavorites) {
+                            if (isInFavorites) {
                                 await refreshFavoriteDeviceStates();
                             } else {
                                 await refreshDeviceStates(state.roomId);

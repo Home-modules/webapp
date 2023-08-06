@@ -12,7 +12,7 @@ export default function Header() {
             e.key === 'ArrowRight' ?
                 (e.target as HTMLElement).nextElementSibling :
             null;
-        
+
         if (element?.tagName === 'A') {
             (element as HTMLElement).focus();
             (element as HTMLElement).click();
@@ -22,7 +22,7 @@ export default function Header() {
     return (
         <header>
             <NavLink
-                className={({isActive}) => isActive ? 'active' : ''}
+                className={({ isActive }) => isActive ? 'active' : ''}
                 to="/home"
                 onKeyDown={onKeyDown}
             >
@@ -30,7 +30,7 @@ export default function Header() {
                 <FontAwesomeIcon icon={faHome} />
             </NavLink>
             <NavLink
-                className={({isActive}) => isActive ? 'active' : ''}
+                className={({ isActive }) => isActive ? 'active' : ''}
                 to="/settings"
                 onKeyDown={onKeyDown}
             >

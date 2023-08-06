@@ -7,7 +7,7 @@ import { store, StoreState } from '../store';
 import { connect } from 'react-redux';
 import { Navigate, useLocation, useSearchParams } from 'react-router-dom';
 
-function LoginForm({token}: Pick<StoreState, 'token'>) {
+function LoginForm({ token }: Pick<StoreState, 'token'>) {
     const [searchParams] = useSearchParams();
     const location = useLocation()
 
@@ -17,14 +17,14 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
     const [passwordError, setPasswordError] = React.useState('');
     const usernameRef = React.useRef<HTMLInputElement>(null);
     const passwordRef = React.useRef<HTMLInputElement>(null);
-    
-    if(location.pathname === '/login' && token) {
+
+    if (location.pathname === '/login' && token) {
         return <Navigate to={searchParams.get('redirect') || '/home'} />
     }
 
     const handleSubmit = () => loginToHub(username, password).then(res => {
-        if(res.type==='ok') {
-            if(password==='admin') { // Warn the user to change their password
+        if (res.type === 'ok') {
+            if (password === 'admin') { // Warn the user to change their password
                 store.dispatch({
                     type: 'ADD_NOTIFICATION',
                     notification: {
@@ -43,21 +43,21 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
                 });
             }
         }
-    }, (e: HMApi.ResponseOrError<HMApi.Request.Account.Login>)=> {
-        if(e.type==='error') {
-            if(e.error.message==='LOGIN_USER_NOT_FOUND') {
+    }, (e: HMApi.ResponseOrError<HMApi.Request.Account.Login>) => {
+        if (e.type === 'error') {
+            if (e.error.message === 'LOGIN_USER_NOT_FOUND') {
                 setUsernameError("Username not found");
                 setPasswordError('');
                 usernameRef.current?.focus();
             }
-            else if(e.error.message==='LOGIN_PASSWORD_INCORRECT') {
+            else if (e.error.message === 'LOGIN_PASSWORD_INCORRECT') {
                 setUsernameError('');
                 setPasswordError("Password incorrect");
                 passwordRef.current?.focus();
             } else {
                 handleError(e);
             }
-        } 
+        }
     });
 
     return (
@@ -66,25 +66,25 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
             <form>
                 <label className='text' data-error={usernameError} >
                     Username
-                    <input 
-                        type="text" 
-                        value={username} 
+                    <input
+                        type="text"
+                        value={username}
                         ref={usernameRef}
                         autoComplete="username"
                         onChange={(event) => {
-                            setUsername(event.target.value); 
+                            setUsername(event.target.value);
                             setUsernameError('');
                         }} />
                 </label>
                 <label className='text' data-error={passwordError}>
                     Password
-                    <input 
-                        type="password" 
-                        value={password} 
+                    <input
+                        type="password"
+                        value={password}
                         ref={passwordRef}
                         autoComplete="current-password"
                         onChange={(event) => {
-                            setPassword(event.target.value); 
+                            setPassword(event.target.value);
                             setPasswordError('');
                         }} />
                 </label>
@@ -96,4 +96,4 @@ function LoginForm({token}: Pick<StoreState, 'token'>) {
     );
 }
 
-export default connect((state: StoreState)=>({token: state.token}))(LoginForm);
+export default connect((state: StoreState) => ({ token: state.token }))(LoginForm);

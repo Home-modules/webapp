@@ -14,22 +14,22 @@ import { addConfirmationFlyout } from '../../../ui/flyout';
 import { PlaceHolders } from '../../../ui/placeholders';
 import { PageWithHeader } from '../../../ui/header';
 
-function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'rooms'> & {devicesScreen?: boolean}) {
+function SettingsPageRooms({ rooms, devicesScreen = false }: Pick<StoreState, 'rooms'> & { devicesScreen?: boolean }) {
     let hideList = !!(useMatch('/settings/rooms/:roomId/edit'));
     hideList = !!(useMatch('/settings/rooms/new')) || hideList;
     let collapseList = !!(useMatch('/settings/devices/:roomId'));
     collapseList = !!(useMatch('/settings/devices/:roomId/new/*')) || collapseList;
     collapseList = !!(useMatch('/settings/devices/:roomId/edit/:deviceId')) || collapseList;
-    const {roomId= ''} = useParams();
+    const { roomId = '' } = useParams();
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const search= collapseList ? null : searchParams.get('search');
+    const search = collapseList ? null : searchParams.get('search');
     const searchFieldRef = React.useRef<HTMLInputElement>(null);
 
     const [selectedRooms, setSelectedRooms] = React.useState<string[]>([])
 
     function updateRooms() {
-        if(hideList) return;
+        if (hideList) return;
         refreshRooms();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,12 +38,12 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
     if (rooms && searchParams.has('redirect')) {
         return <Navigate to={searchParams.get('redirect')!} replace />;
     }
-    
+
     function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
-        if(rooms) {
+        if (rooms) {
             sendRequest({
                 type: 'rooms.changeRoomOrder',
-                ids: rooms.map(room=>room.id)
+                ids: rooms.map(room => room.id)
             }).catch(handleError)
         }
     }
@@ -60,8 +60,8 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
                     totalCount: rooms ? rooms.length : Infinity,
                     selectedCount: selectedRooms.length,
                     onToggle(checked) {
-                        if(rooms && checked) {
-                            setSelectedRooms(rooms.map(r=>r.id));
+                        if (rooms && checked) {
+                            setSelectedRooms(rooms.map(r => r.id));
                         } else {
                             setSelectedRooms([]);
                         }
@@ -73,13 +73,13 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
                         onClick(e) {
                             addConfirmationFlyout({
                                 element: e.target,
-                                text: `Are you sure you want to delete ${selectedRooms.length} ${selectedRooms.length===1 ? 'room':'rooms'}?`,
+                                text: `Are you sure you want to delete ${selectedRooms.length} ${selectedRooms.length === 1 ? 'room' : 'rooms'}?`,
                                 confirmText: "Delete",
                                 attention: true,
                                 async: true,
-                                onConfirm: ()=> (async()=> {
+                                onConfirm: () => (async () => {
                                     const rooms = [...selectedRooms]; // Clone array it case it changes during the process
-                                    for(const roomId of rooms) {
+                                    for (const roomId of rooms) {
                                         await sendRequest({
                                             type: "rooms.removeRoom",
                                             id: roomId
@@ -89,7 +89,7 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
                                         type: "ADD_NOTIFICATION",
                                         notification: {
                                             type: "success",
-                                            message: `Deleted ${rooms.length} ${rooms.length===1?'room':'rooms'}`
+                                            message: `Deleted ${rooms.length} ${rooms.length === 1 ? 'room' : 'rooms'}`
                                         }
                                     });
                                     updateRooms();
@@ -99,13 +99,13 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
                         }
                     }]
                 }}
-                
-                className={`rooms-list ${hideList? 'hidden':''} ${collapseList? 'collapsed':''}`}
+
+                className={`rooms-list ${hideList ? 'hidden' : ''} ${collapseList ? 'collapsed' : ''}`}
                 tabIndex={-1}
                 onKeyDown={e => {
                     if (e.ctrlKey && e.key === 'f' && !(hideList || collapseList)) {
                         e.preventDefault();
-                        setSearchParams({search: ''});
+                        setSearchParams({ search: '' });
                         searchFieldRef.current?.focus();
                     }
                 }}
@@ -178,10 +178,10 @@ function SettingsPageRooms({rooms, devicesScreen = false}: Pick<StoreState, 'roo
     )
 }
 
-export default connect(({rooms}: StoreState)=>({rooms}))(SettingsPageRooms);
+export default connect(({ rooms }: StoreState) => ({ rooms }))(SettingsPageRooms);
 
 
-export const roomIcons: Record<HMApi.T.Room['icon'], IconDefinition>= {
+export const roomIcons: Record<HMApi.T.Room['icon'], IconDefinition> = {
     'bathroom': faBath,
     'bedroom': faBed,
     'kitchen': faUtensils,
@@ -189,14 +189,14 @@ export const roomIcons: Record<HMApi.T.Room['icon'], IconDefinition>= {
     'other': faDoorClosed
 }
 
-type RoomItemProps= {
+type RoomItemProps = {
     room: HMApi.T.Room;
     disableReorder?: boolean;
     search?: string;
     active?: boolean;
-    action: "edit"|"devices-collapsed"|"devices"|"check",
+    action: "edit" | "devices-collapsed" | "devices" | "check",
     selected: boolean,
-    onSelectChange: ()=>void
+    onSelectChange: () => void
 }
 
 export function refreshRooms() {
@@ -223,31 +223,31 @@ export function refreshRooms() {
     });
 }
 
-function RoomItem({room, disableReorder=false, search, active, action, selected, onSelectChange}: RoomItemProps) {
+function RoomItem({ room, disableReorder = false, search, active, action, selected, onSelectChange }: RoomItemProps) {
     return (
-        <div className={`item ${active?'active':''}`}>
+        <div className={`item ${active ? 'active' : ''}`}>
             {(!disableReorder) && (
                 <svg className='drag-handle' width="16" height="16">
                     <path fillRule="evenodd" d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
                 </svg>
             )}
-            <Link 
+            <Link
                 to={{
                     "edit": `/settings/rooms/${room.id}/${action}`,
                     "devices": `/settings/devices/${room.id}`,
                     "devices-collapsed": `/settings/devices/${room.id}`,
                     "check": "#",
-                }[action]} 
-                className={`open ${action==='check'? 'checkbox-visible': ''} ${['devices','devices-collapsed'].includes(action) ? 'checkbox-hidden': ''}`}
-                title={action==='devices-collapsed'? room.name : undefined}
-                onClick={e=> {
-                    if(action==='check') {
+                }[action]}
+                className={`open ${action === 'check' ? 'checkbox-visible' : ''} ${['devices', 'devices-collapsed'].includes(action) ? 'checkbox-hidden' : ''}`}
+                title={action === 'devices-collapsed' ? room.name : undefined}
+                onClick={e => {
+                    if (action === 'check') {
                         e.preventDefault();
                         onSelectChange();
                     }
                 }}
-                onContextMenu={e=> {
-                    if(navigator.maxTouchPoints && action==='edit') { // Only on mobile devices and when devices list is closed and select mode is off
+                onContextMenu={e => {
+                    if (navigator.maxTouchPoints && action === 'edit') { // Only on mobile devices and when devices list is closed and select mode is off
                         e.preventDefault();
                         onSelectChange();
                     }
@@ -256,10 +256,10 @@ function RoomItem({room, disableReorder=false, search, active, action, selected,
                 <span className='name'>
                     <FontAwesomeIcon icon={roomIcons[room.icon]} fixedWidth />
                     <label className="checkbox">
-                        <input 
-                            type="checkbox" 
-                            checked={selected} 
-                            onClick={e=> {e.stopPropagation()}} 
+                        <input
+                            type="checkbox"
+                            checked={selected}
+                            onClick={e => { e.stopPropagation() }}
                             onChange={onSelectChange}
                         />
                     </label>

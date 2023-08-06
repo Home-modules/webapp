@@ -4,7 +4,7 @@ import promiseTimeout from "../../utils/promise-timeout";
 export type ToggleButtonProps = {
     label: string,
     value: boolean,
-    onChange(value: boolean): void|Promise<void>,
+    onChange(value: boolean): void | Promise<void>,
     disabled?: boolean
 }
 

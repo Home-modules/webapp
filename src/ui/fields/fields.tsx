@@ -34,23 +34,23 @@ export type FieldsProps = {
     }
 }
 
-export default function Fields({fields, fieldValues, setFieldValues, fieldErrors, setFieldErrors, context}: FieldsProps) {
+export default function Fields({ fields, fieldValues, setFieldValues, fieldErrors, setFieldErrors, context }: FieldsProps) {
     return <>
-        {fields.map((field, index)=>(
+        {fields.map((field, index) => (
             field.type === 'container' ? (
                 <Container
                     key={index}
                     field={field}
-                    {...{context, fieldValues, fieldErrors, setFieldErrors, setFieldValues}}
+                    {...{ context, fieldValues, fieldErrors, setFieldErrors, setFieldValues }}
                 />
             ) : checkSettingsFieldCondition(getFlatFields(fields), field.id, fieldValues) && (
-                <Field 
-                    key={index} 
-                    field={field} 
-                    value={fieldValues[field.id]} 
-                    setValue={value=>setFieldValues({...fieldValues, [field.id]: value})} 
-                    error={fieldErrors[field.id]} 
-                    setError={error=>setFieldErrors({...fieldErrors, [field.id]: error})} 
+                <Field
+                    key={index}
+                    field={field}
+                    value={fieldValues[field.id]}
+                    setValue={value => setFieldValues({ ...fieldValues, [field.id]: value })}
+                    error={fieldErrors[field.id]}
+                    setError={error => setFieldErrors({ ...fieldErrors, [field.id]: error })}
                     context={context}
                 />
             )
@@ -62,17 +62,17 @@ type ContainerProps = {
     field: HMApi.T.SettingsField.TypeContainer
 } & Omit<FieldsProps, "fields">;
 function Container(props: ContainerProps) {
-    const {field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues } = props
+    const { field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues } = props
 
     const firstChild = field.children[0];
-    if(firstChild?.type === "checkbox" && firstChild.label === "Enable") {
+    if (firstChild?.type === "checkbox" && firstChild.label === "Enable") {
         return (
             <ToggleContainer {...props} toggleField={firstChild} />
         )
     }
     return (
         <SettingItemContainer title={field.label}>
-            <Fields fields={field.children} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
+            <Fields fields={field.children} {...{ fieldErrors, fieldValues, context, setFieldErrors, setFieldValues }} />
         </SettingItemContainer>
     )
 }
@@ -81,12 +81,12 @@ type ToggleContainerProps = ContainerProps & {
     toggleField: HMApi.T.SettingsField.TypeCheckbox;
 }
 
-function ToggleContainer({field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues, toggleField }: ToggleContainerProps) {
+function ToggleContainer({ field, fieldErrors, fieldValues, context, setFieldErrors, setFieldValues, toggleField }: ToggleContainerProps) {
     const childrenRef = React.useRef<HTMLDivElement>(null);
-    const [everToggled, setEverToggled]= React.useState(false);
+    const [everToggled, setEverToggled] = React.useState(false);
 
-    React.useEffect(()=> {
-        if(fieldValues[toggleField.id] && everToggled) {
+    React.useEffect(() => {
+        if (fieldValues[toggleField.id] && everToggled) {
             childrenRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
@@ -95,23 +95,23 @@ function ToggleContainer({field, fieldErrors, fieldValues, context, setFieldErro
     }, [fieldValues[toggleField.id], everToggled]);
 
     return (
-        <SettingItemContainer 
+        <SettingItemContainer
             title={field.label}
-            divRef={childrenRef} 
+            divRef={childrenRef}
             field={
-                <ToggleButton 
+                <ToggleButton
                     label=""
-                    value={fieldValues[toggleField.id] as boolean} 
-                    onChange={value=> {
-                        setFieldValues({...fieldValues, [toggleField.id]: value});
+                    value={fieldValues[toggleField.id] as boolean}
+                    onChange={value => {
+                        setFieldValues({ ...fieldValues, [toggleField.id]: value });
                         setEverToggled(true);
                     }}
                 />
             }
         >
-            {fieldValues[toggleField.id]===true ?
-                <Fields fields={field.children.slice(1)} {...{fieldErrors, fieldValues, context, setFieldErrors, setFieldValues}} />
-            : <></>}
+            {fieldValues[toggleField.id] === true ?
+                <Fields fields={field.children.slice(1)} {...{ fieldErrors, fieldValues, context, setFieldErrors, setFieldValues }} />
+                : <></>}
         </SettingItemContainer>
     )
 }
@@ -128,7 +128,7 @@ export type FieldProps<
     context: FieldsProps['context']
 }
 
-function Field({field, value, setValue, error, setError, context}: FieldProps) {
+function Field({ field, value, setValue, error, setError, context }: FieldProps) {
     switch (field.type) {
         case 'text': {
             value = value as string;
@@ -159,7 +159,7 @@ function Field({field, value, setValue, error, setError, context}: FieldProps) {
 }
 
 export function getSettingsFieldDefaultValue(field: HMApi.T.SettingsField<false>) {
-    if(field.default !== undefined) {
+    if (field.default !== undefined) {
         return field.default;
     }
     else {
@@ -172,7 +172,7 @@ export function getSettingsFieldDefaultValue(field: HMApi.T.SettingsField<false>
             case 'number':
             case 'slider':
                 return field.min || 0;
-            
+
             case 'checkbox':
                 return false;
         }
@@ -180,19 +180,19 @@ export function getSettingsFieldDefaultValue(field: HMApi.T.SettingsField<false>
 }
 
 export function getSettingsFieldsDefaultValues(fields: HMApi.T.SettingsField<false>[]) {
-    return Object.fromEntries(fields.map(field=> [field.id, getSettingsFieldDefaultValue(field)]))
+    return Object.fromEntries(fields.map(field => [field.id, getSettingsFieldDefaultValue(field)]))
 }
 
-export function validateField(field: HMApi.T.SettingsField<false>, value: string|number|boolean) {
-    switch(field.type) {
+export function validateField(field: HMApi.T.SettingsField<false>, value: string | number | boolean) {
+    switch (field.type) {
         case 'checkbox': {
-            if(typeof value !== 'boolean') {
+            if (typeof value !== 'boolean') {
                 return {
                     id: field.id,
                     error: "invalid_value_type"
                 } as const;
             }
-            if(field.required && value === false) {
+            if (field.required && value === false) {
                 return {
                     id: field.id,
                     error: "required_but_unchecked"
@@ -202,19 +202,19 @@ export function validateField(field: HMApi.T.SettingsField<false>, value: string
         }
 
         case 'number': {
-            if(typeof value !== 'number') {
+            if (typeof value !== 'number') {
                 return {
                     id: field.id,
                     error: "invalid_value_type"
                 } as const;
             }
-            if(field.required && Number.isNaN(value)) {
+            if (field.required && Number.isNaN(value)) {
                 return {
                     id: field.id,
                     error: "no_value"
                 } as const;
             }
-            if(field.min !== undefined && value < field.min) {
+            if (field.min !== undefined && value < field.min) {
                 return {
                     id: field.id,
                     error: "number_too_low",
@@ -222,7 +222,7 @@ export function validateField(field: HMApi.T.SettingsField<false>, value: string
                     min: field.min
                 } as const;
             }
-            if(field.max !== undefined && value > field.max) {
+            if (field.max !== undefined && value > field.max) {
                 return {
                     id: field.id,
                     error: "number_too_high",
@@ -234,13 +234,13 @@ export function validateField(field: HMApi.T.SettingsField<false>, value: string
         }
 
         case 'radio': {
-            if(typeof value !== 'string') {
+            if (typeof value !== 'string') {
                 return {
                     id: field.id,
                     error: "invalid_value_type"
                 } as const;
             }
-            if(field.required && (!value.length)) {
+            if (field.required && (!value.length)) {
                 return {
                     id: field.id,
                     error: "no_value"
@@ -256,21 +256,21 @@ export function validateField(field: HMApi.T.SettingsField<false>, value: string
         }
 
         case 'select': {
-            if(typeof value !== 'string') {
+            if (typeof value !== 'string') {
                 return {
                     id: field.id,
                     error: "invalid_value_type"
                 } as const;
             }
-            if(field.required && (!value.length)) {
+            if (field.required && (!value.length)) {
                 return {
                     id: field.id,
                     error: "no_value"
                 } as const;
             }
-            if(value.length && (
-                ((!field.allowCustomValue) || field.checkCustomValue) && 
-                (field.options instanceof Array) && 
+            if (value.length && (
+                ((!field.allowCustomValue) || field.checkCustomValue) &&
+                (field.options instanceof Array) &&
                 (!searchInDropdownOptions(field.options, value))
             )) {
                 return {
@@ -282,19 +282,19 @@ export function validateField(field: HMApi.T.SettingsField<false>, value: string
         }
 
         case 'text': {
-            if(typeof value !== 'string') {
+            if (typeof value !== 'string') {
                 return {
                     id: field.id,
                     error: "invalid_value_type"
                 } as const;
             }
-            if(field.required && (!value.length)) {
+            if (field.required && (!value.length)) {
                 return {
                     id: field.id,
                     error: "no_value"
                 } as const;
             }
-            if(field.min_length !== undefined && value.length < field.min_length) {
+            if (field.min_length !== undefined && value.length < field.min_length) {
                 return {
                     id: field.id,
                     error: "text_too_short",
@@ -302,7 +302,7 @@ export function validateField(field: HMApi.T.SettingsField<false>, value: string
                     min: field.min_length
                 } as const;
             }
-            if(field.max_length !== undefined && value.length > field.max_length) {
+            if (field.max_length !== undefined && value.length > field.max_length) {
                 return {
                     id: field.id,
                     error: "text_too_long",
@@ -314,10 +314,10 @@ export function validateField(field: HMApi.T.SettingsField<false>, value: string
     }
 }
 
-export function fieldErrorToText(error: ReturnType<typeof validateField>): string|undefined {
-    if(!error) return;
-    switch(error.error) {
-        case 'invalid_value_type': 
+export function fieldErrorToText(error: ReturnType<typeof validateField>): string | undefined {
+    if (!error) return;
+    switch (error.error) {
+        case 'invalid_value_type':
             return "Invalid value";
         case 'no_option_selected':
             return "Please select an option"
@@ -338,12 +338,12 @@ export function fieldErrorToText(error: ReturnType<typeof validateField>): strin
     }
 }
 
-export function getFieldsErrors(fields: HMApi.T.SettingsField<false>[], values: Record<string, string|number|boolean>): [boolean, Record<string, string|undefined>] {
-    const res: Record<string, string|undefined> = { };
+export function getFieldsErrors(fields: HMApi.T.SettingsField<false>[], values: Record<string, string | number | boolean>): [boolean, Record<string, string | undefined>] {
+    const res: Record<string, string | undefined> = {};
     let hasErr = false;
-    for(const field of fields) {
+    for (const field of fields) {
         res[field.id] = fieldErrorToText(validateField(field, values[field.id]));
-        if(res[field.id]) {
+        if (res[field.id]) {
             hasErr = true;
         }
     }

@@ -10,20 +10,20 @@ import { SettingItemEditableInfo } from '../../../ui/settings/editable-info';
 import { faArrowRightFromBracket, faAt, faKey, faLaptop } from '@fortawesome/free-solid-svg-icons';
 import { Header } from '../../../ui/header';
 
-function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
+function SettingsPageAccount({ token }: Pick<StoreState, 'token'>) {
     const [sessionsCount, setSessionsCount] = React.useState(-1); // Special values: -1 = loading, -2 = error
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         sendRequest({
             'type': 'account.getSessionsCount'
-        }).then(res=> {
-            if(res.type==='ok') {
+        }).then(res => {
+            if (res.type === 'ok') {
                 setSessionsCount(res.data.sessions);
             } else {
                 setSessionsCount(-2);
                 handleError(res);
             }
-        }).catch(err=> {
+        }).catch(err => {
             setSessionsCount(-2);
             handleError(err);
         });
@@ -78,4 +78,4 @@ function SettingsPageAccount({token}: Pick<StoreState, 'token'>) {
     )
 }
 
-export default connect<Pick<StoreState, 'token'>, {}, {}, StoreState>(({token})=>({token}))(SettingsPageAccount);
+export default connect<Pick<StoreState, 'token'>, {}, {}, StoreState>(({ token }) => ({ token }))(SettingsPageAccount); //wtf is this

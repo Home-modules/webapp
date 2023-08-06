@@ -17,7 +17,7 @@ export type SettingItemTextProps = SettingItemProps & {
 }
 
 export function SettingItemText({
-    title, description, icon, className='',
+    title, description, icon, className = '',
     value, onChange,
     postfix, placeholder, minLength, maxLength,
     error, onBlur, autofocus, iRef, disabled

@@ -55,9 +55,9 @@ export default function Flyout({ id, element, children, showCloseButton, width, 
         const element =
             e.key === 'ArrowLeft' ?
                 (e.target as HTMLElement).previousElementSibling :
-            e.key === 'ArrowRight' ?
-                (e.target as HTMLElement).nextElementSibling :
-            null;
+                e.key === 'ArrowRight' ?
+                    (e.target as HTMLElement).nextElementSibling :
+                    null;
         element && (element as HTMLElement).focus();
     }
 

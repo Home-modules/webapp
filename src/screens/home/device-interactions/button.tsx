@@ -5,7 +5,7 @@ import { DeviceInteractionTypeProps } from "./interactions";
 
 export function DeviceInteractionTypeButton({
     interaction,
-    state = { },
+    state = {},
     sendAction,
     isDefault = false
 }: DeviceInteractionTypeProps<HMApi.T.DeviceInteraction.Type.Button>) {

@@ -27,7 +27,7 @@ export type StoreState = {
     },
     appearanceSettings: {
         showDesktopModeButton: boolean,
-        colorTheme: 'dark'|'light'|'system'
+        colorTheme: 'dark' | 'light' | 'system'
     },
     allowDesktopMode: boolean,
     routines: {
@@ -108,7 +108,7 @@ export type StoreAction = {
     routines: StoreState['routinesEnabled']
 }
 
-export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
+export const store = createStore<StoreState, StoreAction, {}, {}>((state = {
     token: localStorage.getItem('home_modules_token') || null,
     notifications: [],
     dialogs: [],
@@ -128,8 +128,8 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
     allowDesktopMode: !mobileMediaQuery.matches,
     routines: undefined,
     routinesEnabled: undefined,
-}, action)=> {
-    switch(action.type) {
+}, action) => {
+    switch (action.type) {
         case 'SET_TOKEN':
             return {
                 ...state,
@@ -149,7 +149,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
         case 'REMOVE_NOTIFICATION':
             return {
                 ...state,
-                notifications: state.notifications.filter(e=> e.id!==action.id)
+                notifications: state.notifications.filter(e => e.id !== action.id)
             };
         case 'ADD_DIALOG':
             return {
@@ -165,7 +165,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
         case 'REMOVE_DIALOG':
             return {
                 ...state,
-                dialogs: state.dialogs.filter(e=> e.id!==action.id)
+                dialogs: state.dialogs.filter(e => e.id !== action.id)
             };
         case 'ADD_FLYOUT':
             return {
@@ -181,7 +181,7 @@ export const store= createStore<StoreState, StoreAction, {}, {}>((state= {
         case 'REMOVE_FLYOUT':
             return {
                 ...state,
-                flyouts: state.flyouts.filter(e=> e.id!==action.id)
+                flyouts: state.flyouts.filter(e => e.id !== action.id)
             };
         case 'SET_CONTEXT_MENU':
             return {

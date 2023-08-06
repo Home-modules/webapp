@@ -14,7 +14,7 @@ export default function SettingsSidebar() {
             e.key === 'ArrowDown' ?
                 (e.target as HTMLElement).nextElementSibling :
             null;
-        
+
         if (element?.tagName === 'A') {
             (element as HTMLElement).focus();
             (element as HTMLElement).click();
@@ -23,12 +23,12 @@ export default function SettingsSidebar() {
 
     return (
         <ScrollView tagName='nav' className="settings-sidebar">
-            <NavLink 
+            <NavLink
                 to="/settings/account"
                 className={({ isActive }) => isActive ? 'active' : ''}
                 onKeyDown={onKeyDown}
             >
-                <FontAwesomeIcon icon={faUserCircle}/>
+                <FontAwesomeIcon icon={faUserCircle} />
                 <span>Account</span>
             </NavLink>
             <NavLink
@@ -36,7 +36,7 @@ export default function SettingsSidebar() {
                 className={({ isActive }) => isActive ? 'active' : ''}
                 onKeyDown={onKeyDown}
             >
-                <FontAwesomeIcon icon={faDoorClosed}/>
+                <FontAwesomeIcon icon={faDoorClosed} />
                 <span>Rooms</span>
             </NavLink>
             <NavLink
@@ -44,7 +44,7 @@ export default function SettingsSidebar() {
                 className={({ isActive }) => isActive ? 'active' : ''}
                 onKeyDown={onKeyDown}
             >
-                <FontAwesomeIcon icon={faPlug}/>
+                <FontAwesomeIcon icon={faPlug} />
                 <span>Devices</span>
             </NavLink>
             <NavLink
@@ -52,7 +52,7 @@ export default function SettingsSidebar() {
                 className={({ isActive }) => isActive ? 'active' : ''}
                 onKeyDown={onKeyDown}
             >
-                <FontAwesomeIcon icon={faPuzzlePiece}/>
+                <FontAwesomeIcon icon={faPuzzlePiece} />
                 <span>Plugins</span>
             </NavLink>
             <NavLink
@@ -60,7 +60,7 @@ export default function SettingsSidebar() {
                 className={({ isActive }) => isActive ? 'active' : ''}
                 onKeyDown={onKeyDown}
             >
-                <FontAwesomeIcon icon={faBrush}/>
+                <FontAwesomeIcon icon={faBrush} />
                 <span>Appearance</span>
             </NavLink>
             <NavLink
@@ -68,7 +68,7 @@ export default function SettingsSidebar() {
                 className={({ isActive }) => isActive ? 'active' : ''}
                 onKeyDown={onKeyDown}
             >
-                <FontAwesomeIcon icon={faCirclePlay}/>
+                <FontAwesomeIcon icon={faCirclePlay} />
                 <span>Automation</span>
             </NavLink>
 

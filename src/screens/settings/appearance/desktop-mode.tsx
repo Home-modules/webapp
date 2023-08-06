@@ -13,7 +13,7 @@ function AppearanceSettingsDesktopMode({ appearanceSettings }: Pick<StoreState, 
     const currentField = searchParams.get('field');
     const [wallpaperUrl, setWallpaperUrl] = React.useState(localStorage.getItem('home_modules_wallpaper'));
     const [wallpaperUrlDark, setWallpaperUrlDark] = React.useState(localStorage.getItem('home_modules_wallpaper_dark'));
-    
+
     return (
         <div className="fields sub">
             <Link to="..">
@@ -81,7 +81,7 @@ function AppearanceSettingsDesktopMode({ appearanceSettings }: Pick<StoreState, 
                 </section>
             )}
 
-            <div className="rest" onClick={()=>setSearchParams({})}/>
+            <div className="rest" onClick={() => setSearchParams({})} />
         </div>
     )
 }

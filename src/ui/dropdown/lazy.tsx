@@ -39,7 +39,7 @@ export function LazyDropDownSelect({ className, callback, lazyOptions, onChange,
                 if (!(options instanceof Array)) { // Don't show loading indicator if loaded before
                     setOptions(0);
                 }
-            }, ()=> {
+            }, () => {
                 setPulse(true); // The pulse rotates the loading indicator by 180 degrees as a haptic feedback.
                 setTimeout(() => {
                     setPulse(false);

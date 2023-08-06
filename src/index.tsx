@@ -9,7 +9,7 @@ import { store } from './store';
 import { Route, Routes, Navigate, HashRouter } from 'react-router-dom';
 import Notifications from './ui/notifications';
 import Dialogs from './ui/dialogs';
-import {Flyouts} from './ui/flyout';
+import { Flyouts } from './ui/flyout';
 import { CurrentContextMenu } from './ui/context-menu';
 
 import HomePage from './screens/home/home';
@@ -75,7 +75,7 @@ ReactDOM.render(
                             <Route path="devices" element={<SettingsPageRooms devicesScreen />}>
                                 <Route path=":roomId" element={<SettingsPageRoomsDevices />}>
                                     <Route path="new" element={<SettingsPageRoomsDevicesNewDevice />} >
-                                        <Route path=":deviceType" element={<SettingsPageRoomsDevicesEditDevice   />} />
+                                        <Route path=":deviceType" element={<SettingsPageRoomsDevicesEditDevice />} />
                                     </Route>
                                     <Route path="edit/:deviceId" element={<SettingsPageRoomsDevicesEditDevice />} />
                                 </Route>

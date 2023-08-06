@@ -73,7 +73,7 @@ function ChangeButton({ disabled, settings, onClick }: ChangeButtonProps) {
     return (
         <div className="button-container">
             <button
-                className={`button primary ${settings.color || ''} ${intermittent?'intermittent-spin':''}`}
+                className={`button primary ${settings.color || ''} ${intermittent ? 'intermittent-spin' : ''}`}
                 onClick={e => {
                     e.stopPropagation();
                     const res = onClick();

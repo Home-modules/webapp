@@ -28,18 +28,18 @@ export function DeviceInteractionTypeUIColorInput({
             <div className="colors">
                 {allowed.map((color, index) => (
                     <input key={index}
-                        type='radio' 
-                        name={id} 
-                        value={color} 
-                        checked={color===state.color} 
-                        onChange={(e)=> {
+                        type='radio'
+                        name={id}
+                        value={color}
+                        checked={color === state.color}
+                        onChange={(e) => {
                             if (e.target.checked) {
                                 promiseTimeout(sendAction({
                                     type: "setUIColorInputValue",
                                     color
                                 }), 100, (promise) => {
                                     setIntermittent(true);
-                                    promise.finally(()=> setIntermittent(false))
+                                    promise.finally(() => setIntermittent(false))
                                 });
                             }
                         }}

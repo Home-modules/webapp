@@ -9,27 +9,27 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 export type DialogProps = {
     title?: string,
     className?: string,
-    children: React.ReactNode|React.ReactNodeArray | ((props:{close: () => void})=>void),
-    onClose?: ()=> void,
+    children: React.ReactNode | React.ReactNodeArray | ((props: { close: () => void }) => void),
+    onClose?: () => void,
     cancellable?: boolean,
     showCloseButton?: boolean,
     id: string,
 }
 
-export function Dialog({title, className='', children: Children, onClose, id, cancellable=true, showCloseButton=false}: DialogProps) {
-    const ref= React.useRef<HTMLDivElement>(null);
+export function Dialog({ title, className = '', children: Children, onClose, id, cancellable = true, showCloseButton = false }: DialogProps) {
+    const ref = React.useRef<HTMLDivElement>(null);
     const [closing, setClosing] = React.useState(false);
 
     function close() {
         onClose?.();
         setClosing(true);
-        setTimeout(()=>{
-            store.dispatch({type: "REMOVE_DIALOG", id});
+        setTimeout(() => {
+            store.dispatch({ type: "REMOVE_DIALOG", id });
         }, 1000);
     }
 
     function handleClose(e: React.MouseEvent<HTMLDivElement>) {
-        if(e.target !== ref.current || !cancellable) return;
+        if (e.target !== ref.current || !cancellable) return;
         close();
     }
 
@@ -39,12 +39,12 @@ export function Dialog({title, className='', children: Children, onClose, id, ca
 
     return (
         <div
-            className={`dialog-container ${closing ? 'closing' : ''} ${className}`} 
+            className={`dialog-container ${closing ? 'closing' : ''} ${className}`}
             ref={ref}
             onClick={handleClose}
             tabIndex={-1}
             onKeyDown={e => {
-                if(e.key==='Escape') {
+                if (e.key === 'Escape') {
                     cancellable && close();
                 }
             }}
@@ -59,7 +59,7 @@ export function Dialog({title, className='', children: Children, onClose, id, ca
                     )}
                 </h1>}
                 <div className="content">
-                    {typeof Children==='function'? <Children close={close}/>: Children}
+                    {typeof Children === 'function' ? <Children close={close} /> : Children}
                 </div>
             </div>
         </div>
@@ -67,12 +67,12 @@ export function Dialog({title, className='', children: Children, onClose, id, ca
 }
 
 export default connect<Pick<StoreState, 'dialogs'>, {}, {}, StoreState>(
-    ({dialogs})=>({dialogs})
-)(function Dialogs({dialogs}: Pick<StoreState, 'dialogs'>) {
+    ({ dialogs }) => ({ dialogs })
+)(function Dialogs({ dialogs }: Pick<StoreState, 'dialogs'>) {
     return (
         <>
-            {dialogs.map(dialog=>
-                <Dialog key={dialog.id} {...dialog}/>
+            {dialogs.map(dialog =>
+                <Dialog key={dialog.id} {...dialog} />
             )}
         </>
     );
@@ -81,16 +81,16 @@ export default connect<Pick<StoreState, 'dialogs'>, {}, {}, StoreState>(
 export type RouteDialogProps = {
     title?: string,
     className?: string,
-    children: React.ReactNode|React.ReactNodeArray,
+    children: React.ReactNode | React.ReactNodeArray,
     cancellable?: boolean,
     parentRoute?: string,
 }
 
-export function RouteDialog({title, className='', children, cancellable= true, parentRoute='..'}: RouteDialogProps) {
+export function RouteDialog({ title, className = '', children, cancellable = true, parentRoute = '..' }: RouteDialogProps) {
     const ref = React.useRef<HTMLDivElement>(null);
     const [pastFocus, setPastFocus] = React.useState<Element | null>(null);
 
-    const navigate= useNavigate();
+    const navigate = useNavigate();
 
     function close() {
         navigate(parentRoute);
@@ -98,7 +98,7 @@ export function RouteDialog({title, className='', children, cancellable= true, p
     }
 
     function handleClose(e: React.MouseEvent<HTMLDivElement>) {
-        if(e.target !== ref.current || !cancellable) return;
+        if (e.target !== ref.current || !cancellable) return;
         close();
     }
 
@@ -109,7 +109,7 @@ export function RouteDialog({title, className='', children, cancellable= true, p
 
     return (
         <div
-            className={`dialog-container ${className}`} 
+            className={`dialog-container ${className}`}
             ref={ref}
             onClick={handleClose}
             tabIndex={-1}

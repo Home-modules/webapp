@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { StoreState, store } from "../../../store";
-import { Header, PageWithHeader } from "../../../ui/header";
+import { PageWithHeader } from "../../../ui/header";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { HMApi } from "../../../hub/api";
 import React from "react";
@@ -17,8 +17,14 @@ import { updateRoutines, updateRoutinesEnabled } from "./automation";
 import { TriggerName, editTrigger } from "./trigger";
 import ToggleButton from "../../../ui/fields/toggle-button";
 
-const SettingsPageAutomationEditRoutine = connect(({ routines, routinesEnabled }: StoreState) => ({ routines, routinesEnabled }))(
-    function SettingsPageAutomationEditRoutine({ routines, routinesEnabled }: Pick<StoreState, "routines"|"routinesEnabled">) {
+const SettingsPageAutomationEditRoutine = connect(
+    ({ routines, routinesEnabled }: StoreState) =>
+        ({ routines, routinesEnabled })
+)(
+    function SettingsPageAutomationEditRoutine(
+        { routines, routinesEnabled }:
+            Pick<StoreState, "routines" | "routinesEnabled">
+    ) {
 
         const id = useParams().routineId;
         if ((!routines) || (!routinesEnabled))
