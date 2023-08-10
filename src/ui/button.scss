@@ -7,7 +7,11 @@
     cursor: pointer;
     text-decoration: none;
     box-shadow: 0 0 0 0 var(--color-input-active-border);
-    transition: color 200ms, background-color 200ms, opacity 200ms, box-shadow 200ms;
+    transition: 
+        color var(--anim-duration), 
+        background-color var(--anim-duration), 
+        opacity var(--anim-duration), 
+        box-shadow var(--anim-duration);
 
     &:not(.primary):not(.attention) {
         color: var(--color-button-secondary-foreground);
@@ -154,7 +158,7 @@ a.icon {
     border: none;
     padding: 0;
     height: 2.5rem;
-    transition: color 200ms;
+    transition: color var(--anim-duration);
 
     svg {
         font-size: 2rem;

@@ -5,6 +5,8 @@
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
   --code-font-stack: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  --anim-duration: 200ms;
+  --view-anim-duration: 300ms;
 }
 
 body {
@@ -14,7 +16,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
   color: var(--color-foreground);
-  transition: color 200ms, background-color 200ms;
+  transition: color var(--anim-duration), background-color var(--anim-duration);
 }
 
 html, body, #root {
@@ -31,37 +33,6 @@ code {
 
 * {
   -webkit-tap-highlight-color: var(--color-tap-highlight);
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: var(--color-scrollbar-background);
-  border-radius: 6px;
-  
-  &:hover {
-    background-color: var(--color-scrollbar-hover-background);
-  }
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar-thumb);
-  border-radius: 6px;
-  
-  &:hover {
-    background-color: var(--color-scrollbar-hover-thumb);
-  }
-
-  &:active {
-    background-color: var(--color-scrollbar-active-thumb);
-  }
-}
-
-::-webkit-scrollbar-corner {
-  background-color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

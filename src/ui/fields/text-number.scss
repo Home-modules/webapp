@@ -17,7 +17,12 @@ label.text, label.number {
         box-shadow: 0 0 0 0 transparent, inset 0 0 0 100px var(--color-input-background);
         font-size: 16px;
         color: var(--color-foreground);
-        transition: box-shadow 200ms, border-color 200ms, padding-right 200ms, background-color 200ms, color 200ms;
+        transition: 
+            box-shadow var(--anim-duration), 
+            border-color var(--anim-duration), 
+            padding-right var(--anim-duration), 
+            background-color var(--anim-duration), 
+            color var(--anim-duration);
 
         -moz-appearance: textfield;
         &::-webkit-inner-spin-button {
@@ -29,7 +34,10 @@ label.text, label.number {
         &:-webkit-autofill:focus, 
         &:-webkit-autofill:active{
             transition: background-color 999999s, color 999999s, // Prevent Chrome from filling the input with the autofill color by setting a very long transition (999999s= 11.5 days)
-                box-shadow 200ms, border-color 200ms, background-color 200ms, color 200ms; // The usual transitions
+                box-shadow var(--anim-duration), // The usual transitions
+                border-color var(--anim-duration), 
+                background-color var(--anim-duration), 
+                color var(--anim-duration);
         }
 
         &:focus {
@@ -72,7 +80,7 @@ label.text, label.number {
         bottom: 11px;
         font-size: 0.9em;
         color: var(--color-foreground-subtext);
-        transition: right 200ms;
+        transition: right var(--anim-duration);
     }
 
     button.spin {
@@ -84,7 +92,7 @@ label.text, label.number {
         width: 12px;
         cursor: pointer;
         opacity: 0;
-        transition: opacity 200ms;
+        transition: opacity var(--anim-duration);
 
         &:disabled {
             cursor: initial;
@@ -104,7 +112,7 @@ label.text, label.number {
             transform: rotate(45deg);
             border: 1px var(--color-input-border);
             border-style: solid none none solid;
-            transition: border-color 200ms, top 200ms;
+            transition: border-color var(--anim-duration), top var(--anim-duration);
         }
 
         &:hover:not(:disabled)::after,

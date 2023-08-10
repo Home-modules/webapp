@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--color-login-background);
-    transition: background-color 200ms;
+    transition: background-color var(--anim-duration);
 
     form {
         background-color: var(--color-login-card-background);
@@ -16,7 +16,7 @@
         border-radius: 10px;
         box-shadow: 2px 2px 10px var(--color-login-card-shadow);
         padding: 15px;
-        transition: background-color 200ms, box-shadow 200ms;
+        transition: background-color var(--anim-duration), box-shadow var(--anim-duration);
 
         @media (forced-colors: active) {
             border: 1px solid;

@@ -15,21 +15,28 @@
         box-shadow: 4px 4px 10px var(--color-flyout-shadow);
         transform: translateY(0);
         filter: opacity(1);
-        transition: transform 200ms, filter 200ms, background-color 200ms, border 200ms, box-shadow 200ms;
+        transition: 
+            transform var(--anim-duration), 
+            filter var(--anim-duration), 
+            background-color var(--anim-duration), 
+            border var(--anim-duration), 
+            box-shadow var(--anim-duration);
 
         &.top {
-            animation: flyout-appear 200ms, flyout-appear-top 200ms;
+            animation: flyout-appear var(--anim-duration), 
+                       flyout-appear-top var(--anim-duration);
         }
 
         &.bottom {
-            animation: flyout-appear 200ms, flyout-appear-bottom 200ms;
+            animation: flyout-appear var(--anim-duration), 
+                       flyout-appear-bottom var(--anim-duration);
         }
 
         > svg.close {
             float: right;
             cursor: pointer;
             transform: scale(1);
-            transition: transform 200ms;
+            transition: transform var(--anim-duration);
 
             &:active {
                 transform: scale(1.25);
@@ -67,13 +74,21 @@
         .flyout {
             backdrop-filter: opacity(1) blur(10px);
             background-color: var(--color-flyout-background-with-blur);
-            transition: transform 200ms, filter 200ms, backdrop-filter 200ms, background-color 200ms, border 200ms, box-shadow 200ms;
+            transition: 
+                transform var(--anim-duration), 
+                filter var(--anim-duration), 
+                backdrop-filter var(--anim-duration), 
+                background-color var(--anim-duration), 
+                border var(--anim-duration), 
+                box-shadow var(--anim-duration);
 
             &.top {
-                animation: flyout-appear-with-blur 200ms, flyout-appear-top 200ms;
+                animation: flyout-appear-with-blur var(--anim-duration), 
+                           flyout-appear-top var(--anim-duration);
             }
             &.bottom {
-                animation: flyout-appear-with-blur 200ms, flyout-appear-bottom 200ms;
+                animation: flyout-appear-with-blur var(--anim-duration), 
+                           flyout-appear-bottom var(--anim-duration);
             }
         }
 

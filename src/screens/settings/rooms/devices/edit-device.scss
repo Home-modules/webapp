@@ -5,7 +5,7 @@ main#settings main#settings-rooms .edit-devices .edit-device {
     left: 0;
     right: 0;
     bottom: 0;
-    animation: inner-screen-appear 250ms;
+    animation: inner-screen-appear var(--view-anim-duration);
 
     > div:first-child > .content {
         padding: 20px;
@@ -33,7 +33,7 @@ main#settings main#settings-rooms .edit-devices .edit-device {
         bottom: 20px;
         box-shadow: 0 20px 20px 30px var(--color-background);
         border-radius: 7px;
-        transition: box-shadow 200ms;
+        transition: box-shadow var(--anim-duration);
 
         .save {
             padding: 12px;

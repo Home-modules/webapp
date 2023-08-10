@@ -5,7 +5,7 @@
     background-color: var(--color-navbar-background);
     height: 60px;
     flex-shrink: 0;
-    transition: background-color 200ms;
+    transition: background-color var(--anim-duration);
 
     a {
         flex-grow: 1;
@@ -41,7 +41,11 @@
             color: transparent;
             font-size: 18px;
             overflow: hidden;
-            transition: background-color 200ms, height 200ms, color 200ms, border-radius 200ms;
+            transition: 
+                background-color var(--anim-duration), 
+                height var(--anim-duration), 
+                color var(--anim-duration), 
+                border-radius var(--anim-duration);
         }
         &.active {
             padding-bottom: 4px;
@@ -72,7 +76,7 @@
             color: var(--color-navbar-icon);
             height: 30px !important;
             width: 30px !important;
-            transition: color 200ms;
+            transition: color var(--anim-duration);
         }
     }
     

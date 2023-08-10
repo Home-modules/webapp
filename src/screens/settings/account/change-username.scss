@@ -2,7 +2,7 @@
     .warning {
         color: var(--color-status-warning);
         margin: -0.5em 0 1em 0;
-        transition: color 200ms
+        transition: color var(--anim-duration)
     }
 
     .status {
@@ -15,7 +15,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            transition: transform 200ms, opacity 200ms;
+            transition: transform var(--anim-duration), opacity var(--anim-duration);
             opacity: 1;
             transform: translateY(0);
         }

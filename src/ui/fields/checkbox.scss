@@ -15,7 +15,7 @@ label.checkbox {
         vertical-align: middle;
         cursor: pointer;
         box-shadow: 0 0 0 0 var(--color-input-active-border);
-        transition: background-color 200ms, box-shadow 200ms;
+        transition: background-color var(--anim-duration), box-shadow var(--anim-duration);
         position: relative;
 
         &::after {
@@ -29,7 +29,7 @@ label.checkbox {
             border: 3px var(--color-checkbox-check);
             border-style: none solid solid none;
             transform: rotate(45deg);
-            transition: opacity 200ms;
+            transition: opacity var(--anim-duration);
         }
 
         &:checked {

@@ -24,7 +24,7 @@
         }
 
         span {
-            transition: color 200ms;
+            transition: color var(--anim-duration);
         }
     }
 
@@ -33,6 +33,10 @@
         background-color: var(--color-horizontal-select-active-background);
         border-radius: 8px;
         pointer-events: none;
-        transition: left 200ms, top 200ms, width 200ms, background-color 200ms;
+        transition: 
+            left var(--anim-duration), 
+            top var(--anim-duration), 
+            width var(--anim-duration), 
+            background-color var(--anim-duration);
     }
 }

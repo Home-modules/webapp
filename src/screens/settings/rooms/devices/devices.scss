@@ -6,11 +6,16 @@ main#settings main#settings-rooms .edit-devices {
     left: 66.5px;
     width: calc(100% - 66.5px);
     height: 100%;
-    animation: settings-devices-list-push 250ms;
+    animation: settings-devices-list-push var(--view-anim-duration);
     border-left: 1px solid var(--color-input-border);
     background-color: var(--color-background);
     z-index: +2;
-    transition: left 250ms, width 250ms, border-left-width 250ms, background-color 200ms, border-color 200ms;
+    transition: 
+        left var(--view-anim-duration), 
+        width var(--view-anim-duration), 
+        border-left-width var(--view-anim-duration), 
+        background-color var(--anim-duration), 
+        border-color var(--anim-duration);
 
     @media screen and (max-width: 600px) {
         left: -1px;
@@ -24,7 +29,7 @@ main#settings main#settings-rooms .edit-devices {
         left: 0;
         right: 0;
         bottom: 0;
-        transition: opacity 250ms, transform 250ms;
+        transition: opacity var(--view-anim-duration), transform var(--view-anim-duration);
         overflow: overlay;
 
         &.hidden {
@@ -40,8 +45,11 @@ main#settings main#settings-rooms .edit-devices {
         left: 0;
         right: 0;
         bottom: 0;
-        animation: inner-screen-appear 250ms;
-        transition: opacity 250ms, transform 250ms, background-color 200ms;
+        animation: inner-screen-appear var(--view-anim-duration);
+        transition: 
+            opacity var(--view-anim-duration), 
+            transform var(--view-anim-duration), 
+            background-color var(--anim-duration);
 
         &.hidden {
             opacity: 0;

@@ -77,7 +77,7 @@
                 background-color: var(--color-background);
                 box-shadow: 0px 0px 7px 7px var(--color-background);
                 border-radius: 5px;
-                transition: opacity 200ms;
+                transition: opacity var(--anim-duration);
             }
 
             &:hover .actions, .actions:focus-within {

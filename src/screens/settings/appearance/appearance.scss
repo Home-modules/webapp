@@ -5,7 +5,7 @@
     .fields-container {
         flex-basis: 0;
         flex-grow: 1;
-        transition: border 200ms;
+        transition: border var(--anim-duration);
         position: relative;
         overflow: hidden;
 
@@ -22,13 +22,16 @@
             top: 0; left: 0px; bottom: 0; width: 100%;
             box-sizing: border-box;
             border-right: 1px solid var(--color-navbar-border);
-            transition: border-color 200ms, left 300ms;
+            transition: border-color var(--anim-duration), left var(--view-anim-duration);
             z-index: 1;
 
             .setting {
                 border-right: 0px solid var(--color-navbar-active);
                 background-color: transparent;
-                transition: border-right-width 200ms, background-color 200ms, left 300ms;
+                transition: 
+                    border-right-width var(--anim-duration), 
+                    background-color var(--anim-duration), 
+                    left var(--view-anim-duration);
 
                 &:hover {
                     background-color: var(--color-background-hover-1);
@@ -53,7 +56,10 @@
                 border-bottom: 1px solid var(--color-navbar-border);
                 background-color: transparent;
                 left: 0;
-                transition: border-bottom 200ms, background-color 200ms, left 300ms;
+                transition: 
+                    border-bottom var(--anim-duration), 
+                    background-color var(--anim-duration), 
+                    left var(--view-anim-duration);
 
                 &:hover {
                     background-color: var(--color-background-hover-1);
@@ -74,7 +80,7 @@
             }
 
             &.sub {
-                animation: appearance-settings-submenu-open 300ms;
+                animation: appearance-settings-submenu-open var(--view-anim-duration);
                 @keyframes appearance-settings-submenu-open {
                     from { left: calc(100% - 1px); }
                     to { left: -1px; }
@@ -104,7 +110,7 @@
             color: var(--color-foreground-subtext);
             font-size: 1.1em;
             opacity: 0.5;
-            transition: color 200ms;
+            transition: color var(--anim-duration);
         }
     }
 

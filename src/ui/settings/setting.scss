@@ -5,7 +5,7 @@
     padding: 10px 0;
     gap: 10px;
     border-bottom: 1px solid var(--color-navbar-border);
-    transition: border-bottom 200ms;
+    transition: border-bottom var(--anim-duration);
 
     >.title {
         display: flex;
@@ -25,7 +25,7 @@
             .description {
                 color: var(--color-foreground-subtext);
                 font-size: 0.8em;
-                transition: color 200ms;
+                transition: color var(--anim-duration);
             }
         }
     }

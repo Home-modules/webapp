@@ -37,40 +37,41 @@ label.toggle-button {
     justify-content: space-between;
     cursor: pointer;
     --size: 16px;
+    --padding: 2px;
     
     .right {
         position: relative;
-        height: calc( var(--size) + 4px );
+        height: calc( var(--size) + 2 * var(--padding) );
     }
 
     input {
         cursor: pointer;
         appearance: none;
         margin: 0;
-        height: calc( var(--size) + 4px );
-        width: calc( var(--size) * 2 + 6px );
-        border-radius: calc( var(--size) / 2 + 2px );
+        height: calc( var(--size) + 2 * var(--padding) );
+        width: calc( var(--size) * 2 + 3 * var(--padding) );
+        border-radius: calc( var(--size) / 2 + var(--padding) );
         background-color: var(--color-checkbox-background);
         position: relative;
-        transition: background-color 200ms, opacity 200ms;
+        transition: background-color var(--anim-duration), opacity var(--anim-duration);
 
         &::after {
             content: "";
             position: absolute;
-            left: 2px;
-            top: 2px;
+            left: var(--padding);
+            top: var(--padding);
             width: var(--size);
             height: var(--size);
             border-radius: calc(var(--size) / 2);
             background-color: var(--color-checkbox-check);
-            transition: left 200ms;
+            transition: left var(--anim-duration);
         }
 
         &:checked {
             background-color: var(--color-checkbox-background-checked);
 
             &::after {
-                left: calc( var(--size) + 4px);
+                left: calc( var(--size) + 2 * var(--padding));
             }
         }
 
@@ -92,7 +93,7 @@ label.toggle-button {
         border: 3px solid var(--color-checkbox-check);
         border-top-color: transparent;
         animation: fa-spin 1s linear infinite;
-        transition: left 200ms;
+        transition: left var(--anim-duration);
     }
 
     input:checked + .intermittent {
@@ -120,7 +121,10 @@ label.toggle-button {
             height: 30px;
             margin: 0;
             border: 0px solid var(--color-checkbox-background-checked);
-            transition: border 200ms, background-color 200ms, opacity 200ms;
+            transition: 
+                border var(--anim-duration), 
+                background-color var(--anim-duration), 
+                opacity var(--anim-duration);
             background-color: white;
 
             &:first-child {
@@ -163,7 +167,10 @@ input[type=submit] {
     color: var(--color-button-primary-foreground);
     font-size: 19px;
     cursor: pointer;
-    transition: opacity 200ms, background-color 200ms, color 200ms;
+    transition: 
+        opacity var(--anim-duration), 
+        background-color var(--anim-duration), 
+        color var(--anim-duration);
 
     &:hover {
         background-color: var(--color-button-primary-hover-background);

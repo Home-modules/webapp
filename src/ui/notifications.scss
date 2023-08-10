@@ -10,7 +10,10 @@
 
     .notification {
         margin-top: 10px;
-        transition: height 200ms , margin 200ms, transform 200ms;
+        transition: 
+            height var(--anim-duration),
+            margin var(--anim-duration), 
+            transform var(--anim-duration);
         transform: translate(0, 0);
         height: var(--height);
         position: relative;
@@ -39,7 +42,7 @@
                 background: none;
                 padding: 5px;
                 color: inherit;
-                transition: transform 200ms, color 200ms;
+                transition: transform var(--anim-duration), color var(--anim-duration);
     
                 &:hover {
                     color: var(--color-notification-close-button-hover);
@@ -68,7 +71,7 @@
                 filter: opacity(0);
             }
 
-            animation: notification-disappear 200ms 2000ms forwards;
+            animation: notification-disappear var(--anim-duration) 2000ms forwards;
         }
 
         &.closing {
@@ -78,7 +81,7 @@
         }
 
         &.new {
-            animation: notification-appear 200ms;
+            animation: notification-appear var(--anim-duration);
         }
 
         @supports (backdrop-filter: blur(10px)) {

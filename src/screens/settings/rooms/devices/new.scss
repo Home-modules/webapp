@@ -30,10 +30,12 @@ main#settings main#settings-rooms .edit-devices .new-device {
                 right: 0;
                 bottom: 0;
                 z-index: 1;
-                animation: new-device-super-types-appear 250ms;
+                animation: new-device-super-types-appear var(--view-anim-duration);
                 opacity: 1;
                 transform: scale(1);
-                transition: opacity 250ms, transform 250ms;
+                transition: 
+                    opacity var(--view-anim-duration), 
+                    transform var(--view-anim-duration);
 
                 @keyframes new-device-super-types-appear {
                     from {
@@ -61,7 +63,7 @@ main#settings main#settings-rooms .edit-devices .new-device {
                 .close {
                     font-size: 2em;
                     color: var(--color-foreground-subtext);
-                    transition: color 200ms;
+                    transition: color var(--anim-duration);
                     cursor: pointer;
                     padding: 10px;
                     width: 43px;
@@ -100,13 +102,16 @@ main#settings main#settings-rooms .edit-devices .new-device {
                 align-content: center;
                 opacity: 1;
                 filter: blur(0px);
-                transition: opacity 250ms, filter 250ms;
+                transition: opacity var(--view-anim-duration), filter var(--view-anim-duration);
 
                 &:not(:last-child) {
                     padding-bottom: 15px;
                     border-bottom: 1px solid var(--color-navbar-border);
                     margin-bottom: 15px;
-                    transition: border-color 200ms, opacity 250ms, filter 250ms;
+                    transition: 
+                        border-color var(--anim-duration), 
+                        opacity var(--view-anim-duration), 
+                        filter var(--view-anim-duration);
                 }
             }
 
@@ -131,7 +136,7 @@ main#settings main#settings-rooms .edit-devices .new-device {
                 .sub-name {
                     font-size: 1rem;
                     color: var(--color-foreground-subtext);
-                    transition: color 200ms;
+                    transition: color var(--anim-duration);
                 }
 
                 * {
@@ -140,8 +145,8 @@ main#settings main#settings-rooms .edit-devices .new-device {
             }
         }
 
-        transition: opacity 250ms,
-        transform 250ms;
+        transition: opacity var(--view-anim-duration),
+        transform var(--view-anim-duration);
 
         &.hidden {
             opacity: 0;
@@ -156,8 +161,8 @@ main#settings main#settings-rooms .edit-devices .new-device {
         left: 0;
         right: 0;
         bottom: 0;
-        animation: inner-screen-appear 250ms;
-        transition: opacity 250ms, transform 250ms;
+        animation: inner-screen-appear var(--view-anim-duration);
+        transition: opacity var(--view-anim-duration), transform var(--view-anim-duration);
 
         &.hidden {
             opacity: 0;

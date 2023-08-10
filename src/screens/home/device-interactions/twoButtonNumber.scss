@@ -54,7 +54,7 @@
                     border: 3px solid var(--color-button-intermittent-2);
                     border-top-color: transparent;
                     animation: spin-centered 1s linear infinite;
-                    transition: opacity 200ms;
+                    transition: opacity var(--anim-duration);
 
                     @keyframes spin-centered {
                         from { transform: translate(-50%, -50%) rotate(0deg); }

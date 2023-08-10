@@ -15,7 +15,7 @@ div.radio-group {
             vertical-align: middle;
             position: relative;
             box-shadow: 0 0 0 0 var(--color-input-active-border);
-            transition: box-shadow 200ms;
+            transition: box-shadow var(--anim-duration);
             cursor: pointer;
 
             &::after {
@@ -28,7 +28,12 @@ div.radio-group {
                 opacity: 0;
                 border-radius: 100%;
                 background-color: var(--color-checkbox-background-checked);
-                transition: opacity 200ms, top 200ms, left 200ms, height 200ms, width 200ms;
+                transition: 
+                    opacity var(--anim-duration), 
+                    top var(--anim-duration), 
+                    left var(--anim-duration), 
+                    height var(--anim-duration), 
+                    width var(--anim-duration);
             }
 
             &:checked::after {

@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     animation: dialog-fade-in-background 400ms;
-    transition: background-color 200ms;
+    transition: background-color var(--view-anim-duration);
 
     .dialog {
         background-color: var(--color-dialog-background);
@@ -20,8 +20,11 @@
         max-width: calc(100vw - 40px);
         max-height: calc(100vh - 80px);
         filter: opacity(1);
-        animation: dialog-fade-in 200ms, dialog-grow 200ms;
-        transition: transform 200ms, filter 200ms, background-color 200ms;
+        animation: dialog-fade-in var(--view-anim-duration), dialog-grow var(--view-anim-duration);
+        transition: 
+            transform var(--view-anim-duration), 
+            filter var(--view-anim-duration), 
+            background-color var(--view-anim-duration);
 
         h1 {
             font-size: 25px;
@@ -54,8 +57,14 @@
         .dialog {
             backdrop-filter: opacity(1) blur(10px);
             background-color: var(--color-dialog-background-with-blur);
-            animation: dialog-fade-in-with-blur 200ms, dialog-grow 200ms;
-            transition: transform 200ms, filter 200ms, backdrop-filter 200ms, background-color 200ms;
+            animation: 
+                dialog-fade-in-with-blur var(--view-anim-duration), 
+                dialog-grow var(--view-anim-duration);
+            transition: 
+                transform var(--view-anim-duration), 
+                filter var(--view-anim-duration), 
+                backdrop-filter var(--view-anim-duration), 
+                background-color var(--view-anim-duration);
         }
 
         &.closing {
@@ -97,7 +106,7 @@
     from {
         background-color: transparent;
     }
-    50% { // To avoid a flash on firefox, we extend the animation so it remains in the final state for 200ms before the animation is 'finished'
+    50% { // To avoid a flash on firefox, we extend the animation so it remains in the final state for var(--view-anim-duration) before the animation is 'finished'
         background-color: var(--color-dialog-background-overlay);
     }
 }

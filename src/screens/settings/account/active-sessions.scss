@@ -18,11 +18,11 @@
                 overflow: auto;
                 background-color: var(--color-button-secondary-background);
                 border-radius: 10px;
-                transition: background-color 200ms;
+                transition: background-color var(--anim-duration);
 
                 .item {
                     padding: 10px;
-                    transition: background-color 200ms, height 200ms;
+                    transition: background-color var(--anim-duration), height var(--anim-duration);
                     cursor: pointer;
                     overflow: hidden; // Backwards compatibility
                     overflow: clip; // Prevents scrolling, just in case
@@ -49,7 +49,7 @@
                         margin: 5px 0 0;
                         color: var(--color-foreground-subtext);
                         font-size: 0.8em;
-                        transition: color 200ms;
+                        transition: color var(--anim-duration);
 
                         .terminate {
                             margin-top: 10px;
@@ -58,7 +58,7 @@
                         }
 
                         div {
-                            transition: opacity 200ms;
+                            transition: opacity var(--anim-duration);
                         }
                     }
 

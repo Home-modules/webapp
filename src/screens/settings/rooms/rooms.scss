@@ -5,14 +5,14 @@ main#settings main#settings-rooms {
     
     .rooms-list > div:first-child > .content,
     .devices-list > div:first-child > .content {
-        transition: padding 250ms;
+        transition: padding var(--view-anim-duration);
 
         .item {
             position: relative;
             display: flex;
             margin-bottom: 10px;
             gap: 10px;
-            transition: opacity 200ms, gap 250ms;
+            transition: opacity var(--anim-duration), gap var(--view-anim-duration);
 
             .drag-handle {
                 position: absolute;
@@ -22,7 +22,7 @@ main#settings main#settings-rooms {
                 cursor: grab;
                 z-index: 1;
                 fill: var(--color-foreground-subtext);
-                transition: opacity 250ms, fill 200ms;
+                transition: opacity var(--view-anim-duration), fill var(--anim-duration);
 
                 &:active {
                     cursor: grabbing;
@@ -46,7 +46,12 @@ main#settings main#settings-rooms {
                 text-decoration: none;
                 color: var(--color-foreground);
 
-                transition: background-color 200ms, box-shadow 200ms, gap 250ms, padding-right 250ms, color 200ms;
+                transition: 
+                    background-color var(--anim-duration), 
+                    box-shadow var(--anim-duration), 
+                    gap var(--view-anim-duration), 
+                    padding-right var(--view-anim-duration), 
+                    color var(--anim-duration);
 
                 &:hover {
                     background-color: var(--color-button-secondary-hover-background);
@@ -89,7 +94,7 @@ main#settings main#settings-rooms {
 
                     svg {
                         margin-right: 10px;
-                        transition: opacity 200ms;
+                        transition: opacity var(--anim-duration);
                     }
 
                     label.checkbox {
@@ -99,7 +104,7 @@ main#settings main#settings-rooms {
                         top: 2.5px; left: 1px;
                         opacity: 0;
                         pointer-events: none;
-                        transition: opacity 200ms;
+                        transition: opacity var(--anim-duration);
                         height: 20px;
                         width: 20px;
                         
@@ -122,7 +127,9 @@ main#settings main#settings-rooms {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     direction: rtl;
-                    transition: flex-shrink 250ms, color 200ms;
+                    transition: 
+                        flex-shrink var(--view-anim-duration), 
+                        color var(--anim-duration);
                 }
 
             }
@@ -142,7 +149,10 @@ main#settings main#settings-rooms {
                 width: 44px;
                 padding: 0;
                 box-shadow: none !important;
-                transition: width 250ms, opacity 250ms, color 200ms;
+                transition: 
+                    width var(--view-anim-duration), 
+                    opacity var(--view-anim-duration), 
+                    color var(--anim-duration);
 
                 > div {
                     position: absolute;
@@ -161,7 +171,7 @@ main#settings main#settings-rooms {
                     width: 44px;
                     box-sizing: border-box;
                     background-color: var(--color-button-secondary-background);
-                    transition: background-color 200ms;
+                    transition: background-color var(--anim-duration);
                     border-radius: inherit;
                     position: absolute;
                     top: 0;
@@ -185,7 +195,10 @@ main#settings main#settings-rooms {
                     box-shadow: 0 0 10px 4px transparent;
                     white-space: nowrap;
                     transform: translateX(calc(100% - 16px));
-                    transition: background-color 200ms, transform 300ms, box-shadow 300ms;
+                    transition: 
+                        background-color var(--anim-duration), 
+                        transform 300ms, 
+                        box-shadow 300ms;
                 }
 
                 &:hover, &:focus-visible { 
@@ -222,7 +235,13 @@ main#settings main#settings-rooms {
             cursor: pointer;
             box-sizing: border-box;
             width: 100%;
-            transition: color 200ms, border-color 200ms, opacity 250ms, margin-top 250ms, width 250ms, background-color 200ms;
+            transition: 
+                color var(--anim-duration), 
+                border-color var(--anim-duration), 
+                opacity var(--view-anim-duration), 
+                margin-top var(--view-anim-duration), 
+                width var(--view-anim-duration), 
+                background-color var(--anim-duration);
 
             &:hover {
                 border-color: var(--color-foreground-subtext);
@@ -252,11 +271,16 @@ main#settings main#settings-rooms {
         left: 0;
         height: 100%;
         width: 100% !important;
-        transition: opacity 250ms, transform 250ms, width 250ms;
+        transition: 
+            opacity var(--view-anim-duration), 
+            transform var(--view-anim-duration), 
+            width var(--view-anim-duration);
         overflow: hidden !important;
 
         header {
-            transition: opacity 250ms, background-color 200ms, border-color 200ms;
+            transition: opacity var(--view-anim-duration), 
+                background-color var(--anim-duration), 
+                border-color var(--anim-duration);
 
             h1 {
                 white-space: nowrap;
@@ -334,7 +358,10 @@ main#settings main#settings-rooms {
         > .track-vertical,
         > .thumb-horizontal,
         > .thumb-vertical {
-            transition: width 200ms, height 200ms, margin 200ms;
+            transition: 
+                width var(--anim-duration), 
+                height var(--anim-duration), 
+                margin var(--anim-duration);
         }
     }
 
@@ -344,8 +371,8 @@ main#settings main#settings-rooms {
         left: 0;
         right: 0;
         bottom: 0;
-        animation: inner-screen-appear 250ms;
-        transition: opacity 250ms, transform 250ms;
+        animation: inner-screen-appear var(--view-anim-duration);
+        transition: opacity var(--view-anim-duration), transform var(--view-anim-duration);
 
         &.hidden {
             opacity: 0;

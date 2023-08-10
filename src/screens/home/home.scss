@@ -3,7 +3,7 @@
     flex-direction: column;
     background-size: cover;
     background-position: center;
-    transition: background 200ms;
+    transition: background var(--anim-duration);
 
     .devices {
         flex-grow: 1;

@@ -11,7 +11,7 @@
         height: var(--scrollbar-width) !important;
         border-radius: 999em;
         background-color: var(--color-scrollbar-background);
-        transition: background-color 200ms;
+        transition: background-color var(--anim-duration);
 
         &:hover {
             background-color: var(--color-scrollbar-hover-background);
@@ -20,7 +20,7 @@
         > .thumb-horizontal {
             border-radius: 999em;
             background-color: var(--color-scrollbar-thumb);
-            transition: background-color 200ms;
+            transition: background-color var(--anim-duration);
 
             &:hover {
                 background-color: var(--color-scrollbar-hover-thumb);
@@ -39,7 +39,7 @@
         width: var(--scrollbar-width) !important;
         border-radius: 999em;
         background-color: var(--color-scrollbar-background);
-        transition: background-color 200ms;
+        transition: background-color var(--anim-duration);
 
         &:hover {
             background-color: var(--color-scrollbar-hover-background);
@@ -48,7 +48,7 @@
         > .thumb-vertical {
             border-radius: 999em;
             background-color: var(--color-scrollbar-thumb);
-            transition: background-color 200ms;
+            transition: background-color var(--anim-duration);
 
             &:hover {
                 background-color: var(--color-scrollbar-hover-thumb);
@@ -59,4 +59,38 @@
             }
         }
     }
+}
+
+
+// Browser scrollbars
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-scrollbar-background);
+  border-radius: 6px;
+  
+  &:hover {
+    background-color: var(--color-scrollbar-hover-background);
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-scrollbar-thumb);
+  border-radius: 6px;
+  
+  &:hover {
+    background-color: var(--color-scrollbar-hover-thumb);
+  }
+
+  &:active {
+    background-color: var(--color-scrollbar-active-thumb);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }

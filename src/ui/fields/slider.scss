@@ -88,7 +88,9 @@ label.slider {
                 position: relative;
                 top: -6px;
                 box-shadow: 0 0 0 0 var(--color-input-active-border);
-                transition: background-color 200ms, box-shadow 200ms;
+                transition: 
+                    background-color var(--anim-duration), 
+                    box-shadow var(--anim-duration);
             }
 
             &::-webkit-slider-runnable-track {
@@ -99,7 +101,9 @@ label.slider {
                 background-color: var(--track-background);
                 cursor: pointer;
                 box-shadow: 0 0 0 0 var(--color-input-active-border);
-                transition: background-color 200ms, box-shadow 200ms;
+                transition: 
+                    background-color var(--anim-duration), 
+                    box-shadow var(--anim-duration);
             }
 
             &::-moz-range-thumb {
@@ -113,7 +117,9 @@ label.slider {
                 position: relative;
                 top: -6px;
                 box-shadow: 0 0 0 0 var(--color-input-active-border);
-                transition: background-color 200ms, box-shadow 200ms;
+                transition: 
+                    background-color var(--anim-duration), 
+                    box-shadow var(--anim-duration);
             }
 
             &::-moz-range-track {
@@ -124,7 +130,9 @@ label.slider {
                 background-color: var(--track-background);
                 cursor: pointer;
                 box-shadow: 0 0 0 0 var(--color-input-active-border);
-                transition: background-color 200ms, box-shadow 200ms;
+                transition: 
+                    background-color var(--anim-duration), 
+                    box-shadow var(--anim-duration);
             }
 
             &:hover {
