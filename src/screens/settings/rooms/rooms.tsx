@@ -2,8 +2,7 @@ import './rooms.scss';
 import { faBath, faBed, faCouch, faDoorClosed, faPlus, faUtensils, IconDefinition, faPlug, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { ReactSortable, Store } from "react-sortablejs";
-import Sortable from 'sortablejs';
+import { ReactSortable } from "react-sortablejs";
 import { HMApi } from '../../../hub/api';
 import { handleError, sendRequest } from '../../../hub/request';
 import { store, StoreState } from '../../../store';
@@ -39,7 +38,7 @@ function SettingsPageRooms({ rooms, devicesScreen = false }: Pick<StoreState, 'r
         return <Navigate to={searchParams.get('redirect')!} replace />;
     }
 
-    function onSort(evt: Sortable.SortableEvent, sortable: Sortable | null, store: Store) {
+    function onSort() {
         if (rooms) {
             sendRequest({
                 type: 'rooms.changeRoomOrder',

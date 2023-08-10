@@ -76,6 +76,7 @@ main#automation {
                 display: flex;
                 align-items: stretch;
                 padding: 0 10px 0 0;
+                position: relative;
 
                 a {
                     text-decoration: none;
@@ -86,6 +87,25 @@ main#automation {
 
                 &:not(:hover) input[type=checkbox] {
                     --color-checkbox-background: var(--color-button-secondary-hover-background);
+                }
+
+                .drag-handle {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 100%;
+                    cursor: grab;
+                    z-index: 1;
+                    fill: var(--color-foreground-subtext);
+                    transition: fill var(--anim-duration);
+    
+                    &:active {
+                        cursor: grabbing;
+                    }
+                }
+
+                &.ghost {
+                    opacity: 0.5;
                 }
             }
         }
