@@ -71,7 +71,8 @@
                 filter: opacity(0);
             }
 
-            animation: notification-disappear var(--anim-duration) 2000ms forwards;
+            animation: notification-disappear 300ms 2000ms forwards,
+                       notification-disappear-2 300ms 2000ms forwards;
         }
 
         &.closing {
@@ -117,11 +118,25 @@
 @keyframes notification-disappear {
     from {
         height: var(--height);
-        margin-top: 10px;
+    }
+    70% {
+        height: 0;
+        pointer-events: none;
     }
     to {
         height: 0;
-        margin-top: 0;
         pointer-events: none;
+    }
+}
+@keyframes notification-disappear-2 {
+    from {
+        margin-top: 10px;
+    }
+    70% {
+        margin-top: -5px;
+        transition-timing-function: ease-out;
+    }
+    to {
+        margin-top: 0;
     }
 }
