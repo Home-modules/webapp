@@ -54,6 +54,11 @@ header:not(#root > header) {
                     margin: 0;
                 }
             }
+
+            .buttons {
+                display: flex;
+                align-items: center;
+            }
         }
         &.search {
             .fa-magnifying-glass {

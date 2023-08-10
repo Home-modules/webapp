@@ -9,13 +9,14 @@ import { SettingItemToggle } from "../../../ui/settings/toggle";
 import { SettingItemTextSelect } from "../../../ui/settings/text-select";
 import ScrollView from "../../../ui/scrollbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { handleError, sendRequest } from "../../../hub/request";
 import Button, { IntermittentButton } from "../../../ui/button";
 import { ActionName, editAction } from "./action";
 import { updateRoutines, updateRoutinesEnabled } from "./automation";
 import { TriggerName, editTrigger } from "./trigger";
 import ToggleButton from "../../../ui/fields/toggle-button";
+import { addConfirmationFlyout } from "../../../ui/flyout";
 
 const SettingsPageAutomationEditRoutine = connect(
     ({ routines, routinesEnabled }: StoreState) =>
@@ -126,22 +127,46 @@ function EditRoutine({ routine, isNew, routines, enabled=false }: EditRoutinePro
             subtitle={enabled ? "Disable the routine to edit" : undefined}
             backLink=".."
             className="edit-routine"
-            buttons={isNew ? [] : [{
-                content: (
-                    <ToggleButton
-                        label=""
-                        value={enabled}
-                        onChange={async enabled => {
-                            await sendRequest({
-                                type: "automation.setRoutinesEnabled",
-                                routines: [routine.id],
-                                enabled
-                            });
-                            await updateRoutinesEnabled();
-                        }}
-                    />
-                )
-            }]}
+            buttons={isNew ? [] : [
+                {
+                    label: "Delete routine",
+                    icon: faTrash,
+                    attention: true,
+                    onClick: e => addConfirmationFlyout({
+                        element: e.target,
+                        text: "Are you sure you want to delete this routine?",
+                        confirmText: "Delete",
+                        attention: true,
+                        async: true,
+                        onConfirm: () => sendRequest({
+                            'type': 'automation.removeRoutine',
+                            id: routine.id
+                        }).then(res => {
+                            if (res.type === 'ok') {
+                                navigate('/settings/automation')
+                            }
+                            else handleError(res);
+                            updateRoutines();
+                        }, handleError)
+                    })
+                },
+                {
+                    content: (
+                        <ToggleButton
+                            label=""
+                            value={enabled}
+                            onChange={async enabled => {
+                                await sendRequest({
+                                    type: "automation.setRoutinesEnabled",
+                                    routines: [routine.id],
+                                    enabled
+                                });
+                                await updateRoutinesEnabled();
+                            }}
+                        />
+                    )
+                }
+            ]}
         >
 
             <input
