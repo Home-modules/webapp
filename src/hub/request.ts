@@ -19,7 +19,7 @@ const ax = axios.create({
 
 const websocketProtocol = { 'http:': 'ws:', 'https:': 'wss:' }[window.location.protocol];
 export const ws = new ReconnectingWebSocket(
-    `${websocketProtocol}${window.location.hostname}${port}`
+    process.env.NODE_ENV === "production" ? "/" : `${websocketProtocol}${window.location.hostname}${port}`
 );
 ws.onerror = (e) => {
     console.error(e);
