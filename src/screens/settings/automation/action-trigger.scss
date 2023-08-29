@@ -61,7 +61,7 @@
         }
     }
 
-    .select-action {
+    .select-action, .select-event {
         h3 {
             margin: 0 0 10px
         }
@@ -69,6 +69,10 @@
         button {
             display: block;
             width: 100%;
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
         }
     }
 }

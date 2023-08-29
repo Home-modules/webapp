@@ -31,6 +31,11 @@ export type FieldsProps = {
     } | {
         for: "globalAction",
         id: string
+    } | {
+        for: "deviceAction",
+        controller: string,
+        deviceType: string,
+        action: string
     }
 }
 

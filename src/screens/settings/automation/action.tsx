@@ -144,23 +144,67 @@ function EditAction_({ action, onSubmit, routines }: EditActionProps & Pick<Stor
                             {(obj.room && obj.device) && <>
                                 <h3>Available actions</h3>
                                 <ProvideDeviceType room={obj.room} device={obj.device}>
-                                    {(deviceType) => deviceType.hasMainToggle ? (
-                                        <Button
-                                            onClick={() => setObj(obj => ({
-                                                ...obj as HMApi.T.Automation.Action.DeviceAction,
-                                                type: "toggleDeviceMainToggle"
-                                            }))}
-                                        >
-                                            Turn on/off
-                                        </Button>
-                                    ) : <></>}
+                                    {(deviceType) => <>
+                                        {deviceType.hasMainToggle ? (
+                                            <Button
+                                                onClick={() => setObj(obj => ({
+                                                    ...obj as HMApi.T.Automation.Action.DeviceAction,
+                                                    type: "toggleDeviceMainToggle"
+                                                }))}
+                                            >
+                                                Turn on/off
+                                            </Button>
+                                        ) : <></>}
+                                        {deviceType.actions.map(action => (
+                                            <Button onClick={()=> setObj(obj=> ({...obj, action: action.id, options: getSettingsFieldsDefaultValues(getFlatFields(action.fields))}))}>
+                                                {action.name}
+                                            </Button>
+                                        ))}
+                                    </>}
                                 </ProvideDeviceType>
                             </>}
                         </div>
                     </div>
                 )
             }
-            else return <></>
+            else return (
+                <div className="device-action">
+                    <ProvideDeviceType room={obj.room} device={obj.device}>
+                        {(deviceType, roomControllerType) => <>
+                            <h2>
+                                <IconButton icon={faArrowLeft} onClick={() => setObj(obj=> ({...obj, action: ""}))} />
+                                <span>Device actions</span>
+                            </h2>
+                            <div className="settings">
+                                <Fields
+                                    context={{ for: "deviceAction", controller: roomControllerType, deviceType: deviceType.id, action: obj.action }}
+                                    fields={deviceType.actions.find(a=>a.id === obj.action)!.fields}
+                                    fieldValues={obj.options}
+                                    setFieldValues={v => setObj(o => ({ ...o, options: v }))}
+                                    fieldErrors={fieldErrors}
+                                    setFieldErrors={setFieldErrors}
+                                />
+                            </div>
+                            <Button primary className="save"
+                                onClick={() => {
+                                    const [hasError, errors] = getFieldsErrors(getFlatFields(deviceType.actions.find(a=>a.id === obj.action)!.fields), obj.options);
+                                    setFieldErrors({});
+                                    if (hasError) {
+                                        window.setTimeout(() => { // Combined with the code two lines above here, this causes the existing errors to be removed and set again, causing the shake animations to repeat.
+                                            setFieldErrors(errors);
+                                        });
+                                        return Promise.reject();
+                                    }
+
+                                    onSubmit(obj);
+                                }}
+                            >
+                                Save
+                            </Button>
+                        </>}
+                    </ProvideDeviceType>
+                </div>
+            )
         }
 
         case "toggleDeviceMainToggle": {
@@ -308,22 +352,24 @@ export function DeviceDropdown({ room, device, onChange }: DeviceDropdownProps) 
 export type ProvideDeviceTypeProps = {
     room: string,
     device: string,
-    children: (type: HMApi.T.DeviceType) => JSX.Element;
+    children: (type: HMApi.T.DeviceType, roomControllerType: string) => JSX.Element;
 }
 
 export function ProvideDeviceType({ room, device, children }: ProvideDeviceTypeProps) {
 
-    const [deviceType, setDeviceType] = React.useState<HMApi.T.DeviceType | undefined>();
+    const [data, setData] = React.useState<HMApi.Response.DeviceType | undefined>();
 
     useEffect(() => {
         sendRequest({
             type: "devices.getDeviceType",
             deviceId: device,
             roomId: room
-        }).then(res => setDeviceType(res.data.type), handleError);
+        }).then(res => {
+            setData(res.data);
+        }, handleError);
     }, [room, device])
 
-    return deviceType ? children(deviceType) : <></>;
+    return data ? children(data.type, data.roomController) : <></>;
 }
 
 export function editAction(

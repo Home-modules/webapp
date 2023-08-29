@@ -11,7 +11,7 @@ import getFlatFields from "../../../utils/flat-fields";
 import { LazyDropDownSelect } from "../../../ui/dropdown/lazy";
 import { refreshRooms } from "../rooms/rooms";
 import { SettingItemText } from "../../../ui/settings/text";
-import { DeviceDropdown, RoomAndDeviceName, RoomName } from "./action";
+import { DeviceDropdown, ProvideDeviceType, RoomAndDeviceName, RoomName } from "./action";
 
 // I copy&pasted action.tsx,
 // Replaced all instances of "Action" with "Trigger",
@@ -148,18 +148,19 @@ function EditTrigger({ trigger, onSubmit }: EditTriggerProps) {
                         <div className="select-event">
                             {(obj.room && obj.device) && <>
                                 <h3>Available events</h3>
-                                {/* <ProvideDeviceType room={obj.room} device={obj.device}>
-                                    {(deviceType)=> deviceType.hasMainToggle ? (
-                                        <Button
-                                            onClick={() => setObj(obj => ({
-                                                ...obj as HMApi.T.Automation.Trigger.DeviceEvent,
-                                                type: "toggleDeviceMainToggle"
-                                            }))}
-                                        >
-                                            Turn on/off
-                                        </Button>
-                                    ): <></>}
-                                </ProvideDeviceType> */}
+                                <ProvideDeviceType room={obj.room} device={obj.device}>
+                                    {(deviceType) => <>
+                                        {deviceType.events.map(event => (
+                                            <Button onClick={() => {
+                                                const newObj = { ...obj, event: event.id };
+                                                setObj(newObj); // is it necessary?
+                                                onSubmit(newObj);
+                                            }}>
+                                                {event.name}
+                                            </Button>
+                                        ))}
+                                    </>}
+                                </ProvideDeviceType>
                             </>}
                         </div>
                     </div>
