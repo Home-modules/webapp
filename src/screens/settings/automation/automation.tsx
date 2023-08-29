@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ReactSortable } from "react-sortablejs";
 import { HMApi } from "../../../hub/api";
+import SearchKeywordHighlight from "../../../ui/search-highlight";
 
 export function updateRoutines() {
     return sendRequest({
@@ -56,7 +57,6 @@ const SettingsPageAutomation = connect(
             Pick<StoreState, 'routines' | 'routinesEnabled'>
     ) {
 
-
         function onSort() {
             if (routines) {
                 sendRequest({
@@ -71,7 +71,8 @@ const SettingsPageAutomation = connect(
             updateRoutinesEnabled();
         }, []);
         const hide = !useMatch({ path: "/settings/automation/", end: true });
-        const [searchParams] = useSearchParams();
+        const [searchParams, setSearchParams] = useSearchParams();
+        const search = searchParams.get("search");
 
         if (routines && routinesEnabled && searchParams.has('redirect')) {
             return <Navigate to={searchParams.get('redirect')!} replace />;
@@ -85,10 +86,31 @@ const SettingsPageAutomation = connect(
                     className={`routines-list ${hide ? "hidden" : ''}`}
                     //@ts-ignore
                     inert={hide ? "" : undefined}
+                    search={{
+                        value: search,
+                        onChange(search) { setSearchParams(search === null ? {} : { search }) }
+                    }}
                 >
                     <PlaceHolders
                         content={routines}
-                        Wrapper={({ routines, order }) => (
+                        Wrapper={({ routines, order }) => search ? (
+                            <ul className="list">
+                                {order
+                                    .map(id => routines[id])
+                                    .filter(({ name }) =>
+                                        name.toLowerCase().includes(search.toLowerCase()))
+                                    .map(routine => (
+                                        <RoutineItem
+                                            key={routine.id}
+                                            routine={routine}
+                                            routinesEnabled={routinesEnabled}
+                                            disableReorder
+                                            search={search}
+                                        />
+                                    ))
+                                }
+                            </ul>
+                        ) : (
                             <><ReactSortable
                                 list={order.map(id=>({id}))}
                                 setList={(order) => store.dispatch({
@@ -128,9 +150,10 @@ export default SettingsPageAutomation;
 type RoutineItemProps = {
     disableReorder?: boolean,
     routine: HMApi.T.Automation.Routine,
-    routinesEnabled?: StoreState['routinesEnabled']
+    routinesEnabled?: StoreState['routinesEnabled'],
+    search?: string
 }
-function RoutineItem({ disableReorder, routine, routinesEnabled }: RoutineItemProps) {
+function RoutineItem({ disableReorder, routine, routinesEnabled, search }: RoutineItemProps) {
     return (
         <li className="button">
             {(!disableReorder) && (
@@ -139,7 +162,9 @@ function RoutineItem({ disableReorder, routine, routinesEnabled }: RoutineItemPr
                 </svg>
             )}
             <Link to={routine.id.toString()}>
-                {routine.name}
+                <SearchKeywordHighlight term={search}>
+                    {routine.name}
+                </SearchKeywordHighlight>
             </Link>
             {routinesEnabled && (
                 <ToggleButton
