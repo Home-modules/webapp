@@ -18,7 +18,7 @@ export type HeaderButtonProps = {
 export type HeaderProps = {
     title: string;
     subtitle?: string;
-    buttons?: HeaderButtonProps[];
+    buttons?: (HeaderButtonProps|undefined)[];
     backLink?: To,
     search?: {
         value: string | null,
@@ -70,7 +70,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                         {subtitle && <div className="subtitle">{subtitle}</div>}
                     </div>
                     <div className="buttons right">
-                        {buttons?.map((props, index) => <HeaderButton key={index} {...props} />)}
+                        {buttons?.filter(Boolean).map((props, index) => <HeaderButton key={index} {...props as HeaderButtonProps} />)}
                     </div>
                 </div>
                 {search && (

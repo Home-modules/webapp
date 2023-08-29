@@ -128,7 +128,7 @@ function EditRoutine({ routine, isNew, routines, enabled=false }: EditRoutinePro
             backLink=".."
             className="edit-routine"
             buttons={isNew ? [] : [
-                {
+                enabled ? undefined : {
                     label: "Delete routine",
                     icon: faTrash,
                     attention: true,
