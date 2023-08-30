@@ -35,6 +35,7 @@ export type StoreState = {
         order: number[]
     } | false | undefined,
     routinesEnabled: Record<number, boolean> | false | undefined,
+    manualRoutines: HMApi.Response.ManualTriggerRoutine['routines'] | false | undefined
 };
 
 export type StoreAction = {
@@ -106,6 +107,9 @@ export type StoreAction = {
 } | {
     type: "SET_ROUTINES_ENABLED",
     routines: StoreState['routinesEnabled']
+} | {
+    type: "SET_MANUAL_ROUTINES",
+    routines: StoreState['manualRoutines']
 }
 
 export const store = createStore<StoreState, StoreAction, {}, {}>((state = {
@@ -122,12 +126,13 @@ export const store = createStore<StoreState, StoreAction, {}, {}>((state = {
     favoriteDeviceStates: undefined,
     plugins: {
         all: undefined,
-        installed: undefined
+        installed: undefined 
     },
     appearanceSettings: JSON.parse(localStorage.getItem('home_modules_appearance_settings') || 'null') || defaultAppearanceSettings,
     allowDesktopMode: !mobileMediaQuery.matches,
     routines: undefined,
     routinesEnabled: undefined,
+    manualRoutines: undefined
 }, action) => {
     switch (action.type) {
         case 'SET_TOKEN':
@@ -229,12 +234,14 @@ export const store = createStore<StoreState, StoreAction, {}, {}>((state = {
             };
         case 'SET_DEVICE_STATE': {
             const states = state.deviceStates[action.state.roomId];
+            const fav = state.favoriteDeviceStates;
             return {
                 ...state,
                 deviceStates: {
                     ...state.deviceStates,
                     [action.state.roomId]: states ? states.map(state => state.id === action.state.id ? action.state : state) : states
-                }
+                },
+                favoriteDeviceStates: fav ? fav.map(state => state.id === action.state.id ? action.state : state) : fav
             };
         }
         case 'SET_FAVORITE_DEVICE_STATES':
@@ -277,6 +284,12 @@ export const store = createStore<StoreState, StoreAction, {}, {}>((state = {
             return {
                 ...state,
                 routinesEnabled: action.routines
+            }
+        }
+        case "SET_MANUAL_ROUTINES": {
+            return {
+                ...state,
+                manualRoutines: action.routines
             }
         }
         default:

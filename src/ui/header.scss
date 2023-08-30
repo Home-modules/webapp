@@ -26,6 +26,11 @@ header:not(#root > header) {
         box-sizing: border-box;
         transition: opacity var(--view-anim-duration), top var(--view-anim-duration);
 
+        &.h2 {
+            padding: 8px;
+            gap: 10px;
+        }
+
         &.hidden {
             top: -50%;
             pointer-events: none;
@@ -50,7 +55,7 @@ header:not(#root > header) {
             .title {
                 flex-grow: 1;
 
-                h1 {
+                h1, h2 {
                     margin: 0;
                 }
             }
@@ -93,7 +98,7 @@ header:not(#root > header) {
                 margin-left: 1em;
             }
 
-            h1 {
+            h1, h2 {
                 flex-grow: 1;
             }
         }

@@ -1,0 +1,26 @@
+#home .manual-routines {
+    border-top: 1px solid var(--color-navbar-border);
+    transition: border-top var(--transition-duration);
+
+    header {
+        backdrop-filter: none;
+        border-bottom: none;
+    }
+
+    .scroll-view {
+        height: 75px !important;
+
+        > div:first-child {
+            display: flex;
+            align-items: stretch;
+            padding: 20px;
+            padding-top: 0;
+            gap: 15px;
+
+            button {
+                padding: 15px;
+                font-size: 1.4em;
+            }
+        }
+    }
+}

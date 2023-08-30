@@ -16,6 +16,7 @@ import { ContextMenuItem } from "../../ui/context-menu";
 import { PlaceHoldersArray } from "../../ui/placeholders";
 import { SwipeableProps, useSwipeable } from "react-swipeable";
 import { useNavigate } from "react-router-dom";
+import { ManualRoutines } from "./manual-routines";
 
 function swipeableOptions(
     roomStates: StoreState['roomStates'],
@@ -249,7 +250,7 @@ const Favorites = connect(({ favoriteDeviceStates, roomStates }: StoreState) => 
         }
     })
 
-    return (
+    return (<>
         <PlaceHoldersArray
             className="devices favorites"
             items={favoriteDeviceStates}
@@ -298,5 +299,6 @@ const Favorites = connect(({ favoriteDeviceStates, roomStates }: StoreState) => 
             loadingPlaceholder="Loading devices..."
             errorPlaceholder="There was an error loading the devices"
         />
-    );
+        <ManualRoutines />
+    </>);
 });

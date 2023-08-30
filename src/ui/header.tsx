@@ -29,11 +29,12 @@ export type HeaderProps = {
         selectedCount: number,
         onToggle(checked: boolean): void,
         buttons?: HeaderButtonProps[],
-    }
+    },
+    tag?: 'h1' | 'h2',
 }
 
 export const Header = React.forwardRef<HTMLElement, HeaderProps>(
-    function Header({ title, buttons, backLink, subtitle, search, select }, ref) {
+    function Header({ title, buttons, backLink, subtitle, search, select, tag='h1' }, ref) {
         const selectActive = select ? select.selectedCount > 0 : false;
         const searchActive = search && search.value !== null && !selectActive;
         const searchFieldRef = React.useRef<HTMLInputElement>(null);
@@ -54,7 +55,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
         }, [searchActive])
 
         return (
-            <header ref={ref}>
+            <header ref={ref} className={tag}>
                 <div
                     className={`main ${titleActive ? "" : "hidden"}`}
                     //@ts-ignore
@@ -66,7 +67,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
                         </Link>
                     )}
                     <div className="title">
-                        <h1>{title}</h1>
+                        {tag === 'h1' ? <h1>{title}</h1> : <h2>{title}</h2>}
                         {subtitle && <div className="subtitle">{subtitle}</div>}
                     </div>
                     <div className="buttons right">
