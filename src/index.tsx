@@ -6,31 +6,17 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { Route, Routes, Navigate, HashRouter } from 'react-router-dom';
+import { Route, Routes, HashRouter } from 'react-router-dom';
 import Notifications from './ui/notifications';
 import Dialogs from './ui/dialogs';
 import { Flyouts } from './ui/flyout';
 import { CurrentContextMenu } from './ui/context-menu';
+import { getAppearanceSetting } from './screens/settings/appearance/appearance';
 
 import HomePage from './screens/home/home';
-import SettingsPage from './screens/settings/settings';
-import SettingsPageAccount from './screens/settings/account/account';
-import SettingsPageRooms from './screens/settings/rooms/rooms';
-import SettingsPageRoomsEditRoom from './screens/settings/rooms/room-edit';
 import LoginForm from './screens/login';
-import ChangePasswordDialog from './screens/settings/account/change-password';
-import ChangeUsernameDialog from './screens/settings/account/change-username';
-import SettingsPageRoomsDevices from './screens/settings/rooms/devices/devices';
-import SettingsPageRoomsDevicesNewDevice from './screens/settings/rooms/devices/new';
-import SettingsPageRoomsDevicesEditDevice from './screens/settings/rooms/devices/edit-device';
 import InvalidVersionPage from './screens/invalid-version';
-import ActiveSessions from './screens/settings/account/active-sessions';
 import HomePageRoom from './screens/home/room';
-import SettingsPagePlugins, { SettingsPagePluginsTab } from './screens/settings/plugins/plugins';
-import SettingsPageAppearance, { getAppearanceSetting } from './screens/settings/appearance/appearance';
-import SettingsPageAppearanceDesktopMode from './screens/settings/appearance/desktop-mode';
-import SettingsPageAutomation from './screens/settings/automation/automation';
-import SettingsPageAutomationEditRoutine from './screens/settings/automation/edit-routine';
 
 export const darkThemeMediaQuery = matchMedia("(prefers-color-scheme: dark)");
 export function updateTheme() {
@@ -47,6 +33,19 @@ export function updateTheme() {
 darkThemeMediaQuery.addEventListener('change', updateTheme);
 updateTheme();
 
+const SettingsLazy = React.lazy(() => import("./screens/settings/settings"));
+function Settings() {
+    return (
+        <React.Suspense fallback={(
+            <main className='placeholders loading'>
+                <div className="circle"></div>
+            </main>
+        )}>
+            <SettingsLazy />
+        </React.Suspense>
+    )
+}
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
@@ -60,42 +59,7 @@ ReactDOM.render(
                             <Route index element={<HomePageRoom />} />
                             <Route path=":roomId" element={<HomePageRoom />} />
                         </Route>
-                        <Route path="settings" element={<SettingsPage />}>
-                            <Route path="account" element={<SettingsPageAccount />}>
-                                <Route path="change-password" element={<ChangePasswordDialog />} />
-                                <Route path="change-username" element={<ChangeUsernameDialog />} />
-                                <Route path="active-sessions" element={<ActiveSessions />} />
-                                <Route path="*" element={<Navigate to="/settings/account" />} />
-                            </Route>
-                            <Route path="rooms" element={<SettingsPageRooms />}>
-                                <Route path=":roomId/edit" element={<SettingsPageRoomsEditRoom />} />
-                                <Route path="new" element={<SettingsPageRoomsEditRoom />} />
-                                <Route path="*" element={<Navigate to="/settings/rooms" />} />
-                            </Route>
-                            <Route path="devices" element={<SettingsPageRooms devicesScreen />}>
-                                <Route path=":roomId" element={<SettingsPageRoomsDevices />}>
-                                    <Route path="new" element={<SettingsPageRoomsDevicesNewDevice />} >
-                                        <Route path=":deviceType" element={<SettingsPageRoomsDevicesEditDevice />} />
-                                    </Route>
-                                    <Route path="edit/:deviceId" element={<SettingsPageRoomsDevicesEditDevice />} />
-                                </Route>
-                            </Route>
-                            <Route path="plugins" element={<SettingsPagePlugins />}>
-                                <Route path="installed" element={<SettingsPagePluginsTab tab="installed" />} />
-                                <Route path="all" element={<SettingsPagePluginsTab tab="all" />} />
-                                <Route path="*" element={<Navigate to="/settings/plugins/installed" />} />
-                                <Route index element={<Navigate to="/settings/plugins/installed" replace />} />
-                            </Route>
-                            <Route path="appearance" element={<SettingsPageAppearance />}>
-                                <Route path="desktop-mode" element={<SettingsPageAppearanceDesktopMode />} />
-                                <Route path="*" element={<Navigate to="/settings/appearance" />} />
-                            </Route>
-                            <Route path="automation" element={<SettingsPageAutomation />}>
-                                <Route path=":routineId" element={<SettingsPageAutomationEditRoutine />} />
-                            </Route>
-                            <Route path="*" element={<Navigate to="/settings/account" />} />
-                            <Route index element={<Navigate to="/settings/account" replace />} />
-                        </Route>
+                        <Route path="settings/*" element={ <Settings /> } />
                         <Route index element={<AppRedirect />} />
                         <Route path="*" element={<AppRedirect />} />
                     </Route>
