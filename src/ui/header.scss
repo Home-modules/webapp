@@ -1,5 +1,5 @@
 header:not(#root > header) {
-    border-bottom: 1px solid var(--color-navbar-border);
+    border-bottom: 1px solid var(--color-border);
     background-color: var(--color-background);
     
     @supports (backdrop-filter: blur(10px)) {

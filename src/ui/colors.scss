@@ -4,6 +4,7 @@ $colors: (
     // General background & text
     "background":                                   (#fff                           ,rgb(19, 19, 20)                ), // Background color
     "foreground":                                   (#000                           ,#fff                           ), // Text color
+    "border":                                       (rgba(0, 0, 0, 0.13)            ,rgba(255, 255, 255, 0.1)       ), // Border color used in many places
     "background-with-blur":                         (#fffb                          ,#131314bb                      ), // Background color for some elements with background blur
     "foreground-highlight":                         (rgb(75, 57, 0)                 ,#ffee00                        ), // Text color for highlighted text
     "foreground-subtext":                           (#666                           ,rgb(163, 163, 163)             ), // Text color for secondary text
@@ -55,9 +56,9 @@ $colors: (
     "button-primary-hover-background":              (#0353d8                        ,#0353d8                        ), // Primary (blue) button background color on hover
     "button-primary-hover-foreground":              (#fff                           ,#fff                           ), // Primary (blue) button text color on hover
     "button-secondary-background":                  (rgb(228, 228, 228)             ,rgb(53, 53, 56)                ), // Secondary (gray) button background color
-    "button-secondary-foreground":                  ("foreground"                     ,"foreground"                     ), // Primary (blue) button text color
+    "button-secondary-foreground":                  ("foreground"                     ,"foreground"                      ), // Primary (blue) button text color
     "button-secondary-hover-background":            (#cccccc                        ,rgb(73, 73, 76)                ), // Secondary (gray) button background color on hover
-    "button-secondary-hover-foreground":            ("foreground"                     ,"foreground"                     ), // Primary (blue) button text color on hover
+    "button-secondary-hover-foreground":            ("foreground"                     ,"foreground"                      ), // Primary (blue) button text color on hover
     "button-secondary-disabled-foreground":         (rgba(0, 0, 0, 0.467)           ,rgba(255, 255, 255, 0.274)     ), // Secondary (gray) button text color when disabled
     "button-attention-primary-foreground":          (#fff                           ,#fff                           ), // Attention primary button text color
     "button-attention-primary-background":          (#ff1900                        ,#ce1500                        ), // Attention primary button background color
