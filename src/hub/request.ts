@@ -81,7 +81,7 @@ export async function sendRequest<R extends HMApi.Request>(req: R): Promise<Resp
     try {
         const token = store.getState().token;
         const e = await ax.post<ResponseWithoutError<R>>('.', req, {
-            headers: token ? { token } : undefined
+            headers: token ? { token: encodeURIComponent(token) } : undefined
         });
         console.log('Response: ', e.data);
         return e.data;
