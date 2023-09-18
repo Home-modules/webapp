@@ -55,7 +55,7 @@ const DeviceInteractions = connect(({ deviceStates, favoriteDeviceStates }: Stor
         return (
             <div className="device-interactions">
                 <div className="interactions" onClick={e => e.stopPropagation()}>
-                    {interactions.map(interaction => (deviceState.interactions[interaction.id]!.visible !== false) && (
+                    {interactions.map(interaction => (deviceState.interactions[interaction.id]?.visible !== false) && (
                         <DeviceInteraction
                             key={interaction.id}
                             interaction={interaction}
