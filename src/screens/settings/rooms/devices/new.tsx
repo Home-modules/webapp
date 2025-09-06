@@ -51,7 +51,7 @@ function SettingsPageRoomsDevicesNewDevice({ deviceTypes, rooms }: Pick<StoreSta
                                     <h2>{currentSuperType[0][0].name}</h2>
                                     <div className="items">
                                         {currentSuperType[0].map((type) => (
-                                            <Link key={type.id} to={type.id} className="button">
+                                            <Link key={type.id} to={'./'+type.id} className="button">
                                                 <FontAwesomeIcon icon={fas['fa' + type.icon]} />
                                                 <div>{type.sub_name}</div>
                                             </Link>
@@ -75,7 +75,7 @@ function SettingsPageRoomsDevicesNewDevice({ deviceTypes, rooms }: Pick<StoreSta
                                             <FontAwesomeIcon icon={faChevronRight} />
                                         </Button>
                                     ) : (
-                                        <Link key={superType} to={types[0].id} className="button">
+                                        <Link key={superType} to={'./'+types[0].id} className="button">
                                             <FontAwesomeIcon icon={fas['fa' + types[0].icon]} />
                                             <div className="text">
                                                 <div className="name">{types[0].name}</div>
