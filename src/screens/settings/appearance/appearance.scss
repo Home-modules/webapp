@@ -46,6 +46,10 @@
                 .setting-item {
                     padding: 10px;
                 }
+
+                &.color-accent input {
+                    --track-background: linear-gradient(in oklch longer hue 90deg, oklch(0.5 0.3 0), oklch(0.5 0.3 359.9));
+                }
             }
 
             > .rest {

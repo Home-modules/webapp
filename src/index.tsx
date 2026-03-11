@@ -29,6 +29,8 @@ export function updateTheme() {
         document.documentElement.classList.add('dark');
     else
         document.documentElement.classList.remove('dark');
+
+    document.documentElement.style.setProperty("--hue", getAppearanceSetting("hue").toString())
 };
 darkThemeMediaQuery.addEventListener('change', updateTheme);
 updateTheme();

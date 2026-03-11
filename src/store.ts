@@ -27,7 +27,8 @@ export type StoreState = {
     },
     appearanceSettings: {
         showDesktopModeButton: boolean,
-        colorTheme: 'dark' | 'light' | 'system'
+        colorTheme: 'dark' | 'light' | 'system',
+        hue: number
     },
     allowDesktopMode: boolean,
     routines: {

@@ -15,7 +15,7 @@ $colors: (
     "status-warning":                               (#c88d00                        ,"notification-border-warning"    ), // Color for warning fallback text
     "background-hover-1":                           (#f9f9f9                        ,rgb(25, 25, 26)                ), // Background color for large hovered elements
     "background-hover-2":                           (#f5f5f5                        ,rgb(30, 30, 32)                ), // Background color for large active elements
-    "input-active-border":                          (#2b7cff4f                      ,#1770ff65                      ), // Active UI item outline (drop shadow)
+    "input-active-border":                          (oklch(0.6 0.21 var(--hue) / 0.3) ,oklch(0.58 0.23 var(--hue) / 0.4) ), // Active UI item outline (drop shadow)
     "input-active-border-alternate":                (#ffffff4f                      ,rgba(0, 0, 0, 0.31)            ), // Alternate active UI item outline (drop shadow)
  
     // Custom colors     
@@ -51,9 +51,9 @@ $colors: (
 
 
     // Buttons
-    "button-primary-background":                    (#0464ff                        ,#0464ff                        ), // Primary (blue) button background color
+    "button-primary-background":                    (oklch(0.56 0.243 var(--hue))      ,oklch(0.56 0.243 var(--hue))     ), // Primary (blue) button background color
     "button-primary-foreground":                    (#fff                           ,#fff                           ), // Primary (blue) button text color
-    "button-primary-hover-background":              (#0353d8                        ,#0353d8                        ), // Primary (blue) button background color on hover
+    "button-primary-hover-background":              (oklch(0.5 0.243 var(--hue))      ,oklch(0.5 0.243 var(--hue))       ), // Primary (blue) button background color on hover
     "button-primary-hover-foreground":              (#fff                           ,#fff                           ), // Primary (blue) button text color on hover
     "button-secondary-background":                  (rgb(228, 228, 228)             ,rgb(53, 53, 56)                ), // Secondary (gray) button background color
     "button-secondary-foreground":                  ("foreground"                     ,"foreground"                      ), // Primary (blue) button text color
@@ -65,12 +65,12 @@ $colors: (
     "button-attention-primary-hover-foreground":    (#fff                           ,#fff                           ), // Attention primary button text color on hover
     "button-attention-primary-hover-background":    (#be1300                        ,#ff1900                        ), // Attention primary button background color on hover
     "button-attention-secondary-foreground":        (#ff1900                        ,#ff412c                        ), // Attention button text color
-    "button-attention-secondary-background":        ("button-secondary-background"    ,"button-secondary-background"    ), // Attention button background color
+    "button-attention-secondary-background":        ("button-secondary-background"    ,"button-secondary-background"     ), // Attention button background color
     "button-attention-secondary-hover-foreground":  (#fff                           ,#fff                           ), // Attention button text color on hover
     "button-attention-secondary-hover-background":  (#ff1b02                        ,#ff1b02                        ), // Attention button background color on hover
    "button-attention-secondary-disabled-foreground":(#ff19007c                      ,#ff1900b1                      ), // Attention button text color when disabled
-    "button-intermittent":                          (#00a2ff                        ,#00a2ff                        ), // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
-    "button-intermittent-2":                        (#afdeff                        ,#afdeff                        ), // Intermittent bar (loading bar) color for primary buttons outside forms
+    "button-intermittent":                          (oklch(0.75 0.17 var(--hue))      ,oklch(0.75 0.17 var(--hue))       ), // Intermittent bar (loading bar) color for primary buttons on forms and secondary buttons
+    "button-intermittent-2":                        (oklch(0.85 0.17 var(--hue))      ,oklch(0.85 0.17 var(--hue))       ), // Intermittent bar (loading bar) color for primary buttons outside forms
     "backdrop-button-foreground":                   (white                                                            ), // Button with background image text color
     "backdrop-button-background":                   (rgba(0, 0, 0, 0.448)                                             ), // Button with background image background color
     "backdrop-button-hover-background":             (rgba(0, 0, 0, 0.537)                                             ), // Button with background image background color on hover
@@ -98,10 +98,10 @@ $colors: (
     "navbar-background":                            (#e9e9e9                    ,rgb(29 29 31)                      ), // Background for the header and settings navigation menu
     "navbar-border":                                (#dcdcdc                    ,rgb(43 43 46)                      ), // Border between the header and settings navigation menu
     "navbar-hover-title":                           (#d3d3d3                    ,#2c2c2c                            ), // Header button title background color vern hovered
-    "navbar-active":                                (#007bff                    ,#007bff                            ), // Header active item underline / Settings navigation active item background color
+    "navbar-active":                                (oklch(0.605 0.217 var(--hue)),oklch(0.605 0.217 var(--hue))         ), // Header active item underline / Settings navigation active item background color
     "navbar-active-text":                           (#fff                       ,#fff                               ), // Header active item title / Settings navigation active item text color
     "navbar-icon":                                  (rgb(44, 44, 44)            ,rgb(209, 209, 209)                 ), // Header / settings navigation icon color
-    "navbar-hover-text":                            (#0055c5                    ,#4696ff                            ), // Settings navigation menu inactive item text color when hovered
+    "navbar-hover-text":                            (oklch(0.53 0.217 var(--hue)) ,oklch(0.70 0.19 var(--hue))           ), // Settings navigation menu inactive item text color when hovered
 
     // Notifications
     "notification-background":                      (#fff                       ,rgb(53, 53, 56)                    ), // Notification background color
@@ -185,7 +185,12 @@ $colors: (
     @each $name, $values in $colors {
         $color: list.nth($values, 1);
         @if type-of($color) == string {
-            --color-#{$name}: var(--color-#{$color});
+            @if str-index($string: $color, $substring: "oklch") {
+                --color-#{$name}: #{$color};
+            }
+            @else {
+                --color-#{$name}: var(--color-#{$color});
+            }
         }
         @else {
             --color-#{$name}: #{$color};
@@ -197,7 +202,12 @@ $colors: (
             @if list.length($values) > 1 {
                 $color: list.nth($values, 2);
                 @if type-of($color) == string {
-                    --color-#{$name}: var(--color-#{$color});
+                    @if str-index($string: $color, $substring: "oklch") {
+                        --color-#{$name}: #{$color};
+                    }
+                    @else {
+                        --color-#{$name}: var(--color-#{$color});
+                    }
                 }
                 @else {
                     --color-#{$name}: #{$color};
@@ -211,6 +221,7 @@ $colors: (
 
     --color-button-primary-disable-opacity: 0.25; // Primary (blue) button opacity when disabled
     --color-button-secondary-disable-opacity: 0.75; // Secondary (gray) button opacity when disabled
+    --hue: 260;
 
     // $transition-list: ();
 

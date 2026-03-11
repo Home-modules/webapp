@@ -9,10 +9,12 @@ import './appearance.scss';
 import { SettingItemIconSelect } from "../../../ui/settings/icon-select";
 import { darkThemeMediaQuery, updateTheme } from "../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SettingItemSlider } from "../../../ui/settings/slider";
 
 export const defaultAppearanceSettings: StoreState['appearanceSettings'] = {
     showDesktopModeButton: window.innerWidth > 600, // Disabled for mobile, enabled for desktop
     colorTheme: 'system',
+    hue: 260,
 }
 
 export function getAppearanceSetting<T extends keyof StoreState['appearanceSettings']>(name: T, settings?: StoreState['appearanceSettings']): StoreState['appearanceSettings'][T] {
@@ -24,6 +26,7 @@ function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<Store
     const [searchParams, setSearchParams] = useSearchParams();
     const currentField = searchParams.get('field');
 
+    const hue = getAppearanceSetting('hue', appearanceSettings);
     const theme = getAppearanceSetting('colorTheme', appearanceSettings);
     const [systemThemeIsDark, setSystemThemeIsDark] = React.useState(darkThemeMediaQuery.matches);
     const isDarkNow = theme === 'system' ? systemThemeIsDark : theme === 'dark';
@@ -35,7 +38,7 @@ function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<Store
     }, []);
     React.useEffect(() => {
         updateTheme();
-    }, [isDarkNow]);
+    }, [isDarkNow, hue]);
 
     return (
         <div id="settings-appearance">
@@ -68,6 +71,26 @@ function AppearanceSettings({ appearanceSettings, allowDesktopMode }: Pick<Store
                                     colorTheme: ({
                                         'circle-half-stroke': 'system', 'circle-down': 'dark', 'circle-up': 'light'
                                     } as const)[value as 'circle-half-stroke' | 'circle-up' | 'circle-down']
+                                }
+                            })}
+                        />
+                    </section>
+                    <section
+                        className={`setting color-accent ${currentField === 'color-accent' ? 'active' : ''}`}
+                        onClick={() => setSearchParams({ field: 'color-accent' })}
+                        onFocusCapture={() => setSearchParams({ field: 'color-accent' })}
+                    >
+                        <SettingItemSlider
+                            title="Accent Color"
+                            icon={faPalette}
+                            min={0} max={360}
+                            appearance={{type:"horizontal"}}
+                            value={hue}
+                            showValue={false}
+                            onChange={value => store.dispatch({
+                                type: "SET_APPEARANCE_SETTINGS",
+                                settings: {
+                                    hue: value
                                 }
                             })}
                         />
