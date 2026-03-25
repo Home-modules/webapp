@@ -17,6 +17,7 @@ import { PlaceHoldersArray } from "../../ui/placeholders";
 import { SwipeableProps, useSwipeable } from "react-swipeable";
 import { useNavigate } from "react-router-dom";
 import { ManualRoutines } from "./manual-routines";
+import useGlobalEventListener from "../../utils/use-global-event";
 
 function swipeableOptions(
     roomStates: StoreState['roomStates'],
@@ -176,6 +177,7 @@ function Devices_(
     const thisRoomDeviceStates = deviceStates[roomState.id];
 
     React.useEffect(() => { refreshDeviceStates(roomState.id) }, [roomState.id]);
+    useGlobalEventListener("focus", ()=>refreshDeviceStates(roomState.id), [roomState.id]);
 
     const callbacks = useSwipeable(swipeableOptions(roomStates, roomState.id, useNavigate(), useSearchParams()[0]))
 
@@ -238,6 +240,7 @@ function Devices_(
 
 const Favorites = connect(({ favoriteDeviceStates, roomStates }: StoreState) => ({ favoriteDeviceStates, roomStates }))(function Favorites({ favoriteDeviceStates, roomStates }: Pick<StoreState, 'favoriteDeviceStates' | 'roomStates'>) {
     React.useEffect(() => { refreshFavoriteDeviceStates() }, []);
+    useGlobalEventListener("focus", refreshFavoriteDeviceStates, []);
 
     const navigate = useNavigate(), searchParams = useSearchParams()[0];
     const callbacks = useSwipeable({
