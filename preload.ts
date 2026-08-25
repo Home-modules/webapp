@@ -12,9 +12,8 @@ const style: BunPlugin = {
         // when a .scss file is imported...
         build.onLoad({ filter: /\.scss$/ }, ({ path, loader }) => {
             // read and compile it with the sass compiler
-            const contents = sass.compile(path, {style: process.env.NODE_ENV == "production" ? "compressed" : "expanded"});
+            const contents = sass.compile(path);
             const css = contents.css;
-            console.log(path, loader)
 
             return {
                 loader: "css",

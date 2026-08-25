@@ -1,7 +1,7 @@
 import style from './preload';
 import  "../hub/node_modules/@types/bun/index.d.ts"
 
-console.log(await Bun.build({
+await Bun.build({
     entrypoints: ['./src/index.html', './src/index.tsx'],
     outdir: './build',
     plugins: [style],
@@ -11,4 +11,4 @@ console.log(await Bun.build({
       json: "./build/meta.json",
       markdown: "./build/meta.md",
     },
-}));
+});
