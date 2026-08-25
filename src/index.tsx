@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './ui/index.scss' with {type: "css"};
 import App, { AppRedirect } from './App';
 import { Provider } from 'react-redux';
@@ -48,7 +48,7 @@ function Settings() {
     )
 }
 
-ReactDOM.render(
+createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Provider store={store}>
             <HashRouter>
@@ -71,6 +71,5 @@ ReactDOM.render(
                 <CurrentContextMenu />
             </HashRouter>
         </Provider>
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
 );
