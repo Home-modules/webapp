@@ -1,4 +1,4 @@
-@import "./error-style.scss";
+@use "./error-style.scss";
 
 .setting-item.dropdown .value {
     .dropdown-select {
@@ -14,7 +14,7 @@
         }
 
         &::after {
-            @include setting-error;
+            @include error-style.setting-error;
             left: initial;
         }
     }

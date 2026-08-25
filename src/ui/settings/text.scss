@@ -1,4 +1,4 @@
-@import "./error-style.scss";
+@use "./error-style.scss";
 
 .setting-item.text {
     .value {
@@ -9,7 +9,7 @@
             margin: 0;
 
             &[data-error]:not([data-error=""])::before {
-                @include setting-error;
+                @include error-style.setting-error;
             }
         }
 

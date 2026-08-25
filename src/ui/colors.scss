@@ -1,4 +1,6 @@
 @use "sass:list";
+@use "sass:string";
+@use "sass:meta";
 
 $colors: (
     // General background & text
@@ -184,8 +186,8 @@ $colors: (
 :root {
     @each $name, $values in $colors {
         $color: list.nth($values, 1);
-        @if type-of($color) == string {
-            @if str-index($string: $color, $substring: "oklch") {
+        @if meta.type-of($color) == string {
+            @if string.index($string: $color, $substring: "oklch") {
                 --color-#{$name}: #{$color};
             }
             @else {
@@ -201,8 +203,8 @@ $colors: (
         @each $name, $values in $colors {
             @if list.length($values) > 1 {
                 $color: list.nth($values, 2);
-                @if type-of($color) == string {
-                    @if str-index($string: $color, $substring: "oklch") {
+                @if meta.type-of($color) == string {
+                    @if string.index($string: $color, $substring: "oklch") {
                         --color-#{$name}: #{$color};
                     }
                     @else {
