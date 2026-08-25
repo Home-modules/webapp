@@ -2,7 +2,7 @@ import React from 'react';
 import { HMApi } from '../../hub/api';
 import { SettingItemText } from '../settings/text';
 import { FieldProps } from './fields';
-import "./text-number.scss";
+import "./text-number.scss" with {type: "css"};
 
 export function FieldTypeText({ field, value, setValue, error, setError }: FieldProps<string, HMApi.T.SettingsField.TypeText>) {
     return (

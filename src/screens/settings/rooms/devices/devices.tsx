@@ -11,7 +11,7 @@ import { store, StoreState } from "../../../../store";
 import { addConfirmationFlyout } from "../../../../ui/flyout";
 import { PlaceHolders } from "../../../../ui/placeholders";
 import SearchKeywordHighlight from "../../../../ui/search-highlight";
-import './devices.scss';
+import './devices.scss' with {type: "css"};
 import { PageWithHeader } from "../../../../ui/header";
 
 export function refreshDevices(roomId: string) {

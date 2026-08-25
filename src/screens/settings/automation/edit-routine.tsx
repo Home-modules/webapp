@@ -4,7 +4,7 @@ import { PageWithHeader } from "../../../ui/header";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { HMApi } from "../../../hub/api";
 import React from "react";
-import "./edit-routine.scss";
+import "./edit-routine.scss" with {type: "css"};
 import { SettingItemToggle } from "../../../ui/settings/toggle";
 import { SettingItemTextSelect } from "../../../ui/settings/text-select";
 import ScrollView from "../../../ui/scrollbar";

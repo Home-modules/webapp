@@ -3,7 +3,7 @@ import { handleError, sendRequest } from "../../../hub/request";
 import { ContextMenuItem, ContextMenuItemProps } from "../../../ui/context-menu";
 import { refreshDeviceStates, refreshFavoriteDeviceStates } from "../room";
 import { DeviceInteractionTypeSlider } from "./slider";
-import "./interactions.scss";
+import "./interactions.scss" with {type: "css"};
 import { DeviceInteractionTypeButton } from "./button";
 import { DeviceInteractionTypeLabel } from "./label";
 import { connect } from "react-redux";

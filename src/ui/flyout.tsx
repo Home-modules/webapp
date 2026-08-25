@@ -2,7 +2,7 @@ import Button, { IntermittentButton } from './button'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import './flyout.scss';
+import './flyout.scss' with {type: "css"};
 import { store, StoreState } from '../store';
 import { connect } from 'react-redux';
 

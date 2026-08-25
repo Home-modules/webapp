@@ -5,7 +5,7 @@ import Button, { IconButton } from "../../../ui/button";
 import { handleError, sendRequest } from "../../../hub/request";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import "./action-trigger.scss";
+import "./action-trigger.scss" with {type: "css"};
 import { uniqueId } from "../../../utils/uniqueId";
 import Fields, { getFieldsErrors, getSettingsFieldsDefaultValues } from "../../../ui/fields/fields";
 import getFlatFields from "../../../utils/flat-fields";

@@ -5,7 +5,7 @@ import { store } from "../../../store";
 import Button from "../../../ui/button";
 import { RouteDialog } from "../../../ui/dialogs";
 import { addConfirmationFlyout } from "../../../ui/flyout";
-import './active-sessions.scss';
+import './active-sessions.scss' with {type: "css"};
 
 export default function ActiveSessions() {
     const [sessions, setSessions] = React.useState<HMApi.T.Session[]>([]);

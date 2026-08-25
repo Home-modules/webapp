@@ -8,7 +8,7 @@ import Button, { IntermittentButton } from '../../../ui/button';
 import { addConfirmationFlyout } from '../../../ui/flyout';
 import { PlaceHoldersArray } from '../../../ui/placeholders';
 import SearchKeywordHighlight from '../../../ui/search-highlight';
-import './plugins.scss';
+import './plugins.scss' with {type: "css"};
 import { PageWithHeader } from '../../../ui/header';
 
 export function updateInstalledPlugins() {

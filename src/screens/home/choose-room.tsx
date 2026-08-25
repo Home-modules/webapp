@@ -5,7 +5,7 @@ import { store, StoreState } from "../../store";
 import ScrollView from "../../ui/scrollbar";
 import { roomIcons } from "../settings/rooms/rooms";
 import { ContextMenuItem } from "../../ui/context-menu";
-import './choose-room.scss';
+import './choose-room.scss' with {type: "css"};
 import { handleError, sendRequest } from "../../hub/request";
 import { refreshRoomStates } from "./home";
 import { PlaceHolders } from "../../ui/placeholders";

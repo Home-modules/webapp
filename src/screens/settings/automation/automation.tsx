@@ -3,7 +3,7 @@ import { PageWithHeader } from "../../../ui/header";
 import { StoreState, store } from "../../../store";
 import { PlaceHolders } from "../../../ui/placeholders";
 import { Link, Navigate, Outlet, useMatch, useSearchParams } from "react-router-dom";
-import "./automation.scss";
+import "./automation.scss" with {type: "css"};
 import ToggleButton from "../../../ui/fields/toggle-button";
 import { handleError, sendRequest } from "../../../hub/request";
 import React from "react";

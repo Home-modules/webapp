@@ -9,7 +9,7 @@ import { HMApi } from "../../hub/api";
 import { ContextMenuItem } from "../../ui/context-menu";
 import promiseTimeout from "../../utils/promise-timeout";
 import { refreshFavoriteDeviceStates, refreshDeviceStates } from "./room";
-import './device.scss';
+import './device.scss' with {type: "css"};
 import DeviceInteractions, { DeviceInteraction, getSendActionF } from "./device-interactions/interactions";
 
 type DeviceProps = {

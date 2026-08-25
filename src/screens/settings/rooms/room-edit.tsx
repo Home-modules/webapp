@@ -1,4 +1,4 @@
-import './room-edit.scss';
+import './room-edit.scss' with {type: "css"};
 import { HMApi } from "../../../hub/api";
 import { faBath, faBed, faCouch, faDoorClosed, faTrash, faUtensils, IconName } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';

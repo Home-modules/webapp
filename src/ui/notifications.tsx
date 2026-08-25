@@ -1,4 +1,4 @@
-import './notifications.scss';
+import './notifications.scss' with {type: "css"};
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
 import { store, StoreState } from "../../../store";
 import HomePage from "../../home/home";
-import './appearance.scss';
+import './appearance.scss' with {type: "css"};
 import { SettingItemIconSelect } from "../../../ui/settings/icon-select";
 import { darkThemeMediaQuery, updateTheme } from "../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

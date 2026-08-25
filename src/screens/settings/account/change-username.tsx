@@ -1,4 +1,4 @@
-import './change-username.scss';
+import './change-username.scss' with {type: "css"};
 import React from 'react';
 import { HMApi } from '../../../hub/api';
 import { handleError, sendRequest } from '../../../hub/request';

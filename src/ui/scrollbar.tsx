@@ -1,6 +1,6 @@
 import React from "react";
 import { Scrollbars, ScrollbarProps } from "react-custom-scrollbars-2";
-import './scrollbar.scss';
+import './scrollbar.scss' with {type: "css"};
 
 export type ScrollViewProps = {
 

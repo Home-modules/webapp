@@ -1,7 +1,7 @@
 import { faChevronRight, fas, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, Navigate, Outlet, useMatch, useParams } from "react-router-dom";
-import './new.scss';
+import './new.scss' with {type: "css"};
 import './edit-device';
 import { StoreState } from "../../../../store";
 import { connect } from "react-redux";

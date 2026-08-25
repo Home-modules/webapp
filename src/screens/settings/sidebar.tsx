@@ -1,4 +1,4 @@
-import './sidebar.scss';
+import './sidebar.scss' with {type: "css"};
 import React from 'react';
 import { faBrush, faCirclePlay, faDoorClosed, faPlug, faPuzzlePiece, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -1,7 +1,7 @@
 import React from "react";
 import { uniqueId } from "../../utils/uniqueId";
 import SettingItem, { SettingItemProps } from "./setting";
-import "./text-select.scss";
+import "./text-select.scss" with {type: "css"};
 
 export type SettingItemTextSelectProps<T extends string> = SettingItemProps & {
     options: Record<T, string>,

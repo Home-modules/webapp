@@ -1,5 +1,5 @@
 import React from "react";
-import "./header.scss"
+import "./header.scss" with {type: "css"}
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, To } from "react-router-dom";

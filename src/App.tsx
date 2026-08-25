@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './App.scss';
+import './App.scss' with {type: "css"};
 import Header from './screens/header';
 import { StoreState } from './store';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';

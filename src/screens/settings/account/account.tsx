@@ -1,4 +1,4 @@
-import './account.scss';
+import './account.scss' with {type: "css"};
 import React from 'react';
 import { connect } from 'react-redux';
 import { handleError, logoutFromHub, sendRequest } from '../../../hub/request';

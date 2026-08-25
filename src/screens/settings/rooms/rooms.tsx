@@ -1,4 +1,4 @@
-import './rooms.scss';
+import './rooms.scss' with {type: "css"};
 import { faBath, faBed, faCouch, faDoorClosed, faPlus, faUtensils, IconDefinition, faPlug, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';

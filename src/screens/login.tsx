@@ -1,5 +1,5 @@
-import './login.scss';
-import '../ui/fields/text-number.scss'
+import './login.scss' with {type: "css"};
+import '../ui/fields/text-number.scss' with {type: "css"}
 import React from 'react';
 import { handleError, loginToHub } from '../hub/request';
 import { HMApi } from '../hub/api';

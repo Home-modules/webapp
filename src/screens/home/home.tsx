@@ -4,8 +4,8 @@ import { Navigate, Outlet, useMatch, useSearchParams } from "react-router-dom";
 import { handleError, sendRequest } from "../../hub/request";
 import { store, StoreState } from "../../store";
 import HomePageChooseRoom from "./choose-room";
-import './home.scss';
-import './desktop.scss';
+import './home.scss' with {type: "css"};
+import './desktop.scss' with {type: "css"};
 import { darkThemeMediaQuery } from "../..";
 
 const HomePage = connect(

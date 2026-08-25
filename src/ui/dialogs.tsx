@@ -1,4 +1,4 @@
-import './dialogs.scss';
+import './dialogs.scss' with {type: "css"};
 import React from "react";
 import { connect } from "react-redux";
 import { store, StoreState } from "../store";

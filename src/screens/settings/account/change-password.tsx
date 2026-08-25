@@ -6,7 +6,7 @@ import { handleError, sendRequest } from "../../../hub/request";
 import { store, StoreState } from "../../../store";
 import { IntermittentSubmitButton } from "../../../ui/button";
 import { RouteDialog } from "../../../ui/dialogs";
-import './change-password.scss';
+import './change-password.scss' with {type: "css"};
 import zxcvbn from "zxcvbn";
 
 const ChangePasswordDialog = connect(({ token }: StoreState) => ({ token }))(

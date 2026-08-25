@@ -1,5 +1,5 @@
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
-import './edit-device.scss';
+import './edit-device.scss' with {type: "css"};
 import { StoreState } from '../../../../store';
 import { connect } from 'react-redux';
 import { HMApi } from '../../../../hub/api';

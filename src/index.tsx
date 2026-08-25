@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './ui/index.scss';
+import './ui/index.scss' with {type: "css"};
 import App, { AppRedirect } from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
@@ -17,6 +17,8 @@ import HomePage from './screens/home/home';
 import LoginForm from './screens/login';
 import InvalidVersionPage from './screens/invalid-version';
 import HomePageRoom from './screens/home/room';
+
+console.log('JavaScript is executing');
 
 export const darkThemeMediaQuery = matchMedia("(prefers-color-scheme: dark)");
 export function updateTheme() {

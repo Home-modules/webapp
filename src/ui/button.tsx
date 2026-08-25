@@ -1,6 +1,6 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import './button.scss';
-import './form.scss';
+import './button.scss' with {type: "css"};
+import './form.scss' with {type: "css"};
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

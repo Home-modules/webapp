@@ -1,4 +1,4 @@
-import "./text.scss";
+import "./text.scss" with {type: "css"};
 import SettingItem, { SettingItemProps } from "./setting";
 import React from "react";
 

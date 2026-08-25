@@ -4,7 +4,7 @@ import React from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import { store, StoreState } from "../store"
-import './context-menu.scss'
+import './context-menu.scss' with {type: "css"}
 
 window.addEventListener('blur', () => {
     store.dispatch({

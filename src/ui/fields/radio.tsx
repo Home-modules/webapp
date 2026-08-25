@@ -2,7 +2,7 @@ import React from 'react';
 import { HMApi } from '../../hub/api';
 import { SettingItemTextSelect } from '../settings/text-select';
 import { FieldProps } from './fields';
-import "./radio.scss";
+import "./radio.scss" with {type: "css"};
 
 export function FieldTypeRadio({ field, value, setValue, error, setError }: FieldProps<string, HMApi.T.SettingsField.TypeRadio>) {
     return (

@@ -1,7 +1,7 @@
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import "./placeholders.scss";
+import "./placeholders.scss" with {type: "css"};
 
 export type PlaceHoldersProps<T> = {
     className?: string,

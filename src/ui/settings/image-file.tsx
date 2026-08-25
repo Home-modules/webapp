@@ -1,6 +1,6 @@
 import { store } from "../../store";
 import SettingItem, { SettingItemProps } from "./setting";
-import "./image-file.scss"
+import "./image-file.scss" with {type: "css"}
 
 export type SettingItemImageFileProps = SettingItemProps & {
     value: string | null,

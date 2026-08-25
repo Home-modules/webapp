@@ -7,7 +7,7 @@ import { handleError, sendRequest } from "../../hub/request";
 import { store, StoreState } from "../../store";
 import { IntermittentButton } from "../../ui/button";
 import { refreshRoomStates } from "./home";
-import './room.scss';
+import './room.scss' with {type: "css"};
 import React from "react";
 import { HMApi } from "../../hub/api";
 import ScrollView from "../../ui/scrollbar";

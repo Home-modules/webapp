@@ -1,6 +1,6 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 import version from "../version";
-import './invalid-version.scss';
+import './invalid-version.scss' with {type: "css"};
 
 export default function InvalidVersionPage() {
     const currentVersion = useSearchParams()[0].get('current');

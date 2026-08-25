@@ -4,7 +4,7 @@ import ScrollView from "../../ui/scrollbar";
 import { IntermittentButton } from "../../ui/button";
 import { handleAnyErrors, handleError, sendRequest } from "../../hub/request";
 import { useEffect } from "react";
-import "./manual-routines.scss";
+import "./manual-routines.scss" with {type: "css"};
 import { Header } from "../../ui/header";
 import { ContextMenuItem } from "../../ui/context-menu";
 import { faPen } from "@fortawesome/free-solid-svg-icons";

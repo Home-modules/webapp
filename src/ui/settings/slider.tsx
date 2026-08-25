@@ -1,7 +1,7 @@
 import SettingItem, { SettingItemProps } from "./setting";
 import React from "react";
 import Slider, { SliderProps } from "../fields/slider";
-import "./slider.scss";
+import "./slider.scss" with {type: "css"};
 
 export type SettingItemSliderProps = SettingItemProps & Omit<SliderProps, 'label'>;
 

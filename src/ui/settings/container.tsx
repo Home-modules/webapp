@@ -1,4 +1,4 @@
-import "./container.scss";
+import "./container.scss" with {type: "css"};
 
 export type SettingItemContainerProps = {
     title: string,

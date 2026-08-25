@@ -1,4 +1,4 @@
-import './settings.scss';
+import './settings.scss' with {type: "css"};
 import React from 'react';
 import SettingsSidebar from './sidebar';
 import { Navigate, Route, Routes } from 'react-router-dom';

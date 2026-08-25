@@ -4,7 +4,7 @@ import React from "react";
 import { HMApi } from "../../../hub/api";
 import promiseTimeout from "../../../utils/promise-timeout";
 import { DeviceInteractionTypeProps } from "./interactions";
-import "./twoButtonNumber.scss";
+import "./twoButtonNumber.scss" with {type: "css"};
 
 export function DeviceInteractionTypeTwoButtonNumber({
     interaction,

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import Button from "../button";
 import SettingItem, { SettingItemProps } from "./setting";
-import "./editable-info.scss"
+import "./editable-info.scss" with {type: "css"}
 
 export type SettingItemEditableInfoProps = SettingItemProps & {
     value: string,

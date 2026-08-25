@@ -1,5 +1,5 @@
 import SettingItem, { SettingItemProps } from "./setting";
-import "./dropdown.scss"
+import "./dropdown.scss" with {type: "css"}
 import DropDownSelect, { DropDownSelectProps } from "../dropdown/dropdown";
 
 export type SettingItemDropdownProps = SettingItemProps & DropDownSelectProps

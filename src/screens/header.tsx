@@ -1,4 +1,4 @@
-import './header.scss';
+import './header.scss' with {type: "css"};
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faCog } from '@fortawesome/free-solid-svg-icons'

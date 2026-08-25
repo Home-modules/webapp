@@ -1,7 +1,7 @@
 import { IconDefinition, IconName } from "@fortawesome/free-solid-svg-icons";
 import IconSelect from "../fields/icon-select";
 import SettingItem, { SettingItemProps } from "./setting";
-import "./icon-select.scss"
+import "./icon-select.scss" with {type: "css"}
 
 export type SettingItemIconSelectProps = SettingItemProps & {
     /** A list of icon */

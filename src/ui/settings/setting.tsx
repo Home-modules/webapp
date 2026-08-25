@@ -1,7 +1,7 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
-import "./setting.scss"
+import "./setting.scss" with {type: "css"}
 
 export type SettingItemProps = {
     title: string,
